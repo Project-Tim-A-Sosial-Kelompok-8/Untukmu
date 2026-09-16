@@ -16,6 +16,11 @@
   --um-teal: #8fd8c8;
   --um-radius: 12px;
   --um-radius-sm: 8px;
+  
+  /* Variabel baru untuk efek partikel interaktif */
+  --um-hover-glow: 0 0 20px rgba(255, 255, 255, 0.6);
+  --um-selected-glow: 0 0 30px rgba(99, 102, 241, 0.8);
+  --um-particle-highlight: #ffffff;
 }
 
 /* ── dasar ─────────────────────────────────────────────────────────────────── */
@@ -321,4 +326,72 @@ body.gx-cinema .um-screen { display: none !important; }
   .um-brand { top: max(12px, env(safe-area-inset-top)); left: 14px; }
   .um-toast { bottom: 120px; }
   .um-skyctl { top: max(56px, calc(env(safe-area-inset-top) + 46px)); left: 14px; }
+}
+
+/* ── Efek visual untuk partikel interaktif ────────────────────────────────── */
+
+/* Efek visual untuk partikel interaktif */
+.um-particle-highlight {
+  animation: um-particle-pulse 1.5s ease-in-out infinite;
+  filter: drop-shadow(var(--um-hover-glow));
+}
+
+.um-particle-selected {
+  filter: drop-shadow(var(--um-selected-glow));
+}
+
+@keyframes um-particle-pulse {
+  0%, 100% { opacity: 0.8; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.2); }
+}
+
+/* Cursor styles untuk interaksi partikel */
+.canvas-interactive {
+  cursor: pointer;
+}
+
+.canvas-interactive:hover {
+  cursor: pointer !important;
+}
+
+/* Loading states untuk animasi perjalanan */
+.um-travel-indicator {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--um-accent), transparent 70%);
+  animation: um-travel-spin 2s linear infinite;
+  pointer-events: none;
+  z-index: 15;
+}
+
+@keyframes um-travel-spin {
+  0% { transform: rotate(0deg); opacity: 0.6; }
+  50% { transform: rotate(180deg); opacity: 1; }
+  100% { transform: rotate(360deg); opacity: 0.6; }
+}
+
+/* Indikator orbit tracking */
+.um-orbit-indicator {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.7);
+  box-shadow: 0 0 10px var(--um-accent);
+  pointer-events: none;
+  z-index: 10;
+}
+
+/* Zoom feedback untuk partikel */
+.um-zoom-feedback {
+  animation: um-zoom-pulse 0.8s ease-out;
+  transform-origin: center;
+}
+
+@keyframes um-zoom-pulse {
+  0% { transform: scale(0.5); opacity: 0; }
+  50% { transform: scale(1.2); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
 }
