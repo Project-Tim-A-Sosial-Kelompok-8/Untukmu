@@ -16,11 +16,6 @@
   --um-teal: #8fd8c8;
   --um-radius: 12px;
   --um-radius-sm: 8px;
-  
-  /* Variabel baru untuk efek partikel interaktif */
-  --um-hover-glow: 0 0 20px rgba(255, 255, 255, 0.6);
-  --um-selected-glow: 0 0 30px rgba(99, 102, 241, 0.8);
-  --um-particle-highlight: #ffffff;
 }
 
 /* ── dasar ─────────────────────────────────────────────────────────────────── */
@@ -326,6 +321,42 @@ body.gx-cinema .um-screen { display: none !important; }
   .um-brand { top: max(12px, env(safe-area-inset-top)); left: 14px; }
   .um-toast { bottom: 120px; }
   .um-skyctl { top: max(56px, calc(env(safe-area-inset-top) + 46px)); left: 14px; }
+}
+
+/* ── Sembunyikan elemen Galaxy Explorer asli yang tidak diperlukan ──────────── */
+
+/* Sembunyikan tab/strip galaxy astronomi di bagian bawah */
+#galaxystrip,
+#solarstrip,
+#solartime,
+#solarlabels,
+#solarback,
+#skylabels,
+#skyback {
+  display: none !important;
+}
+
+/* Sembunyikan title/audio dari Galaxy Explorer asli */
+#title,
+#audio {
+  display: none !important;
+}
+
+/* Sembunyikan beacon panel default (digantikan oleh panel Untukmu) */
+#beacon-panel:not(.um-panel) {
+  display: none !important;
+}
+
+/* Sembunyikan language selector default (digantikan oleh Untukmu) */
+#lang:not(.um-lang) {
+  display: none !important;
+}
+
+/* Pastikan hanya UI Untukmu yang tampil */
+body:not(.gx-cinema) .um-dock,
+body:not(.gx-cinema) .um-brand,
+body:not(.gx-cinema) .um-screen.on {
+  display: block !important;
 }
 
 /* ── Efek visual untuk partikel interaktif ────────────────────────────────── */
