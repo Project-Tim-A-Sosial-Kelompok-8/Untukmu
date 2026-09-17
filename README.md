@@ -1,7 +1,7 @@
 ## 👥 Panduan Kerjasama untuk Tim A Kelompok 8
 
 **Project Manager:** Hanung  
-**Anggota Tim:** Winda, Yoga, Cania, Tarisa, Adit, Farid, Maherul
+**Anggota Tim:** Yoga, Cania, Tarisa, Adit, Farid, Maherul
 
 Panduan ini wajib diikuti semua kontributor agar riwayat git tetap rapi dan review mudah.
 
