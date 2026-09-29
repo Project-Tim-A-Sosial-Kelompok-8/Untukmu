@@ -1,0 +1,1570 @@
+{
+  "description": "SHA-256 of packaged files, excluding this manifest itself",
+  "files": [
+    {
+      "path": ".dockerignore",
+      "bytes": 176,
+      "sha256": "4cd07e17b04d25015d8f08131387506a0fc1d6a3f9c5eea8a1ca9017132ba649"
+    },
+    {
+      "path": ".env.example",
+      "bytes": 646,
+      "sha256": "e02e6f4de90431ac48bf0dd5932161c405af5321f5cd24a934217175f5464e85"
+    },
+    {
+      "path": ".github/workflows/ci.yml",
+      "bytes": 1523,
+      "sha256": "5f7c04b1394032f54d1ee4783f15a867557863277d17c54790969435a7393b68"
+    },
+    {
+      "path": ".gitignore",
+      "bytes": 170,
+      "sha256": "dce2be60b32dca63dd29d707aaa6cd517db7f3bae5e03d880f865873d1ca347f"
+    },
+    {
+      "path": "README.md",
+      "bytes": 7134,
+      "sha256": "480945e94a17abf910aaba8ad6fed5f973b8ead767cc1463d7902581d2927121"
+    },
+    {
+      "path": "THIRD-PARTY-NOTICES.md",
+      "bytes": 24938,
+      "sha256": "312cac11504bf1de55c40b09a52b92339d4f14bda8dd48786fb5341d8a543184"
+    },
+    {
+      "path": "apps/api/Dockerfile",
+      "bytes": 521,
+      "sha256": "4e5edc2471d0594cd58db5436782d59e877ae2864c6bcf479b291e5581098890"
+    },
+    {
+      "path": "apps/api/alembic/catalog-v1.json",
+      "bytes": 10181,
+      "sha256": "c2cb89b289551b71dade1873af1a2cf5e342031c492c3bb4f7ebe44645e231a3"
+    },
+    {
+      "path": "apps/api/alembic/env.py",
+      "bytes": 1249,
+      "sha256": "9371b9487965358661010fe6388fe391c8591b17eac213a85a3e9c33dc9fa966"
+    },
+    {
+      "path": "apps/api/alembic/versions/0001_foundation.py",
+      "bytes": 10718,
+      "sha256": "ef574000dfcb4a3c06e2067887e9dbcae60f46fb38fbdb692a0e155bf468f10d"
+    },
+    {
+      "path": "apps/api/alembic/versions/0002_social.py",
+      "bytes": 1944,
+      "sha256": "e62f1b0266a98e5910be043d9ff05cb6d67dad88300f3804262666dc31641812"
+    },
+    {
+      "path": "apps/api/alembic/versions/0003_prayers.py",
+      "bytes": 1860,
+      "sha256": "7cf7486c9dd18d04091ad7df6a3c5b1d5f0aedb44b0c493eb82bb053572e9ebc"
+    },
+    {
+      "path": "apps/api/alembic/versions/0004_recovery.py",
+      "bytes": 382,
+      "sha256": "1b5c00a61c5f666ba5b83904cae30e75104142806704af6cbe1ba47025cc5f39"
+    },
+    {
+      "path": "apps/api/alembic.ini",
+      "bytes": 528,
+      "sha256": "ad5362b8c20d0d381a99202dddfec3733576e4cbab2d35257dd3d79ddaa47893"
+    },
+    {
+      "path": "apps/api/app/__init__.py",
+      "bytes": 1,
+      "sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+    },
+    {
+      "path": "apps/api/app/auth.py",
+      "bytes": 7073,
+      "sha256": "2c96c633058f397c71a067d93afdcbe164f4d9436a5636298fbc1d29f46b994a"
+    },
+    {
+      "path": "apps/api/app/config.py",
+      "bytes": 2542,
+      "sha256": "b3401d32cfd19e4892632d3e2fe20fbbedc2976fde0b07b0b67ac609f8d770ef"
+    },
+    {
+      "path": "apps/api/app/content.py",
+      "bytes": 10082,
+      "sha256": "2d1479cedee1007789f4513bee78fb623e434632c6e54bae0a4623810c152cab"
+    },
+    {
+      "path": "apps/api/app/dashboard.py",
+      "bytes": 2624,
+      "sha256": "31ae60422ff61c6f3ec10b57ccea2115573f2d731863ae05d067524b20deb3ac"
+    },
+    {
+      "path": "apps/api/app/db.py",
+      "bytes": 325,
+      "sha256": "df1443d3d29947fb82edcf3fc3521ca951a5ee68b2528205f29929ba8883767e"
+    },
+    {
+      "path": "apps/api/app/export.py",
+      "bytes": 1065,
+      "sha256": "6373b469f82617ece84fb60215c0295fb0f8062c7a9e96a16b7fdb4d5b3c3bed"
+    },
+    {
+      "path": "apps/api/app/main.py",
+      "bytes": 3133,
+      "sha256": "fba7ca1c74b0147f260293fceb8cdb919f02415678b49361e1e4cc302d98bf8f"
+    },
+    {
+      "path": "apps/api/app/models.py",
+      "bytes": 10305,
+      "sha256": "6fee64cf56eb262f7b0bcf04c6ad9242c6cd8f75254a262528fef582c071aadc"
+    },
+    {
+      "path": "apps/api/app/prayer_catalog.py",
+      "bytes": 689,
+      "sha256": "ca84e9853cc4e27005c07fcba55793b7253adf3bb057aa5e061991a1bba42833"
+    },
+    {
+      "path": "apps/api/app/prayers.py",
+      "bytes": 8344,
+      "sha256": "c13ada6e5ea6c155b156f93cf54a29534f4c74e0c039154665843db6ad5ea92c"
+    },
+    {
+      "path": "apps/api/app/public_content.py",
+      "bytes": 1110,
+      "sha256": "b32aedbf4c16083c7aec36d9a49600d218ac243352e74a0a4ce06452913403bc"
+    },
+    {
+      "path": "apps/api/app/recovery.py",
+      "bytes": 2574,
+      "sha256": "81ebcfb36778b3569b59fab08808eafcac6f0f765ded57e0243cb48a2e8d5670"
+    },
+    {
+      "path": "apps/api/app/schemas.py",
+      "bytes": 8334,
+      "sha256": "0748ec0d20cc7c4bc04bd36d734bad026797bbcff7571645314daae165a45b08"
+    },
+    {
+      "path": "apps/api/app/security.py",
+      "bytes": 7395,
+      "sha256": "17ba1e9d95552fdc8088c91be238f0adf5a6a3b11fe41ec6eb6ea784aa863a96"
+    },
+    {
+      "path": "apps/api/app/sharing.py",
+      "bytes": 1820,
+      "sha256": "ded671bfd019d4db63625f1939f04e75cc9296abba4c3e2de7251b5ff61a7398"
+    },
+    {
+      "path": "apps/api/app/social.py",
+      "bytes": 8377,
+      "sha256": "ea227569d7dbb6ff4e720f325c5cb33f5305ad9ce9c38345d28486e24fb65def"
+    },
+    {
+      "path": "apps/api/app/uploads.py",
+      "bytes": 3404,
+      "sha256": "bef89a3b044a81b6cf6efc3b474dda51fee9f70bb3036e8ec43cd8df3c077973"
+    },
+    {
+      "path": "apps/api/app/worker.py",
+      "bytes": 1791,
+      "sha256": "83da2ae13fc04d575e64c095af58be9d954255d830448ed95a2b10c3273af62e"
+    },
+    {
+      "path": "apps/api/data/prayers-v1.json",
+      "bytes": 10181,
+      "sha256": "c2cb89b289551b71dade1873af1a2cf5e342031c492c3bb4f7ebe44645e231a3"
+    },
+    {
+      "path": "apps/api/pyproject.toml",
+      "bytes": 204,
+      "sha256": "0eb60c11098f3a2fbe9b97c596b8da3b6c63480607ceecdb2b8656f47cd2a1da"
+    },
+    {
+      "path": "apps/api/requirements-dev.lock",
+      "bytes": 3172,
+      "sha256": "c35585fb6c32190fdc29abed0f0b3d4599c56374a60410a2f33e6fd09385a401"
+    },
+    {
+      "path": "apps/api/requirements-dev.txt",
+      "bytes": 112,
+      "sha256": "57edd39ed3be2d65ec80222dc1cffbbc85392fbaa0ab2e8b832231c99c8683e9"
+    },
+    {
+      "path": "apps/api/requirements.lock",
+      "bytes": 2698,
+      "sha256": "e93f697ea40133d0102ba3b2cdca687f4f6638111e1cf6c968b1c6c9facf16d0"
+    },
+    {
+      "path": "apps/api/requirements.txt",
+      "bytes": 257,
+      "sha256": "7ab91744652b73c6763a16baefda9e54aafcc7b9fa39524f47608d86f5f12b82"
+    },
+    {
+      "path": "apps/api/scripts/init_storage.py",
+      "bytes": 793,
+      "sha256": "c608d606f8e7517adfe9dc17c6954ca7615fa809f003857ce7bce5beb0faa43b"
+    },
+    {
+      "path": "apps/api/scripts/make_admin.py",
+      "bytes": 733,
+      "sha256": "c415871b43f72c9d146544b4c8d1b6f7000a79b106d1b90ae29c7cada5cbcced"
+    },
+    {
+      "path": "apps/api/tests/__init__.py",
+      "bytes": 1,
+      "sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+    },
+    {
+      "path": "apps/api/tests/browser_server.py",
+      "bytes": 1274,
+      "sha256": "13f7a6c6fbbb7ae917e9e693d78c0ff3eab7f728d152ea2b6e93297ad58f86a5"
+    },
+    {
+      "path": "apps/api/tests/conftest.py",
+      "bytes": 3279,
+      "sha256": "091ab99c1a62158553d95f61034f06ac8cda4ceed23b4603ed63cdcee1ec8447"
+    },
+    {
+      "path": "apps/api/tests/promote_browser_admin.py",
+      "bytes": 628,
+      "sha256": "84699623bcb57cbdc8fe9736d6af46bccd92cbc958431c0e5b7f1dc053146e2c"
+    },
+    {
+      "path": "apps/api/tests/test_advanced.py",
+      "bytes": 4523,
+      "sha256": "356d4ec3be1cbf7e3a4eeca1660afa4a8810eee9eee01a5acd63acdcb44aef94"
+    },
+    {
+      "path": "apps/api/tests/test_foundation.py",
+      "bytes": 8560,
+      "sha256": "84243025fbda1c430c0e0d0bc61746a213f9a079574c36526bdcbf739de56ad3"
+    },
+    {
+      "path": "apps/api/tests/test_prayers.py",
+      "bytes": 3134,
+      "sha256": "019725dbf106549553316b67ad8579f6da3f2b2a690fd46ba3d5fb18fc51c4b0"
+    },
+    {
+      "path": "apps/api/tests/test_security_release.py",
+      "bytes": 2876,
+      "sha256": "f318e4a8442a19359b635738c1d56cead23f2e9282f5de9d7c11c4c5832f26a3"
+    },
+    {
+      "path": "apps/api/tests/test_social.py",
+      "bytes": 6866,
+      "sha256": "3b657172ace8d296e4bab237cb2ee233057c72daeda49a6e32920199ef7163ee"
+    },
+    {
+      "path": "apps/web/Dockerfile",
+      "bytes": 878,
+      "sha256": "19d0d30232ff08f44d7300ca26cf6fa0b49918210b2c20030397a17dd9004a9c"
+    },
+    {
+      "path": "apps/web/eslint.config.mjs",
+      "bytes": 292,
+      "sha256": "bdd0503e856b0a5380ee05c01b53e72e1453fa740351444d96f25eb4c88f3578"
+    },
+    {
+      "path": "apps/web/legacy/.github/workflows/deploy-pages.yml",
+      "bytes": 724,
+      "sha256": "dd139fb93bb34b8ad6713164cee9107e8b0e329fa7901f8cae182ffd9c8bf45c"
+    },
+    {
+      "path": "apps/web/legacy/.gitignore",
+      "bytes": 1497,
+      "sha256": "b115e6108252e665f8e5ba0d8fe03877653dbc88a3f0a6b033baf960bf444278"
+    },
+    {
+      "path": "apps/web/legacy/README.md",
+      "bytes": 3676,
+      "sha256": "4c7368b22d53de26fcee05d7eadb755b21b01541cb9d3efe152077b8e4f644f2"
+    },
+    {
+      "path": "apps/web/legacy/THIRD-PARTY-NOTICES.md",
+      "bytes": 24938,
+      "sha256": "312cac11504bf1de55c40b09a52b92339d4f14bda8dd48786fb5341d8a543184"
+    },
+    {
+      "path": "apps/web/legacy/audio/README.md",
+      "bytes": 444,
+      "sha256": "16871f88fb4cc75d06271630090ea13751b1efac81ce977eabb10470651b449b"
+    },
+    {
+      "path": "apps/web/legacy/dev.bat",
+      "bytes": 223,
+      "sha256": "0309b6ca289b81ba06df2771ac1ce9686269cf11ec335ce085a6c16318988f47"
+    },
+    {
+      "path": "apps/web/legacy/dev.command",
+      "bytes": 325,
+      "sha256": "037720936a6f2d9f75f8fbc2d66a8bb49ef76b8d800814360282682f0ad669b1"
+    },
+    {
+      "path": "apps/web/legacy/docs/superpowers/plans/2026-07-18-beacon-interaction.md",
+      "bytes": 29504,
+      "sha256": "4849ee3e59a1d0de6ee6db9653c0ebe9e8e6cdc0202a10ccba9858627e8fbc37"
+    },
+    {
+      "path": "apps/web/legacy/docs/superpowers/plans/2026-07-18-celestial-view.md",
+      "bytes": 47664,
+      "sha256": "dec0b7779927445db51ce51a6a68b243bd6cfe57946c81fb209bda0088bd133f"
+    },
+    {
+      "path": "apps/web/legacy/docs/superpowers/plans/2026-07-19-in-galaxy-detection.md",
+      "bytes": 33809,
+      "sha256": "ec1f940e9a2df010b19e1cdfd7cdd83f615ada492863b8bff990262162edd8e2"
+    },
+    {
+      "path": "apps/web/legacy/docs/superpowers/plans/2026-07-21-solar-system-guide.md",
+      "bytes": 28381,
+      "sha256": "1c3f72b7775ff1dedb1d6aad0ed7951f854774f4db93a03f4eca5014f0fe4757"
+    },
+    {
+      "path": "apps/web/legacy/docs/superpowers/plans/2026-07-22-solar-selection-visual-refresh.md",
+      "bytes": 19286,
+      "sha256": "c2d92322ceb175b635f08192982032ab033ec0b38aa8ec1c39c1121da77764bd"
+    },
+    {
+      "path": "apps/web/legacy/docs/superpowers/specs/2026-07-18-beacon-interaction-design.md",
+      "bytes": 9733,
+      "sha256": "28051b1fbd542bf61be98fa786d4feb831d03bf3359d35ea5797771aab64735e"
+    },
+    {
+      "path": "apps/web/legacy/docs/superpowers/specs/2026-07-18-celestial-view-design.md",
+      "bytes": 4758,
+      "sha256": "2d7e2b0d9e358a5032f4aeb980ee646c99a29275698b0218d4c51f83c89ed115"
+    },
+    {
+      "path": "apps/web/legacy/docs/superpowers/specs/2026-07-19-in-galaxy-detection-design.md",
+      "bytes": 9308,
+      "sha256": "e7eea501dfe7f2a1c972b49677ade86f0c06e3630e0b79960b4da04a6cbe0829"
+    },
+    {
+      "path": "apps/web/legacy/docs/superpowers/specs/2026-07-21-solar-system-guide-design.md",
+      "bytes": 14466,
+      "sha256": "89a723bcd5e47a4e14ee8dff7bad4dcd0232f9dd2d37a5360f64dceeba600695"
+    },
+    {
+      "path": "apps/web/legacy/docs/superpowers/specs/2026-07-22-solar-selection-visual-refresh-design.md",
+      "bytes": 6281,
+      "sha256": "63629f8ed96b6c7164e83f74be6624aa0fe8661222e9e6100d830bda14920732"
+    },
+    {
+      "path": "apps/web/legacy/images/andromeda.jpg",
+      "bytes": 243837,
+      "sha256": "9c970c675fc401fd3e76c37ac3e7c4c8521a73772b282afe40bed0899cd95f51"
+    },
+    {
+      "path": "apps/web/legacy/images/antares.jpg",
+      "bytes": 39471,
+      "sha256": "ea7f08e10d00762282cb1e132cc6bcc03bd6dc5249607c8b8850e82e5501e470"
+    },
+    {
+      "path": "apps/web/legacy/images/betelgeuse.jpg",
+      "bytes": 44079,
+      "sha256": "60b21ec2e28df4fbf3d3c3464e86ddd19f1dcac3311acadf655416511c806bee"
+    },
+    {
+      "path": "apps/web/legacy/images/carina-nebula.jpg",
+      "bytes": 205682,
+      "sha256": "bc367181622712a118d4b1d6e367c49779b0af4753bce6d19c8a09765f38921d"
+    },
+    {
+      "path": "apps/web/legacy/images/cen-a.jpg",
+      "bytes": 375375,
+      "sha256": "5cc5527b1e2a2ca4dcbc88905b53fd50c5f4999fdef9ae95d5c3e8dfb62d751a"
+    },
+    {
+      "path": "apps/web/legacy/images/cena-jet.jpg",
+      "bytes": 337588,
+      "sha256": "ddf67c8ff560fe9cc4a34d4c78cd58dbbe652921bdfcc0085690045b01094257"
+    },
+    {
+      "path": "apps/web/legacy/images/cena-plate.png",
+      "bytes": 902735,
+      "sha256": "43a031ee9fba3061d7db811af5e86e7bd00c28a1250dd7c5b73058523d6786ff"
+    },
+    {
+      "path": "apps/web/legacy/images/cena-sfr.jpg",
+      "bytes": 384289,
+      "sha256": "ac8da29e0d566ec70a615f48a15e7c5316447bc24879ca5b9f8ab786615c289d"
+    },
+    {
+      "path": "apps/web/legacy/images/comet-halley.jpg",
+      "bytes": 319448,
+      "sha256": "b62b3a8392a8c475ff156598069de8658e3c3ebaca475c91407a92b683fb8b97"
+    },
+    {
+      "path": "apps/web/legacy/images/cons-andromeda.jpg",
+      "bytes": 644883,
+      "sha256": "42955afbd46b61ddba5e012b12ffac7d7b62ceda137fa969a8a8376acb55c444"
+    },
+    {
+      "path": "apps/web/legacy/images/cons-canis-major.jpg",
+      "bytes": 464317,
+      "sha256": "e96d96ef22c9a00664b3258277236182573480432ae44f46baa26ded71f79141"
+    },
+    {
+      "path": "apps/web/legacy/images/cons-cassiopeia.jpg",
+      "bytes": 461795,
+      "sha256": "9f5ed3c864e11aef135df99f6b849ab8f3c1e21030167a1a722493dfe99ba87b"
+    },
+    {
+      "path": "apps/web/legacy/images/cons-centaurus.jpg",
+      "bytes": 641548,
+      "sha256": "6b97af2346eaa67f5601de40c479b02d5cdb713ac8e0e698379a2bf5b64d68c2"
+    },
+    {
+      "path": "apps/web/legacy/images/cons-crux.jpg",
+      "bytes": 473929,
+      "sha256": "24d35053c6847d5c2594318bdf45ba1457eae54eea50e995a2aa28d02d1f2825"
+    },
+    {
+      "path": "apps/web/legacy/images/cons-cygnus.jpg",
+      "bytes": 421337,
+      "sha256": "f46a5d8483329bb0f8939ff54c13b3ceecae982c9cdc86306e85f03e47235425"
+    },
+    {
+      "path": "apps/web/legacy/images/cons-dorado.jpg",
+      "bytes": 632937,
+      "sha256": "5ccd11cd6c0b6eeed06130e1b595cea40ad777a6403c6f6fddfc8d6cc2dbb177"
+    },
+    {
+      "path": "apps/web/legacy/images/cons-lyra.jpg",
+      "bytes": 371069,
+      "sha256": "81b1c5228be4699570673c33360f4e6750457b927aae68dc1e6bc6f08773226b"
+    },
+    {
+      "path": "apps/web/legacy/images/cons-orion.jpg",
+      "bytes": 404941,
+      "sha256": "cc59553a81260187c32f08fdb7dd09cc4510b425458f440401dfd2be66620192"
+    },
+    {
+      "path": "apps/web/legacy/images/cons-triangulum.jpg",
+      "bytes": 613942,
+      "sha256": "66c0fad80675f64c6cd2b3b2cc956eefe161f8cd48618e854785db59b35bdf29"
+    },
+    {
+      "path": "apps/web/legacy/images/cons-tucana.jpg",
+      "bytes": 580696,
+      "sha256": "a1756a5f8ad05eed578dd743ca2386c78899c22e2d04bbdbe6bcd3e92ecb709c"
+    },
+    {
+      "path": "apps/web/legacy/images/cons-ursa-major.jpg",
+      "bytes": 409762,
+      "sha256": "473c7bf87cd94248270e743d4f8b4bb698c6cda8d408b98322e45634eb638dce"
+    },
+    {
+      "path": "apps/web/legacy/images/cons-ursa-minor.jpg",
+      "bytes": 447643,
+      "sha256": "3b9ec0f0c9961b727979323c645104292d2e957caf4931d3e4ea071b416fbbfa"
+    },
+    {
+      "path": "apps/web/legacy/images/constellations/aquarius.png",
+      "bytes": 1266316,
+      "sha256": "1aecc4f917ac994c7d7c36c80cf0ba83e0e8582d464930c0d30b425a931e5c01"
+    },
+    {
+      "path": "apps/web/legacy/images/constellations/aquarius_stars.png",
+      "bytes": 1104096,
+      "sha256": "5a6af76ed15f2e140494cfe0349b1e884abdc73ddb6e9c4b1a665c25db86ca8e"
+    },
+    {
+      "path": "apps/web/legacy/images/constellations/aries.png",
+      "bytes": 1205063,
+      "sha256": "dceefab45293aeba06905f76f4561c4f31cd9aec5f8242b18ff40ad5f87bae96"
+    },
+    {
+      "path": "apps/web/legacy/images/constellations/aries_stars.png",
+      "bytes": 1061281,
+      "sha256": "2307c288c3a0b39268f1b02d5eb7a269f5aca3d6f72fd575f5e594f60143b676"
+    },
+    {
+      "path": "apps/web/legacy/images/constellations/cancer.png",
+      "bytes": 1117789,
+      "sha256": "019a5e8aece625b72f372a21008be66a73a47a5c8b74da63559a94e5bdd6a51e"
+    },
+    {
+      "path": "apps/web/legacy/images/constellations/cancer_stars.png",
+      "bytes": 996844,
+      "sha256": "f25d680df42e62aee81f94c36af23055b039eb29dd4ff718c1a25e738407c77c"
+    },
+    {
+      "path": "apps/web/legacy/images/constellations/capricornus.png",
+      "bytes": 1205234,
+      "sha256": "be22984aec148f035a9d6898408e9ec4d4be31e992a3cc8ebe95273cfb57b2ea"
+    },
+    {
+      "path": "apps/web/legacy/images/constellations/capricornus_stars.png",
+      "bytes": 1056120,
+      "sha256": "fdfadb5f9fb22a3c68341417e5fb19627e402e205bfa84467188a97276d32e35"
+    },
+    {
+      "path": "apps/web/legacy/images/constellations/gemini.png",
+      "bytes": 1126083,
+      "sha256": "99ff8e8c99443bf03a39a0cd3093210dd540589d5098fc3c798c39beec52054b"
+    },
+    {
+      "path": "apps/web/legacy/images/constellations/gemini_stars.png",
+      "bytes": 1007170,
+      "sha256": "645b43bd2db33dcad1ad01fefda3d760651852c0d66ceae62d59d98878a019e7"
+    },
+    {
+      "path": "apps/web/legacy/images/constellations/leo.png",
+      "bytes": 1156897,
+      "sha256": "5ac9e855b11b8026011175d49b03538418851d0e5846239c7a04de52d51ce456"
+    },
+    {
+      "path": "apps/web/legacy/images/constellations/leo_stars.png",
+      "bytes": 1023553,
+      "sha256": "f5b4cd10557016abaeb30c17aa7c65bc3d65bbddbe3db36fe63f980805f16870"
+    },
+    {
+      "path": "apps/web/legacy/images/constellations/libra.png",
+      "bytes": 1078828,
+      "sha256": "4edb0fb154ca443c270f07defad8d5b37189b088ccc8258a849b6d4e1c820e3e"
+    },
+    {
+      "path": "apps/web/legacy/images/constellations/libra_stars.png",
+      "bytes": 968862,
+      "sha256": "816200f5b66438fa134ff2b676ba23d20814fe687d571d3b78a02893850477cb"
+    },
+    {
+      "path": "apps/web/legacy/images/constellations/pisces.png",
+      "bytes": 974097,
+      "sha256": "4a49e5a12b7a0d369dc3af0d5ba7178f5d8aea830291ed773a8c8eebeca420fd"
+    },
+    {
+      "path": "apps/web/legacy/images/constellations/pisces_stars.png",
+      "bytes": 976076,
+      "sha256": "e4f4eeb59767ef1c756ccfc695ea15a6f1422b0465b5fdc389cfb28b695ecd56"
+    },
+    {
+      "path": "apps/web/legacy/images/constellations/sagittarius.png",
+      "bytes": 1183899,
+      "sha256": "afb94fbb9cc979c8fec842aa03d78088ba385fb2d3c2a140065453e6ad343d35"
+    },
+    {
+      "path": "apps/web/legacy/images/constellations/sagittarius_stars.png",
+      "bytes": 1050748,
+      "sha256": "65f41779c3b4e225f2b82496fb6857d95dac3f7faf1bd22b6e21e2d267e736df"
+    },
+    {
+      "path": "apps/web/legacy/images/constellations/scorpius.png",
+      "bytes": 1164377,
+      "sha256": "44a199b5b7bd581c436521c0fc4cf349a2b0cc06d71c5b771bd47393923dd752"
+    },
+    {
+      "path": "apps/web/legacy/images/constellations/scorpius_stars.png",
+      "bytes": 1033624,
+      "sha256": "3931aecf2ed5aa8b950d4e6265bc7e48a8b7e994c24f74369d6f5b46dd5335eb"
+    },
+    {
+      "path": "apps/web/legacy/images/constellations/taurus.png",
+      "bytes": 1199381,
+      "sha256": "1ad8b968b649d401f711335ab6ec1fc19e2801f965d81a1f7d0cc64e15842ebb"
+    },
+    {
+      "path": "apps/web/legacy/images/constellations/taurus_stars.png",
+      "bytes": 1063673,
+      "sha256": "692713a0218907fd80237c6b7c61c950d5079b887363488a07c7867b5541030b"
+    },
+    {
+      "path": "apps/web/legacy/images/constellations/virgo.png",
+      "bytes": 1160224,
+      "sha256": "8c2c5b8c80044eb7b1a3c3c39b379e68f8045bfd85a2288081bebdcab57de941"
+    },
+    {
+      "path": "apps/web/legacy/images/constellations/virgo_stars.png",
+      "bytes": 1028985,
+      "sha256": "9146ae5a52a14a880d26020feb670643b269113f88c75b8b418196e888315aef"
+    },
+    {
+      "path": "apps/web/legacy/images/crab-nebula.jpg",
+      "bytes": 298414,
+      "sha256": "618af7da5fad3955e4669d011234efc47731f9a74e9b4e29c37b6549baf14679"
+    },
+    {
+      "path": "apps/web/legacy/images/cygnus-x1.jpg",
+      "bytes": 207666,
+      "sha256": "7ae54c4de53f7a3ade068f7b0f961210f48f0baa897122b850f1bf0868322191"
+    },
+    {
+      "path": "apps/web/legacy/images/eagle-nebula.jpg",
+      "bytes": 449793,
+      "sha256": "1b7d3c2c8758f6025e30b4897b107ab88255965b31f6fb400afbe90bb3c6ef81"
+    },
+    {
+      "path": "apps/web/legacy/images/g1.jpg",
+      "bytes": 166716,
+      "sha256": "f7ced718969f06f1ce71248c2e89bf1510ab6af6523dceff6266b73b5dffcca4"
+    },
+    {
+      "path": "apps/web/legacy/images/helix-nebula.jpg",
+      "bytes": 112602,
+      "sha256": "50179989ee8ea7fce1d8df08c1cbb08113d1a9de86a7066cbd9a04e90d54bd73"
+    },
+    {
+      "path": "apps/web/legacy/images/hercules-cluster.jpg",
+      "bytes": 412089,
+      "sha256": "caf955ab785acb7f7abeea8823acfe831e9d981f9c9c7be7008c4467a08aafee"
+    },
+    {
+      "path": "apps/web/legacy/images/horsehead-nebula.jpg",
+      "bytes": 180399,
+      "sha256": "8d76ca3b111ad965d6f1103c4018e2202d529ec5d4104ef2c2eb3122c55440e8"
+    },
+    {
+      "path": "apps/web/legacy/images/lagoon-nebula.jpg",
+      "bytes": 133592,
+      "sha256": "0e690d1698261cbe468f1a415b0e4b2328ed5e36497bd42f3dc57cb0a32691cf"
+    },
+    {
+      "path": "apps/web/legacy/images/lmc-plate.png",
+      "bytes": 1542266,
+      "sha256": "c1ab340777aa4983bf5424f19c1bd5ee51ace20801083afa5c4ec2ce1ab6e642"
+    },
+    {
+      "path": "apps/web/legacy/images/lmc.jpg",
+      "bytes": 482204,
+      "sha256": "3ea4fa604fa14b7bd88babda9f88b5d6ecf21eda354fbaaa30c332fa1aab985e"
+    },
+    {
+      "path": "apps/web/legacy/images/m104.jpg",
+      "bytes": 120043,
+      "sha256": "3a49a30c7ed2c3beef2e2cd6a1ceeab4ece34734176864a031387a22c0f139c6"
+    },
+    {
+      "path": "apps/web/legacy/images/m15.jpg",
+      "bytes": 484820,
+      "sha256": "0550f09cc7a0a31cb4a7944612f7e86159383efa5e5e54e054f089d2bda4cdcf"
+    },
+    {
+      "path": "apps/web/legacy/images/m22.jpg",
+      "bytes": 493985,
+      "sha256": "534be6722169cadca193c5d01e2cf847c076b5b7f17651560e3bc4f6c0153031"
+    },
+    {
+      "path": "apps/web/legacy/images/m33.jpg",
+      "bytes": 189281,
+      "sha256": "2429b62c83ac72057f710b2ac8417741f9cedcb3a490e4065a1aad3a97c858b5"
+    },
+    {
+      "path": "apps/web/legacy/images/m5.jpg",
+      "bytes": 448932,
+      "sha256": "1fc63db5ad1927b0a48cddb66b35661b778c6b4917afb1b0a133505cb4e2a93d"
+    },
+    {
+      "path": "apps/web/legacy/images/m87-jet.jpg",
+      "bytes": 212497,
+      "sha256": "085c7976dd42ca47301f31467fe8e09cf17513c59cd36c2d44c4b846cde98a6b"
+    },
+    {
+      "path": "apps/web/legacy/images/m87.jpg",
+      "bytes": 28409,
+      "sha256": "04c40a232c5d607ee741c0c516c1926f01be4a9f7d34164dc881ac87d513c346"
+    },
+    {
+      "path": "apps/web/legacy/images/ngc206.jpg",
+      "bytes": 322748,
+      "sha256": "7feeb0c27259541146c0587f1952c989bfd0044b24e8c87624daf0ec76cc3fb0"
+    },
+    {
+      "path": "apps/web/legacy/images/ngc346.jpg",
+      "bytes": 461673,
+      "sha256": "854d936572f8ba8dc2c1ba4df108a58526ee7299aae181459df335baad0803df"
+    },
+    {
+      "path": "apps/web/legacy/images/ngc604.jpg",
+      "bytes": 313473,
+      "sha256": "be1d724bb750706585e33fe555d580186977c478dfd54fd29021eeff8030360d"
+    },
+    {
+      "path": "apps/web/legacy/images/omega-centauri.jpg",
+      "bytes": 281561,
+      "sha256": "d644c68d6a37531cb414ddd650918aaa791002db0a742e58f2676189ed905add"
+    },
+    {
+      "path": "apps/web/legacy/images/orion-nebula.jpg",
+      "bytes": 162194,
+      "sha256": "a62bcf07d0e48be1a2e254e301c8afc5605129297a4b6821584e9426b65d1d53"
+    },
+    {
+      "path": "apps/web/legacy/images/pleiades.jpg",
+      "bytes": 152637,
+      "sha256": "9675c8c258ba802ce9eabb8baa8ef767058d49856dfe174856e0aff6d1a76dd1"
+    },
+    {
+      "path": "apps/web/legacy/images/polaris.jpg",
+      "bytes": 317493,
+      "sha256": "93d2cefc6ef29f532509b1f295794b8019cc3dcd1686dcdc57116c2a80cf3b1c"
+    },
+    {
+      "path": "apps/web/legacy/images/proxima.jpg",
+      "bytes": 61717,
+      "sha256": "51cf178761b83ce67ba0cd3bc89a9a65f5bd4d04978e6ab65cc2569cc0395a23"
+    },
+    {
+      "path": "apps/web/legacy/images/ring-nebula.jpg",
+      "bytes": 135837,
+      "sha256": "36b1db75c31ce7d27e9afc3b69d7a22c2b718838bafb01ae8b74015b1880f18e"
+    },
+    {
+      "path": "apps/web/legacy/images/sgr-a.jpg",
+      "bytes": 36147,
+      "sha256": "96cb8bce6065f24bcc8e38898643a35b8c7e73a07315b98a5b691f8b408c1bce"
+    },
+    {
+      "path": "apps/web/legacy/images/sirius.jpg",
+      "bytes": 141584,
+      "sha256": "979ad6f204bfc688f6e42c0ef0ae259918d9e7a2145235d4d52b6e5c22af4a2e"
+    },
+    {
+      "path": "apps/web/legacy/images/smc-plate.png",
+      "bytes": 1798917,
+      "sha256": "677d79b31daee3ba47c8e318e94585abd7a4297900839c599c90345e6445ef2e"
+    },
+    {
+      "path": "apps/web/legacy/images/smc.jpg",
+      "bytes": 471395,
+      "sha256": "8ba4e71e6ebb4e1ff2597fcebae10e09d1fd3c3b355979cace07103503bbd0fa"
+    },
+    {
+      "path": "apps/web/legacy/images/sn1987a.jpg",
+      "bytes": 205477,
+      "sha256": "26cfc71bf812960d708b8d60d8bf2c729b830b9078c6264f0ba97cf37d008f1e"
+    },
+    {
+      "path": "apps/web/legacy/images/solar-system/README.md",
+      "bytes": 9418,
+      "sha256": "3ac82b3c9f57c73b575128ca1bfb711ae42d4f412a41e8c7bd87879f9e03e3ce"
+    },
+    {
+      "path": "apps/web/legacy/images/solar-system/build-relief-maps.sh",
+      "bytes": 1464,
+      "sha256": "935b0ce8f98dec6509fdf042f253bde9cc3940c5456674db6d4dcc008ae1f4dc"
+    },
+    {
+      "path": "apps/web/legacy/images/solar-system/callisto.jpg",
+      "bytes": 491156,
+      "sha256": "70e123b69f407a3b9a463dfd716c79f99493aa0f23fcaeb918fbe294dedf9b90"
+    },
+    {
+      "path": "apps/web/legacy/images/solar-system/cards/callisto.jpg",
+      "bytes": 187195,
+      "sha256": "a1dc6cbecfde643a07e89a31fd8c522e525c8634ab7350f2b642507e33977fdc"
+    },
+    {
+      "path": "apps/web/legacy/images/solar-system/cards/ceres.jpg",
+      "bytes": 95420,
+      "sha256": "0a824fa1f595e4ceef3ce4df08f4d83b71487666c6680dd46885e665b2242ac6"
+    },
+    {
+      "path": "apps/web/legacy/images/solar-system/cards/earth.jpg",
+      "bytes": 320514,
+      "sha256": "0423cc6073c7fcb99b93da89cc84bd20a1fba8817706dfbeeaa5e1628f5f3a67"
+    },
+    {
+      "path": "apps/web/legacy/images/solar-system/cards/europa.jpg",
+      "bytes": 197732,
+      "sha256": "e207fb1485ec6092b83e0a42a18b81d4bcb5ce1e31d1f1bd816b8e3d9c112a04"
+    },
+    {
+      "path": "apps/web/legacy/images/solar-system/cards/ganymede.jpg",
+      "bytes": 154934,
+      "sha256": "df7b1a1beb8a033386a0983e0347ce35fdfecd8b6a17098e059f3d504fbf75e7"
+    },
+    {
+      "path": "apps/web/legacy/images/solar-system/cards/io.jpg",
+      "bytes": 211238,
+      "sha256": "9a21ec03ffb1229a4315ec501c70d55a3fb9bcf112030b4882ab2740dea99e1e"
+    },
+    {
+      "path": "apps/web/legacy/images/solar-system/cards/jupiter.jpg",
+      "bytes": 88960,
+      "sha256": "1d0f580c1c77b549b1e5ff2d0343db84972183a4c3c31b32600e0683988f3942"
+    },
+    {
+      "path": "apps/web/legacy/images/solar-system/cards/mars.jpg",
+      "bytes": 234625,
+      "sha256": "dc7b44b8c4a6ccb5d89f1e08699c320ac4fab6ae927cefb91594c61a4fc83fb0"
+    },
+    {
+      "path": "apps/web/legacy/images/solar-system/cards/mercury.jpg",
+      "bytes": 149086,
+      "sha256": "4046e20f6bd8bb2393a28a83555d30ba2c15945d06b7c62fc794bc059f9c6d68"
+    },
+    {
+      "path": "apps/web/legacy/images/solar-system/cards/moon.jpg",
+      "bytes": 347110,
+      "sha256": "6b31eeb67857290cd7402f1f6c5d87e17eaccfc7683d939cd4d4ed9379c74ba6"
+    },
+    {
+      "path": "apps/web/legacy/images/solar-system/cards/neptune.jpg",
+      "bytes": 140320,
+      "sha256": "18838642d2ff8364274e882c46e91410d6fc9f8705f5ae1096cb874cd135e359"
+    },
+    {
+      "path": "apps/web/legacy/images/solar-system/cards/pluto.jpg",
+      "bytes": 249377,
+      "sha256": "70344ce4f5f7ac1cdbc8804acb1b885338652e427c1d7eea586c499fa1b55eea"
+    },
+    {
+      "path": "apps/web/legacy/images/solar-system/cards/saturn.jpg",
+      "bytes": 31303,
+      "sha256": "f8bfe0734fa7648349540aa2d74c525b3c6528636471a5b9b0b97c25a32783eb"
+    },
+    {
+      "path": "apps/web/legacy/images/solar-system/cards/sun.jpg",
+      "bytes": 284615,
+      "sha256": "59f6bff88a2c1585eedfc0f5045676d00365cf96531c6c86cc917e47d7db4da9"
+    },
+    {
+      "path": "apps/web/legacy/images/solar-system/cards/titan.jpg",
+      "bytes": 68553,
+      "sha256": "c4c54da1ef30ee3bba5a3f63259de9e7aa42196ee17ce31e529c56333704c973"
+    },
+    {
+      "path": "apps/web/legacy/images/solar-system/cards/triton.jpg",
+      "bytes": 241760,
+      "sha256": "662eb9e66f0117bec7c31b1de44aa770844563f5ee635a7478b57d6431bc2625"
+    },
+    {
+      "path": "apps/web/legacy/images/solar-system/cards/uranus.jpg",
+      "bytes": 60189,
+      "sha256": "a4acd23f2c30627523f4eca9ee08399219e5147f697e698138675b9a462024e4"
+    },
+    {
+      "path": "apps/web/legacy/images/solar-system/cards/venus.jpg",
+      "bytes": 51261,
+      "sha256": "99335f7d3d07920d7475893e0322d97b1afcc34d7c76ba1cecc19d17b76c82b1"
+    },
+    {
+      "path": "apps/web/legacy/images/solar-system/ceres.jpg",
+      "bytes": 185326,
+      "sha256": "dc92eb63042c1eba12a11fb73c8e62c043e7e4272260c51804dc85b50b2f387f"
+    },
+    {
+      "path": "apps/web/legacy/images/solar-system/earth-clouds.png",
+      "bytes": 2509803,
+      "sha256": "ce136db7ba632ed87aebfd02967d1c7cd3022727d511321d534e50c5a0a5af69"
+    },
+    {
+      "path": "apps/web/legacy/images/solar-system/earth-night.jpg",
+      "bytes": 843973,
+      "sha256": "e93272cff3486df07442f92191a43b4bec68904c42305a4cc4e7c7cf6b2874d3"
+    },
+    {
+      "path": "apps/web/legacy/images/solar-system/earth.jpg",
+      "bytes": 1408283,
+      "sha256": "ab0eb5c3e97b68190b8c34670d1db343f7d62d7994b613d21a1aeef7483e0363"
+    },
+    {
+      "path": "apps/web/legacy/images/solar-system/europa.jpg",
+      "bytes": 274303,
+      "sha256": "8a3a2f180ac9beb0d19a0b8f93ae349c0aeefc29d628906154e0c9cee8ea9dc4"
+    },
+    {
+      "path": "apps/web/legacy/images/solar-system/ganymede.jpg",
+      "bytes": 388874,
+      "sha256": "6b4779efa7c18a41da34c4a12da7f661877689ec247a14e3a7045410e5d89a85"
+    },
+    {
+      "path": "apps/web/legacy/images/solar-system/io.jpg",
+      "bytes": 273072,
+      "sha256": "7ba57e53a3b85204bf89266c2a934c43ecf3a2b622c83c2f412e2c7e03e18c5c"
+    },
+    {
+      "path": "apps/web/legacy/images/solar-system/jupiter.jpg",
+      "bytes": 2541943,
+      "sha256": "2256a5d79d099d253a647ec4d1ad9132f9d2f10522c3160da22340629d9a3fc6"
+    },
+    {
+      "path": "apps/web/legacy/images/solar-system/mars-normal.png",
+      "bytes": 815273,
+      "sha256": "9013bf146ff92704e146ef0f7c8fe023252788709656192f58c5d9be6ea465ab"
+    },
+    {
+      "path": "apps/web/legacy/images/solar-system/mars.jpg",
+      "bytes": 2517226,
+      "sha256": "d617e89861031d6f2a8e9d974a5d3b9875a2277d71d922efb32998e637fe5491"
+    },
+    {
+      "path": "apps/web/legacy/images/solar-system/mercury.jpg",
+      "bytes": 948864,
+      "sha256": "a3e682f487112220d4d6367e45b4818df27e2bf8bb5e4370294b7641a4d8553e"
+    },
+    {
+      "path": "apps/web/legacy/images/solar-system/moon-normal.png",
+      "bytes": 1013810,
+      "sha256": "819e66c64d7744daa44bea9cd38a88957eafddb1a945f3ee5e868731fbae1056"
+    },
+    {
+      "path": "apps/web/legacy/images/solar-system/moon.jpg",
+      "bytes": 4588317,
+      "sha256": "fd7c97e710e01ca3c4809e8fdccda69d41bc8bfa732db2714896bbb3ea9438b3"
+    },
+    {
+      "path": "apps/web/legacy/images/solar-system/neptune.jpg",
+      "bytes": 224712,
+      "sha256": "c043b3c0854609ec060e37c82a6862145bba47933b1687881754d15bc28675be"
+    },
+    {
+      "path": "apps/web/legacy/images/solar-system/pluto.jpg",
+      "bytes": 346097,
+      "sha256": "edd220b49bb484844d1c17a2db10dc15a0d140ddb0e0f7ce347c2f2e63a5dbf7"
+    },
+    {
+      "path": "apps/web/legacy/images/solar-system/saturn-rings.png",
+      "bytes": 1014989,
+      "sha256": "4d74d4ccc1f1efb5a1a4ceed3588384e75ccd4875216cb1cae53885c5991c273"
+    },
+    {
+      "path": "apps/web/legacy/images/solar-system/saturn.jpg",
+      "bytes": 987157,
+      "sha256": "73aadcde0d0b202930245164d7d836aa32e6fdbaa1f6720dc7275bbbb6aab597"
+    },
+    {
+      "path": "apps/web/legacy/images/solar-system/sun.jpg",
+      "bytes": 3230387,
+      "sha256": "f3bade1d040ec22754be64da06c79b7173537976f4548908180b81a06d2facf2"
+    },
+    {
+      "path": "apps/web/legacy/images/solar-system/titan.jpg",
+      "bytes": 43325,
+      "sha256": "801dfd2142733bc3bd9c942c6a51646d8250c7a3e0971ac0fe4b1076671cb0aa"
+    },
+    {
+      "path": "apps/web/legacy/images/solar-system/triton.jpg",
+      "bytes": 85462,
+      "sha256": "72017632d7334e0f0f7ea270920da836d2520135cc741a3af0af94d9b4b9661f"
+    },
+    {
+      "path": "apps/web/legacy/images/solar-system/uranus.jpg",
+      "bytes": 130115,
+      "sha256": "741ab383ba64753d8cb2752ebb52a874eb8276c08f17c383e2bf410a24a2e0d3"
+    },
+    {
+      "path": "apps/web/legacy/images/solar-system/venus.jpg",
+      "bytes": 252409,
+      "sha256": "241f7c23794abbc9c72892275ad2f62caf208b029f8bded3dad6af312c212031"
+    },
+    {
+      "path": "apps/web/legacy/images/solar-system-family.jpg",
+      "bytes": 76301,
+      "sha256": "c9fdaa0b68e51e8be40fbb96c24b5787cb04a0a400ca55796ed9ebf2cdef2168"
+    },
+    {
+      "path": "apps/web/legacy/images/tarantula.jpg",
+      "bytes": 418095,
+      "sha256": "0be62d980f0ba6e54b548495634a475dbfde276a5bdbfa63366f6c172f0bf107"
+    },
+    {
+      "path": "apps/web/legacy/images/trappist1.jpg",
+      "bytes": 107142,
+      "sha256": "9701b9a5ed329fba8c24b47fb47e9baf0e7bcd8ce4f77db25f831dd081a05bee"
+    },
+    {
+      "path": "apps/web/legacy/images/uy-scuti.jpg",
+      "bytes": 196148,
+      "sha256": "1e471edc89583a2328ef38e4047a50645002f76ff58da28581ac8c474fc9b2b4"
+    },
+    {
+      "path": "apps/web/legacy/images/veil-nebula.jpg",
+      "bytes": 229536,
+      "sha256": "f7a15090fc7ebe0bf46a38dad40f91f1f5f224177044c34ec86549710816b8f8"
+    },
+    {
+      "path": "apps/web/legacy/images/zodiac-aquarius.jpg",
+      "bytes": 434302,
+      "sha256": "4bf79f0f3ef0afe810b3938d5e268d761e56b28113ea062ae6123efc043156c0"
+    },
+    {
+      "path": "apps/web/legacy/images/zodiac-aries.jpg",
+      "bytes": 435610,
+      "sha256": "3d1da2664785571fa4e10e84a7ba18fbe2c231a1c5f6eb5510362654fcfea5e7"
+    },
+    {
+      "path": "apps/web/legacy/images/zodiac-cancer.jpg",
+      "bytes": 451728,
+      "sha256": "1f8397822161bc386dd89337b1ced0f053e078c1fa5f2da74838ad7d36d60161"
+    },
+    {
+      "path": "apps/web/legacy/images/zodiac-capricornus.jpg",
+      "bytes": 476073,
+      "sha256": "fcb2947cea4aac9d0d235a1c44261b23cd5c62fffffe38018ef8f0addb2bacc8"
+    },
+    {
+      "path": "apps/web/legacy/images/zodiac-gemini.jpg",
+      "bytes": 387702,
+      "sha256": "751fbc4ea3c0540a9a2de31a53c7db5e6da1713af69b2967143f455031465746"
+    },
+    {
+      "path": "apps/web/legacy/images/zodiac-leo.jpg",
+      "bytes": 413951,
+      "sha256": "971aa303451514fcbbf9a6d119d853ab1dc22a6159d86d8a770fb33097212215"
+    },
+    {
+      "path": "apps/web/legacy/images/zodiac-libra.jpg",
+      "bytes": 445434,
+      "sha256": "cb0d18d339ded6273e1332cf8ae425ad64dcf61c344e00128d61442ba8277d71"
+    },
+    {
+      "path": "apps/web/legacy/images/zodiac-pisces.jpg",
+      "bytes": 425301,
+      "sha256": "6156ee0ab3ca29906928880eba3deb409eba301a232386a65a2a252e593cbcf1"
+    },
+    {
+      "path": "apps/web/legacy/images/zodiac-sagittarius.jpg",
+      "bytes": 479411,
+      "sha256": "94b733402289c334561a573ccd6a103f023742fff1c0a7929f8065fc1853bbb6"
+    },
+    {
+      "path": "apps/web/legacy/images/zodiac-scorpius.jpg",
+      "bytes": 496565,
+      "sha256": "6c5168faac207837b317b0e26d1b959e20b628be4bf505eb5a4b6ab13531c4c1"
+    },
+    {
+      "path": "apps/web/legacy/images/zodiac-taurus.jpg",
+      "bytes": 477241,
+      "sha256": "1655108b36032d954e99668031164898f7a034876b59ada6d5a31b4e07c9a00f"
+    },
+    {
+      "path": "apps/web/legacy/images/zodiac-virgo.jpg",
+      "bytes": 414142,
+      "sha256": "c15c51aa7794f36935f27cd96343ba8f5c0f8bd22d04d4295afdb0b5a18db455"
+    },
+    {
+      "path": "apps/web/legacy/index.html",
+      "bytes": 663051,
+      "sha256": "df83093bdd684be5653cecb40c3821f54cc2a21ff54a86a6d66ee1ec854d8370"
+    },
+    {
+      "path": "apps/web/legacy/untukmu/README.md",
+      "bytes": 21334,
+      "sha256": "bb546fbe13071e430720ffefdf06839b719695748b7f37a593e9e0694784df98"
+    },
+    {
+      "path": "apps/web/legacy/untukmu/dev/verify-node.cjs",
+      "bytes": 33497,
+      "sha256": "044a5080c38cabdc134b30ca7be840f93506f27540694c063c2d40a4d9aa2f97"
+    },
+    {
+      "path": "apps/web/legacy/untukmu/js/um-app.js",
+      "bytes": 6744,
+      "sha256": "63f4c8a7a9b7264f5346597ba77ab79591124399aad9ba0c5d02b02317f7597e"
+    },
+    {
+      "path": "apps/web/legacy/untukmu/js/um-crypto.js",
+      "bytes": 10719,
+      "sha256": "7b48c2c101d1e18f4bf7639c28f6168d325affabb62b978796b8e19d1a490c53"
+    },
+    {
+      "path": "apps/web/legacy/untukmu/js/um-doa.js",
+      "bytes": 11796,
+      "sha256": "73d0edfe50df93554ea28652d126d2e8270436d550bf6b687171f56869ad0eba"
+    },
+    {
+      "path": "apps/web/legacy/untukmu/js/um-galaksi.js",
+      "bytes": 60805,
+      "sha256": "0397332212e884c6600bcc805b85cfb0cd289a204e6c1ca6979d69e3de4a9d61"
+    },
+    {
+      "path": "apps/web/legacy/untukmu/js/um-i18n.js",
+      "bytes": 23015,
+      "sha256": "a021085d6146fef224bc0e681fc1eb3c7d793c96e392ba7d64437801d3323059"
+    },
+    {
+      "path": "apps/web/legacy/untukmu/js/um-sky.js",
+      "bytes": 9320,
+      "sha256": "a952c9e6f50c7adcd374d7b6d518b94467dcc3c52126511cd91d30de195ead37"
+    },
+    {
+      "path": "apps/web/legacy/untukmu/js/um-store.js",
+      "bytes": 29018,
+      "sha256": "8369d1e269be54b1269104783f0fdb31f522fab4bec38157c33ab4956479cded"
+    },
+    {
+      "path": "apps/web/legacy/untukmu/js/um-tests.js",
+      "bytes": 33415,
+      "sha256": "d33a4d13ff0285a0a54a202855de4720a0fadb868e819d73fb62a8e0cd7f1a8f"
+    },
+    {
+      "path": "apps/web/legacy/untukmu/js/um-ui.js",
+      "bytes": 64022,
+      "sha256": "8f9f355f2067853f535917e901ba116eebc97e1ac0c8a561f40ea895a1aa3414"
+    },
+    {
+      "path": "apps/web/legacy/untukmu/untukmu.css",
+      "bytes": 18962,
+      "sha256": "0a478cfb2a9ac7d60817d2ebb9ec42827b75cdc385205c088ed8fab05096ed97"
+    },
+    {
+      "path": "apps/web/legacy/vendor/CopyShader.js",
+      "bytes": 653,
+      "sha256": "8cf05bda35383ea2502decc388d91a4adcf6ab3d9fa1d35a600fee4e49ec796b"
+    },
+    {
+      "path": "apps/web/legacy/vendor/EffectComposer.js",
+      "bytes": 6555,
+      "sha256": "72dcd55f4626f1533a9f98dd03021a5de415ffc15f1ad688ef84997612b04de0"
+    },
+    {
+      "path": "apps/web/legacy/vendor/LuminosityHighPassShader.js",
+      "bytes": 1299,
+      "sha256": "1b6eaa1f4f1c6d240001cd310e604551274968c7aaa55f7cc9c6c1a8aae45526"
+    },
+    {
+      "path": "apps/web/legacy/vendor/OrbitControls.js",
+      "bytes": 27420,
+      "sha256": "5742860df2533c1c5ed580f939228f2a0d88b14967bb167dc9954ceedb1616e8"
+    },
+    {
+      "path": "apps/web/legacy/vendor/RenderPass.js",
+      "bytes": 1820,
+      "sha256": "3a08e1adbe3a5d915d75323ecc9d6b836057ae06afd3d39704dea180795823cd"
+    },
+    {
+      "path": "apps/web/legacy/vendor/ShaderPass.js",
+      "bytes": 1479,
+      "sha256": "9ed292e0b177cab987d00000070a779202a7c86b6d738ee24f3864ccfa0c79ed"
+    },
+    {
+      "path": "apps/web/legacy/vendor/UnrealBloomPass.js",
+      "bytes": 12978,
+      "sha256": "0030802645409fc2c35ad87d4f794619b379a1a208edf6a1a9c5d0002f9831f7"
+    },
+    {
+      "path": "apps/web/legacy/vendor/three.min.js",
+      "bytes": 603451,
+      "sha256": "7ae04663bb431808bc025280122162029ea3a354efc5fcca8bd8f95d1a1933e9"
+    },
+    {
+      "path": "apps/web/next-env.d.ts",
+      "bytes": 288,
+      "sha256": "1862ac4bbbc5192d4bf562161df66ea547ed3e67173100656ab606ae9797db2b"
+    },
+    {
+      "path": "apps/web/next.config.ts",
+      "bytes": 641,
+      "sha256": "43c9e1e66e225352d846fd2d7c7d0e0d533d8a2613b0e906fb9dda2dff95149f"
+    },
+    {
+      "path": "apps/web/package.json",
+      "bytes": 1338,
+      "sha256": "a5d830f9cd4ce44631824e1232afe8102b9160122d41efc267202e8223afb9a3"
+    },
+    {
+      "path": "apps/web/playwright.config.ts",
+      "bytes": 593,
+      "sha256": "355bc393886db72fe609788c96ee3a5b3286354c9400cf775d4d09106a7f2936"
+    },
+    {
+      "path": "apps/web/postcss.config.mjs",
+      "bytes": 90,
+      "sha256": "367fbca6f16a783112387d94ee7bb91ec72e3b36b6d61228f6247cda6ee46d47"
+    },
+    {
+      "path": "apps/web/public/icons/icon-192.png",
+      "bytes": 3468,
+      "sha256": "ca2a5c75bc880dc116fb53794a0e64fa907a45ffde7b65f0e89cd34b7c6b20d5"
+    },
+    {
+      "path": "apps/web/public/icons/icon-512.png",
+      "bytes": 15113,
+      "sha256": "d4852f490c93a6b34e4e90c31701f1820213b0b7a598b89cdddc6eecaa953656"
+    },
+    {
+      "path": "apps/web/public/offline.html",
+      "bytes": 762,
+      "sha256": "52e39125b8ea3c057479bd80fbb2fdb7546cdcd97ff9453ad18cbacb9dd3f474"
+    },
+    {
+      "path": "apps/web/public/offline.js",
+      "bytes": 82,
+      "sha256": "060e796dcf8f20b5a5815993957138a16df1a7efc6e70a4de32dace17d4fbb12"
+    },
+    {
+      "path": "apps/web/public/sw.js",
+      "bytes": 1946,
+      "sha256": "4f9e3558158434262b0c233696916eeac94bfcb11f6ac941645fa393e35923e6"
+    },
+    {
+      "path": "apps/web/scripts/enhance-advanced.mjs",
+      "bytes": 2319,
+      "sha256": "cf2b81dad47ee3b712649b1fd6c16562f5ac574646ff6ae20bd72bd4adb9fc6b"
+    },
+    {
+      "path": "apps/web/scripts/enhance-prayers.mjs",
+      "bytes": 3105,
+      "sha256": "9f96263af2b2d6bde068a4d8f6cb1ec4a596860aaa4b052210f1c2525f605dec"
+    },
+    {
+      "path": "apps/web/scripts/enhance-social.mjs",
+      "bytes": 5191,
+      "sha256": "803359d509b5f714163b1bd0051d0e19b3e0785146894c88ff57c03bee003bab"
+    },
+    {
+      "path": "apps/web/scripts/port-react-ui.mjs",
+      "bytes": 792,
+      "sha256": "348574bd5eada66478142ec753a92cd76352e9b9aea25b9366da78d0a96dea60"
+    },
+    {
+      "path": "apps/web/scripts/prepare-engine.mjs",
+      "bytes": 11627,
+      "sha256": "dd4db45df7bbd2ee5e863d22d5fd3ff6d93e88e30d73c7921a1087520240b1fe"
+    },
+    {
+      "path": "apps/web/scripts/start.mjs",
+      "bytes": 654,
+      "sha256": "718705db0b7762ee3df860f2d6a915e90321c8b57b62fd2a94e9236a87d18cad"
+    },
+    {
+      "path": "apps/web/src/app/admin/page.tsx",
+      "bytes": 154,
+      "sha256": "e0952b6e8d0aef41d56790605f9dbf9cc3be99b8147a68d74a2b474ec7e6341a"
+    },
+    {
+      "path": "apps/web/src/app/bagi/page.tsx",
+      "bytes": 378,
+      "sha256": "3903c3de8f4de07746d6b7a06fae228a754a73188e03902910ef34b1871e0f19"
+    },
+    {
+      "path": "apps/web/src/app/globals.css",
+      "bytes": 432,
+      "sha256": "8965d8b87c94875c81e504a71149f9eb8da3b314b6427fb06cf8c7bbdfd45cd8"
+    },
+    {
+      "path": "apps/web/src/app/icon.svg",
+      "bytes": 194,
+      "sha256": "94c8d7914f396a958a52645854d6c066f843aa6c4dfb97c0984c103c4aa25fed"
+    },
+    {
+      "path": "apps/web/src/app/kebijakan-privasi/page.tsx",
+      "bytes": 2305,
+      "sha256": "6afdf0e5075db325678449b3f5afe6661bf6f4a0dff5b2d932ddb3c3c698cb86"
+    },
+    {
+      "path": "apps/web/src/app/layout.tsx",
+      "bytes": 519,
+      "sha256": "bc96934a7b932700070e3087a9dfec6ca3ea011272334f7d8a3c3747e5a07615"
+    },
+    {
+      "path": "apps/web/src/app/manifest.ts",
+      "bytes": 523,
+      "sha256": "d01b8b6929f61dfe2df3755db3e2dc1ef3d0a34efac294d4fffcf86ada1c1d70"
+    },
+    {
+      "path": "apps/web/src/app/page.tsx",
+      "bytes": 123,
+      "sha256": "3b1e6496d52a745a12a6e6879f3fae3c914efc9193d863c210a02b51f347133c"
+    },
+    {
+      "path": "apps/web/src/features/account/AccountScreen.tsx",
+      "bytes": 12274,
+      "sha256": "8a35411f28ab7f3dfc3ffafbcd8950bcaa7a16d5dc895a275c6e01d6c6f50647"
+    },
+    {
+      "path": "apps/web/src/features/account/Challenge.tsx",
+      "bytes": 1495,
+      "sha256": "297055916b4464635d4512fe205f09bb33bc2e4c95b5412dee72cff148bba78f"
+    },
+    {
+      "path": "apps/web/src/features/account/ExportScreen.tsx",
+      "bytes": 3472,
+      "sha256": "a25136e6a9305e16c4ccbbd146dbdabd0247623b59f055aad1008e64944c932e"
+    },
+    {
+      "path": "apps/web/src/features/account/RecoveryScreen.tsx",
+      "bytes": 3715,
+      "sha256": "9e0513f4f137286e92cd0517d48a20fa227e9017a33f4995b70df38b40900072"
+    },
+    {
+      "path": "apps/web/src/features/account/Turnstile.tsx",
+      "bytes": 1472,
+      "sha256": "5cc5c62c9eb37bee1c81f9c1f24edb164b2ad5154cd6519c613682cdd7fb2093"
+    },
+    {
+      "path": "apps/web/src/features/account/state.ts",
+      "bytes": 732,
+      "sha256": "42ba9bd63d92a2ffe73cce91ac7ed9cd6530baef8ad9949f5ebf8ca63dce4ef4"
+    },
+    {
+      "path": "apps/web/src/features/galaxy/FiberBridge.tsx",
+      "bytes": 2414,
+      "sha256": "7b6b7f21b2fbc6023a4028d44fec995cfb5ba3145c0c3bc8a785573a53213fc0"
+    },
+    {
+      "path": "apps/web/src/features/galaxy/GalaxyEngine.tsx",
+      "bytes": 505,
+      "sha256": "a2de9a0fc3eae07a2f2b65e3a5bd5569a967b74a6cbaea7e568bfde0aa779aa0"
+    },
+    {
+      "path": "apps/web/src/features/messages/ManageMessage.tsx",
+      "bytes": 3659,
+      "sha256": "87096a6dd3048ba81434fcfcc82d1ab29bc33a32426ebbb49b69a095cdaf1632"
+    },
+    {
+      "path": "apps/web/src/features/messages/SharedMessage.tsx",
+      "bytes": 949,
+      "sha256": "52604ceb1525de27ce79e99450d50a0892aa12b574c404f79d6035b6ec783de5"
+    },
+    {
+      "path": "apps/web/src/features/prayers/PrayerAdmin.tsx",
+      "bytes": 5344,
+      "sha256": "36306d27b7f40ec70186640feb7dc59fe5bb73abd41993676617b6150eeee857"
+    },
+    {
+      "path": "apps/web/src/features/pwa/Register.tsx",
+      "bytes": 319,
+      "sha256": "0b9c09a0c1c7e9590a8ec48ec572aaa38f43df956acb588e40f25e72f039a2d2"
+    },
+    {
+      "path": "apps/web/src/features/screens/PreservedScreens.tsx",
+      "bytes": 2066,
+      "sha256": "33d12e9ee03e2d52f5cff7bd1642463cdfc7c180eef88ad775d9f36a9fff5208"
+    },
+    {
+      "path": "apps/web/src/features/social/SocialScreens.tsx",
+      "bytes": 6213,
+      "sha256": "08631e9e5542b01a501b66ce022c936d798005aef6628b943e91eec17409aabb"
+    },
+    {
+      "path": "apps/web/src/lib/api/client.ts",
+      "bytes": 4136,
+      "sha256": "73ac705b159e9edcb582182b83897502c989e9f14e425695d8ba33344c9be90a"
+    },
+    {
+      "path": "apps/web/src/lib/api/store.ts",
+      "bytes": 12549,
+      "sha256": "e47978dc0a8ecf5827846f510ff83c60f907ee773dfefcecc9b8a3d457951dcb"
+    },
+    {
+      "path": "apps/web/src/lib/crypto/argon2.worker.ts",
+      "bytes": 762,
+      "sha256": "0a2c9432b63177efffdcb55e464f9ca99b3f9c893cde940b7e547dc4f6c0ed5e"
+    },
+    {
+      "path": "apps/web/src/lib/crypto/types.ts",
+      "bytes": 467,
+      "sha256": "7eb58221ca7e1ede611e81c91f980ca13cde23940d56b31125b2ab90103cfe4a"
+    },
+    {
+      "path": "apps/web/src/lib/crypto/vault.ts",
+      "bytes": 10278,
+      "sha256": "532ffa6b61f48693d2d0dba9fdf0579ab335949126718b67dfefa34a9cfbd324"
+    },
+    {
+      "path": "apps/web/src/runtime/accessibility.ts",
+      "bytes": 3292,
+      "sha256": "308f288dfb3f966e64885833ee8e294a7bd42f11e605dc2f5cef5f740f81df96"
+    },
+    {
+      "path": "apps/web/src/runtime/bootstrap.tsx",
+      "bytes": 4886,
+      "sha256": "4a33e7731cd92c69ea5ab52b8d2a5d02ef83314b3eea76225c90fd26ad0be279"
+    },
+    {
+      "path": "apps/web/src/runtime/globals.d.ts",
+      "bytes": 1218,
+      "sha256": "88fa953fd38fee539b09890846afe2edf4dc83df5c71a865568e53d11af42143"
+    },
+    {
+      "path": "apps/web/tailwind.config.ts",
+      "bytes": 387,
+      "sha256": "857f22f9bb408f42f1b47ccdabac81b84389cbfcfcdb86ebb09eb85a3c514871"
+    },
+    {
+      "path": "apps/web/tests/e2e/advanced.spec.ts",
+      "bytes": 2624,
+      "sha256": "50912c5f16801887f3d6c7d3d283e938d4787798c15b4640463faf9b5640b0ab"
+    },
+    {
+      "path": "apps/web/tests/e2e/foundation.spec.ts",
+      "bytes": 4995,
+      "sha256": "96aa93c559658bc11fb3025a55ceb47427eb495006121f134537fc50df55d338"
+    },
+    {
+      "path": "apps/web/tests/e2e/helpers.ts",
+      "bytes": 1164,
+      "sha256": "a5bd388e05036aac29969bc3babc57e7c0f03e6bb1f43b6a094853286d0871cc"
+    },
+    {
+      "path": "apps/web/tests/e2e/quality.spec.ts",
+      "bytes": 2867,
+      "sha256": "633fffc67583b27072874db67108b5c1a0c3361af17434fb1bde42b637640aff"
+    },
+    {
+      "path": "apps/web/tests/e2e/social.spec.ts",
+      "bytes": 3332,
+      "sha256": "79f1ad0820c0c36aeb4ecaf5f03b737a322cf9040048c99922ff096b9b766206"
+    },
+    {
+      "path": "apps/web/tests/e2e/visual.spec.ts",
+      "bytes": 3775,
+      "sha256": "f25c0c26981a1c492886d8c75e3d647b004e79a8ee2f7e8683d072c5be35c3fc"
+    },
+    {
+      "path": "apps/web/tests/legacy.test.ts",
+      "bytes": 3096,
+      "sha256": "1926adc1455d186db2e25eaba18c3a3f56af2b7f05b3015a4719bd012e9bbf00"
+    },
+    {
+      "path": "apps/web/tests/preservation.test.ts",
+      "bytes": 2063,
+      "sha256": "e2886aea7bbce0e24ef6df13acb0a5b63f99e48bed68a078c621441b2ff5f4b5"
+    },
+    {
+      "path": "apps/web/tsconfig.json",
+      "bytes": 778,
+      "sha256": "94ffd92d627acbfc727556c9740325049f2387b6c3591a6fd04ab279500a0b4c"
+    },
+    {
+      "path": "apps/web/vitest.config.ts",
+      "bytes": 179,
+      "sha256": "4e72401499b27badecd2da725699d02bf697ae30c541207df5b88c78ac0d9399"
+    },
+    {
+      "path": "docker-compose.yml",
+      "bytes": 2979,
+      "sha256": "3a4b23bf36b31fd398ae2584ce8c23703c496c35b4c58a79ca6bb9b99b204615"
+    },
+    {
+      "path": "docs/AUDIT-FASE-5.md",
+      "bytes": 4030,
+      "sha256": "1a4d0c6708febe2457c05f342ca07fd97e1100e47b6cd17eeb2b2ab7f2733985"
+    },
+    {
+      "path": "docs/CATATAN-LISENSI.md",
+      "bytes": 661,
+      "sha256": "fbfb29b7411c9d0768f3a2244eca945209876a7f965075719a0445a75a2e34f9"
+    },
+    {
+      "path": "docs/KEPUTUSAN-ARSITEKTUR.md",
+      "bytes": 5386,
+      "sha256": "40e781fca35fbadbb5369fec8a584bf02c669d8c9305f2212174962240ec1457"
+    },
+    {
+      "path": "docs/PEMETAAN-PORT.md",
+      "bytes": 1896,
+      "sha256": "b54390274884e5e8da513b696427b65f512f77cd564762ee2400c27f953dc56a"
+    },
+    {
+      "path": "docs/STATUS-PENGUJIAN.md",
+      "bytes": 3167,
+      "sha256": "df3a8dbdaae633920546c665bbd4e90ac9f1b58c19fbe43bc871b87716d094bf"
+    },
+    {
+      "path": "docs/manifest-asli.json",
+      "bytes": 48672,
+      "sha256": "d4a09f15408ebd54eed82485ee1b660c64752727eed55f3987888e9ad4350384"
+    },
+    {
+      "path": "docs/migration-postgresql.sql",
+      "bytes": 17287,
+      "sha256": "8054960586c41435be3007533b5e13761c9c82dda289748484be9c4b6b390098"
+    },
+    {
+      "path": "docs/openapi.json",
+      "bytes": 79591,
+      "sha256": "73ee4e5db0caf98f96e3caa9f9a1d08e7609730e634bff926e389ad2ebf2765f"
+    },
+    {
+      "path": "docs/quality/browser-results.json",
+      "bytes": 9022,
+      "sha256": "562babfa2b41981443e68c36873345c5564009275ee104281cad861c0a08a696"
+    },
+    {
+      "path": "docs/quality/camera-metrics.json",
+      "bytes": 404,
+      "sha256": "7a58f381e08c8133c11bdfe92017ebae419e3c9aeec23c8c842878f6ad8e5709"
+    },
+    {
+      "path": "docs/quality/npm-audit-production.json",
+      "bytes": 365,
+      "sha256": "cba1d0b3ba546651fa2745e5a86d6f867650ead63195ab2c17bf04729222f0f9"
+    },
+    {
+      "path": "docs/visual/desktop-asli.png",
+      "bytes": 249239,
+      "sha256": "769396953ec6a248ca1731bdb87f2972bab7439100fd278357bc8a85eec68278"
+    },
+    {
+      "path": "docs/visual/desktop-migrasi.png",
+      "bytes": 244406,
+      "sha256": "9c154fd2fbae03df00d5c5731c4ea6a460b36d1aa3cad40b6e2af0bc4a9e26c8"
+    },
+    {
+      "path": "docs/visual/mobile-asli.png",
+      "bytes": 154495,
+      "sha256": "6b83aedb50a7e3c695b822f6a8b5563ee06fa5862ba18853edd5ff88348b9724"
+    },
+    {
+      "path": "docs/visual/mobile-migrasi.png",
+      "bytes": 154260,
+      "sha256": "6952e8b7636c7cbdaa77f736d419d7bc453903abe7dc824f2f44c1767bd53ad0"
+    },
+    {
+      "path": "docs/visual/perbandingan.html",
+      "bytes": 1094,
+      "sha256": "e8e66d814f3f35080e7a1df2085dd61be17a2a8203ea114413e460dbd99d7aab"
+    },
+    {
+      "path": "infra/Caddyfile",
+      "bytes": 284,
+      "sha256": "ab2677a05bf14ac9dc0ca11bc5d2da26403832817444c688673f861a5ec41276"
+    },
+    {
+      "path": "infra/Caddyfile.production.example",
+      "bytes": 384,
+      "sha256": "6898397b2ce142d0dd0da020913efe5120ad8621312447f153ba3a306b5ade3f"
+    },
+    {
+      "path": "package-lock.json",
+      "bytes": 318648,
+      "sha256": "bb45371ad5522e45cbe0b557065c23254cf79f48a20ccbc50cb70e396c55a6b5"
+    },
+    {
+      "path": "package.json",
+      "bytes": 355,
+      "sha256": "f4e6229793fbc319eb3135eab9c78182bf0698495381aa87042d27b48cb60e64"
+    },
+    {
+      "path": "referensi/Instruksi-Kerja.md",
+      "bytes": 25807,
+      "sha256": "8c12365c40f8e81021914c07384355a3348773883d1d7eca593666c1e5a3214c"
+    },
+    {
+      "path": "referensi/PRD_Kelompok_8.docx",
+      "bytes": 17533,
+      "sha256": "edeadef8426fc3720afa30cbbdac600099467cca7ee5d1c83b2e02272bd10ce5"
+    },
+    {
+      "path": "referensi/Untukmu-asli.zip",
+      "bytes": 162131189,
+      "sha256": "da3aec36f0f877576b18fc4e6a8ca000f7dd27ba18d4a98445ac9a70fc9676dd"
+    },
+    {
+      "path": "scripts/checkpoint.py",
+      "bytes": 631,
+      "sha256": "d6257daeb40a1a42dde7835e82f1f3637376be30c8b7eeeb14157ce06a125523"
+    },
+    {
+      "path": "scripts/init_env.py",
+      "bytes": 991,
+      "sha256": "05129f5d437cbe34d702313a97de4dda3e4b7e9e1c8175e1a3a06c623685a64d"
+    },
+    {
+      "path": "scripts/package_release.py",
+      "bytes": 1918,
+      "sha256": "7a424f7c1cde6b335a43aded974577251b7a7fce945178ebe718872947d70cc9"
+    },
+    {
+      "path": "scripts/test-browser-local.mjs",
+      "bytes": 2162,
+      "sha256": "26760ea1446a2d9ecd0949cc65dd756d23306b2bc3bed7cd3f0c9f117a2fdff7"
+    },
+    {
+      "path": "scripts/verify_original.py",
+      "bytes": 1049,
+      "sha256": "cc7b9e46eb98c7a96c2b6b8228d0b4514a9cc51eba2d5544e6d37c8a2177fa95"
+    }
+  ]
+}

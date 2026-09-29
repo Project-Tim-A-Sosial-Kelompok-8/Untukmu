@@ -1,0 +1,7 @@
+@import "../../legacy/untukmu/untukmu.css";
+@tailwind components;
+@tailwind utilities;
+html, body { margin: 0; background: #03040a; color: #e5e7eb; font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; }
+.galaxy-frame { width: 100%; height: 100dvh; position: fixed; inset: 0; border: 0; display: block; }
+.policy { max-width: 720px; margin: 40px auto; padding: 24px; line-height: 1.7; }
+.policy a { color: #9cc0ff; }
