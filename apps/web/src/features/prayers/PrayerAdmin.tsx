@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { api } from "../../lib/api/client";
-interface Entry { id: string; content: { nama: { id: string }; teks?: { id: string }; arti?: { id: string }; sumber: string; source_url?: string; review_note?: string; detik: number }; reviewed: boolean; has_audio: boolean; audio_meta: { license?: string; attribution?: string } }
+interface Entry { id: string; content: { nama: { id: string }; teks?: { id: string }; arti?: { id: string }; sumber: string; source_url?: string; review_note?: string; detik: number }; reviewed: boolean; has_audio: boolean; audio_meta: { license?: string; attribution?: string }; references?: { title: string; url: string; kind: string; note: string }[] }
 export function PrayerAdmin() {
   const catalog = useQuery({ queryKey: ["prayer-admin"], queryFn: () => api<Entry[]>("/admin/prayers") });
   const [selected, setSelected] = useState<Entry | null>(null), [busy, setBusy] = useState(false), [error, setError] = useState("");
@@ -25,6 +25,7 @@ export function PrayerAdmin() {
     {(error||catalog.error) && <p role="alert" className="um-error">{error||catalog.error?.message}</p>}
     <label className="um-label" htmlFor="prayer-catalog">Entri katalog</label><select className="um-select" id="prayer-catalog" disabled={busy} value={selected?.id||""} onChange={e=>setSelected(catalog.data?.find(x=>x.id===e.target.value)||null)}><option value="">Pilih entri</option>{catalog.data?.map(row=><option key={row.id} value={row.id}>{row.id} · {row.reviewed?"disetujui":"menunggu kurasi"}</option>)}</select>
     {selected && <form key={selected.id} onSubmit={e=>{e.preventDefault();void save(e.currentTarget);}}>
+      {!!selected.references?.length && <aside className="um-note"><h3>Rujukan untuk peninjauan</h3><p>Temuan sumber belum merupakan persetujuan kurator atau izin distribusi rekaman. Cocokkan jenis doa, naskah, durasi, dan izin sebelum menerbitkan.</p>{selected.references.map(ref => <p key={ref.url}><a href={ref.url} target="_blank" rel="noopener noreferrer">{ref.title}</a><br/>{ref.kind}<br/>{ref.note}</p>)}</aside>}
       {([['title','Judul',selected.content.nama.id],['source_attribution','Atribusi sumber',selected.content.sumber],['source_url','Tautan sumber HTTPS',selected.content.source_url||""],['review_note','Catatan peninjauan',selected.content.review_note||""]] as const).map(([name,label,value])=><div className="um-field" key={name}><label className="um-label" htmlFor={name}>{label}</label><input className="um-input" id={name} name={name} defaultValue={value} required maxLength={name==="title"?120:1000}/></div>)}
       {([['text','Teks doa',selected.content.teks?.id||""],['translation','Terjemahan',selected.content.arti?.id||""]] as const).map(([name,label,value])=><div className="um-field" key={name}><label className="um-label" htmlFor={name}>{label}</label><textarea className="um-textarea" id={name} name={name} defaultValue={value} maxLength={10000}/></div>)}
       <div className="um-field"><label className="um-label" htmlFor="duration_seconds">Durasi (detik)</label><input className="um-input" id="duration_seconds" name="duration_seconds" type="number" min={5} max={900} defaultValue={selected.content.detik||30} required/></div>

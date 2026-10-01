@@ -68,8 +68,10 @@ UM.sky = (function () {
   function warnaAman(c) { return /^#[0-9a-f]{6}$/i.test(c || '') ? c : '#ffd9a0'; }
 
   function bangunPenanda(item) {
-    var el = document.createElement('div');
+    var el = document.createElement('button');
+    el.type = 'button';
     el.className = 'um-plabel';
+    el.style.display = 'none';
     el.addEventListener('click', function (e) {
       e.stopPropagation();
       terbangKeGalaksi(item.g.id);
@@ -85,6 +87,7 @@ UM.sky = (function () {
       '<b><span class="dot" style="background:' + warnaAman(item.g.warna) + '"></span>' + esc(item.g.nama) + '</b>' +
       '<small>' + item.nPesan + ' ' + esc(UM.i18n.t('commonPesan')) + ' · ' + item.nBatu + ' ' + esc(UM.i18n.t('commonDoa')) + '</small>';
     item.el.title = item.g.nama;
+    item.el.setAttribute('aria-label', 'Kunjungi kenangan ' + item.g.nama);
   }
 
   function segarkanTeks() { state.daftar.forEach(tulisPenanda); }
@@ -94,14 +97,16 @@ UM.sky = (function () {
     var tampil = typeof viewMode !== 'undefined' && viewMode === 'sky' && state.mode === 'kenangan';
     host.style.display = tampil ? '' : 'none';
     if (!tampil) return;
+    skyCamera.updateMatrixWorld();
     for (var i = 0; i < state.daftar.length; i++) {
       var item = state.daftar[i];
       tmpV.copy(item.dir).multiplyScalar(SKY_R * 0.96).project(skyCamera);
-      var vis = tmpV.z < 1 && tmpV.x > -1.1 && tmpV.x < 1.1 && tmpV.y > -1.1 && tmpV.y < 1.1;
-      if (vis !== item.terlihat) { item.el.style.display = vis ? '' : 'none'; item.terlihat = vis; }
+      var vis = tmpV.z > -1 && tmpV.z < 1 && Math.abs(tmpV.x) < 1 && Math.abs(tmpV.y) < 1;
+      item.el.style.display = vis ? '' : 'none'; item.terlihat = vis;
       if (vis) {
-        item.el.style.left = ((tmpV.x * 0.5 + 0.5) * window.innerWidth) + 'px';
-        item.el.style.top = ((-tmpV.y * 0.5 + 0.5) * window.innerHeight) + 'px';
+        var margin = item.el.offsetWidth / 2 + 12;
+        item.el.style.left = Math.max(margin, Math.min(window.innerWidth - margin, (tmpV.x * 0.5 + 0.5) * window.innerWidth)) + 'px';
+        item.el.style.top = Math.max(item.el.offsetHeight / 2 + 12, Math.min(window.innerHeight - item.el.offsetHeight / 2 - 12, (-tmpV.y * 0.5 + 0.5) * window.innerHeight)) + 'px';
       }
     }
   }
@@ -150,6 +155,7 @@ UM.sky = (function () {
 
   function setMode(mode) {
     state.mode = (mode === 'astronomi') ? 'astronomi' : 'kenangan';
+    document.body.setAttribute('data-sky-mode', state.mode);
     terapkanMode();
     perbaruiLabel();
     return state.mode;
@@ -159,6 +165,7 @@ UM.sky = (function () {
   function terapkanMode() {
     if (!engineSiap()) return;
     var kenangan = state.mode === 'kenangan';
+    document.body.setAttribute('data-sky-mode', state.mode);
 
     if (typeof SKY_CONS !== 'undefined') {
       SKY_CONS.forEach(function (c) {

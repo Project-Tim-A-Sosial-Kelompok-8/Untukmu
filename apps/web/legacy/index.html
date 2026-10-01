@@ -4378,23 +4378,28 @@
     });
   }
   var skyTmp = new THREE.Vector3();
+  function positionSkyLabel(label, projected) {
+    var halfWidth = label.offsetWidth / 2 + 12, halfHeight = label.offsetHeight / 2 + 16;
+    label.style.left = Math.max(halfWidth, Math.min(innerWidth - halfWidth, (projected.x * .5 + .5) * innerWidth)) + 'px';
+    label.style.top = Math.max(halfHeight, Math.min(innerHeight - halfHeight, (-projected.y * .5 + .5) * innerHeight)) + 'px';
+  }
   window.updateSkyLabels = function () {
+    skyCamera.updateMatrixWorld();
     for (var i = 0; i < SKY_CONS.length; i++) {
       var c = SKY_CONS[i];
       skyTmp.copy(c.dir).multiplyScalar(SKY_R).project(skyCamera);
-      var vis = viewMode === 'sky' && skyTmp.z < 1 && skyTmp.x > -1.05 && skyTmp.x < 1.05 && skyTmp.y > -1.05 && skyTmp.y < 1.05;
-      if (vis !== c.shown) { c.el.style.display = vis ? '' : 'none'; c.shown = vis; }
+      var vis = viewMode === 'sky' && skyTmp.z > -1 && skyTmp.z < 1 && Math.abs(skyTmp.x) < 1 && Math.abs(skyTmp.y) < 1;
+      c.el.style.display = vis ? '' : 'none'; c.shown = vis;
       if (vis) {
-        c.el.style.left = ((skyTmp.x * 0.5 + 0.5) * window.innerWidth) + 'px';
-        c.el.style.top = ((-skyTmp.y * 0.5 + 0.5) * window.innerHeight) + 'px';
+        positionSkyLabel(c.el, skyTmp);
       }
     }
     for (var gi = 0; gi < SKY_GAL.length; gi++) { // galaxy markers ride the same projection
       var g = SKY_GAL[gi];
       skyTmp.copy(g.dir).multiplyScalar(SKY_R).project(skyCamera);
-      var gv = viewMode === 'sky' && skyTmp.z < 1 && skyTmp.x > -1.05 && skyTmp.x < 1.05 && skyTmp.y > -1.05 && skyTmp.y < 1.05;
-      if (gv !== g.shown) { g.el.style.display = gv ? '' : 'none'; g.shown = gv; }
-      if (gv) { g.el.style.left = ((skyTmp.x * 0.5 + 0.5) * window.innerWidth) + 'px'; g.el.style.top = ((-skyTmp.y * 0.5 + 0.5) * window.innerHeight) + 'px'; }
+      var gv = viewMode === 'sky' && skyTmp.z > -1 && skyTmp.z < 1 && Math.abs(skyTmp.x) < 1 && Math.abs(skyTmp.y) < 1;
+      g.el.style.display = gv ? '' : 'none'; g.shown = gv;
+      if (gv) positionSkyLabel(g.el, skyTmp);
     }
   };
   window.skySelected = null;
@@ -4680,6 +4685,9 @@
     if (document.hidden) return;
     if (videoMode) videoClockMs += videoFrameStepMs;
     videoFrameCount++;
+    // Label layers belong to one camera only. Galaxy updates are not called
+    // by the solar/sky branches, so hide their stale DOM before either branch.
+    if (document.body.getAttribute('data-view-mode') !== viewMode) document.body.setAttribute('data-view-mode', viewMode);
     var nowMs = videoNow(), t = (nowMs - t0) / 1000;
     if (viewMode === 'sky') {
       if (skyDive && stepSkyDive()) { // dive-into-Earth prologue: render the solar scene one last stretch

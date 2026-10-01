@@ -10,6 +10,9 @@ from .test_social import admin_account, public_message, approve
 async def test_catalog_and_curation_permissions(client, database):
     catalog = (await client.get('/api/v1/prayers/traditions')).json()
     assert len(catalog) == 7
+    assert all(t['references'] for t in catalog if t['id'] != 'umum')
+    assert all(ref['url'].startswith('https://') for t in catalog for ref in t['references'])
+    # Discovering a credible reference must not bypass curation of its content.
     assert sum(e['reviewed'] for t in catalog for e in t['entri']) == 1
     owner = await account(client)
     assert (await client.get('/api/v1/admin/prayers', headers=owner)).status_code == 403

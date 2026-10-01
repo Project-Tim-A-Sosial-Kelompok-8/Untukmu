@@ -59,6 +59,8 @@
   border-radius: 0 var(--um-radius-sm) var(--um-radius-sm) 0; padding: 9px 12px; margin: 10px 0 0;
 }
 .um-note.warn { background: rgba(244, 213, 141, .10); border-left-color: var(--um-gold); }
+.um-note a { color: #a5c9ff; text-underline-offset: 3px; }
+.um-note summary { cursor: pointer; padding: 6px 0; }
 
 .um-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; margin-bottom: 16px; }
 .um-close {
@@ -363,6 +365,20 @@ body.um-on.um-sky #beacon-panel { bottom: calc(var(--um-dock-space) + max(12px, 
 .um-close { min-width: 44px; min-height: 44px; }
 .um-priv-opt > span:last-child { min-width: 0; }
 .um-glabel { font-family: inherit; }
+.um-plabel { font-family: inherit; }
+.skylabel { max-width: min(220px, calc(100vw - 24px)); white-space: normal; overflow-wrap: anywhere; }
+.um-glabel, .um-plabel { max-width: min(220px, calc(100vw - 24px)); white-space: normal; overflow-wrap: anywhere; }
+body[data-view-mode="sky"] #um-petalabels,
+body[data-view-mode="sky"] #skylabels,
+body[data-view-mode="sky"] #um-galaksilabels,
+body[data-view-mode="solar"] #um-galaksilabels,
+body[data-view-mode="solar"] #um-petalabels,
+body[data-view-mode="galaxy"] #um-petalabels,
+body[data-sky-mode="astronomi"] #um-petalabels,
+body[data-sky-mode="kenangan"] #skylabels { display: none !important; }
+.um-trad .um-hint { display: block; }
+[data-prayer-audio] audio { display: block; width: 100%; max-width: 100%; margin-top: 12px; }
+.um-head > div { min-width: 0; }
 .um-screen .um-btn, .um-screen .um-chip, .um-mini-btn { min-height: 44px; }
 .um-prayer .src { overflow-wrap: anywhere; }
 @media (max-width: 640px) {

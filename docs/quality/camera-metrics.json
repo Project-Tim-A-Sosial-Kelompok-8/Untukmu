@@ -1,18 +1,18 @@
 {
   "environment": "Headless Chromium, software WebGL; not a physical-device FPS benchmark",
   "before": {
-    "frames": 116,
+    "frames": 54,
     "mode": "galaxy",
     "pixelRatio": 1,
-    "frameMs": 9.81550512420433,
+    "frameMs": 13.611869704613534,
     "geometries": 19,
     "textures": 18
   },
   "after": {
-    "frames": 165,
+    "frames": 106,
     "mode": "galaxy",
     "pixelRatio": 1,
-    "frameMs": 25.13836372914828,
+    "frameMs": 4.940752374311515,
     "geometries": 35,
     "textures": 19
   }

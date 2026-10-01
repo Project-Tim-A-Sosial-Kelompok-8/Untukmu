@@ -15,7 +15,7 @@ from starlette.concurrency import run_in_threadpool
 from .config import settings
 from .content import invalidate
 from .models import Message, Prayer, PrayerContent, now
-from .prayer_catalog import CATALOG
+from .prayer_catalog import CATALOG, SOURCES
 from .schemas import PrayerAudioInput, PrayerContentInput, PrayerFinish, PrayerStart
 from .security import AdminUser, DB, OptionalUser, get_redis, throttle, verify_turnstile, visitor_identity
 from .social import readable_public
@@ -45,7 +45,7 @@ async def entry(db, identifier, lock=False):
 @router.get("/prayers/traditions")
 async def catalog(db: DB):
     rows = {row.id: row for row in await db.scalars(select(PrayerContent))}
-    return [{**tradition, "entri": [{**rows[f"{tradition['id']}/{e['id']}"].content,
+    return [{**tradition, "references": SOURCES.get(tradition["id"], []), "entri": [{**rows[f"{tradition['id']}/{e['id']}"].content,
         "reviewed": rows[f"{tradition['id']}/{e['id']}"].reviewed,
         "audio": bool(rows[f"{tradition['id']}/{e['id']}"].audio_key),
         "detik": duration_seconds(rows[f"{tradition['id']}/{e['id']}"])}
@@ -56,7 +56,8 @@ async def catalog(db: DB):
 async def admin_catalog(admin: AdminUser, db: DB):
     return [{"id": row.id, "content": row.content, "reviewed": row.reviewed,
              "audio_meta": row.audio_meta, "has_audio": bool(row.audio_key),
-             "reviewed_at": row.reviewed_at} for row in await db.scalars(select(PrayerContent).order_by(PrayerContent.id))]
+             "reviewed_at": row.reviewed_at, "references": SOURCES.get(row.tradition, [])}
+            for row in await db.scalars(select(PrayerContent).order_by(PrayerContent.id))]
 
 
 @router.put("/admin/prayers/{tradition}/{prayer_id}")
@@ -118,6 +119,8 @@ async def start(message_id: UUID, body: PrayerStart, user: OptionalUser, db: DB,
     row = await entry(db, body.catalog_id)
     if not row.reviewed:
         raise HTTPException(409, "Entri ini menunggu kurasi manusia.")
+    if row.tradition != "umum" and not row.audio_key:
+        raise HTTPException(409, "Audio doa belum tersedia. Pilih hening sejenak pada tradisi Umum.")
     token = secrets.token_urlsafe(32)
     seconds = duration_seconds(row)
     audio_url = None

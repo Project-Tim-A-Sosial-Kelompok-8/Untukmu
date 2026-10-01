@@ -148,7 +148,13 @@ async function stats() {
 }
 export const store = {
   defaultPrivacy: () => currentUser()?.default_message_visibility === "public_anon" ? "publik" : currentUser()?.default_message_visibility === "unlisted" ? "unlisted" : "privat",
-  explore: async (sort = "baru", offset = 0, mood = "", tag = "") => (await api<MessageRecord[]>(`/explore?sort=${sort === "doa" ? "prayers" : "new"}&offset=${offset}&limit=30&mood=${encodeURIComponent(mood)}&tag=${encodeURIComponent(tag)}`)).map(message),
+  // One extra row proves another page exists; the UI displays 30 at a time.
+  explore: async (sort = "baru", offset = 0, mood = "", tag = "") => (await api<MessageRecord[]>(`/explore?sort=${sort === "doa" ? "prayers" : "new"}&offset=${offset}&limit=31&mood=${encodeURIComponent(mood)}&tag=${encodeURIComponent(tag.replace(/^#/, ""))}`)).map(message),
+  prayerCatalog: async () => {
+    const catalog = await api<unknown[]>("/prayers/traditions");
+    window.UM.doaData.tradisi.splice(0, window.UM.doaData.tradisi.length, ...catalog);
+    return catalog;
+  },
   empathy: async (id: string) => api(`/messages/${id}/empathy`, { method: "POST", body: JSON.stringify({ turnstile_token: currentUser() ? undefined : await requestChallenge("empathy") }) }),
   report: async (id: string, reason: string) => api("/reports", { method: "POST", body: JSON.stringify({ message_id: id, reason, turnstile_token: currentUser() ? undefined : await requestChallenge("report") }) }),
   block: async (id: string) => { requireUser(); await api("/users/blocks", { method: "POST", body: JSON.stringify({ message_id: id }) }); await invalidate(); },

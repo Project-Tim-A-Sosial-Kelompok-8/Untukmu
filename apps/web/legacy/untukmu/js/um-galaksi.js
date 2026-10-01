@@ -372,6 +372,7 @@ UM.galaksi = (function () {
     var el = document.createElement('button');
     el.type = 'button';
     el.className = 'um-glabel';
+    el.style.display = 'none';
     el.addEventListener('click', function (e) {
       e.stopPropagation();
       UM.galaksi.terbangKe(item);
@@ -400,14 +401,16 @@ UM.galaksi = (function () {
     var tampil = typeof viewMode !== 'undefined' && viewMode === 'galaxy';
     host.style.display = tampil ? '' : 'none';
     if (!tampil) return;
+    camera.updateMatrixWorld();
     for (var i = 0; i < state.daftar.length; i++) {
       var item = state.daftar[i];
       tmpV.copy(item.pos).project(camera);
-      var vis = tmpV.z > -1 && tmpV.z < 1 && tmpV.x > -1.15 && tmpV.x < 1.15 && tmpV.y > -1.15 && tmpV.y < 1.15;
-      if (vis !== item.terlihat) { item.el.style.display = vis ? '' : 'none'; item.terlihat = vis; }
+      var vis = tmpV.z > -1 && tmpV.z < 1 && Math.abs(tmpV.x) < 1 && Math.abs(tmpV.y) < 1;
+      item.el.style.display = vis ? '' : 'none'; item.terlihat = vis;
       if (vis) {
-        item.el.style.left = ((tmpV.x * 0.5 + 0.5) * window.innerWidth) + 'px';
-        item.el.style.top = ((-tmpV.y * 0.5 + 0.5) * window.innerHeight + 38) + 'px';
+        var margin = item.el.offsetWidth / 2 + 12;
+        item.el.style.left = Math.max(margin, Math.min(window.innerWidth - margin, (tmpV.x * 0.5 + 0.5) * window.innerWidth)) + 'px';
+        item.el.style.top = Math.max(item.el.offsetHeight / 2 + 12, Math.min(window.innerHeight - item.el.offsetHeight / 2 - 12, (-tmpV.y * 0.5 + 0.5) * window.innerHeight + 38)) + 'px';
         var dekat = camera.position.distanceTo(item.pos) < galaksiRadius(item.g) * 6;
         item.el.classList.toggle('dekat', dekat);
       }

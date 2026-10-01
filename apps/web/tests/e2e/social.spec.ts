@@ -4,6 +4,9 @@ import { resolve } from "node:path";
 import { register } from "./helpers";
 
 test("publikasi → moderasi → jelajah anonim → empati dan laporan", async ({ page, browser }) => {
+  // Includes registration/key derivation, two browser contexts, and a real
+  // 30-second prayer. Leave time for browser teardown on software WebGL hosts.
+  test.setTimeout(180000);
   test.skip(process.env.UNTUKMU_BROWSER_TEST !== "1", "Uses a test-only admin fixture; never promotes a production account.");
   const errors: string[] = [];
   page.on("pageerror", error => errors.push(error.message));
@@ -41,13 +44,19 @@ test("publikasi → moderasi → jelajah anonim → empati dan laporan", async (
   await guest.locator("#um-report-reason").fill("Mohon diperiksa kembali konteksnya.");
   await guest.getByRole("button", { name: "Kirim laporan", exact: true }).click();
   await expect(guest.locator("#um-report-reason")).toHaveCount(0);
-  await guest.locator('#um-exp [data-act=doa]').first().click();
+  await guest.locator('#um-exp [data-act=close]').click();
+  await guest.locator('.um-dock [data-act=doa]').click();
+  await expect(guest.locator('#um-exp')).not.toHaveClass(/on/);
+  await expect(guest.locator('#um-doa [data-act=hub-trad]')).toHaveCount(7);
+  await guest.locator('#um-doa [data-act=target]').first().click();
   await expect(guest.locator('#um-doa')).toHaveClass(/on/);
   await expect(guest.locator('#um-doa [data-act=trad]')).toHaveCount(7);
   await guest.locator('#um-doa [data-act=trad][data-id=umum]').click();
   await guest.locator('#um-doa [data-act=entri][data-id=hening]').click();
   await guest.locator('#um-doa [data-act=start]').click();
   await expect(guest.locator('#um-doa [data-act=again]')).toBeVisible({timeout:65000});
+  await page.frames()[1].evaluate('UM.galaksi.refresh()');
+  expect(await page.frames()[1].evaluate('UM.galaksi.state.daftar.reduce((n, item) => n + item.batuTotal, 0)')).toBe(1);
   await context.close();
   expect(errors).toEqual([]);
 });

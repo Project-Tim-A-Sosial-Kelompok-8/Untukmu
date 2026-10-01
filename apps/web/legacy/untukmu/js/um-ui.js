@@ -117,10 +117,10 @@ UM.ui = (function () {
     var diPeta = typeof viewMode !== 'undefined' && viewMode === 'sky';
     dockEl.innerHTML =
       '<button data-act="tulis"><span class="i">✎</span>' + teks(T('dockTulis')) + '</button>' +
+      '<button data-act="doa"><span class="i">♡</span>Doa</button>' +
       '<button data-act="rumah"><span class="i">⌂</span>' + teks(T('dockRumah')) + '</button>' +
       '<button data-act="peta"' + (diPeta ? ' class="on"' : '') + '><span class="i">✧</span>' + teks(T('dockPeta')) + '</button>' +
       '<button data-act="jelajah"><span class="i">☰</span>' + teks(T('dockJelajah')) + '</button>' +
-      '<button data-act="doa"><span class="i">♡</span>Doa</button>' +
       '<button data-act="dash"><span class="i">◈</span>' + teks(T('dockDash')) + '</button>' +
       '<button data-act="setup"><span class="i">🔑</span>' + teks(T('dockSetup')) + '</button>' +
       '<button data-act="set"><span class="i">⚙</span>' + teks(T('dockSet')) + '</button>';
@@ -228,6 +228,7 @@ UM.ui = (function () {
   }
 
   function bukaKomposer(galaksiId) {
+    if (comp.saving) return;
     galaksiId = galaksiId || UM.galaksi.state.aktif || null;
     comp.step = 0; comp.err = ''; comp.isi = ''; comp.mood = ''; comp.tag = '';
     comp.tanggal = new Date().toISOString().slice(0, 10);
@@ -240,6 +241,7 @@ UM.ui = (function () {
   }
 
   function renderKomposer() {
+    var request = comp.renderRequest = (comp.renderRequest || 0) + 1;
     hitungLangkah();
     var step = comp.steps[comp.step];
     var bar = comp.steps.map(function (s, i) {
@@ -247,6 +249,7 @@ UM.ui = (function () {
     }).join('');
 
     var petakan = function (body) {
+      if (request !== comp.renderRequest || !compEl.classList.contains('on')) return;
       compEl.querySelector('.um-wrap').innerHTML =
         '<div class="um-head">' +
           '<div><div class="um-h1">' + teks(T('compTitle')) + '</div>' +
@@ -256,7 +259,10 @@ UM.ui = (function () {
         '<div class="um-steps">' + bar + '</div>' +
         '<div class="um-card">' + body + '</div>';
     };
-    if (step === 'tujuan') { stepTujuan().then(petakan).catch(function (err) { petakan('<div class="um-error" role="alert">' + escAttr(err.message || 'Tujuan gagal dimuat.') + '</div><div class="um-btn-row"><button class="um-btn" data-act="retry">Coba lagi</button><button class="um-btn" data-act="cancel">Tutup</button></div>'); }); return; }
+    if (step === 'tujuan') {
+      petakan('<p class="um-muted" role="status">Memuat pilihan kenangan…</p>');
+      stepTujuan().then(petakan).catch(function (err) { petakan('<div class="um-error" role="alert">' + escAttr(err.message || 'Tujuan gagal dimuat.') + '</div><div class="um-btn-row"><button class="um-btn" data-act="retry">Coba lagi</button><button class="um-btn" data-act="cancel">Tutup</button></div>'); }); return;
+    }
     petakan(step === 'bentuk' ? stepBentuk() : step === 'isi' ? stepIsi() : stepPrivasi());
   }
 

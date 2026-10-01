@@ -9,7 +9,9 @@ for (const width of [320, 390, 1280]) {
     const frame = page.frameLocator("iframe");
     await frame.locator("#um-entry [data-act=skip]").click();
     await frame.locator('.um-dock [data-act=doa]').click();
-    await expect(frame.locator('#um-exp')).toContainText('pilih agama atau tradisi');
+    await expect(frame.locator('#um-doa')).toHaveClass(/on/);
+    await expect(frame.locator('#um-doa [data-act=hub-trad]')).toHaveCount(7);
+    await expect(frame.locator('#um-exp')).not.toHaveClass(/on/);
     const engine = page.frames()[1];
     // Isolate slow/retried responses here; social.spec exercises a complete
     // prayer with the real API, moderation, duration, and anonymous identity.
@@ -25,7 +27,7 @@ for (const width of [320, 390, 1280]) {
       window.prayerStarts = []; window.prayerFinishes = [];
       UM.store.startPrayer = async (id, catalog) => {
         window.prayerStarts.push({id, catalog});
-        await new Promise(resolve => setTimeout(resolve, 600));
+        if (window.prayerStarts.length === 1) await new Promise(resolve => { window.releasePrayerStart = resolve; });
         return {playback_token:'test-session',seconds:0,audio_url:null};
       };
       UM.store.addDoa = async (id, token) => {
@@ -59,7 +61,9 @@ for (const width of [320, 390, 1280]) {
     await frame.locator('#um-doa [data-act=start]').click();
     await frame.locator('#um-doa [data-act=cancel]').click();
     await expect(frame.locator('#um-doa [data-act=start]')).toBeVisible();
-    await page.waitForTimeout(850); // The canceled response must have arrived.
+    // Deliver the response only after cancellation. A short wall-clock delay
+    // can finish before Playwright clicks Cancel on a busy software renderer.
+    await engine.evaluate('(async () => { window.releasePrayerStart(); await new Promise(resolve => setTimeout(resolve, 0)); })()');
     expect(await engine.evaluate('window.prayerFinishes.length')).toBe(0);
     await frame.locator('#um-doa [data-act=start]').click();
     await frame.locator('#um-doa [data-act=retry-finish]').click();
@@ -77,3 +81,42 @@ for (const width of [320, 390, 1280]) {
     expect(errors).toEqual([]);
   });
 }
+
+test('pemutar audio dapat dijeda, dibatalkan, dan mencatat hanya setelah berakhir', async ({ page }) => {
+  // A silent WAV is only a media fixture, never shipped as religious content.
+  const samples = 8000 * 2, wav = Buffer.alloc(44 + samples * 2);
+  wav.write('RIFF', 0); wav.writeUInt32LE(wav.length - 8, 4); wav.write('WAVEfmt ', 8);
+  wav.writeUInt32LE(16, 16); wav.writeUInt16LE(1, 20); wav.writeUInt16LE(1, 22);
+  wav.writeUInt32LE(8000, 24); wav.writeUInt32LE(16000, 28); wav.writeUInt16LE(2, 32);
+  wav.writeUInt16LE(16, 34); wav.write('data', 36); wav.writeUInt32LE(samples * 2, 40);
+  await page.route('**/test-prayer.wav', route => route.fulfill({ body: wav, contentType: 'audio/wav' }));
+  await page.goto('/'); const frame = page.frameLocator('iframe');
+  await frame.locator('#um-entry [data-act=skip]').click();
+  const engine = page.frames()[1];
+  await engine.evaluate(`(() => {
+    const target = {id:'audio-target',galaksiId:'audio-galaxy',publicBody:'Ucapan tujuan audio',privasi:'publik',moderationStatus:'approved'};
+    UM.store.preparePrayer = async () => target.id;
+    UM.store.getPesan = async () => target;
+    UM.doaData.entri('umum','hening').audio = true;
+    UM.store.startPrayer = async () => ({playback_token:'audio-session',seconds:2,audio_url:'/test-prayer.wav',audio_attribution:'Audio pengujian'});
+    window.audioFinishes = 0;
+    UM.store.addDoa = async () => { window.audioFinishes++; return {added:true}; };
+    UM.galaksi.refresh = async () => {};
+    UM.ui.bukaDoa(target.galaksiId,target.id);
+  })()`);
+  await frame.locator('#um-doa [data-act=trad][data-id=umum]').click();
+  await frame.locator('#um-doa [data-act=entri][data-id=hening]').click();
+  await frame.locator('#um-doa [data-act=start]').click();
+  const audio = frame.locator('#um-doa audio');
+  await expect(audio).toBeVisible();
+  await audio.evaluate((node: HTMLAudioElement) => node.pause());
+  await page.waitForTimeout(2300);
+  expect(await engine.evaluate('window.audioFinishes')).toBe(0);
+  await frame.locator('#um-doa [data-act=cancel]').click();
+  await expect(audio).toHaveCount(0);
+  await frame.locator('#um-doa [data-act=start]').click();
+  await expect(audio).toBeVisible();
+  await audio.evaluate((node: HTMLAudioElement) => node.play());
+  await expect(frame.locator('#um-doa [data-act=again]')).toBeVisible({timeout:10000});
+  expect(await engine.evaluate('window.audioFinishes')).toBe(1);
+});

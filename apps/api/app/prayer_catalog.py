@@ -3,6 +3,7 @@ from pathlib import Path
 from .models import PrayerContent
 
 CATALOG = json.loads((Path(__file__).resolve().parents[1] / "data/prayers-v1.json").read_text(encoding="utf-8"))
+SOURCES = json.loads((Path(__file__).resolve().parents[1] / "data/prayer-sources.json").read_text(encoding="utf-8"))
 
 
 def initial_rows():
