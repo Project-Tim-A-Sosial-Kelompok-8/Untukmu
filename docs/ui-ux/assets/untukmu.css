@@ -1,0 +1,395 @@
+/* Untukmu — lapisan produk di atas Galaxy Explorer.
+   Semua gaya memakai token yang sama dengan engine (panel gelap, aksen #6366f1)
+   supaya UI baru terasa menyatu, bukan tempelan. */
+
+:root {
+  --um-dock-space: 64px;
+  --um-panel: rgba(10, 14, 24, .94);
+  --um-panel-solid: #0b1018;
+  --um-border: #243049;
+  --um-border-hi: #9cc0ff;
+  --um-accent: #6366f1;
+  --um-text: #e5e7eb;
+  --um-muted: #9ca3af;
+  --um-dim: #6b7280;
+  --um-gold: #f4d58d;
+  --um-rose: #f0a5b8;
+  --um-teal: #8fd8c8;
+  --um-radius: 12px;
+  --um-radius-sm: 8px;
+}
+
+/* ── dasar ─────────────────────────────────────────────────────────────────── */
+
+.um-screen {
+  position: fixed; inset: 0; z-index: 20;
+  display: none; overflow-y: auto; overscroll-behavior: contain;
+  background: radial-gradient(120% 90% at 50% 0%, rgba(8, 12, 22, .82), rgba(3, 4, 10, .96));
+  -webkit-backdrop-filter: blur(7px); backdrop-filter: blur(7px);
+  padding: max(20px, env(safe-area-inset-top)) max(20px, env(safe-area-inset-right))
+           max(24px, env(safe-area-inset-bottom)) max(20px, env(safe-area-inset-left));
+}
+.um-screen.on { display: block; }
+.um-screen.z-top { z-index: 30; }
+
+.um-screen input, .um-screen textarea, .um-screen select {
+  user-select: text; -webkit-user-select: text;
+}
+
+.um-wrap { max-width: 720px; margin: 0 auto; }
+.um-wrap.narrow { max-width: 520px; }
+.um-wrap.wide { max-width: 940px; }
+
+.um-card {
+  background: var(--um-panel); border: 1px solid var(--um-border);
+  border-radius: var(--um-radius); padding: 20px 22px;
+  box-shadow: 0 18px 50px rgba(0, 0, 0, .5);
+}
+.um-card + .um-card { margin-top: 14px; }
+
+.um-h1 { font-size: 22px; font-weight: 600; margin: 0 0 6px; letter-spacing: .01em; }
+.um-h2 { font-size: 15px; font-weight: 600; margin: 0 0 10px; }
+.um-h3 { font-size: 12px; font-weight: 600; margin: 0 0 8px; letter-spacing: .06em; text-transform: uppercase; color: var(--um-dim); }
+.um-p { font-size: 13px; line-height: 1.65; color: #cbd5e1; margin: 0 0 12px; }
+.um-muted { font-size: 12px; color: var(--um-muted); line-height: 1.6; }
+.um-dim { color: var(--um-dim); }
+.um-note {
+  font-size: 11.5px; line-height: 1.6; color: #b9c2d0;
+  background: rgba(99, 102, 241, .10); border-left: 2px solid var(--um-accent);
+  border-radius: 0 var(--um-radius-sm) var(--um-radius-sm) 0; padding: 9px 12px; margin: 10px 0 0;
+}
+.um-note.warn { background: rgba(244, 213, 141, .10); border-left-color: var(--um-gold); }
+.um-note a { color: #a5c9ff; text-underline-offset: 3px; }
+.um-note summary { cursor: pointer; padding: 6px 0; }
+
+.um-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; margin-bottom: 16px; }
+.um-close {
+  flex: none; cursor: pointer; font: inherit; font-size: 20px; line-height: 1;
+  color: var(--um-muted); background: transparent; border: 1px solid transparent;
+  border-radius: var(--um-radius-sm); padding: 4px 10px;
+}
+.um-close:hover { color: #fff; border-color: var(--um-border); background: rgba(8, 12, 22, .6); }
+
+/* ── tombol ────────────────────────────────────────────────────────────────── */
+
+.um-btn {
+  font: inherit; font-size: 13px; cursor: pointer; color: #cbd5e1;
+  background: rgba(10, 14, 24, .72); border: 1px solid var(--um-border);
+  border-radius: var(--um-radius-sm); padding: 9px 16px; min-height: 40px;
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  transition: border-color .15s, color .15s, background .15s;
+}
+.um-btn:hover { border-color: var(--um-accent); color: #fff; }
+.um-btn:disabled { opacity: .45; cursor: not-allowed; }
+.um-btn:disabled:hover { border-color: var(--um-border); color: #cbd5e1; }
+.um-btn.primary { background: rgba(99, 102, 241, .22); border-color: #4f52d8; color: #fff; font-weight: 600; }
+.um-btn.primary:hover { background: rgba(99, 102, 241, .34); border-color: var(--um-accent); }
+.um-btn.ghost { background: transparent; border-color: transparent; color: var(--um-muted); }
+.um-btn.ghost:hover { color: #fff; }
+.um-btn.danger:hover { border-color: #f87171; color: #fca5a5; }
+.um-btn.small { font-size: 11.5px; padding: 6px 11px; min-height: 32px; }
+.um-btn-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 16px; }
+.um-btn-row.end { justify-content: flex-end; }
+.um-btn-row.between { justify-content: space-between; }
+
+/* ── form ──────────────────────────────────────────────────────────────────── */
+
+.um-field { margin-bottom: 16px; }
+.um-label { display: block; font-size: 12px; font-weight: 600; color: #cbd5e1; margin-bottom: 7px; }
+.um-input, .um-textarea, .um-select {
+  font: inherit; font-size: 13px; width: 100%; color: var(--um-text);
+  background: rgba(6, 9, 16, .8); border: 1px solid var(--um-border);
+  border-radius: var(--um-radius-sm); padding: 10px 12px;
+}
+.um-textarea { min-height: 148px; resize: vertical; line-height: 1.7; }
+.um-input:focus, .um-textarea:focus, .um-select:focus { outline: 2px solid var(--um-border-hi); outline-offset: 2px; border-color: var(--um-border-hi); }
+.um-input::placeholder, .um-textarea::placeholder { color: #4b5563; }
+.um-hint { font-size: 11px; color: var(--um-dim); margin-top: 6px; line-height: 1.5; }
+.um-error { font-size: 11.5px; color: #fca5a5; margin-top: 6px; min-height: 15px; }
+.um-grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+@media (max-width: 640px) { .um-grid2 { grid-template-columns: 1fr; } }
+
+.um-chips { display: flex; flex-wrap: wrap; gap: 7px; }
+.um-chip {
+  font: inherit; font-size: 12px; cursor: pointer; color: #cbd5e1;
+  background: rgba(10, 14, 24, .7); border: 1px solid var(--um-border);
+  border-radius: 999px; padding: 7px 14px; min-height: 34px;
+  display: inline-flex; align-items: center; gap: 6px;
+}
+.um-chip:hover { border-color: var(--um-accent); color: #fff; }
+.um-chip.on { border-color: var(--um-border-hi); color: #fff; background: rgba(30, 42, 68, .92); }
+
+/* pilihan privasi: kartu radio */
+.um-priv { display: grid; gap: 10px; }
+.um-priv-opt {
+  display: flex; gap: 12px; align-items: flex-start; cursor: pointer; text-align: left;
+  background: rgba(6, 9, 16, .6); border: 1px solid var(--um-border);
+  border-radius: var(--um-radius-sm); padding: 13px 15px;
+}
+.um-priv-opt:hover { border-color: var(--um-accent); }
+.um-priv-opt.on { border-color: var(--um-border-hi); background: rgba(30, 42, 68, .72); }
+.um-priv-opt .mark { flex: none; width: 18px; height: 18px; border-radius: 50%; border: 1.5px solid var(--um-border); margin-top: 2px; }
+.um-priv-opt.on .mark { border-color: var(--um-border-hi); box-shadow: inset 0 0 0 4px var(--um-border-hi); }
+.um-priv-opt .t { font-size: 13px; font-weight: 600; color: #fff; display: block; margin-bottom: 3px; }
+.um-priv-opt .d { font-size: 11.5px; color: var(--um-muted); line-height: 1.55; }
+
+/* ── langkah komposer ──────────────────────────────────────────────────────── */
+
+.um-steps { display: flex; gap: 6px; margin-bottom: 20px; }
+.um-step { flex: 1; height: 3px; border-radius: 999px; background: #1f2937; overflow: hidden; }
+.um-step.on { background: var(--um-border-hi); }
+.um-step.done { background: #4f52d8; }
+
+/* ── label galaksi & penanda Peta ──────────────────────────────────────────── */
+
+#um-galaksilabels, #um-petalabels { position: absolute; inset: 0; z-index: 4; pointer-events: none; }
+
+.um-glabel, .um-plabel {
+  position: absolute; transform: translate(-50%, -50%); pointer-events: auto; cursor: pointer;
+  font-size: 11.5px; white-space: nowrap; color: #cfe0ff; text-align: center;
+  background: rgba(10, 14, 24, .55); border: 1px solid transparent;
+  border-radius: 10px; padding: 5px 12px; text-shadow: 0 0 12px rgba(0, 0, 0, .9);
+}
+.um-glabel b, .um-plabel b { display: block; font-weight: 600; }
+.um-glabel small, .um-plabel small { display: block; font-size: 9.5px; color: var(--um-dim); letter-spacing: .04em; margin-top: 2px; }
+.um-glabel .dot, .um-plabel .dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; margin-right: 6px; vertical-align: middle; }
+.um-glabel:hover, .um-plabel:hover { border-color: var(--um-accent); color: #fff; }
+.um-glabel.dekat { border-color: rgba(156, 192, 255, .5); background: rgba(18, 26, 44, .8); color: #fff; }
+.um-glabel.jauh { opacity: .5; }
+
+/* ── pemilih bentuk galaksi ────────────────────────────────────────────────── */
+
+.um-bentuk { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+@media (max-width: 640px) { .um-bentuk { grid-template-columns: 1fr; } }
+.um-bentuk-opt {
+  display: flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer; text-align: center;
+  font: inherit; color: #cbd5e1; background: rgba(6, 9, 16, .6);
+  border: 1px solid var(--um-border); border-radius: var(--um-radius-sm); padding: 14px 10px;
+}
+.um-bentuk-opt:hover { border-color: var(--um-accent); color: #fff; }
+.um-bentuk-opt.on { border-color: var(--um-border-hi); background: rgba(30, 42, 68, .72); color: #fff; }
+.um-bentuk-opt svg { width: 54px; height: 54px; }
+.um-bentuk-opt .t { font-size: 12.5px; font-weight: 600; }
+.um-bentuk-opt .d { font-size: 10.5px; color: var(--um-muted); line-height: 1.45; }
+
+/* ── daftar ringkas di dalam kartu ─────────────────────────────────────────── */
+
+.um-mini { list-style: none; margin: 0; padding: 0; }
+.um-mini li {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 11.5px; color: #cbd5e1; line-height: 1.5;
+  border-bottom: 1px solid rgba(36, 48, 73, .6); padding: 7px 0;
+}
+.um-mini li:last-child { border-bottom: 0; }
+.um-mini .t { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.um-mini .t.locked { color: var(--um-dim); font-style: italic; }
+.um-mini-btn {
+  flex: none; cursor: pointer; font: inherit; font-size: 10.5px; color: #cfe0ff;
+  background: transparent; border: 1px solid var(--um-border); border-radius: 999px; padding: 3px 10px;
+}
+.um-mini-btn:hover { border-color: var(--um-accent); color: #fff; }
+
+/* ── dock bawah ────────────────────────────────────────────────────────────── */
+
+.um-dock {
+  position: fixed; z-index: 8; left: 50%; transform: translateX(-50%); bottom: max(12px, env(safe-area-inset-bottom));
+  display: flex; gap: 5px; padding: 4px; max-width: min(94vw, 700px); overflow-x: auto;
+  background: rgba(10, 14, 24, .72); border: 1px solid var(--um-border);
+  border-radius: 999px; scrollbar-width: none;
+}
+.um-dock::-webkit-scrollbar { display: none; }
+.um-dock button {
+  font: inherit; font-size: 11px; cursor: pointer; color: #cbd5e1; white-space: nowrap;
+  background: transparent; border: 1px solid transparent; border-radius: 999px;
+  padding: 7px 13px; min-height: 34px; display: inline-flex; align-items: center; gap: 6px;
+}
+.um-dock button:hover { border-color: var(--um-accent); color: #fff; }
+.um-dock button.on { border-color: var(--um-border-hi); color: #fff; background: rgba(30, 42, 68, .9); }
+.um-dock button .i { font-size: 13px; line-height: 1; }
+body.um-sky .um-dock { bottom: max(12px, env(safe-area-inset-bottom)); }
+
+/* ── merek ─────────────────────────────────────────────────────────────────── */
+
+/* Judul bawaan engine digantikan merek produk saat Untukmu aktif. */
+body.um-on #title { display: none !important; }
+
+.um-brand { position: fixed; z-index: 6; top: 14px; left: 18px; max-width: calc(100vw - 190px); pointer-events: none; }
+.um-brand b { display: block; font-size: 15px; font-weight: 600; letter-spacing: .02em; }
+.um-brand span { display: block; font-size: 11px; color: var(--um-dim); margin-top: 2px; }
+.um-brand em { display: block; font-style: normal; font-size: 10px; color: #4b5563; margin-top: 3px; }
+
+/* ── kartu & daftar ────────────────────────────────────────────────────────── */
+
+.um-badge {
+  display: inline-flex; align-items: center; gap: 5px; font-size: 10.5px; font-weight: 600;
+  letter-spacing: .03em; border-radius: 999px; padding: 3px 10px;
+  border: 1px solid var(--um-border); color: var(--um-muted); background: rgba(6, 9, 16, .6);
+}
+.um-badge.privat { color: #a5b4fc; border-color: #3730a3; }
+.um-badge.publik { color: var(--um-gold); border-color: #78350f; }
+.um-badge.unlisted { color: var(--um-teal); border-color: #115e59; }
+.um-badge.lock { color: var(--um-rose); border-color: #7f1d4d; }
+.um-badge.warn { color: var(--um-gold); border-color: #78350f; }
+
+.um-list { list-style: none; margin: 0; padding: 0; }
+.um-item {
+  background: rgba(6, 9, 16, .55); border: 1px solid var(--um-border);
+  border-radius: var(--um-radius-sm); padding: 13px 15px; margin-bottom: 9px;
+}
+.um-item:hover { border-color: #33415c; }
+.um-item-top { display: flex; align-items: center; gap: 9px; flex-wrap: wrap; margin-bottom: 7px; }
+.um-item-top .who { font-size: 13px; font-weight: 600; color: #fff; }
+.um-item-top .when { font-size: 11px; color: var(--um-dim); margin-left: auto; }
+.um-item .txt { font-size: 12.5px; line-height: 1.7; color: #cbd5e1; }
+.um-item .txt.locked { color: var(--um-dim); font-style: italic; }
+.um-item-acts { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 11px; }
+
+.um-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 11px; }
+@media (max-width: 640px) { .um-stats { grid-template-columns: repeat(2, 1fr); } }
+.um-stat {
+  background: rgba(6, 9, 16, .55); border: 1px solid var(--um-border);
+  border-radius: var(--um-radius-sm); padding: 14px;
+}
+.um-stat b { display: block; font-size: 24px; font-weight: 600; color: #fff; line-height: 1.15; }
+.um-stat span { display: block; font-size: 11px; color: var(--um-muted); margin-top: 4px; }
+
+.um-empty { font-size: 12.5px; color: var(--um-dim); text-align: center; padding: 26px 12px; line-height: 1.7; }
+
+/* ── modal doa ─────────────────────────────────────────────────────────────── */
+
+.um-trad { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 16px; }
+.um-prayer {
+  background: rgba(6, 9, 16, .55); border: 1px solid var(--um-border);
+  border-radius: var(--um-radius-sm); padding: 15px 17px;
+}
+.um-prayer .nm { font-size: 13px; font-weight: 600; color: #fff; }
+.um-prayer .src { font-size: 10.5px; color: var(--um-dim); margin-top: 3px; letter-spacing: .03em; }
+.um-prayer .tx { font-size: 13px; line-height: 1.85; color: #dbe3ee; margin-top: 13px; white-space: pre-line; }
+.um-prayer .tx.missing { color: var(--um-dim); font-style: italic; }
+
+.um-hening { text-align: center; padding: 26px 12px; }
+.um-hening .clock { font-size: 42px; font-weight: 300; color: #fff; letter-spacing: .04em; font-variant-numeric: tabular-nums; }
+.um-hening .lbl { font-size: 12px; color: var(--um-muted); margin-top: 8px; }
+
+/* ── toast ─────────────────────────────────────────────────────────────────── */
+
+.um-toast {
+  position: fixed; z-index: 40; left: 50%; transform: translateX(-50%); bottom: 84px;
+  background: rgba(10, 14, 24, .96); border: 1px solid var(--um-border);
+  border-radius: 999px; padding: 10px 20px; font-size: 12.5px; color: #fff;
+  box-shadow: 0 10px 34px rgba(0, 0, 0, .55); opacity: 0; pointer-events: none;
+  transition: opacity .25s, transform .25s;
+}
+.um-toast.on { opacity: 1; transform: translateX(-50%) translateY(-6px); }
+
+/* ── entry (layar pembuka) ─────────────────────────────────────────────────── */
+
+#um-entry { z-index: 24; }
+#um-entry .um-enter { max-width: 620px; margin: min(12vh, 110px) auto 0; text-align: center; }
+#um-entry h1 {
+  font-size: clamp(30px, 6vw, 46px); font-weight: 600; margin: 0 0 12px;
+  letter-spacing: -.01em; color: #fff;
+  text-shadow: 0 0 40px rgba(120, 160, 255, .45);
+}
+#um-entry .lead { font-size: 14.5px; line-height: 1.75; color: #b9c2d0; margin: 0 auto 8px; max-width: 480px; }
+#um-entry .acts { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin: 28px 0 18px; }
+#um-entry .acts .um-btn { padding: 13px 26px; min-height: 48px; font-size: 14px; }
+#um-entry .fine { font-size: 11.5px; color: var(--um-dim); line-height: 1.75; max-width: 460px; margin: 0 auto; }
+
+/* ── mode langit ───────────────────────────────────────────────────────────── */
+
+.um-skyctl { position: fixed; z-index: 8; top: 136px; left: 18px; display: none; }
+.um-skyctl .um-hint { max-width: 260px; }
+body.um-sky .um-skyctl { display: block; }
+body.um-sky .um-brand span { opacity: 0; }
+
+/* ── mode sinema: sembunyikan seluruh chrome produk ────────────────────────── */
+
+body.gx-cinema .um-dock,
+body.gx-cinema .um-brand,
+body.gx-cinema .um-skyctl,
+body.gx-cinema #um-galaksilabels,
+body.gx-cinema #um-petalabels,
+body.gx-cinema .um-screen { display: none !important; }
+
+/* ── mobile ────────────────────────────────────────────────────────────────── */
+
+@media (max-width: 640px) {
+  :root { --um-dock-space: 116px; }
+  .um-card { padding: 16px 16px 18px; }
+  .um-wrap { max-width: none; }
+  #um-entry .um-enter { margin-top: 8vh; }
+  .um-dock { left: 12px; right: 12px; transform: none; max-width: none; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 4px; border-radius: 16px; overflow: visible; }
+  .um-dock button { justify-content: center; flex-direction: column; gap: 3px; min-width: 0; min-height: 44px; padding: 5px 2px; font-size: 10px; }
+  .um-brand { top: max(12px, env(safe-area-inset-top)); left: 14px; }
+  .um-toast { bottom: 120px; }
+  .um-brand span { font-size: 10px; }
+  .um-brand em { display: none; }
+  .um-skyctl { top: max(136px, calc(env(safe-area-inset-top) + 124px)); left: 14px; right: 14px; }
+}
+
+/* Tiap baris navigasi punya ruang sendiri, termasuk saat panel terbuka. */
+body.um-on #galaxystrip, body.um-on #solarstrip {
+  bottom: calc(var(--um-dock-space) + max(12px, env(safe-area-inset-bottom)));
+  max-width: calc(100vw - 24px);
+  min-height: 44px;
+  padding: 3px;
+  border-radius: 12px;
+  background: var(--um-panel);
+  border: 1px solid var(--um-border);
+  pointer-events: auto;
+  scrollbar-width: thin;
+}
+body.um-on #galaxystrip button, body.um-on #solarstrip button { min-height: 36px; flex-shrink: 0; }
+body.um-on #galaxystrip::-webkit-scrollbar, body.um-on #solarstrip::-webkit-scrollbar { display: block; height: 6px; }
+body.um-on #solartime {
+  left: 50%; transform: translateX(-50%);
+  bottom: calc(var(--um-dock-space) + max(12px, env(safe-area-inset-bottom)) + 54px);
+  max-width: calc(100vw - 24px); flex-wrap: wrap; justify-content: center;
+}
+body.um-on #skyback, body.um-on #solarback { top: max(86px, calc(env(safe-area-inset-top) + 74px)); min-height: 40px; }
+body.um-on #return-mw { z-index: 8; min-height: 40px; }
+body.um-on #beacon-panel {
+  bottom: calc(var(--um-dock-space) + max(12px, env(safe-area-inset-bottom)) + 108px);
+  max-height: calc(100dvh - var(--um-dock-space) - max(12px, env(safe-area-inset-bottom)) - 190px);
+  overflow-wrap: anywhere;
+}
+/* Leave room for the drawer's 16px entrance motion as well as the dock. */
+body.um-on.um-sky #beacon-panel { bottom: calc(var(--um-dock-space) + max(12px, env(safe-area-inset-bottom)) + 12px); }
+.um-toast { bottom: calc(var(--um-dock-space) + max(12px, env(safe-area-inset-bottom)) + 108px); width: max-content; max-width: calc(100vw - 32px); text-align: center; overflow-wrap: anywhere; }
+.um-head > :first-child, .um-grid2 > *, .um-stats > * { min-width: 0; }
+.um-screen, .um-card, .um-item .txt, .um-item-top .who, .um-head { overflow-wrap: anywhere; }
+.um-screen { overflow-x: hidden; }
+.um-btn, .um-chip { max-width: 100%; }
+.um-btn-row > .um-btn { white-space: normal; }
+.um-chip, .um-trad .um-chip { white-space: normal; text-align: left; }
+.um-close { min-width: 44px; min-height: 44px; }
+.um-priv-opt > span:last-child { min-width: 0; }
+.um-glabel { font-family: inherit; }
+.um-plabel { font-family: inherit; }
+.skylabel { max-width: min(220px, calc(100vw - 24px)); white-space: normal; overflow-wrap: anywhere; }
+.um-glabel, .um-plabel { max-width: min(220px, calc(100vw - 24px)); white-space: normal; overflow-wrap: anywhere; }
+body[data-view-mode="sky"] #um-petalabels,
+body[data-view-mode="sky"] #skylabels,
+body[data-view-mode="sky"] #um-galaksilabels,
+body[data-view-mode="solar"] #um-galaksilabels,
+body[data-view-mode="solar"] #um-petalabels,
+body[data-view-mode="galaxy"] #um-petalabels,
+body[data-sky-mode="astronomi"] #um-petalabels,
+body[data-sky-mode="kenangan"] #skylabels { display: none !important; }
+.um-trad .um-hint { display: block; }
+[data-prayer-audio] audio { display: block; width: 100%; max-width: 100%; margin-top: 12px; }
+.um-head > div { min-width: 0; }
+.um-screen .um-btn, .um-screen .um-chip, .um-mini-btn { min-height: 44px; }
+.um-prayer .src { overflow-wrap: anywhere; }
+@media (max-width: 640px) {
+  body.um-on #return-mw { top: max(86px, calc(env(safe-area-inset-top) + 74px)); max-width: calc(100vw - 28px); text-align: center; }
+  body.um-on #beacon-panel { top: auto; left: 12px; right: 12px; width: auto; max-height: min(30dvh, calc(100dvh - 360px)); }
+  body.um-on.um-sky #beacon-panel { max-height: min(42dvh, calc(100dvh - 320px)); }
+  .um-screen { padding-left: max(12px, env(safe-area-inset-left)); padding-right: max(12px, env(safe-area-inset-right)); }
+  .um-item-acts > .um-btn { flex: 1 1 auto; }
+}
+@media (max-height: 540px) and (min-width: 641px) {
+  body.um-on #beacon-panel { top: 72px; bottom: 184px; max-height: none; width: min(340px, 45vw); }
+  body.um-on.um-sky #beacon-panel { bottom: 82px; }
+}

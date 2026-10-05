@@ -1,0 +1,349 @@
+{
+  "config": {
+    "argv": [
+      "D:\\Project\\Untukmu-Git\\test-results\\browser-tools\\playwright\\driver\\node.exe",
+      "D:\\Project\\Untukmu-Git\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "map-stars.spec.ts",
+      "navigation.spec.ts",
+      "--trace",
+      "off"
+    ],
+    "configFile": "D:\\Project\\Untukmu-Git\\apps\\web\\playwright.config.ts",
+    "rootDir": "D:/Project/Untukmu-Git/apps/web/tests/e2e",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "D:/Project/Untukmu-Git/apps/web/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "D:/Project/Untukmu-Git/apps/web/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 120000
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "html",
+        {
+          "open": "never"
+        }
+      ],
+      [
+        "json",
+        {
+          "outputFile": "../../docs/quality/personal-prayers-map-final-results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.63.0",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "frontend-navigation.spec.ts",
+      "file": "frontend-navigation.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "Tulis dan Doa tersedia pada navigasi bawah tanpa tombol tambahan di atas (320px)",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 6364,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-02T12:06:58.130Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "fe674648b25204e345b9-85109b1526fae9c9101e",
+          "file": "frontend-navigation.spec.ts",
+          "line": 5,
+          "column": 7
+        },
+        {
+          "title": "Tulis dan Doa tersedia pada navigasi bawah tanpa tombol tambahan di atas (390px)",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3712,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-02T12:07:06.844Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "fe674648b25204e345b9-e60a4011a95a01bb01df",
+          "file": "frontend-navigation.spec.ts",
+          "line": 5,
+          "column": 7
+        },
+        {
+          "title": "Tulis dan Doa tersedia pada navigasi bawah tanpa tombol tambahan di atas (1366px)",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4570,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-02T12:07:10.583Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "fe674648b25204e345b9-12837e7678449c941b47",
+          "file": "frontend-navigation.spec.ts",
+          "line": 5,
+          "column": 7
+        }
+      ]
+    },
+    {
+      "title": "map-stars.spec.ts",
+      "file": "map-stars.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "bintang Kenangan dan 25 konstelasi terlihat dan dapat diklik langsung pada langit",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 19129,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-02T12:07:15.191Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "52cd214dbacce89f7540-8e7ebe40ea800d6d5ea3",
+          "file": "map-stars.spec.ts",
+          "line": 6,
+          "column": 5
+        }
+      ]
+    },
+    {
+      "title": "navigation.spec.ts",
+      "file": "navigation.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "navigasi dan panel tidak bertumpuk, semua menu bisa diklik (1280px)",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 19797,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-02T12:07:34.356Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "5d2868f7d23420c27cca-1b798a50e7f3184f5bfd",
+          "file": "navigation.spec.ts",
+          "line": 22,
+          "column": 7
+        },
+        {
+          "title": "navigasi dan panel tidak bertumpuk, semua menu bisa diklik (390px)",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 14732,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-02T12:07:54.170Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "5d2868f7d23420c27cca-03805e33fd65c76e3688",
+          "file": "navigation.spec.ts",
+          "line": 22,
+          "column": 7
+        },
+        {
+          "title": "tombol kunci bisa dicoba lagi setelah salah kata sandi; galaksi tetap ada",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 18419,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-02T12:08:08.922Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "5d2868f7d23420c27cca-6f337ddca64808dc46aa",
+          "file": "navigation.spec.ts",
+          "line": 96,
+          "column": 5
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-02T12:06:57.323Z",
+    "duration": 90811.495,
+    "expected": 7,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

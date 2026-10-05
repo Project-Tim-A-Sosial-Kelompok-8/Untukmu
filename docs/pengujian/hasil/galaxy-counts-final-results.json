@@ -1,0 +1,283 @@
+{
+  "config": {
+    "argv": [
+      "D:\\Project\\Untukmu-Git\\test-results\\browser-tools\\playwright\\driver\\node.exe",
+      "D:\\Project\\Untukmu-Git\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "galaxy-counts.spec.ts",
+      "written-prayers.spec.ts",
+      "map-stars.spec.ts",
+      "--trace",
+      "off"
+    ],
+    "configFile": "D:\\Project\\Untukmu-Git\\apps\\web\\playwright.config.ts",
+    "rootDir": "D:/Project/Untukmu-Git/apps/web/tests/e2e",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "D:/Project/Untukmu-Git/apps/web/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "D:/Project/Untukmu-Git/apps/web/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 120000
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "html",
+        {
+          "open": "never"
+        }
+      ],
+      [
+        "json",
+        {
+          "outputFile": "../../docs/quality/galaxy-counts-final-results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.63.0",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "galaxy-counts.spec.ts",
+      "file": "galaxy-counts.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "label dan kartu galaksi menghitung doa serta pesan sesuai jenis, termasuk setelah edit dan hapus",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 63656,
+                  "error": {
+                    "message": "Error: frame.evaluate: Frame was detached",
+                    "stack": "Error: frame.evaluate: Frame was detached\n    at D:\\Project\\Untukmu-Git\\apps\\web\\tests\\e2e\\galaxy-counts.spec.ts:24:36\n    at counts (D:\\Project\\Untukmu-Git\\apps\\web\\tests\\e2e\\galaxy-counts.spec.ts:24:5)\n    at D:\\Project\\Untukmu-Git\\apps\\web\\tests\\e2e\\galaxy-counts.spec.ts:110:3",
+                    "location": {
+                      "file": "D:\\Project\\Untukmu-Git\\apps\\web\\tests\\e2e\\galaxy-counts.spec.ts",
+                      "column": 36,
+                      "line": 24
+                    },
+                    "snippet": "  22 |     await expect(label.locator('[data-count=pesan]')).toHaveText(`${messages} pesan`);\n  23 |     await expect(label.locator('[data-count=doa]')).toHaveText(`${prayers} doa`);\n> 24 |     await expect.poll(() => engine.evaluate(`(() => {\n     |                                    ^\n  25 |       const g=UM.sky.state.daftar.find(item=>item.g.id===${JSON.stringify(galaxy.id)});\n  26 |       return {pesan:g.nPesan,doa:g.nDoaTertulis+g.nBatu};\n  27 |     })()`)).toEqual({ pesan: messages, doa: prayers });"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "D:\\Project\\Untukmu-Git\\apps\\web\\tests\\e2e\\galaxy-counts.spec.ts",
+                        "column": 36,
+                        "line": 24
+                      },
+                      "message": "Error: frame.evaluate: Frame was detached\n\n  22 |     await expect(label.locator('[data-count=pesan]')).toHaveText(`${messages} pesan`);\n  23 |     await expect(label.locator('[data-count=doa]')).toHaveText(`${prayers} doa`);\n> 24 |     await expect.poll(() => engine.evaluate(`(() => {\n     |                                    ^\n  25 |       const g=UM.sky.state.daftar.find(item=>item.g.id===${JSON.stringify(galaxy.id)});\n  26 |       return {pesan:g.nPesan,doa:g.nDoaTertulis+g.nBatu};\n  27 |     })()`)).toEqual({ pesan: messages, doa: prayers });\n    at D:\\Project\\Untukmu-Git\\apps\\web\\tests\\e2e\\galaxy-counts.spec.ts:24:36\n    at counts (D:\\Project\\Untukmu-Git\\apps\\web\\tests\\e2e\\galaxy-counts.spec.ts:24:5)\n    at D:\\Project\\Untukmu-Git\\apps\\web\\tests\\e2e\\galaxy-counts.spec.ts:110:3"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-02T13:15:12.533Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "D:\\Project\\Untukmu-Git\\apps\\web\\test-results\\galaxy-counts-label-dan-ka-b496a-asuk-setelah-edit-dan-hapus\\test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "D:\\Project\\Untukmu-Git\\apps\\web\\test-results\\galaxy-counts-label-dan-ka-b496a-asuk-setelah-edit-dan-hapus\\error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "D:\\Project\\Untukmu-Git\\apps\\web\\tests\\e2e\\galaxy-counts.spec.ts",
+                    "column": 36,
+                    "line": 24
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "0b43938837aba8da93a9-2c0026f6bcdaa75c3442",
+          "file": "galaxy-counts.spec.ts",
+          "line": 4,
+          "column": 5
+        }
+      ]
+    },
+    {
+      "title": "map-stars.spec.ts",
+      "file": "map-stars.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "bintang Kenangan dan 25 konstelasi terlihat dan dapat diklik langsung pada langit",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 44556,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-02T13:16:24.467Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "52cd214dbacce89f7540-8e7ebe40ea800d6d5ea3",
+          "file": "map-stars.spec.ts",
+          "line": 6,
+          "column": 5
+        }
+      ]
+    },
+    {
+      "title": "written-prayers.spec.ts",
+      "file": "written-prayers.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "pengunjung dapat membuka Doa; menulis doa meminta akun dan pembatalan kembali ke Doa",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 6111,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-02T13:17:10.024Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "87a2f0125baa3067441c-88b1463a94afc264662a",
+          "file": "written-prayers.spec.ts",
+          "line": 5,
+          "column": 5
+        },
+        {
+          "title": "doa tertulis tersimpan pada tujuan yang benar; retry tidak menggandakan galaksi; draf tetap ada saat membuka kunci",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 36054,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-02T13:17:16.179Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "87a2f0125baa3067441c-b1e59d4d7379e68cd289",
+          "file": "written-prayers.spec.ts",
+          "line": 18,
+          "column": 5
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-02T13:15:11.333Z",
+    "duration": 162341.651,
+    "expected": 3,
+    "skipped": 0,
+    "unexpected": 1,
+    "flaky": 0
+  }
+}

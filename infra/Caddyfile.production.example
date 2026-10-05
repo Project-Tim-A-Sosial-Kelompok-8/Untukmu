@@ -1,0 +1,14 @@
+# Example only. Set APP_ORIGIN=https://your-domain and configure Turnstile,
+# HTTPS object storage, backups, monitoring, and the production release gate.
+{$SITE_DOMAIN} {
+    header Strict-Transport-Security "max-age=31536000"
+    request_body {
+        max_size 200KB
+    }
+    handle /api/* {
+        reverse_proxy api:8000
+    }
+    handle {
+        reverse_proxy web:3000
+    }
+}

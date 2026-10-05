@@ -1,0 +1,1663 @@
+{
+  "device": "mobile",
+  "viewport": {
+    "width": 390,
+    "height": 844
+  },
+  "exportedAt": "2026-10-03T04:51:31.070Z",
+  "runtimeSha256": "29dfb1ca2eec72a4580b257521ccb8729e816cd598caf1033f76a3332694b396",
+  "demonstrationData": true,
+  "policy": "Tampilan asli website dengan akun contoh. Panel panjang direkam per bagian; daftar berulang memakai awal, bagian berikutnya, dan akhir. Tidak ada data pengguna produksi.",
+  "screens": [
+    {
+      "id": "halaman-awal",
+      "title": "Halaman pembuka",
+      "group": "Mulai dan akun",
+      "entry": "/",
+      "action": "Buka website",
+      "result": "Tulis, Doa, Jelajah, dan keterangan privasi terlihat.",
+      "images": [
+        {
+          "path": "mobile/layar/01-halaman-awal.png",
+          "width": 390,
+          "height": 844,
+          "sha256": "8733ef4c6d29457a3f2d55e33c896042f637826619574fccebb66be6b4b658c9",
+          "scroll": 0
+        }
+      ],
+      "url": "/"
+    },
+    {
+      "id": "rumah-milky-way",
+      "title": "Home / Milky Way",
+      "group": "Galaksi dan Peta",
+      "entry": "Home / Rumah",
+      "action": "Lanjutkan tanpa akun",
+      "result": "Galaksi utama dan delapan menu bawah terlihat.",
+      "images": [
+        {
+          "path": "mobile/layar/02-rumah-milky-way.png",
+          "width": 390,
+          "height": 844,
+          "sha256": "667d9f783eb243e0321fa142d5e22022564fada82a716e20c70fb8f4785636cd",
+          "scroll": 0
+        }
+      ],
+      "url": "/"
+    },
+    {
+      "id": "jelajah-kosong",
+      "title": "Jelajah tanpa ucapan",
+      "group": "Jelajah dan sosial",
+      "entry": "Jelajah",
+      "action": "Buka daftar tanpa data publik",
+      "result": "Keadaan kosong dan alasan batas halaman terlihat.",
+      "images": [
+        {
+          "path": "mobile/layar/03-jelajah-kosong.png",
+          "width": 390,
+          "height": 844,
+          "sha256": "600a99da44dcfdea57f9ce255545551d73cba56e5c39af48427a7e4a3a763457",
+          "scroll": 0
+        },
+        {
+          "path": "mobile/layar/03-jelajah-kosong-bagian-2.png",
+          "width": 390,
+          "height": 844,
+          "sha256": "00d9c812e8666c6a0f7e1f1695afaab85d0d0027f198aba2b01b6e353b841ddf",
+          "scroll": 109
+        }
+      ],
+      "url": "/"
+    },
+    {
+      "id": "doa-kosong",
+      "title": "Doa tanpa ucapan publik",
+      "group": "Doa",
+      "entry": "Doa",
+      "action": "Buka Doa sebelum ada konten publik",
+      "result": "Akses tulis doa dan tujuh tradisi tetap tersedia.",
+      "images": [
+        {
+          "path": "mobile/layar/04-doa-kosong.png",
+          "width": 390,
+          "height": 844,
+          "sha256": "6f76e123e2d2bb497405826cfb0c5392e24876f6c55762f5cea38acff9f948ba",
+          "scroll": 0
+        },
+        {
+          "path": "mobile/layar/04-doa-kosong-bagian-2.png",
+          "width": 390,
+          "height": 844,
+          "sha256": "35fd693f51a4868dfd04c2a826eaa2392eef8c9816f83726a718db8f5ce5d842",
+          "scroll": 198
+        }
+      ],
+      "url": "/"
+    },
+    {
+      "id": "masuk",
+      "title": "Masuk ke akun",
+      "group": "Mulai dan akun",
+      "entry": "Tulis → Masuk",
+      "action": "Buka fitur yang memerlukan akun",
+      "result": "Surel, kata sandi, daftar, dan pemulihan tersedia.",
+      "images": [
+        {
+          "path": "mobile/layar/05-masuk.png",
+          "width": 390,
+          "height": 844,
+          "sha256": "444fb867d6c58c2ade36f442434ff209055b34fb48c2f547bf7faa56968a8712",
+          "scroll": 0
+        }
+      ],
+      "url": "/"
+    },
+    {
+      "id": "pemulihan-tamu",
+      "title": "Pemulihan akun",
+      "group": "Mulai dan akun",
+      "entry": "Masuk → Pulihkan akun",
+      "action": "Buka formulir pemulihan",
+      "result": "Kode pemulihan dan kata sandi baru diminta.",
+      "images": [
+        {
+          "path": "mobile/layar/06-pemulihan-tamu.png",
+          "width": 390,
+          "height": 844,
+          "sha256": "e9503b4c8276be4f8acdb06327c284eb8ce7661dde99e35838756d108da62a2f",
+          "scroll": 0
+        }
+      ],
+      "url": "/"
+    },
+    {
+      "id": "daftar",
+      "title": "Pendaftaran akun",
+      "group": "Mulai dan akun",
+      "entry": "Masuk → Buat akun",
+      "action": "Isi formulir pendaftaran",
+      "result": "Surel dan pengulangan kata sandi ditampilkan.",
+      "images": [
+        {
+          "path": "mobile/layar/07-daftar.png",
+          "width": 390,
+          "height": 844,
+          "sha256": "80afdea2746689de1f1e87c317589b1ba115fa05095d7aa008ae2d885c13bda1",
+          "scroll": 0
+        }
+      ],
+      "url": "/"
+    },
+    {
+      "id": "daftar-validasi",
+      "title": "Validasi pendaftaran",
+      "group": "Mulai dan akun",
+      "entry": "Buat akun",
+      "action": "Gunakan pengulangan kata sandi yang berbeda",
+      "result": "Pesan kesalahan muncul dan formulir dapat diperbaiki.",
+      "images": [
+        {
+          "path": "mobile/layar/08-daftar-validasi.png",
+          "width": 390,
+          "height": 844,
+          "sha256": "663cb6ad889a01e6490774b4096501f683cef5fec7b1caac48188fb6cfd44b71",
+          "scroll": 0
+        }
+      ],
+      "url": "/"
+    },
+    {
+      "id": "kode-pemulihan",
+      "title": "Simpan kode pemulihan",
+      "group": "Mulai dan akun",
+      "entry": "Setelah mendaftar",
+      "action": "Pendaftaran berhasil pada akun contoh",
+      "result": "Kode sekali tampil dan konfirmasi penyimpanan terlihat.",
+      "images": [
+        {
+          "path": "mobile/layar/09-kode-pemulihan.png",
+          "width": 390,
+          "height": 844,
+          "sha256": "e4167454c3af891a8094e4d95909be2e0f9f074dd995716f7b06124cc0828515",
+          "scroll": 0
+        }
+      ],
+      "url": "/"
+    },
+    {
+      "id": "ruang-pribadi-kosong",
+      "title": "Ruang Pribadi kosong",
+      "group": "Ruang Pribadi",
+      "entry": "Ruang Pribadi",
+      "action": "Buka akun yang baru dibuat",
+      "result": "Ringkasan kosong serta bagian pesan dan doa tersedia.",
+      "images": [
+        {
+          "path": "mobile/layar/10-ruang-pribadi-kosong.png",
+          "width": 390,
+          "height": 844,
+          "sha256": "c8d46a5c8ed790537e3fdb12804f7ff9d6cba4391caa141988d8c1a3746c5841",
+          "scroll": 0
+        },
+        {
+          "path": "mobile/layar/10-ruang-pribadi-kosong-bagian-2.png",
+          "width": 390,
+          "height": 844,
+          "sha256": "4e790b38dd343444710c6a2c94045ebc40fa07483d149af481280c4921300408",
+          "scroll": 133
+        }
+      ],
+      "url": "/"
+    },
+    {
+      "id": "tulis-tujuan-baru",
+      "title": "Tulis 1: tujuan baru",
+      "group": "Tulis pesan",
+      "entry": "Tulis",
+      "action": "Isi nama dan hubungan",
+      "result": "Tujuan pesan dan pilihan kategori jelas.",
+      "images": [
+        {
+          "path": "mobile/layar/11-tulis-tujuan-baru.png",
+          "width": 390,
+          "height": 844,
+          "sha256": "1e0320ff7af22305754f8538e41acde5e4920c1e55dc0b5eb6b1c4c3bef6ca3c",
+          "scroll": 0
+        }
+      ],
+      "url": "/"
+    },
+    {
+      "id": "tulis-bentuk-galaksi",
+      "title": "Tulis 2: bentuk galaksi",
+      "group": "Tulis pesan",
+      "entry": "Langkah 2",
+      "action": "Pilih bentuk, warna, ukuran, atau foto",
+      "result": "Representasi galaksi dan kontrol unggahan terlihat.",
+      "images": [
+        {
+          "path": "mobile/layar/12-tulis-bentuk-galaksi.png",
+          "width": 390,
+          "height": 844,
+          "sha256": "8ff5f1460994ca33aff0051da2259731655a7f00394176509033487fa517311b",
+          "scroll": 0
+        },
+        {
+          "path": "mobile/layar/12-tulis-bentuk-galaksi-bagian-2.png",
+          "width": 390,
+          "height": 844,
+          "sha256": "18e0d372e07144250000c2c8754248543aabf38906ad67099f3f33ef476a89a2",
+          "scroll": 93
+        }
+      ],
+      "url": "/"
+    },
+    {
+      "id": "tulis-isi-pesan",
+      "title": "Tulis 3: isi dan lampiran",
+      "group": "Tulis pesan",
+      "entry": "Langkah 3",
+      "action": "Tulis isi, tanggal, suasana, tag, dan lampiran",
+      "result": "Atribut tulisan dan batas lampiran tersedia.",
+      "images": [
+        {
+          "path": "mobile/layar/13-tulis-isi-pesan.png",
+          "width": 390,
+          "height": 844,
+          "sha256": "06de6caf2d66646b24c34eab3b5809f737d009f38d9d08aa01b1300587b2cdf0",
+          "scroll": 0
+        },
+        {
+          "path": "mobile/layar/13-tulis-isi-pesan-bagian-2.png",
+          "width": 390,
+          "height": 844,
+          "sha256": "8e27c56f5e63a74bd06786d82b9c2235e8bfacd5d0472ff17b73619dc2950291",
+          "scroll": 59
+        }
+      ],
+      "url": "/"
+    },
+    {
+      "id": "tulis-privasi-privat",
+      "title": "Tulis 4: Privat",
+      "group": "Tulis pesan",
+      "entry": "Langkah 4",
+      "action": "Pilih Privat",
+      "result": "Pilihan aktif dan batas aksesnya dijelaskan.",
+      "images": [
+        {
+          "path": "mobile/layar/14-tulis-privasi-privat.png",
+          "width": 390,
+          "height": 844,
+          "sha256": "aa6f9b777e57681b25d21c4ee43d2f6fd59437b9edfa53d824ba23625082ffe1",
+          "scroll": 0
+        }
+      ],
+      "url": "/"
+    },
+    {
+      "id": "tulis-privasi-publik",
+      "title": "Tulis 4: Publik anonim",
+      "group": "Tulis pesan",
+      "entry": "Langkah 4",
+      "action": "Pilih Publik anonim",
+      "result": "Pilihan aktif dan batas aksesnya dijelaskan.",
+      "images": [
+        {
+          "path": "mobile/layar/15-tulis-privasi-publik.png",
+          "width": 390,
+          "height": 844,
+          "sha256": "c8dc37bf27b46591a5e0d11f3bbc1845ce7a1919a489a36296c5a13144f7e709",
+          "scroll": 0
+        }
+      ],
+      "url": "/"
+    },
+    {
+      "id": "tulis-privasi-unlisted",
+      "title": "Tulis 4: Tautan terbatas",
+      "group": "Tulis pesan",
+      "entry": "Langkah 4",
+      "action": "Pilih Tautan terbatas",
+      "result": "Pilihan aktif dan batas aksesnya dijelaskan.",
+      "images": [
+        {
+          "path": "mobile/layar/16-tulis-privasi-unlisted.png",
+          "width": 390,
+          "height": 844,
+          "sha256": "8ddd8ce04ad0a507f4058dab7d6f95c09f2da8289e8cd242f1eda6dbe09adf23",
+          "scroll": 0
+        }
+      ],
+      "url": "/"
+    },
+    {
+      "id": "tulis-tujuan-lama",
+      "title": "Tulis: tujuan lama dan beberapa galaksi",
+      "group": "Tulis pesan",
+      "entry": "Tulis kembali",
+      "action": "Pilih tujuan lama dan tujuan tambahan",
+      "result": "Pesan dapat ditujukan ke beberapa galaksi.",
+      "images": [
+        {
+          "path": "mobile/layar/17-tulis-tujuan-lama.png",
+          "width": 390,
+          "height": 844,
+          "sha256": "fba90e8df05417eaa9937b67ede5432a9d42b9e3c6c800ea1390846768e5d987",
+          "scroll": 0
+        }
+      ],
+      "url": "/"
+    },
+    {
+      "id": "tulis-doa-tujuan-lama",
+      "title": "Tulis doa pada galaksi yang ada",
+      "group": "Doa",
+      "entry": "Doa → Tulis doa",
+      "action": "Pilih galaksi milik akun",
+      "result": "Tujuan, tradisi, isi, dan privasi doa terlihat.",
+      "images": [
+        {
+          "path": "mobile/layar/18-tulis-doa-tujuan-lama.png",
+          "width": 390,
+          "height": 844,
+          "sha256": "20a877cc04d6b9a65b47c9ee096e0a3d8d0030bbb8154e7001d01e2715782dc3",
+          "scroll": 0
+        }
+      ],
+      "url": "/"
+    },
+    {
+      "id": "tulis-doa-galaksi-baru",
+      "title": "Tulis doa dan galaksi baru",
+      "group": "Doa",
+      "entry": "+ Galaksi baru",
+      "action": "Isi tujuan, bentuk, warna, ukuran, dan doa",
+      "result": "Seluruh formulir galaksi baru tersedia.",
+      "images": [
+        {
+          "path": "mobile/layar/19-tulis-doa-galaksi-baru.png",
+          "width": 390,
+          "height": 844,
+          "sha256": "ac2542a58a5cf54cd8347b4f66f5905f433b2cfe8e60a14dee3436e387eacd51",
+          "scroll": 0
+        },
+        {
+          "path": "mobile/layar/19-tulis-doa-galaksi-baru-bagian-2.png",
+          "width": 390,
+          "height": 844,
+          "sha256": "a2621f44a72f4a16639f08d75e98b31b255930cc4fe7edf6bc66d28e81b863c0",
+          "scroll": 373
+        }
+      ],
+      "url": "/"
+    },
+    {
+      "id": "doa-tertulis-tersimpan",
+      "title": "Doa tertulis tersimpan",
+      "group": "Doa",
+      "entry": "Setelah Simpan doa",
+      "action": "Penyimpanan berhasil",
+      "result": "Akses tulis lagi, Ruang Pribadi, dan kembali ke Doa terlihat.",
+      "images": [
+        {
+          "path": "mobile/layar/20-doa-tertulis-tersimpan.png",
+          "width": 390,
+          "height": 844,
+          "sha256": "66625204b8b53cdf05815c6d97f0e1f191317df9716ef3d9f37efdbd3852d90f",
+          "scroll": 0
+        }
+      ],
+      "url": "/"
+    },
+    {
+      "id": "ruang-pribadi-terisi",
+      "title": "Ruang Pribadi dengan pesan dan doa",
+      "group": "Ruang Pribadi",
+      "entry": "Ruang Pribadi",
+      "action": "Buka ringkasan akun contoh",
+      "result": "Pesan, Doa tertulis, galaksi, dan riwayat dipisahkan.",
+      "images": [
+        {
+          "path": "mobile/layar/21-ruang-pribadi-terisi.png",
+          "width": 390,
+          "height": 844,
+          "sha256": "9b57c42923db1cdafe177a2b5118a0a5b04be37bb0d950a5beb179f657f276bd",
+          "scroll": 0
+        },
+        {
+          "path": "mobile/layar/21-ruang-pribadi-terisi-bagian-2.png",
+          "width": 390,
+          "height": 844,
+          "sha256": "ecdb4795a5e5e93328ff2feeb31b30eceda4342b840c816f0f0d10aed9c5e134",
+          "scroll": 744
+        },
+        {
+          "path": "mobile/layar/21-ruang-pribadi-terisi-bagian-3.png",
+          "width": 390,
+          "height": 844,
+          "sha256": "a8af8ef7835768fd90feaa58cb037558e94c9712f3fcebf99e969e0bb8ecd3ec",
+          "scroll": 985
+        }
+      ],
+      "url": "/"
+    },
+    {
+      "id": "kelola-doa",
+      "title": "Kelola doa tertulis",
+      "group": "Ruang Pribadi",
+      "entry": "Doa tertulis → Kelola doa",
+      "action": "Buka tulisan doa",
+      "result": "Edit, simpan perubahan, dan hapus doa tersedia.",
+      "images": [
+        {
+          "path": "mobile/layar/22-kelola-doa.png",
+          "width": 390,
+          "height": 844,
+          "sha256": "f7aedc7a567bd2e7d438536defe9afe2cd11b05514a7edd983fdccf11edd24e7",
+          "scroll": 0
+        }
+      ],
+      "url": "/"
+    },
+    {
+      "id": "kelola-pesan",
+      "title": "Kelola pesan privat",
+      "group": "Ruang Pribadi",
+      "entry": "Pesan → Kelola pesan",
+      "action": "Buka pesan privat",
+      "result": "Kontrol edit dan hapus menggunakan jenis Pesan.",
+      "images": [
+        {
+          "path": "mobile/layar/23-kelola-pesan.png",
+          "width": 390,
+          "height": 844,
+          "sha256": "4328a9918f854c12f3167ed2e54a7dc49b36530c8e91320e134bcd8de0d8d622",
+          "scroll": 0
+        }
+      ],
+      "url": "/"
+    },
+    {
+      "id": "kelola-tautan-terbatas",
+      "title": "Kelola tautan terbatas",
+      "group": "Ruang Pribadi",
+      "entry": "Kelola pesan tautan terbatas",
+      "action": "Buat tautan pada tulisan contoh",
+      "result": "Tautan, pencabutan, dan syarat moderasi ditampilkan.",
+      "images": [
+        {
+          "path": "mobile/layar/24-kelola-tautan-terbatas.png",
+          "width": 390,
+          "height": 844,
+          "sha256": "4cb42809cf3a8aedcf7f08da400c1ab34d313f3dd5b7370c49300450c97a08f2",
+          "scroll": 0
+        }
+      ],
+      "url": "/"
+    },
+    {
+      "id": "kartu-galaksi",
+      "title": "Galaksi dan ringkasan tulisan",
+      "group": "Galaksi dan Peta",
+      "entry": "Ruang Pribadi → galaksi",
+      "action": "Terbang ke galaksi tujuan",
+      "result": "Bentuk galaksi, hitungan, dan daftar tulisan terlihat.",
+      "images": [
+        {
+          "path": "mobile/layar/25-kartu-galaksi.png",
+          "width": 390,
+          "height": 844,
+          "sha256": "d65b0c50f7733493bd1907949cfb91137b31f5e1a30a0fb1a1285d923977077c",
+          "scroll": 0
+        }
+      ],
+      "url": "/"
+    },
+    {
+      "id": "kartu-bintang-pesan",
+      "title": "Membaca tulisan dari bintang",
+      "group": "Galaksi dan Peta",
+      "entry": "Galaksi → bintang",
+      "action": "Pilih bintang yang berisi tulisan",
+      "result": "Isi tulisan, privasi, metadata, dan kontrol terkait terlihat.",
+      "images": [
+        {
+          "path": "mobile/layar/26-kartu-bintang-pesan.png",
+          "width": 390,
+          "height": 844,
+          "sha256": "502e1565a1fdb4c26c63f9f7a7fac7498eded0f582a481fa0f7c4c545c32208c",
+          "scroll": 0
+        }
+      ],
+      "url": "/"
+    },
+    {
+      "id": "jelajah-terbaru",
+      "title": "Jelajah: terbaru",
+      "group": "Jelajah dan sosial",
+      "entry": "Jelajah",
+      "action": "Buka ucapan publik contoh",
+      "result": "Daftar, filter, urutan, tindakan sosial, dan pagination terlihat.",
+      "images": [
+        {
+          "path": "mobile/layar/27-jelajah-terbaru.png",
+          "width": 390,
+          "height": 844,
+          "sha256": "4105128b73cd20bd3d9a54c8bb0db823c9db29a7337a7439200da31a01226f86",
+          "scroll": 0
+        },
+        {
+          "path": "mobile/layar/27-jelajah-terbaru-bagian-2.png",
+          "width": 390,
+          "height": 844,
+          "sha256": "f28b613999b028acde4a6fb8b6724b0d7be71760149612cfb0afc349c3ac2bf2",
+          "scroll": 744
+        },
+        {
+          "path": "mobile/layar/27-jelajah-terbaru-bagian-3.png",
+          "width": 390,
+          "height": 844,
+          "sha256": "11be61dc33167626e7a264903fa96423bb925316dd72647e8c49da25e226e6ae",
+          "scroll": 6446
+        }
+      ],
+      "url": "/"
+    },
+    {
+      "id": "jelajah-paling-didoakan",
+      "title": "Jelajah: paling didoakan",
+      "group": "Jelajah dan sosial",
+      "entry": "Jelajah → Paling didoakan",
+      "action": "Ganti urutan",
+      "result": "Penjelasan urutan dan hitungan pendoa terlihat.",
+      "images": [
+        {
+          "path": "mobile/layar/28-jelajah-paling-didoakan.png",
+          "width": 390,
+          "height": 844,
+          "sha256": "dd496e179c87d3ac49421e13f3b538be24a0cd5acac28c5439ee522ce5057feb",
+          "scroll": 0
+        },
+        {
+          "path": "mobile/layar/28-jelajah-paling-didoakan-bagian-2.png",
+          "width": 390,
+          "height": 844,
+          "sha256": "55a10f85eed5eb5775256458bf7540b633b6d078b2ae87f85f933645e93be59c",
+          "scroll": 744
+        },
+        {
+          "path": "mobile/layar/28-jelajah-paling-didoakan-bagian-3.png",
+          "width": 390,
+          "height": 844,
+          "sha256": "d116046f24e0f453290a3399834f7f9849a8e0680aaba66c6e00f55dc9d395d3",
+          "scroll": 6465
+        }
+      ],
+      "url": "/"
+    },
+    {
+      "id": "jelajah-halaman-kedua",
+      "title": "Jelajah: halaman berikutnya",
+      "group": "Jelajah dan sosial",
+      "entry": "Jelajah → Berikutnya",
+      "action": "Buka halaman kedua",
+      "result": "Sebelumnya aktif dan batas halaman terakhir dijelaskan.",
+      "images": [
+        {
+          "path": "mobile/layar/29-jelajah-halaman-kedua.png",
+          "width": 390,
+          "height": 844,
+          "sha256": "5babe238f5def38b729082481418d31ae9bcddc46560b5cac7f8cc6468e1cc14",
+          "scroll": 0
+        },
+        {
+          "path": "mobile/layar/29-jelajah-halaman-kedua-bagian-2.png",
+          "width": 390,
+          "height": 844,
+          "sha256": "429e6a5fa5e50f15f6fedbf0a53eb928137cbf2ead67689b5b5f2ba7c8d0a782",
+          "scroll": 744
+        },
+        {
+          "path": "mobile/layar/29-jelajah-halaman-kedua-bagian-3.png",
+          "width": 390,
+          "height": 844,
+          "sha256": "9c2a8464c160f90390d941b0343354aee3c214b1f2e93469cec9917c8444fdc1",
+          "scroll": 1094
+        }
+      ],
+      "url": "/"
+    },
+    {
+      "id": "jelajah-filter",
+      "title": "Jelajah: filter aktif",
+      "group": "Jelajah dan sosial",
+      "entry": "Jelajah → Terapkan filter",
+      "action": "Pilih suasana dan tag",
+      "result": "Filter aktif serta daftar hasil ditampilkan.",
+      "images": [
+        {
+          "path": "mobile/layar/30-jelajah-filter.png",
+          "width": 390,
+          "height": 844,
+          "sha256": "a0ef9c804a2ce7164bb282890843cc6e81e85ee9708e0e7c6c9e56b5593691ff",
+          "scroll": 0
+        },
+        {
+          "path": "mobile/layar/30-jelajah-filter-bagian-2.png",
+          "width": 390,
+          "height": 844,
+          "sha256": "41d87502ee4ca67d49e9a01755478e3abc8362a4998d0051709ed150e0b8f366",
+          "scroll": 744
+        },
+        {
+          "path": "mobile/layar/30-jelajah-filter-bagian-3.png",
+          "width": 390,
+          "height": 844,
+          "sha256": "4567e047618dc3265195d2cb2321f75c7e1ace1aeaa5a891f2e9a8ae24224fc7",
+          "scroll": 3923
+        }
+      ],
+      "url": "/"
+    },
+    {
+      "id": "jelajah-filter-kosong",
+      "title": "Jelajah: filter tanpa hasil",
+      "group": "Jelajah dan sosial",
+      "entry": "Jelajah → filter",
+      "action": "Cari tag yang tidak ada",
+      "result": "Pesan kosong dan Hapus filter tersedia.",
+      "images": [
+        {
+          "path": "mobile/layar/31-jelajah-filter-kosong.png",
+          "width": 390,
+          "height": 844,
+          "sha256": "5070eac90b7e0f1f522e37ed5bca54fc1a2694f650c6b152a7de42ea8ca9e6c7",
+          "scroll": 0
+        },
+        {
+          "path": "mobile/layar/31-jelajah-filter-kosong-bagian-2.png",
+          "width": 390,
+          "height": 844,
+          "sha256": "14fd824b10b62d422c4b96c8549a9b85fab3b0f7fac7366609eb167aefe07ef6",
+          "scroll": 129
+        }
+      ],
+      "url": "/"
+    },
+    {
+      "id": "laporkan-ucapan",
+      "title": "Laporkan ucapan",
+      "group": "Jelajah dan sosial",
+      "entry": "Ucapan → Laporkan",
+      "action": "Isi alasan laporan",
+      "result": "Alasan, batal, dan kirim laporan tersedia.",
+      "images": [
+        {
+          "path": "mobile/layar/32-laporkan-ucapan.png",
+          "width": 390,
+          "height": 844,
+          "sha256": "ddb2db2eb89ce1aa4d4416713ba1d540ad8c5a06628de36d79d39ce8dd480f10",
+          "scroll": 0
+        }
+      ],
+      "url": "/"
+    },
+    {
+      "id": "konfirmasi-blokir",
+      "title": "Konfirmasi blokir pengirim",
+      "group": "Jelajah dan sosial",
+      "entry": "Ucapan → Blokir",
+      "action": "Buka konfirmasi",
+      "result": "Dampak pemblokiran, batal, dan konfirmasi terlihat.",
+      "images": [
+        {
+          "path": "mobile/layar/33-konfirmasi-blokir.png",
+          "width": 390,
+          "height": 844,
+          "sha256": "d5c3a70f416f1616979edf1c38997ea10dae87165b190fa8301a33a93dafe023",
+          "scroll": 0
+        }
+      ],
+      "url": "/"
+    },
+    {
+      "id": "daftar-pemblokiran",
+      "title": "Daftar pemblokiran",
+      "group": "Akun dan pengaturan",
+      "entry": "Pengaturan akun → pemblokiran",
+      "action": "Buka daftar pengirim yang diblokir",
+      "result": "Pengirim anonim dan tombol batalkan blokir terlihat.",
+      "images": [
+        {
+          "path": "mobile/layar/34-daftar-pemblokiran.png",
+          "width": 390,
+          "height": 844,
+          "sha256": "8131d8e07daa1d348eb1f2749b22a937bada77be1c61751b8457e130294932b6",
+          "scroll": 0
+        }
+      ],
+      "url": "/"
+    },
+    {
+      "id": "doa-daftar-ucapan",
+      "title": "Doa: daftar ucapan tujuan",
+      "group": "Doa",
+      "entry": "Doa",
+      "action": "Buka hub Doa",
+      "result": "Tujuan publik, tujuh tradisi, dan halaman tujuan tersedia.",
+      "images": [
+        {
+          "path": "mobile/layar/35-doa-daftar-ucapan.png",
+          "width": 390,
+          "height": 844,
+          "sha256": "087706fa1afa023ced7a2e767d266a69a4b30b285d28330ff01f869389acc59e",
+          "scroll": 0
+        },
+        {
+          "path": "mobile/layar/35-doa-daftar-ucapan-bagian-2.png",
+          "width": 390,
+          "height": 844,
+          "sha256": "7eb388995d4ae020cbf6f7aa5f8102e6047555cd293be42b8236e5c041ef6a09",
+          "scroll": 744
+        },
+        {
+          "path": "mobile/layar/35-doa-daftar-ucapan-bagian-3.png",
+          "width": 390,
+          "height": 844,
+          "sha256": "c53cd24a7464d5f76c776db85ff87844e26331c5f2c82e0929b8e9791096e2fb",
+          "scroll": 4623
+        }
+      ],
+      "url": "/"
+    },
+    {
+      "id": "doa-tradisi-islam",
+      "title": "Pilihan doa Islam",
+      "group": "Doa",
+      "entry": "Doa → Islam",
+      "action": "Pilih tradisi",
+      "result": "Jenis doa, rujukan, dan kesiapan teks/audio terlihat.",
+      "images": [
+        {
+          "path": "mobile/layar/36-doa-tradisi-islam.png",
+          "width": 390,
+          "height": 844,
+          "sha256": "c5f96e48819a58fe2aa86ad5fd572483aed5e6ce2a867d4a07f7bde6289ebbe6",
+          "scroll": 0
+        },
+        {
+          "path": "mobile/layar/36-doa-tradisi-islam-bagian-2.png",
+          "width": 390,
+          "height": 844,
+          "sha256": "4cd8784041a791c0057d1e59c8f1e6576a063bee9eef004410c1ed807d5bada5",
+          "scroll": 744
+        },
+        {
+          "path": "mobile/layar/36-doa-tradisi-islam-bagian-3.png",
+          "width": 390,
+          "height": 844,
+          "sha256": "3abfb7c6adf7c0590747dce05b190cacf2e15c077d45749a07aa8b2b43460171",
+          "scroll": 5064
+        }
+      ],
+      "url": "/"
+    },
+    {
+      "id": "doa-tradisi-kristen",
+      "title": "Pilihan doa Kristen",
+      "group": "Doa",
+      "entry": "Doa → Kristen",
+      "action": "Pilih tradisi",
+      "result": "Jenis doa, rujukan, dan kesiapan teks/audio terlihat.",
+      "images": [
+        {
+          "path": "mobile/layar/37-doa-tradisi-kristen.png",
+          "width": 390,
+          "height": 844,
+          "sha256": "f3f123a122b2047d8b128782ae29e3ab64c2b5e9c4c33e5c0548795de1418080",
+          "scroll": 0
+        },
+        {
+          "path": "mobile/layar/37-doa-tradisi-kristen-bagian-2.png",
+          "width": 390,
+          "height": 844,
+          "sha256": "9990da8be980bf7cd374f679f1f700e95ed1ccf58d6b92a635dd234aeb42c1f2",
+          "scroll": 744
+        },
+        {
+          "path": "mobile/layar/37-doa-tradisi-kristen-bagian-3.png",
+          "width": 390,
+          "height": 844,
+          "sha256": "a78f5bfa72f4e8a063d6e5d8c134d15c6686cfc0be3b4d6e8d5b326428315a8e",
+          "scroll": 5044
+        }
+      ],
+      "url": "/"
+    },
+    {
+      "id": "doa-tradisi-katolik",
+      "title": "Pilihan doa Katolik",
+      "group": "Doa",
+      "entry": "Doa → Katolik",
+      "action": "Pilih tradisi",
+      "result": "Jenis doa, rujukan, dan kesiapan teks/audio terlihat.",
+      "images": [
+        {
+          "path": "mobile/layar/38-doa-tradisi-katolik.png",
+          "width": 390,
+          "height": 844,
+          "sha256": "e77296cf2e98456cfe47ad0097427ac0a672ea9d384285a28edb55e2389b2bc3",
+          "scroll": 0
+        },
+        {
+          "path": "mobile/layar/38-doa-tradisi-katolik-bagian-2.png",
+          "width": 390,
+          "height": 844,
+          "sha256": "ad94f862a87ca9ca82407e9db950078a953ad5db913ea5480fdbcc4610e87dae",
+          "scroll": 744
+        },
+        {
+          "path": "mobile/layar/38-doa-tradisi-katolik-bagian-3.png",
+          "width": 390,
+          "height": 844,
+          "sha256": "b5990df17ecdef6dbce5d41bcd6eeed496b39d3941950d650fad2767cdc6b508",
+          "scroll": 5064
+        }
+      ],
+      "url": "/"
+    },
+    {
+      "id": "doa-tradisi-hindu",
+      "title": "Pilihan doa Hindu",
+      "group": "Doa",
+      "entry": "Doa → Hindu",
+      "action": "Pilih tradisi",
+      "result": "Jenis doa, rujukan, dan kesiapan teks/audio terlihat.",
+      "images": [
+        {
+          "path": "mobile/layar/39-doa-tradisi-hindu.png",
+          "width": 390,
+          "height": 844,
+          "sha256": "a5f8f26e0a610002297d6c2982b6d22ce510dac2a832d18b1ceedc7dc45009ce",
+          "scroll": 0
+        },
+        {
+          "path": "mobile/layar/39-doa-tradisi-hindu-bagian-2.png",
+          "width": 390,
+          "height": 844,
+          "sha256": "a43b5e05644ca9f2ac9a5e042f86004a7c2a5e17a002b81b6d19b323642a727a",
+          "scroll": 744
+        },
+        {
+          "path": "mobile/layar/39-doa-tradisi-hindu-bagian-3.png",
+          "width": 390,
+          "height": 844,
+          "sha256": "ba2fcf7e17e8b16bdc59a3f6953239c1835648168442dde0b585ec93fdde1db5",
+          "scroll": 5044
+        }
+      ],
+      "url": "/"
+    },
+    {
+      "id": "doa-tradisi-buddha",
+      "title": "Pilihan doa Buddha",
+      "group": "Doa",
+      "entry": "Doa → Buddha",
+      "action": "Pilih tradisi",
+      "result": "Jenis doa, rujukan, dan kesiapan teks/audio terlihat.",
+      "images": [
+        {
+          "path": "mobile/layar/40-doa-tradisi-buddha.png",
+          "width": 390,
+          "height": 844,
+          "sha256": "38c67fee6dd5004b3b824515469b63bc7133eb4e696e0a61aeefa0f73b872e07",
+          "scroll": 0
+        },
+        {
+          "path": "mobile/layar/40-doa-tradisi-buddha-bagian-2.png",
+          "width": 390,
+          "height": 844,
+          "sha256": "3744618e82cf9b03c64ccdaab313485fbd84bb89000937627f8b34ee46ae8da3",
+          "scroll": 744
+        },
+        {
+          "path": "mobile/layar/40-doa-tradisi-buddha-bagian-3.png",
+          "width": 390,
+          "height": 844,
+          "sha256": "16eab7454fd2e9621e46fbc8ef9255ef12e9f63f457bc3d37bfef5a680ef287b",
+          "scroll": 5083
+        }
+      ],
+      "url": "/"
+    },
+    {
+      "id": "doa-tradisi-konghucu",
+      "title": "Pilihan doa Konghucu",
+      "group": "Doa",
+      "entry": "Doa → Konghucu",
+      "action": "Pilih tradisi",
+      "result": "Jenis doa, rujukan, dan kesiapan teks/audio terlihat.",
+      "images": [
+        {
+          "path": "mobile/layar/41-doa-tradisi-konghucu.png",
+          "width": 390,
+          "height": 844,
+          "sha256": "bfda9455bf4de3af40335a55f389d4a77ed78735cf257d3fc3a68c8f5048aaff",
+          "scroll": 0
+        },
+        {
+          "path": "mobile/layar/41-doa-tradisi-konghucu-bagian-2.png",
+          "width": 390,
+          "height": 844,
+          "sha256": "61a9781469effebf1a8f06c52936a0171af34605aaff596fa6410fded1d584a9",
+          "scroll": 744
+        },
+        {
+          "path": "mobile/layar/41-doa-tradisi-konghucu-bagian-3.png",
+          "width": 390,
+          "height": 844,
+          "sha256": "b25713f85bdfecc16bcde1c56575428368350acef1e496a3eb1b8f012a557cd5",
+          "scroll": 5064
+        }
+      ],
+      "url": "/"
+    },
+    {
+      "id": "doa-tradisi-umum",
+      "title": "Pilihan doa Umum",
+      "group": "Doa",
+      "entry": "Doa → Umum",
+      "action": "Pilih tradisi",
+      "result": "Jenis doa, rujukan, dan kesiapan teks/audio terlihat.",
+      "images": [
+        {
+          "path": "mobile/layar/42-doa-tradisi-umum.png",
+          "width": 390,
+          "height": 844,
+          "sha256": "ef5ce4cf37c8e3fa82e531565f7552f5825f0a5d936c48c47ada8e1167388a1e",
+          "scroll": 0
+        },
+        {
+          "path": "mobile/layar/42-doa-tradisi-umum-bagian-2.png",
+          "width": 390,
+          "height": 844,
+          "sha256": "54e74311c4b98c7b6cc608986de287225bb8d2787befb222d1d95b3fe3d0570b",
+          "scroll": 744
+        },
+        {
+          "path": "mobile/layar/42-doa-tradisi-umum-bagian-3.png",
+          "width": 390,
+          "height": 844,
+          "sha256": "ba2fcf7e17e8b16bdc59a3f6953239c1835648168442dde0b585ec93fdde1db5",
+          "scroll": 4969
+        }
+      ],
+      "url": "/"
+    },
+    {
+      "id": "doa-menunggu-kurasi",
+      "title": "Doa: materi menunggu kurasi",
+      "group": "Doa",
+      "entry": "Ucapan → tradisi → jenis doa",
+      "action": "Pilih materi yang belum disetujui",
+      "result": "Status kurasi dijelaskan tanpa tombol mulai yang menyesatkan.",
+      "images": [
+        {
+          "path": "mobile/layar/43-doa-menunggu-kurasi.png",
+          "width": 390,
+          "height": 844,
+          "sha256": "3c27894b160b3e89aff3b34d2f3207efaccae6b640b7d5d1400c74ee8e3e4ab4",
+          "scroll": 0
+        },
+        {
+          "path": "mobile/layar/43-doa-menunggu-kurasi-bagian-2.png",
+          "width": 390,
+          "height": 844,
+          "sha256": "93391255c7b26f4990cd40ac5881b4b4781e4780b96dcb94889813eccd804c0c",
+          "scroll": 592
+        }
+      ],
+      "url": "/"
+    },
+    {
+      "id": "doa-siap-hening",
+      "title": "Doa: siap memulai hening",
+      "group": "Doa",
+      "entry": "Ucapan → Umum → Hening",
+      "action": "Pilih sesi hening",
+      "result": "Durasi dan aturan pencatatan tersedia.",
+      "images": [
+        {
+          "path": "mobile/layar/44-doa-siap-hening.png",
+          "width": 390,
+          "height": 844,
+          "sha256": "ddc704645717fdebbc309826bbb5ba1165613a7d897fa8dc68466e806feee4fa",
+          "scroll": 0
+        },
+        {
+          "path": "mobile/layar/44-doa-siap-hening-bagian-2.png",
+          "width": 390,
+          "height": 844,
+          "sha256": "a383a62d414bc04f440ff673e0788fe5d3c85cba938af6f9ac6b9f2bffe59040",
+          "scroll": 527
+        }
+      ],
+      "url": "/"
+    },
+    {
+      "id": "doa-hening-berjalan",
+      "title": "Doa: sesi hening berjalan",
+      "group": "Doa",
+      "entry": "Mulai berdoa / hening",
+      "action": "Mulai sesi nyata 30 detik",
+      "result": "Hitung mundur dan pembatalan terlihat.",
+      "images": [
+        {
+          "path": "mobile/layar/45-doa-hening-berjalan.png",
+          "width": 390,
+          "height": 844,
+          "sha256": "5a9a43e7acd56c6e7587f822aa8aa5d4a64acb587fa6e3700a1fc227b17618f5",
+          "scroll": 0
+        },
+        {
+          "path": "mobile/layar/45-doa-hening-berjalan-bagian-2.png",
+          "width": 390,
+          "height": 844,
+          "sha256": "477ab66ee27ff838e630e8c50bcc2220a7ba7f8cf7b95e5548aa3f05fee22ea6",
+          "scroll": 387
+        }
+      ],
+      "url": "/"
+    },
+    {
+      "id": "doa-selesai",
+      "title": "Doa: sesi selesai",
+      "group": "Doa",
+      "entry": "Sesi hening selesai",
+      "action": "Tunggu sesi selesai",
+      "result": "Konfirmasi pencatatan dan tindakan berikutnya tersedia.",
+      "images": [
+        {
+          "path": "mobile/layar/46-doa-selesai.png",
+          "width": 390,
+          "height": 844,
+          "sha256": "ddc704645717fdebbc309826bbb5ba1165613a7d897fa8dc68466e806feee4fa",
+          "scroll": 0
+        },
+        {
+          "path": "mobile/layar/46-doa-selesai-bagian-2.png",
+          "width": 390,
+          "height": 844,
+          "sha256": "b61358a3dbc6cd9d74885df55ca6dbf855d2e23a891735cd38991104bc28ed71",
+          "scroll": 564
+        }
+      ],
+      "url": "/"
+    },
+    {
+      "id": "doa-pemutar-audio",
+      "title": "Doa: kontrol pemutar audio",
+      "group": "Doa",
+      "entry": "Audio tersedia → Mulai dengarkan doa",
+      "action": "Buka pemutar dengan media uji",
+      "result": "Pemutar asli menyediakan putar, jeda, progres, volume, dan pembatalan.",
+      "fixture": "Media WAV hening khusus demonstrasi UI; tidak dikurasi sebagai doa agama dan tidak dicatat sebagai sesi selesai.",
+      "images": [
+        {
+          "path": "mobile/layar/47-doa-pemutar-audio.png",
+          "width": 390,
+          "height": 844,
+          "sha256": "7956912b1a3427034a0811727761c68c32a14ec63bfb79e343b8091f2975b247",
+          "scroll": 0
+        },
+        {
+          "path": "mobile/layar/47-doa-pemutar-audio-bagian-2.png",
+          "width": 390,
+          "height": 844,
+          "sha256": "6c1f82bedaf3d2fb90e0092eec0265afb2432c33f0b94727e2d0113d46021386",
+          "scroll": 480
+        }
+      ],
+      "url": "/"
+    },
+    {
+      "id": "pengaturan",
+      "title": "Pengaturan tampilan dan data",
+      "group": "Akun dan pengaturan",
+      "entry": "Pengaturan",
+      "action": "Buka pengaturan",
+      "result": "Galaksi latar, akun, privasi, dan kontrol penghapusan terlihat.",
+      "images": [
+        {
+          "path": "mobile/layar/48-pengaturan.png",
+          "width": 390,
+          "height": 844,
+          "sha256": "b327d8402dd71e598560851f71c8dd43771b0c3d31039f7a2551a33b9152f5c7",
+          "scroll": 0
+        }
+      ],
+      "url": "/"
+    },
+    {
+      "id": "akun-keamanan-sesi",
+      "title": "Akun, keamanan, ekspor, dan sesi",
+      "group": "Akun dan pengaturan",
+      "entry": "Pengaturan → Akun dan keamanan",
+      "action": "Buka pengaturan akun",
+      "result": "Visibilitas, ekspor, pemulihan, sesi aktif, dan keluar terlihat.",
+      "images": [
+        {
+          "path": "mobile/layar/49-akun-keamanan-sesi.png",
+          "width": 390,
+          "height": 844,
+          "sha256": "36e7d28d686ec170e0363c56a795aeb1a8bd7f53624d4260bff2472fe4678fd8",
+          "scroll": 0
+        },
+        {
+          "path": "mobile/layar/49-akun-keamanan-sesi-bagian-2.png",
+          "width": 390,
+          "height": 844,
+          "sha256": "4fc75b1915c8c21bac87be434012e8b3057ac992eb544a19e6ddf6daeca65e5c",
+          "scroll": 139
+        }
+      ],
+      "url": "/"
+    },
+    {
+      "id": "ekspor-diverifikasi",
+      "title": "Ekspor terenkripsi berhasil",
+      "group": "Akun dan pengaturan",
+      "entry": "Akun → Ekspor",
+      "action": "Unduh dan verifikasi berkas contoh",
+      "result": "Status ekspor dan verifikasi muncul tanpa mengubah data akun.",
+      "images": [
+        {
+          "path": "mobile/layar/50-ekspor-diverifikasi.png",
+          "width": 390,
+          "height": 844,
+          "sha256": "68c4d23562fdccda6a9cbf7b482c647670e63e2505edc6bc7b1928c8d77b5f88",
+          "scroll": 0
+        },
+        {
+          "path": "mobile/layar/50-ekspor-diverifikasi-bagian-2.png",
+          "width": 390,
+          "height": 844,
+          "sha256": "08c31d273a23c217da5249ab9ce336157ea32ad7dc86375e6a33278f1d32bb97",
+          "scroll": 204
+        }
+      ],
+      "url": "/"
+    },
+    {
+      "id": "pemulihan-akun-masuk",
+      "title": "Ganti kata sandi melalui pemulihan",
+      "group": "Akun dan pengaturan",
+      "entry": "Akun → pemulihan",
+      "action": "Buka pemulihan akun yang sedang masuk",
+      "result": "Syarat dan formulir pemulihan ditampilkan.",
+      "images": [
+        {
+          "path": "mobile/layar/51-pemulihan-akun-masuk.png",
+          "width": 390,
+          "height": 844,
+          "sha256": "d987d2c3429fafb814f42858d451b88d446c2fa4e7b0e22aba5237831f42dfda",
+          "scroll": 0
+        }
+      ],
+      "url": "/"
+    },
+    {
+      "id": "kunci-terbuka",
+      "title": "Kunci enkripsi terbuka",
+      "group": "Akun dan pengaturan",
+      "entry": "Kunci",
+      "action": "Buka pengelolaan kunci",
+      "result": "Status kunci, KDF, dan tombol kunci terlihat.",
+      "images": [
+        {
+          "path": "mobile/layar/52-kunci-terbuka.png",
+          "width": 390,
+          "height": 844,
+          "sha256": "378d763661eb9d6cc921cbaabbed48e9cbcd330b797eadd1656a218135639f03",
+          "scroll": 0
+        }
+      ],
+      "url": "/"
+    },
+    {
+      "id": "kunci-tertutup",
+      "title": "Membuka kunci tulisan privat",
+      "group": "Akun dan pengaturan",
+      "entry": "Kunci → Kunci sekarang",
+      "action": "Tutup kunci",
+      "result": "Kata sandi dan kode pemulihan dapat digunakan.",
+      "images": [
+        {
+          "path": "mobile/layar/53-kunci-tertutup.png",
+          "width": 390,
+          "height": 844,
+          "sha256": "ed0c7ad75f64ed95ef73d13263a54a79a75da87cea326300538a7ac0efd371af",
+          "scroll": 0
+        }
+      ],
+      "url": "/"
+    },
+    {
+      "id": "kunci-kata-sandi-salah",
+      "title": "Kunci: kata sandi salah",
+      "group": "Akun dan pengaturan",
+      "entry": "Kunci → Buka",
+      "action": "Masukkan kata sandi yang salah",
+      "result": "Kesalahan ditampilkan dan dapat dicoba ulang.",
+      "images": [
+        {
+          "path": "mobile/layar/54-kunci-kata-sandi-salah.png",
+          "width": 390,
+          "height": 844,
+          "sha256": "ab8cf2b2885b563a19ac3e46b64786a9088da9345b4e25cc97c1b957a7f379c1",
+          "scroll": 0
+        }
+      ],
+      "url": "/"
+    },
+    {
+      "id": "peta-kenangan",
+      "title": "Peta Kenangan",
+      "group": "Galaksi dan Peta",
+      "entry": "Peta → Kenangan",
+      "action": "Buka peta galaksi milik akun",
+      "result": "Bintang dan kontrol peta terlihat tanpa nama mengambang.",
+      "images": [
+        {
+          "path": "mobile/layar/55-peta-kenangan.png",
+          "width": 390,
+          "height": 844,
+          "sha256": "e7df28cb1ed44d677e773a2c20c6623c28b8586c7c282a2fbd8e103e72eec653",
+          "scroll": 0
+        }
+      ],
+      "url": "/"
+    },
+    {
+      "id": "peta-konstelasi",
+      "title": "Peta Konstelasi",
+      "group": "Galaksi dan Peta",
+      "entry": "Peta → Konstelasi",
+      "action": "Ganti mode Peta",
+      "result": "Bintang dan garis rasi ditampilkan.",
+      "images": [
+        {
+          "path": "mobile/layar/56-peta-konstelasi.png",
+          "width": 390,
+          "height": 844,
+          "sha256": "4c63e35e2ca2651bc6ba0f48d7d648aa3e72a12adb49831c92e57859cdd587fe",
+          "scroll": 0
+        }
+      ],
+      "url": "/"
+    },
+    {
+      "id": "peta-kartu-rasi",
+      "title": "Kartu informasi rasi",
+      "group": "Galaksi dan Peta",
+      "entry": "Konstelasi → bintang rasi",
+      "action": "Klik langsung pada bintang rasi",
+      "result": "Nama, informasi, ilustrasi, dan tombol tutup terlihat.",
+      "images": [
+        {
+          "path": "mobile/layar/57-peta-kartu-rasi.png",
+          "width": 390,
+          "height": 844,
+          "sha256": "7ced0a0208617556c92ba1175a5e3bdd4788d6381c50de76371e0db458dba0b3",
+          "scroll": 0
+        }
+      ],
+      "url": "/"
+    },
+    {
+      "id": "astronomi-kartu-objek",
+      "title": "Kartu objek astronomi",
+      "group": "Galaksi dan Peta",
+      "entry": "Strip astronomi",
+      "action": "Pilih objek dari strip",
+      "result": "Foto, informasi objek, dan tujuan perjalanan tersedia.",
+      "images": [
+        {
+          "path": "mobile/layar/58-astronomi-kartu-objek.png",
+          "width": 390,
+          "height": 844,
+          "sha256": "1be25be1d04fede8a053061cdaadcba26c43b07b3b0a81e6616af76dcd2a7e73",
+          "scroll": 0
+        }
+      ],
+      "url": "/"
+    },
+    {
+      "id": "tata-surya",
+      "title": "Jelajah tata surya",
+      "group": "Galaksi dan Peta",
+      "entry": "Kartu Matahari → tata surya",
+      "action": "Masuk ke tata surya",
+      "result": "Objek, strip, kecepatan waktu, dan menu bawah terlihat.",
+      "images": [
+        {
+          "path": "mobile/layar/59-tata-surya.png",
+          "width": 390,
+          "height": 844,
+          "sha256": "c70e5b79656a0d27615b6501b8ca1bcab9626f7d8769bed6cc92a97cc9d21f35",
+          "scroll": 0
+        }
+      ],
+      "url": "/"
+    },
+    {
+      "id": "tata-surya-kartu-planet",
+      "title": "Kartu planet",
+      "group": "Galaksi dan Peta",
+      "entry": "Tata surya → Bumi",
+      "action": "Pilih planet",
+      "result": "Kartu foto dan informasi planet terlihat.",
+      "images": [
+        {
+          "path": "mobile/layar/60-tata-surya-kartu-planet.png",
+          "width": 390,
+          "height": 844,
+          "sha256": "9cf8892d3dc0df7531fb4f6047355de97551479441fbd34a7594f461a7a7f781",
+          "scroll": 0
+        }
+      ],
+      "url": "/"
+    },
+    {
+      "id": "admin-moderasi",
+      "title": "Admin: antrean moderasi",
+      "group": "Admin",
+      "entry": "/admin",
+      "action": "Buka akun admin contoh",
+      "result": "Konten, laporan, catatan, keputusan, dan pagination terlihat.",
+      "images": [
+        {
+          "path": "mobile/layar/61-admin-moderasi.png",
+          "width": 390,
+          "height": 844,
+          "sha256": "d26701127a00223043c92ba1a96cf9a5c768d2a76dbd6d5c855a73635702e887",
+          "scroll": 0
+        },
+        {
+          "path": "mobile/layar/61-admin-moderasi-bagian-2.png",
+          "width": 390,
+          "height": 844,
+          "sha256": "bebfa56ed7f43c881db639eb8b075ef3101becfa95788b32e2cdef428aa2de25",
+          "scroll": 170
+        }
+      ],
+      "url": "/admin"
+    },
+    {
+      "id": "admin-kurasi-katolik",
+      "title": "Admin: kurasi Katolik",
+      "group": "Admin",
+      "entry": "Kurasi doa dan audio",
+      "action": "Pilih entri dengan rekaman kandidat",
+      "result": "Pratinjau, atribusi, sumber, naskah, terjemahan, durasi, lisensi, dan tinjauan terlihat.",
+      "images": [
+        {
+          "path": "mobile/layar/62-admin-kurasi-katolik.png",
+          "width": 390,
+          "height": 844,
+          "sha256": "b99f6e6486f44518119c0be8895a5840072b1eb9c2edb77e0d3a9c1866e2a681",
+          "scroll": 0
+        },
+        {
+          "path": "mobile/layar/62-admin-kurasi-katolik-bagian-2.png",
+          "width": 390,
+          "height": 844,
+          "sha256": "1b551116a037ebcb193c9367b145fbcb56c93236c6ec24ff331e5772f72557a3",
+          "scroll": 744
+        },
+        {
+          "path": "mobile/layar/62-admin-kurasi-katolik-bagian-3.png",
+          "width": 390,
+          "height": 844,
+          "sha256": "e87bc0359201a07e56fe9c8a84d43be389db037b58589115dd3b8b21efd24ace",
+          "scroll": 1488
+        },
+        {
+          "path": "mobile/layar/62-admin-kurasi-katolik-bagian-4.png",
+          "width": 390,
+          "height": 844,
+          "sha256": "232097c22e1ea52b6c58c4e5b08c19e20dcfbea1e41bed89192c665f14d4a82e",
+          "scroll": 2047
+        }
+      ],
+      "url": "/admin"
+    },
+    {
+      "id": "admin-kurasi-hindu",
+      "title": "Admin: kurasi Hindu",
+      "group": "Admin",
+      "entry": "Kurasi doa dan audio",
+      "action": "Pilih entri dengan rekaman kandidat",
+      "result": "Pratinjau, atribusi, sumber, naskah, terjemahan, durasi, lisensi, dan tinjauan terlihat.",
+      "images": [
+        {
+          "path": "mobile/layar/63-admin-kurasi-hindu.png",
+          "width": 390,
+          "height": 844,
+          "sha256": "b2da0c01bd3d99f366613ac41d2064554d643a59e52af402f6bff9cedc05721f",
+          "scroll": 0
+        },
+        {
+          "path": "mobile/layar/63-admin-kurasi-hindu-bagian-2.png",
+          "width": 390,
+          "height": 844,
+          "sha256": "2ae59f6249882b78b839ac408ebee14d386ef90a762c41d6bf4d6f2dba814ed2",
+          "scroll": 744
+        },
+        {
+          "path": "mobile/layar/63-admin-kurasi-hindu-bagian-3.png",
+          "width": 390,
+          "height": 844,
+          "sha256": "31d1db20ac7f6195635da8d17ab08cb8b5fe0783a626a8e3068780554782b8a0",
+          "scroll": 1488
+        },
+        {
+          "path": "mobile/layar/63-admin-kurasi-hindu-bagian-4.png",
+          "width": 390,
+          "height": 844,
+          "sha256": "07cd7c6f39cf517184835fb2f5e29aacbec5f6bb0e6c44b5fb7e723ef38c3c64",
+          "scroll": 2187
+        }
+      ],
+      "url": "/admin"
+    },
+    {
+      "id": "admin-kurasi-buddha",
+      "title": "Admin: kurasi Buddha",
+      "group": "Admin",
+      "entry": "Kurasi doa dan audio",
+      "action": "Pilih entri dengan rekaman kandidat",
+      "result": "Pratinjau, atribusi, sumber, naskah, terjemahan, durasi, lisensi, dan tinjauan terlihat.",
+      "images": [
+        {
+          "path": "mobile/layar/64-admin-kurasi-buddha.png",
+          "width": 390,
+          "height": 844,
+          "sha256": "38ac91d1f384a4420eb58a4227159b7525edd02e1579ee8a6ab08d4ffb488a05",
+          "scroll": 0
+        },
+        {
+          "path": "mobile/layar/64-admin-kurasi-buddha-bagian-2.png",
+          "width": 390,
+          "height": 844,
+          "sha256": "580f6e6bc24d26e9af1ba469c9a1a7517123cdec1fc52dbb5278519650b363af",
+          "scroll": 744
+        },
+        {
+          "path": "mobile/layar/64-admin-kurasi-buddha-bagian-3.png",
+          "width": 390,
+          "height": 844,
+          "sha256": "98a005aa947ba74a631a9b810510a511487c8a56c77bee5ee84ca829164d5584",
+          "scroll": 1488
+        },
+        {
+          "path": "mobile/layar/64-admin-kurasi-buddha-bagian-4.png",
+          "width": 390,
+          "height": 844,
+          "sha256": "7c975db4c649afcbe4ee47c6335fd51c4485708ae1fdc718d024d00054bc1fa4",
+          "scroll": 2160
+        }
+      ],
+      "url": "/admin"
+    },
+    {
+      "id": "admin-audio-draf",
+      "title": "Admin: rekaman dipasang sebagai draf",
+      "group": "Admin",
+      "entry": "Kurasi → Gunakan rekaman ini",
+      "action": "Pasang rekaman kandidat tanpa menyetujuinya",
+      "result": "Status draf dan persetujuan yang tetap kosong terlihat.",
+      "images": [
+        {
+          "path": "mobile/layar/65-admin-audio-draf.png",
+          "width": 390,
+          "height": 844,
+          "sha256": "25ca70b32f5c5939bfa9ca89600e29443a5b7235f9bf5027c49bc1a2aee2630a",
+          "scroll": 0
+        },
+        {
+          "path": "mobile/layar/65-admin-audio-draf-bagian-2.png",
+          "width": 390,
+          "height": 844,
+          "sha256": "6714583315155e6617b65d1011163ee048f66200450fb6d11662973feefb17cd",
+          "scroll": 744
+        },
+        {
+          "path": "mobile/layar/65-admin-audio-draf-bagian-3.png",
+          "width": 390,
+          "height": 844,
+          "sha256": "221f540ae701ed121ca447be62558dc5495869a8681f7da1341df13f9eac3526",
+          "scroll": 1488
+        },
+        {
+          "path": "mobile/layar/65-admin-audio-draf-bagian-4.png",
+          "width": 390,
+          "height": 844,
+          "sha256": "dd4e784da594b611f8a65e86b04a325a37a20fa13409a45a0215f9fe22546345",
+          "scroll": 2120
+        }
+      ],
+      "url": "/admin"
+    },
+    {
+      "id": "admin-antrean-kosong",
+      "title": "Admin: antrean selesai",
+      "group": "Admin",
+      "entry": "Moderasi",
+      "action": "Setujui tulisan contoh pada database sementara",
+      "result": "Keadaan kosong antrean dan tombol halaman terlihat.",
+      "images": [
+        {
+          "path": "mobile/layar/66-admin-antrean-kosong.png",
+          "width": 390,
+          "height": 844,
+          "sha256": "41c876e7055be359a1ec62b595702ae99ccc206f932fa06df1d54599a6ca13a6",
+          "scroll": 0
+        }
+      ],
+      "url": "/admin"
+    },
+    {
+      "id": "tautan-pesan-valid",
+      "title": "Membaca tautan terbatas",
+      "group": "Halaman pendukung",
+      "entry": "/bagi#token",
+      "action": "Buka tautan tulisan contoh yang disetujui",
+      "result": "Isi tulisan dan tombol kembali ke aplikasi ditampilkan.",
+      "images": [
+        {
+          "path": "mobile/layar/67-tautan-pesan-valid.png",
+          "width": 390,
+          "height": 844,
+          "sha256": "78ee910c7e461dd90ab95b370b71231b2c626a381ca1532f1e14f970a3e2b937",
+          "scroll": 0
+        }
+      ],
+      "url": "/bagi"
+    },
+    {
+      "id": "tautan-pesan-tidak-valid",
+      "title": "Tautan tidak lengkap",
+      "group": "Halaman pendukung",
+      "entry": "/bagi",
+      "action": "Buka tanpa token",
+      "result": "Pesan kesalahan dan akses kembali tersedia.",
+      "images": [
+        {
+          "path": "mobile/layar/68-tautan-pesan-tidak-valid.png",
+          "width": 390,
+          "height": 844,
+          "sha256": "0e7328cc7e443b0595e656a34b5e855b6cba40a49860f530eca744b5e8fea054",
+          "scroll": 0
+        }
+      ],
+      "url": "/bagi"
+    },
+    {
+      "id": "kebijakan-privasi",
+      "title": "Kebijakan privasi",
+      "group": "Halaman pendukung",
+      "entry": "/kebijakan-privasi",
+      "action": "Buka kebijakan privasi",
+      "result": "Seluruh kebijakan dan tautan kembali dapat dibaca.",
+      "images": [
+        {
+          "path": "mobile/layar/69-kebijakan-privasi.png",
+          "width": 390,
+          "height": 2112,
+          "sha256": "4e69283f8f9f11ef1d61c9838dfcfcf010f4b738a61df1e5eb0c4dc147ff98a3",
+          "scroll": 0
+        }
+      ],
+      "url": "/kebijakan-privasi"
+    },
+    {
+      "id": "halaman-luring",
+      "title": "Halaman luring",
+      "group": "Halaman pendukung",
+      "entry": "PWA ketika luring",
+      "action": "Buka tampilan luring bawaan",
+      "result": "Keterangan koneksi dan Coba kembali terlihat.",
+      "images": [
+        {
+          "path": "mobile/layar/70-halaman-luring.png",
+          "width": 390,
+          "height": 844,
+          "sha256": "51266b86926f64ccf2fae2c69b6c97122aabefbe38b3baead9119ff11fe20193",
+          "scroll": 0
+        }
+      ],
+      "url": "/offline.html"
+    },
+    {
+      "id": "halaman-tidak-ditemukan",
+      "title": "Halaman tidak ditemukan",
+      "group": "Halaman pendukung",
+      "entry": "Alamat yang tidak tersedia",
+      "action": "Buka URL tidak dikenal",
+      "result": "Halaman 404 bawaan website ditampilkan.",
+      "images": [
+        {
+          "path": "mobile/layar/71-halaman-tidak-ditemukan.png",
+          "width": 390,
+          "height": 844,
+          "sha256": "21b49b30d36e873d619b05454821be485cbecb8c7720c5691a5300e3048b6a2b",
+          "scroll": 0
+        }
+      ],
+      "url": "/halaman-contoh-tidak-ada"
+    }
+  ]
+}

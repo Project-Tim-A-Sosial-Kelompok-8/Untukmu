@@ -1,0 +1,718 @@
+{
+  "config": {
+    "argv": [
+      "D:\\Project\\Untukmu-Git\\test-results\\browser-tools\\playwright\\driver\\node.exe",
+      "D:\\Project\\Untukmu-Git\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "frontend-navigation.spec.ts",
+      "written-prayers.spec.ts",
+      "navigation.spec.ts",
+      "prayers.spec.ts",
+      "social.spec.ts",
+      "settings.spec.ts",
+      "visual.spec.ts",
+      "--trace",
+      "off"
+    ],
+    "configFile": "D:\\Project\\Untukmu-Git\\apps\\web\\playwright.config.ts",
+    "rootDir": "D:/Project/Untukmu-Git/apps/web/tests/e2e",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "D:/Project/Untukmu-Git/apps/web/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "D:/Project/Untukmu-Git/apps/web/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 120000
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "html",
+        {
+          "open": "never"
+        }
+      ],
+      [
+        "json",
+        {
+          "outputFile": "../../docs/quality/written-prayer-results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.63.0",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "frontend-navigation.spec.ts",
+      "file": "frontend-navigation.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "Tulis dan Doa tersedia pada navigasi bawah tanpa tombol tambahan di atas (320px)",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 15545,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-02T10:47:02.693Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "fe674648b25204e345b9-85109b1526fae9c9101e",
+          "file": "frontend-navigation.spec.ts",
+          "line": 5,
+          "column": 7
+        },
+        {
+          "title": "Tulis dan Doa tersedia pada navigasi bawah tanpa tombol tambahan di atas (390px)",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 6176,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-02T10:47:21.115Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "fe674648b25204e345b9-e60a4011a95a01bb01df",
+          "file": "frontend-navigation.spec.ts",
+          "line": 5,
+          "column": 7
+        },
+        {
+          "title": "Tulis dan Doa tersedia pada navigasi bawah tanpa tombol tambahan di atas (1366px)",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 8683,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-02T10:47:27.332Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "fe674648b25204e345b9-12837e7678449c941b47",
+          "file": "frontend-navigation.spec.ts",
+          "line": 5,
+          "column": 7
+        }
+      ]
+    },
+    {
+      "title": "navigation.spec.ts",
+      "file": "navigation.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "navigasi dan panel tidak bertumpuk, semua menu bisa diklik (1280px)",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 42027,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-02T10:47:36.144Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "5d2868f7d23420c27cca-1b798a50e7f3184f5bfd",
+          "file": "navigation.spec.ts",
+          "line": 22,
+          "column": 7
+        },
+        {
+          "title": "navigasi dan panel tidak bertumpuk, semua menu bisa diklik (390px)",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 39502,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-02T10:48:18.278Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "5d2868f7d23420c27cca-03805e33fd65c76e3688",
+          "file": "navigation.spec.ts",
+          "line": 22,
+          "column": 7
+        },
+        {
+          "title": "tombol kunci bisa dicoba lagi setelah salah kata sandi; galaksi tetap ada",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 35553,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-02T10:48:58.002Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "5d2868f7d23420c27cca-6f337ddca64808dc46aa",
+          "file": "navigation.spec.ts",
+          "line": 96,
+          "column": 5
+        }
+      ]
+    },
+    {
+      "title": "prayers.spec.ts",
+      "file": "prayers.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "halaman Doa dapat dibuka langsung tanpa melewati layar pembuka",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4657,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-02T10:49:33.671Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c713ade7c804ac60166c-90a71025a4f08d83ca27",
+          "file": "prayers.spec.ts",
+          "line": 3,
+          "column": 5
+        },
+        {
+          "title": "doa: tujuan, pilihan agama, batal, dan retry tetap sinkron (320px)",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 5910,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-02T10:49:38.366Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c713ade7c804ac60166c-af13e0b4964bf701fe18",
+          "file": "prayers.spec.ts",
+          "line": 12,
+          "column": 7
+        },
+        {
+          "title": "doa: tujuan, pilihan agama, batal, dan retry tetap sinkron (390px)",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 6328,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-02T10:49:44.329Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c713ade7c804ac60166c-f9deee86ef60b0f63b1d",
+          "file": "prayers.spec.ts",
+          "line": 12,
+          "column": 7
+        },
+        {
+          "title": "doa: tujuan, pilihan agama, batal, dan retry tetap sinkron (1280px)",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 8646,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-02T10:49:50.705Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c713ade7c804ac60166c-1d04e5a05047162484d5",
+          "file": "prayers.spec.ts",
+          "line": 12,
+          "column": 7
+        },
+        {
+          "title": "pemutar audio dapat dijeda, dibatalkan, dan mencatat hanya setelah berakhir",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 12615,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-02T10:49:59.402Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c713ade7c804ac60166c-75bcfa03b587d6d113a0",
+          "file": "prayers.spec.ts",
+          "line": 106,
+          "column": 5
+        }
+      ]
+    },
+    {
+      "title": "settings.spec.ts",
+      "file": "settings.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "pengaturan tersimpan; hapus dapat dibatalkan dan dicoba ulang; keluar menutup sesi",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 67939,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-02T10:50:12.163Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "d877ffdf71ec720167ae-e617122557ef79d81503",
+          "file": "settings.spec.ts",
+          "line": 4,
+          "column": 5
+        }
+      ]
+    },
+    {
+      "title": "social.spec.ts",
+      "file": "social.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "publikasi → moderasi → jelajah anonim → empati dan laporan",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "timedOut",
+                  "duration": 221959,
+                  "error": {
+                    "message": "\u001b[31mTest timeout of 180000ms exceeded.\u001b[39m",
+                    "stack": "\u001b[31mTest timeout of 180000ms exceeded.\u001b[39m"
+                  },
+                  "errors": [
+                    {
+                      "message": "\u001b[31mTest timeout of 180000ms exceeded.\u001b[39m"
+                    },
+                    {
+                      "location": {
+                        "file": "D:\\Project\\Untukmu-Git\\apps\\web\\tests\\e2e\\social.spec.ts",
+                        "column": 75,
+                        "line": 45
+                      },
+                      "message": "Error: locator.click: Test ended.\nCall log:\n\u001b[2m  - waiting for locator('iframe').contentFrame().getByRole('button', { name: 'Kirim laporan', exact: true })\u001b[22m\n\n\n  43 |   await guest.locator('#um-exp [data-act=lapor]').first().click();\n  44 |   await guest.locator(\"#um-report-reason\").fill(\"Mohon diperiksa kembali konteksnya.\");\n> 45 |   await guest.getByRole(\"button\", { name: \"Kirim laporan\", exact: true }).click();\n     |                                                                           ^\n  46 |   await expect(guest.locator(\"#um-report-reason\")).toHaveCount(0);\n  47 |   await guest.locator('#um-exp [data-act=close]').click();\n  48 |   await guest.locator('.um-dock [data-act=doa]').click();\n    at D:\\Project\\Untukmu-Git\\apps\\web\\tests\\e2e\\social.spec.ts:45:75"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [
+                    {
+                      "buffer": ""
+                    }
+                  ],
+                  "retry": 0,
+                  "startTime": "2026-10-02T10:51:20.241Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "D:\\Project\\Untukmu-Git\\apps\\web\\test-results\\social-publikasi-→-moderas-a4f30-anonim-→-empati-dan-laporan\\error-context.md"
+                    }
+                  ]
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "3bd26b923e159664f17e-5996b06fe5318a2b0085",
+          "file": "social.spec.ts",
+          "line": 6,
+          "column": 5
+        }
+      ]
+    },
+    {
+      "title": "visual.spec.ts",
+      "file": "visual.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "pembanding visual halaman masuk pada desktop dan ponsel",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 71373,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-02T10:55:26.689Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "8324bb52c49185e48ff4-191329fbfe8b28a15487",
+          "file": "visual.spec.ts",
+          "line": 6,
+          "column": 5
+        }
+      ]
+    },
+    {
+      "title": "written-prayers.spec.ts",
+      "file": "written-prayers.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "pengunjung dapat membuka Doa; menulis doa meminta akun dan pembatalan kembali ke Doa",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 16226,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-02T10:56:40.977Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "87a2f0125baa3067441c-88b1463a94afc264662a",
+          "file": "written-prayers.spec.ts",
+          "line": 5,
+          "column": 5
+        },
+        {
+          "title": "doa tertulis tersimpan pada tujuan yang benar; retry tidak menggandakan galaksi; draf tetap ada saat membuka kunci",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 63384,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-02T10:56:57.293Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "87a2f0125baa3067441c-b1e59d4d7379e68cd289",
+          "file": "written-prayers.spec.ts",
+          "line": 17,
+          "column": 5
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-02T10:47:01.647Z",
+    "duration": 661761.576,
+    "expected": 15,
+    "skipped": 0,
+    "unexpected": 1,
+    "flaky": 0
+  }
+}
