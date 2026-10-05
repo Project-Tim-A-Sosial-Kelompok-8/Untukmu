@@ -44,3 +44,23 @@ for (const name of names) it(`Assertion prototipe: ${name}`, () => {
   const result = results.find(row => row.nama === name);
   expect(result?.ok, result?.pesan || name).toBe(true);
 });
+
+it("interaksi partikel tetap tersedia setelah refresh dan membersihkan hover", async () => {
+  const interaction = await page.evaluate(`(async () => {
+    await UM.galaksi.refresh();
+    const item = UM.galaksi.state.daftar.find(g => g.batuPoints);
+    if (!item) throw new Error('Galaksi uji dengan partikel doa belum tersedia.');
+    const points = item.batuPoints;
+    points.geometry.deleteAttribute('aFokus');
+    UM.galaksi.validasiPartikelInteraktif();
+    const focus = points.geometry.getAttribute('aFokus');
+    UM.galaksi.perbaruiKursor({points, index: 0});
+    const hovered = {cursor: renderer.domElement.style.cursor, index: points.userData.hoverIndex};
+    UM.galaksi.perbaruiKursor(null);
+    return {count: focus.count, particles: points.geometry.getAttribute('position').count,
+      focus: Array.from(focus.array).every(value => value === 1), hovered,
+      cleared: renderer.domElement.style.cursor === '' && !('hoverIndex' in points.userData)};
+  })()`) as { count: number; particles: number; focus: boolean; hovered: { cursor: string; index: number }; cleared: boolean };
+  expect(interaction.count).toBe(interaction.particles);
+  expect(interaction).toMatchObject({ focus: true, hovered: { cursor: "pointer", index: 0 }, cleared: true });
+});

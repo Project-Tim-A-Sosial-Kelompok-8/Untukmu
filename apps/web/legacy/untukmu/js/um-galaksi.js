@@ -442,10 +442,6 @@ UM.galaksi = (function () {
     var versi = ++refreshTerakhir;
     if (bersihkanHover) bersihkanHover(); // tanda hover lama bisa menunjuk titik yang sudah dibangun ulang
     
-    // Validasi dan setup partikel interaktif
-    if (SEMUA_PARTIKEL_INTERAKTIF) {
-      validasiPartikelInteraktif();
-    }
     return Promise.all([
       UM.store.listGalaksi(),
       UM.store.listPesan(),
@@ -493,6 +489,8 @@ UM.galaksi = (function () {
         bangunBatu(item, orangLain, doaPesan);
         perbaruiTeksLabel(item);
       });
+
+      validasiPartikelInteraktif();
 
       // galaksi yang sudah tidak ada di data ikut dibersihkan
       state.daftar = state.daftar.filter(function (item) {
@@ -1422,54 +1420,6 @@ UM.galaksi = (function () {
       hoverItem = null;
     }
 
-    // Fungsi baru: Update cursor style untuk semua partikel
-    function perbaruiKursor(hit) {
-      var canvas = renderer.domElement;
-      if (!canvas) return;
-    
-      if (hit) {
-        // Hit ditemukan, atur cursor menjadi pointer
-        canvas.style.cursor = KURSOR_HOVER;
-      
-        // Tambah kelas hover untuk efek visual tambahan
-        if (hit.points && hit.points.userData) {
-          hit.points.userData.hoverIndex = hit.index;
-        }
-      } else {
-        // Tidak ada hit, kembalikan ke default
-        canvas.style.cursor = '';
-      
-        // Bersihkan semua hover data
-        state.daftar.forEach(function(item) {
-          if (item.batuPoints && item.batuPoints.userData) {
-            delete item.batuPoints.userData.hoverIndex;
-          }
-          if (item.lod && item.lod.pts && item.lod.pts.userData) {
-            delete item.lod.pts.userData.hoverIndex;
-          }
-        });
-      }
-    }
-
-    // Fungsi baru: Validasi partikel interaktif
-    function validasiPartikelInteraktif() {
-      if (!SEMUA_PARTIKEL_INTERAKTIF) return;
-    
-      // Periksa dan pastikan semua partikel memiliki atribut yang diperlukan
-      state.daftar.forEach(function(item) {
-        if (item.batuPoints && item.batuPoints.geometry) {
-          var geo = item.batuPoints.geometry;
-          if (!geo.attributes.aFokus) {
-            // Tambah atribut aFokus untuk partikel doa
-            var count = geo.attributes.position.count;
-            var fokus = new Float32Array(count);
-            for (var i = 0; i < count; i++) fokus[i] = 1;
-            geo.setAttribute('aFokus', new three().BufferAttribute(fokus, 1));
-          }
-        }
-      });
-    }
-
     bersihkanHover = function () { lepasSorot(); sembunyikanCincinHover(); lepasLabelHover(); perbaruiKursor(null); };
 
     function sorot(hit) {
@@ -1591,6 +1541,36 @@ UM.galaksi = (function () {
     }
 
     perbaruiLabel();
+  }
+
+  // Dipakai refresh, handler hover, dan API modul sebelum kait dipasang.
+  function perbaruiKursor(hit) {
+    var canvas = elKanvas();
+    if (!canvas) return;
+    canvas.style.cursor = hit ? KURSOR_HOVER : '';
+    if (hit && hit.points && hit.points.userData) {
+      hit.points.userData.hoverIndex = hit.index;
+    } else if (!hit) {
+      state.daftar.forEach(function(item) {
+        if (item.batuPoints && item.batuPoints.userData) delete item.batuPoints.userData.hoverIndex;
+        if (item.lod && item.lod.pts && item.lod.pts.userData) delete item.lod.pts.userData.hoverIndex;
+      });
+    }
+  }
+
+  function validasiPartikelInteraktif() {
+    var T = three();
+    if (!SEMUA_PARTIKEL_INTERAKTIF || !T) return;
+    state.daftar.forEach(function(item) {
+      if (item.batuPoints && item.batuPoints.geometry) {
+        var geo = item.batuPoints.geometry;
+        if (!geo.attributes.aFokus) {
+          var fokus = new Float32Array(geo.attributes.position.count);
+          fokus.fill(1);
+          geo.setAttribute('aFokus', new T.BufferAttribute(fokus, 1));
+        }
+      }
+    });
   }
 
   function pasangKait() {

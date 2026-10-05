@@ -396,12 +396,8 @@ body[data-sky-mode="kenangan"] #skylabels { display: none !important; }
 
 /* ── Sembunyikan elemen Galaxy Explorer asli yang tidak diperlukan ──────────── */
 
-/* Sembunyikan tab/strip galaxy astronomi di bagian bawah */
-#galaxystrip,
-#solarstrip,
-#solartime,
-#solarlabels,
-#solarback,
+/* Label dan tombol Peta digantikan UM.sky. Kontrol galaksi dan tata surya
+   tetap mengikuti mode engine agar pilihan objek dan waktu bisa digunakan. */
 #skylabels,
 #skyback {
   display: none !important;
@@ -414,7 +410,7 @@ body[data-sky-mode="kenangan"] #skylabels { display: none !important; }
 }
 
 /* Sembunyikan beacon panel default (digantikan oleh panel Untukmu) */
-#beacon-panel:not(.um-panel) {
+body:not(.um-on) #beacon-panel:not(.um-panel) {
   display: none !important;
 }
 
@@ -424,7 +420,6 @@ body[data-sky-mode="kenangan"] #skylabels { display: none !important; }
 }
 
 /* Pastikan hanya UI Untukmu yang tampil */
-body:not(.gx-cinema) .um-dock,
 body:not(.gx-cinema) .um-brand,
 body:not(.gx-cinema) .um-screen.on {
   display: block !important;
