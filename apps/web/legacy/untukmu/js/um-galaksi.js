@@ -36,6 +36,11 @@ UM.galaksi = (function () {
   var TOLERANSI_LAYAR = 0.75;   // beda jarak-layar yang dianggap "sama dekat"
   var PX_CINCIN = 46;           // garis tengah cincin penanda terpilih
   var JARAK_TIBA_REL = 0.7;     // jarak tiba ke sebuah titik = 0.7 × radius galaksinya
+  
+  // Fitur baru: semua partikel interaktif
+  var SEMUA_PARTIKEL_INTERAKTIF = true; // membuat semua partikel bisa diklik
+  var KURSOR_HOVER = 'pointer';        // cursor style saat hover
+  var UKURAN_PARTIKEL_MIN = 0.8;       // ukuran minimum partikel untuk interaksi (dalam piksel)
 
   var state = {
     siap: false,
@@ -436,6 +441,11 @@ UM.galaksi = (function () {
     if (!three() || !generatorAda()) return Promise.resolve(false);
     var versi = ++refreshTerakhir;
     if (bersihkanHover) bersihkanHover(); // tanda hover lama bisa menunjuk titik yang sudah dibangun ulang
+    
+    // Validasi dan setup partikel interaktif
+    if (SEMUA_PARTIKEL_INTERAKTIF) {
+      validasiPartikelInteraktif();
+    }
     return Promise.all([
       UM.store.listGalaksi(),
       UM.store.listPesan(),
@@ -897,6 +907,25 @@ UM.galaksi = (function () {
        3. kamera menyusul, mendarat bersamaan dengan bendanya
      Seluruh kemajuan dihitung di tick(), bukan setTimeout: kalau tab tidak
      aktif, jam animasi ikut berhenti dan tidak ada kedatangan yang tertinggal. */
+  
+  // Fitur baru: Animasi perjalanan yang lebih kaya
+  var JENIS_PERJALANAN = {
+    PESAN: 'pesan',
+    DOA: 'doa',
+    KUNJUNGAN: 'kunjungan'
+  };
+  
+  // Parameter animasi yang bisa disesuaikan
+  var PARAM_ANIMASI = {
+    DURASI_MIN: 2000,
+    DURASI_MAX: 8000,
+    UKURAN_BATU: 6.5,
+    ROTASI_SPEED_X: 0.02,
+    ROTASI_SPEED_Y: 0.03,
+    TRAIL_LENGTH: 15,
+    GLOW_INTENSITY: 2.2
+  };
+  
   function kirimPerjalanan(itemTujuan, jenis, onTiba) {
     if (!three() || !itemTujuan || typeof flyTo !== 'function') return Promise.resolve(false);
     masukLadang();
@@ -1086,6 +1115,105 @@ UM.galaksi = (function () {
 
   /* Jarak sebuah titik dunia ke posisi kursor, dalam piksel CSS. Hasil null
      berarti titiknya ada di belakang kamera. */
+  
+  // Fungsi baru: Sistem camera tracking yang lebih presisi
+  function aturCameraTracking(item, index, jenis, mode) {
+    if (!item || !three()) return;
+    var T = three();
+    
+    // Dapatkan posisi dunia partikel
+    var dunia = posisiTitik(item, index, new T.Vector3());
+    
+    // Hitung jarak optimal berdasarkan ukuran partikel dan galaksi
+    var R = galaksiRadius(item.g);
+    var jarakOptimal = Math.max(10, R * 0.7); // 70% radius galaksi
+    
+    // Hitung arah kamera
+    var dir = camera.position.clone().sub(dunia);
+    if (dir.lengthSq() < 1) dir.set(0, 0.3, 1);
+    dir.normalize();
+    
+    // Mode tracking: 'orbit' (mengikuti rotasi) atau 'fixed' (tetap)
+    var ikut = { 
+      item: item, 
+      jenis: jenis, 
+      index: index, 
+      lalu: dunia.clone(),
+      mode: mode || 'orbit',
+      offset: dir.clone().multiplyScalar(jarakOptimal),
+      jarakOptimal: jarakOptimal
+    };
+    
+    // Tandai partikel yang dipilih
+    tandaiTerpilih(item, index, jenis, jarakOptimal);
+    
+    // Set state tracking
+    state.ikut = ikut;
+    
+    // Terbang ke posisi dengan smooth transition
+    flyTo(
+      dunia.clone().add(ikut.offset),
+      dunia.clone(),
+      1500, // Durasi animasi
+      function () {
+        // Callback setelah tiba: mulai mode orbit jika diperlukan
+        if (ikut.mode === 'orbit') {
+          mulaiOrbitTracking(item, dunia, jarakOptimal);
+        }
+      }
+    );
+  }
+  
+  // Fungsi baru: Mulai orbit tracking
+  function mulaiOrbitTracking(item, pusat, jarak) {
+    if (!item || !three()) return;
+    var T = three();
+    
+    // Hitung posisi orbit yang mengikuti rotasi galaksi
+    var posRelatif = camera.position.clone().sub(pusat);
+    var orbitRadius = posRelatif.length();
+    
+    // Simpan data orbit
+    if (!state.ikut) state.ikut = {};
+    state.ikut.orbitData = {
+      pusat: pusat.clone(),
+      radius: orbitRadius,
+      angleX: Math.atan2(posRelatif.y, Math.sqrt(posRelatif.x * posRelatif.x + posRelatif.z * posRelatif.z)),
+      angleY: Math.atan2(posRelatif.x, posRelatif.z),
+      lastTime: state.sekarang
+    };
+  }
+  
+  // Fungsi baru: Update orbit camera
+  function perbaruiOrbitCamera() {
+    if (!state.ikut || !state.ikut.orbitData || !three()) return;
+    
+    var T = three();
+    var data = state.ikut.orbitData;
+    var now = state.sekarang;
+    var dt = (now - data.lastTime) * 0.001; // detik
+    
+    if (dt <= 0) return;
+    
+    // Update sudut orbit (mengikuti rotasi galaksi)
+    var rotSpeed = 0.02; // radian per detik
+    data.angleY += rotSpeed * dt;
+    
+    // Hitung posisi baru
+    var newPos = new T.Vector3(
+      data.pusat.x + data.radius * Math.sin(data.angleY) * Math.cos(data.angleX),
+      data.pusat.y + data.radius * Math.sin(data.angleX),
+      data.pusat.z + data.radius * Math.cos(data.angleY) * Math.cos(data.angleX)
+    );
+    
+    // Update camera position dan target
+    camera.position.copy(newPos);
+    camera.lookAt(data.pusat);
+    
+    // Update orbit data
+    data.lastTime = now;
+  }
+  
   function pikselDariKursor(dunia, ndcX, ndcY) {
     var T = three();
     if (!T || typeof camera === 'undefined') return null;
@@ -1294,7 +1422,55 @@ UM.galaksi = (function () {
       hoverItem = null;
     }
 
-    bersihkanHover = function () { lepasSorot(); sembunyikanCincinHover(); lepasLabelHover(); };
+    // Fungsi baru: Update cursor style untuk semua partikel
+    function perbaruiKursor(hit) {
+      var canvas = renderer.domElement;
+      if (!canvas) return;
+    
+      if (hit) {
+        // Hit ditemukan, atur cursor menjadi pointer
+        canvas.style.cursor = KURSOR_HOVER;
+      
+        // Tambah kelas hover untuk efek visual tambahan
+        if (hit.points && hit.points.userData) {
+          hit.points.userData.hoverIndex = hit.index;
+        }
+      } else {
+        // Tidak ada hit, kembalikan ke default
+        canvas.style.cursor = '';
+      
+        // Bersihkan semua hover data
+        state.daftar.forEach(function(item) {
+          if (item.batuPoints && item.batuPoints.userData) {
+            delete item.batuPoints.userData.hoverIndex;
+          }
+          if (item.lod && item.lod.pts && item.lod.pts.userData) {
+            delete item.lod.pts.userData.hoverIndex;
+          }
+        });
+      }
+    }
+
+    // Fungsi baru: Validasi partikel interaktif
+    function validasiPartikelInteraktif() {
+      if (!SEMUA_PARTIKEL_INTERAKTIF) return;
+    
+      // Periksa dan pastikan semua partikel memiliki atribut yang diperlukan
+      state.daftar.forEach(function(item) {
+        if (item.batuPoints && item.batuPoints.geometry) {
+          var geo = item.batuPoints.geometry;
+          if (!geo.attributes.aFokus) {
+            // Tambah atribut aFokus untuk partikel doa
+            var count = geo.attributes.position.count;
+            var fokus = new Float32Array(count);
+            for (var i = 0; i < count; i++) fokus[i] = 1;
+            geo.setAttribute('aFokus', new three().BufferAttribute(fokus, 1));
+          }
+        }
+      });
+    }
+
+    bersihkanHover = function () { lepasSorot(); sembunyikanCincinHover(); lepasLabelHover(); perbaruiKursor(null); };
 
     function sorot(hit) {
       /* Label galaksi nyata ikut menyala: pada tingkat kawanan, nama adalah
@@ -1306,7 +1482,7 @@ UM.galaksi = (function () {
         hoverItem = itemBaru;
         if (hoverItem && hoverItem.el) hoverItem.el.classList.add('on');
       }
-      renderer.domElement.style.cursor = hit ? 'pointer' : '';
+      perbaruiKursor(hit);
 
       if (hover && hit && hover.points && hover.points === hit.points && hover.index === hit.index) {
         pindahCincinHover(hit, hit.faktor); // kamera bisa saja sudah bergeser sejak sorotan terakhir
@@ -1368,6 +1544,10 @@ UM.galaksi = (function () {
     state.sekarang = nowMs;
     perbaruiPerjalanan(nowMs);
     perbaruiKilatan(nowMs);
+    
+    // Update orbit camera jika aktif
+    perbaruiOrbitCamera();
+    
     if (typeof viewMode === 'undefined' || viewMode !== 'galaxy') return;
 
     var t = nowMs * 0.001;
@@ -1376,7 +1556,8 @@ UM.galaksi = (function () {
        berputar bersama galaksinya, jadi tiap frame kita geser kamera dan target
        orbit sebesar pergeseran benda itu — hasilnya kamera seolah menempel
        padanya. */
-    if (state.ikut) {
+    if (state.ikut && !state.ikut.orbitData) {
+      // Mode tracking lama (backward compatibility)
       var it = state.ikut;
       var kini = posisiIkut(it, new (three().Vector3)());
       if (!kini) { state.ikut = null; }
@@ -1442,6 +1623,21 @@ UM.galaksi = (function () {
     JARI_KURSOR_PX: JARI_KURSOR_PX,
     PX_CINCIN: PX_CINCIN,
     state: state,
+    
+    // Fungsi-fungsi baru untuk sistem interaksi yang lebih baik
+    aturCameraTracking: aturCameraTracking,
+    mulaiOrbitTracking: mulaiOrbitTracking,
+    perbaruiOrbitCamera: perbaruiOrbitCamera,
+    validasiPartikelInteraktif: validasiPartikelInteraktif,
+    perbaruiKursor: perbaruiKursor,
+    
+    // Constants baru
+    SEMUA_PARTIKEL_INTERAKTIF: SEMUA_PARTIKEL_INTERAKTIF,
+    KURSOR_HOVER: KURSOR_HOVER,
+    UKURAN_PARTIKEL_MIN: UKURAN_PARTIKEL_MIN,
+    JENIS_PERJALANAN: JENIS_PERJALANAN,
+    PARAM_ANIMASI: PARAM_ANIMASI,
+    
     /* dipakai pengujian */
     _posDariId: posDariId, _seedFromId: seedFromId, _warnaBintang: warnaBintang, _kuadrik: kuadrik,
     _perPiksel: perPiksel, _lebihBaik: lebihBaik, _pilihDi: pilihDi

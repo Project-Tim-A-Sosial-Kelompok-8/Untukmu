@@ -393,3 +393,107 @@ body[data-sky-mode="kenangan"] #skylabels { display: none !important; }
   body.um-on #beacon-panel { top: 72px; bottom: 184px; max-height: none; width: min(340px, 45vw); }
   body.um-on.um-sky #beacon-panel { bottom: 82px; }
 }
+
+/* ── Sembunyikan elemen Galaxy Explorer asli yang tidak diperlukan ──────────── */
+
+/* Sembunyikan tab/strip galaxy astronomi di bagian bawah */
+#galaxystrip,
+#solarstrip,
+#solartime,
+#solarlabels,
+#solarback,
+#skylabels,
+#skyback {
+  display: none !important;
+}
+
+/* Sembunyikan title/audio dari Galaxy Explorer asli */
+#title,
+#audio {
+  display: none !important;
+}
+
+/* Sembunyikan beacon panel default (digantikan oleh panel Untukmu) */
+#beacon-panel:not(.um-panel) {
+  display: none !important;
+}
+
+/* Sembunyikan language selector default (digantikan oleh Untukmu) */
+#lang:not(.um-lang) {
+  display: none !important;
+}
+
+/* Pastikan hanya UI Untukmu yang tampil */
+body:not(.gx-cinema) .um-dock,
+body:not(.gx-cinema) .um-brand,
+body:not(.gx-cinema) .um-screen.on {
+  display: block !important;
+}
+
+/* ── Efek visual untuk partikel interaktif ────────────────────────────────── */
+
+/* Efek visual untuk partikel interaktif */
+.um-particle-highlight {
+  animation: um-particle-pulse 1.5s ease-in-out infinite;
+  filter: drop-shadow(var(--um-hover-glow));
+}
+
+.um-particle-selected {
+  filter: drop-shadow(var(--um-selected-glow));
+}
+
+@keyframes um-particle-pulse {
+  0%, 100% { opacity: 0.8; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.2); }
+}
+
+/* Cursor styles untuk interaksi partikel */
+.canvas-interactive {
+  cursor: pointer;
+}
+
+.canvas-interactive:hover {
+  cursor: pointer !important;
+}
+
+/* Loading states untuk animasi perjalanan */
+.um-travel-indicator {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--um-accent), transparent 70%);
+  animation: um-travel-spin 2s linear infinite;
+  pointer-events: none;
+  z-index: 15;
+}
+
+@keyframes um-travel-spin {
+  0% { transform: rotate(0deg); opacity: 0.6; }
+  50% { transform: rotate(180deg); opacity: 1; }
+  100% { transform: rotate(360deg); opacity: 0.6; }
+}
+
+/* Indikator orbit tracking */
+.um-orbit-indicator {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.7);
+  box-shadow: 0 0 10px var(--um-accent);
+  pointer-events: none;
+  z-index: 10;
+}
+
+/* Zoom feedback untuk partikel */
+.um-zoom-feedback {
+  animation: um-zoom-pulse 0.8s ease-out;
+  transform-origin: center;
+}
+
+@keyframes um-zoom-pulse {
+  0% { transform: scale(0.5); opacity: 0; }
+  50% { transform: scale(1.2); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
