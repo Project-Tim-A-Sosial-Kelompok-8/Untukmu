@@ -13,6 +13,8 @@ docker compose up -d --build
 
 Perintah pertama membuat `.env` dengan konfigurasi lokal. Jika `.env` sudah ada, lewati generator dan gunakan konfigurasi tersebut. Perintah kedua menyiapkan database, penyimpanan berkas, API, dan website. Tunggu layanan selesai menyala, lalu buka **http://localhost:3000**.
 
+MinIO dibangun dari sumber resmi versi `RELEASE.2025-04-22T22-12-26Z`, dengan commit dan checksum arsip yang dikunci pada `infra/minio/Dockerfile`. Build pertama juga mengunduh dependensi Go dan mengompilasi MinIO; tidak memerlukan akun registry MinIO.
+
 | Yang ingin dibuka | Alamat lokal |
 | --- | --- |
 | Aplikasi utama | http://localhost:3000 |

@@ -27,12 +27,12 @@ jobs:
         working-directory: apps/api
         env:
           JWT_SECRET: ci-only-random-test-key-not-a-deployment-secret-123
-      - run: node scripts/test-browser-local.mjs
-        env:
-          UNTUKMU_BROWSER_REPORT: ../../docs/pengujian/hasil/button-audit-results.json
       - run: python scripts/verify_original.py --archive-only --if-present
       - run: python scripts/init_env.py
       - run: docker compose up -d --build --wait
+      - run: node scripts/test-browser-local.mjs
+        env:
+          UNTUKMU_BROWSER_REPORT: ../../docs/pengujian/hasil/button-audit-results.json
       - run: npm run test:e2e
       - if: always()
         run: docker compose logs --no-color > compose.log
