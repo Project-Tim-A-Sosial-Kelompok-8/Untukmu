@@ -49,6 +49,7 @@ await writeFile(resolve(output, "index.html"), index);
 
 let app = await readFile(resolve(original, "untukmu/js/um-app.js"), "utf8");
 app = replaceOnce(app, "UM.store.seedIfEmpty()", "UM.store.ready()");
+app = app.replaceAll("UM.ui.bukaEntry();", "if (new URLSearchParams(location.search).get('screen') === 'doa') UM.ui.bukaDoa(); else UM.ui.bukaEntry();");
 app = replaceOnce(app, "if (!tersimpan && typeof setBeaconLang === 'function')", "if (typeof setBeaconLang === 'function')");
 app = replaceOnce(app, "return UM.i18n.setLang(aktif);", "return UM.i18n.setLang('id');");
 app = replaceOnce(app, "UM.i18n.setLang(sel.value);", "sel.value = 'id'; if (typeof setBeaconLang === 'function') setBeaconLang('id'); UM.i18n.setLang('id');");

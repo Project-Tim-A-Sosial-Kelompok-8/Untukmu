@@ -1,13 +1,8 @@
-# audio/
+# Audio sumber engine
 
-Optional background-music folder. Drop your own `.mp3` files here, then list
-their file names in `MUSIC_TRACKS` inside `../index.html`:
+Folder ini dipertahankan untuk proses penyalinan aset engine. Build aplikasi
+saat ini menonaktifkan daftar musik latar dari prototipe.
 
-```js
-var MUSIC_TRACKS = ['ambient 1.mp3', 'ambient 2.mp3'];
-```
-
-The speaker button (bottom-right of the page) stays hidden while this list is
-empty. Tracks loop and are shown by file name in a hover popup.
-
-Do NOT commit copyrighted audio you don't have the rights to redistribute.
+Rekaman doa berada di `apps/api/data/prayer-audio`, dengan atribusi dan lisensi
+pada `NOTICE.md` di folder tersebut. Audio unggahan dikelola melalui panel
+admin dan object storage. Gunakan hanya rekaman yang boleh didistribusikan.

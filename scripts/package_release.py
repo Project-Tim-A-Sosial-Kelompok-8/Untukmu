@@ -7,7 +7,7 @@ from pathlib import Path
 from zipfile import ZIP_DEFLATED, ZIP_STORED, ZipFile
 
 root = Path(__file__).resolve().parents[1]
-subprocess.run([sys.executable, str(root / "scripts/verify_original.py")], check=True)
+subprocess.run([sys.executable, str(root / "scripts/verify_original.py"), "--archive-only", "--if-present"], check=True)
 excluded = {"node_modules", ".next", ".git", "__pycache__", ".pytest_cache", ".ruff_cache", "test-results", "playwright-report", ".venv"}
 files = []
 for path in sorted(root.rglob("*")):
@@ -18,7 +18,7 @@ for path in sorted(root.rglob("*")):
         continue
     if path.name == ".env" or path.suffix in (".db", ".pyc", ".tsbuildinfo", ".log"):
         continue
-    if relative.as_posix() == "docs/release-manifest.json":
+    if relative.as_posix() == "docs/referensi/release-manifest.json":
         continue
     files.append(path)
 manifest = {
@@ -26,7 +26,7 @@ manifest = {
     "files": [{"path": p.relative_to(root).as_posix(), "bytes": p.stat().st_size,
                "sha256": hashlib.sha256(p.read_bytes()).hexdigest()} for p in files],
 }
-manifest_path = root / "docs/release-manifest.json"
+manifest_path = root / "docs/referensi/release-manifest.json"
 manifest_path.write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + "\n")
 files.append(manifest_path)
 output = Path(sys.argv[1]).resolve()

@@ -127,6 +127,7 @@ async def message_views(rows, db):
     return [
         {
             "id": row.id,
+            "entry_type": row.entry_type,
             "constellation_ids": [g for m, g in links if m == row.id],
             "visibility": row.visibility,
             "public_body": open_public(row.id, row.public_body if row.visibility == "public_anon" else row.ciphertext) if row.visibility != "private" else None,
@@ -159,7 +160,7 @@ async def create_message(body: AnyMessageInput, user: CurrentUser, db: DB, reque
     await validate_targets(body, user, db)
     if body.visibility in ("public_anon", "unlisted"):
         await verify_turnstile(request, body.turnstile_token, "publish")
-    row = Message(id=str(body.id), author_id=user.id)
+    row = Message(id=str(body.id), author_id=user.id, entry_type=body.entry_type)
     apply_message(row, body, user)
     db.add(row)
     try:

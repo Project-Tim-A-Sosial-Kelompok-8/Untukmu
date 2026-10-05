@@ -88,6 +88,7 @@ UM.ui = (function () {
       '<p class="lead">' + teks(T('entryLead')) + '</p>' +
       '<div class="acts">' +
         '<button class="um-btn primary" data-act="tulis">✎ ' + teks(T('entryActsTulis')) + '</button>' +
+        '<button class="um-btn primary" data-act="doa">♡ Doa untuk seseorang</button>' +
         '<button class="um-btn" data-act="galaksi">✦ ' + teks(T('entryActsGalaksi')) + '</button>' +
       '</div>' +
       '<p class="fine">' + (aman ? '🔒 ' : '⚠ — ') + teks(aman ? T('entryFine') : T('entryFineWarn')) + '</p>' +
@@ -105,6 +106,7 @@ UM.ui = (function () {
       var act = btn && btn.getAttribute('data-act');
       if (!act) return;
       if (act === 'tulis') { close(entryEl); bukaKomposer(); }
+      else if (act === 'doa') { close(entryEl); bukaDoa(); }
       else if (act === 'galaksi') { close(entryEl); keLadang(); }
       else if (act === 'skip') close(entryEl);
     });
@@ -190,8 +192,9 @@ UM.ui = (function () {
         '<button class="um-chip' + (mode === 'astronomi' ? ' on' : '') + '" data-mode="astronomi">' + teks(T('skyAstro')) + '</button>' +
         '<button class="um-chip' + (mode === 'kenangan' ? ' on' : '') + '" data-mode="kenangan">' + teks(T('skyKenangan')) + '</button>' +
       '</div>' +
-      (diPeta && mode === 'kenangan' && UM.sky.state.daftar.length
-        ? '<div class="um-hint">' + teks(T('petaHint')) + '</div>' : '');
+      (diPeta ? '<div class="um-hint">' + (mode === 'kenangan'
+        ? 'Bintang berwarna menandai galaksi kenanganmu. Klik bintangnya untuk mengunjungi galaksi. Geser untuk melihat langit.'
+        : 'Klik bintang atau garis rasi untuk melihat nama dan informasi konstelasinya. Geser untuk melihat langit.') + '</div>' : '');
   }
 
   /* ── masuk ke ladang galaksi / Peta ──────────────────────────────────────── */
@@ -499,7 +502,7 @@ UM.ui = (function () {
   /* Segarkan data dan langsung bingkai galaksi pesan yang baru disimpan.
      Perjalanan benda tetap dipakai untuk kiriman selain pesan. */
   function kirimKeGalaksi(galaksiId, jenis, pesanSukses, pesanId) {
-    return UM.galaksi.refresh().then(function () {
+    return Promise.all([UM.galaksi.refresh(), UM.sky.refresh()]).then(function () {
       var item = null;
       for (var i = 0; i < UM.galaksi.state.daftar.length; i++) {
         if (UM.galaksi.state.daftar[i].g.id === galaksiId) { item = UM.galaksi.state.daftar[i]; break; }
@@ -537,15 +540,15 @@ UM.ui = (function () {
          benar-benar tergambar di galaksinya. */
       var punyaku = semua.filter(function (p) { return p.sendiri !== false || p.piringan === true; });
       var orangLain = semua.filter(function (p) { return p.sabuk === true; });
-      var doaDiterima = 0;
-      semua.forEach(function (p) { doaDiterima += (p.pendoa && p.pendoa.total) || 0; });
+      var jumlah = UM.galaksi.hitungCatatan(punyaku);
       bpBody.innerHTML =
         '<div id="bp-name" style="color:' + warnaAman(g.warna) + '">' + escAttr(g.nama) + '</div>' +
         '<span id="bp-type">' + escAttr(UM.i18n.kategori(g.kategori)) + ' · ' + escAttr(T('jenis' + (g.kind === 'spiral' ? 'Spiral' : g.kind === 'ellipsoid' ? 'Ellipsoid' : 'Irregular'))) + '</span>' +
         (g.foto ? '<img id="bp-img" src="' + escAttr(g.foto) + '" alt="' + escAttr(g.nama) + '" loading="lazy">' : '') +
-        '<div class="bp-row"><span class="k">' + escAttr(T('gkBintang')) + '</span><span class="v">' + punyaku.length + '</span></div>' +
+        '<div class="bp-row" data-galaxy-count="pesan"><span class="k">' + escAttr(T('gkBintang')) + '</span><span class="v">' + jumlah.pesan + '</span></div>' +
+        '<div class="bp-row" data-galaxy-count="doa-tertulis"><span class="k">' + escAttr(T('gkDoaTertulis')) + '</span><span class="v">' + jumlah.doaTertulis + '</span></div>' +
         '<div class="bp-row"><span class="k">' + escAttr(T('gkBatu')) + '</span><span class="v">' + orangLain.length + '</span></div>' +
-        '<div class="bp-row"><span class="k">' + escAttr(T('gkDoa')) + '</span><span class="v">' + doaDiterima + '</span></div>' +
+        '<div class="bp-row" data-galaxy-count="doa-diterima"><span class="k">' + escAttr(T('gkDoa')) + '</span><span class="v">' + jumlah.doaDiterima + '</span></div>' +
         '<div id="bp-desc"><div class="um-muted">' + teks(T('gkHint')) + '</div></div>' +
         '<div class="um-muted" style="margin-top:8px">' + teks(T('legenda')) + '</div>' +
         '<div id="um-gk-list" style="margin-top:10px"></div>' +
@@ -682,8 +685,9 @@ UM.ui = (function () {
       dashEl.querySelector('.um-wrap').innerHTML =
         '<div class="um-head"><div class="um-h1">' + teks(T('dashTitle')) + '</div>' +
         '<button class="um-close" data-act="close" aria-label="' + escAttr(T('commonClose')) + '">×</button></div>' +
-        '<div class="um-stats">' +
-          '<div class="um-stat"><b>' + s.pesan + '</b><span>' + teks(T('dashStatPesan')) + '</span></div>' +
+        '<div class="um-stats" style="grid-template-columns:repeat(auto-fit,minmax(120px,1fr))">' +
+          '<div class="um-stat" data-stat="pesan"><b>' + s.pesan + '</b><span>' + teks(T('dashStatPesan')) + '</span></div>' +
+          '<div class="um-stat" data-stat="doa"><b>' + s.doaTertulis + '</b><span>Doa tertulis</span></div>' +
           '<div class="um-stat"><b>' + s.galaksi + '</b><span>' + teks(T('dashStatGalaksi')) + '</span></div>' +
           '<div class="um-stat"><b>' + s.doaDiterima + '</b><span>' + teks(T('dashStatDoa')) + '</span></div>' +
           '<div class="um-stat"><b>' + s.doaDiberikan + '</b><span>' + teks(T('dashStatPendoa')) + '</span></div>' +
@@ -702,7 +706,10 @@ UM.ui = (function () {
               '</div></li>';
           }).join('') + '</ul>' : '<div class="um-empty">' + teks(T('dashEmptyGalaksi')) + '</div>') +
         '</div>' +
-        '<div class="um-card"><div class="um-h3">' + teks(T('dashPesan')) + '</div>' +
+        '<div class="um-card"><h2 class="um-h3">Doa tertulis</h2><p class="um-muted">Doa yang kamu tulis untuk seseorang. Jumlahnya terpisah dari pesan dan sesi doa yang diselesaikan pengunjung.</p>' +
+        '<div id="um-dash-doa"><div class="um-empty">…</div></div>' +
+        '<button class="um-btn primary" data-act="write-prayer">Tulis doa</button></div>' +
+        '<div class="um-card"><h2 class="um-h3">' + teks(T('dashPesan')) + '</h2>' +
         '<div id="um-dash-pesan"><div class="um-empty">…</div></div></div>' +
         '<div class="um-btn-row">' +
           '<button class="um-btn primary" data-act="tulis">✎ ' + teks(T('dockTulis')) + '</button>' +
@@ -719,9 +726,15 @@ UM.ui = (function () {
       var pesan = r[0].filter(function (p) { return p.sendiri !== false; });
       var galaksi = r[1], nama = {};
       galaksi.forEach(function (g) { nama[g.id] = g; });
-      var box = document.getElementById('um-dash-pesan');
+      renderDashDaftar(pesan.filter(function(p) { return p.jenis === 'doa'; }), nama, 'um-dash-doa', 'Belum ada doa tertulis. Gunakan Tulis doa untuk menambahkan doa bagi seseorang.');
+      renderDashDaftar(pesan.filter(function(p) { return p.jenis !== 'doa'; }), nama, 'um-dash-pesan', T('dashEmptyPesan'));
+    }).catch(function(err) { toast(err.message || 'Catatan belum dapat dimuat.'); });
+  }
+
+  function renderDashDaftar(pesan, nama, hostId, emptyText) {
+      var box = document.getElementById(hostId);
       if (!box) return;
-      if (!pesan.length) { box.innerHTML = '<div class="um-empty">' + teks(T('dashEmptyPesan')) + '</div>'; return; }
+      if (!pesan.length) { box.innerHTML = '<div class="um-empty">' + teks(emptyText) + '</div>'; return; }
       box.innerHTML = '<ul class="um-list">' + pesan.slice().reverse().map(function (p) {
         var g = nama[p.galaksiId] || { nama: '—' };
         return '<li class="um-item"><div class="um-item-top">' +
@@ -739,7 +752,6 @@ UM.ui = (function () {
           else { node.classList.remove('um-dim'); node.textContent = txt.length > 150 ? txt.slice(0, 150) + '…' : txt; }
         });
       });
-    });
   }
 
   function buildDash() {

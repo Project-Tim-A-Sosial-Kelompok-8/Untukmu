@@ -28,7 +28,7 @@ test('PWA, keyboard, perpindahan kamera, dan cache privat', async ({ page, conte
   await expect.poll(()=>engine.evaluate(()=>window.UM_ENGINE!.metrics().frames)).toBeGreaterThan(before.frames);
   const after=await engine.evaluate(()=>window.UM_ENGINE!.metrics());
   expect(after.pixelRatio).toBeLessThanOrEqual(2);
-  await mkdir(resolve('../../docs/quality'),{recursive:true});await writeFile(resolve('../../docs/quality/camera-metrics.json'),JSON.stringify({environment:'Headless Chromium, software WebGL; not a physical-device FPS benchmark',before,after},null,2));
+  await mkdir(resolve('../../docs/pengujian/hasil'),{recursive:true});await writeFile(resolve('../../docs/pengujian/hasil/camera-metrics.json'),JSON.stringify({environment:'Headless Chromium, software WebGL; not a physical-device FPS benchmark',before,after},null,2));
   await page.evaluate(async()=>{await navigator.serviceWorker.ready;});
   await page.reload();await frame.locator('#um-entry.on').waitFor({timeout:20000});
   const manifest=await (await page.request.get('/manifest.webmanifest')).json();expect(manifest.display).toBe('standalone');expect(manifest.icons).toHaveLength(3);

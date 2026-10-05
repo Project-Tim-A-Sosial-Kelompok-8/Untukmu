@@ -8,6 +8,7 @@ from uuid import UUID, uuid4
 
 from botocore.exceptions import BotoCoreError, ClientError
 from fastapi import APIRouter, HTTPException, Request
+from fastapi.responses import FileResponse
 from sqlalchemy import select, update
 from sqlalchemy.exc import IntegrityError
 from starlette.concurrency import run_in_threadpool
@@ -16,7 +17,8 @@ from .config import settings
 from .content import invalidate
 from .models import Message, Prayer, PrayerContent, now
 from .prayer_catalog import CATALOG, SOURCES
-from .schemas import PrayerAudioInput, PrayerContentInput, PrayerFinish, PrayerStart
+from .prayer_audio import CANDIDATES, candidate_file, candidate_summary
+from .schemas import PrayerAudioCandidateInput, PrayerAudioInput, PrayerContentInput, PrayerFinish, PrayerStart
 from .security import AdminUser, DB, OptionalUser, get_redis, throttle, verify_turnstile, visitor_identity
 from .social import readable_public
 from .uploads import storage
@@ -56,6 +58,7 @@ async def catalog(db: DB):
 async def admin_catalog(admin: AdminUser, db: DB):
     return [{"id": row.id, "content": row.content, "reviewed": row.reviewed,
              "audio_meta": row.audio_meta, "has_audio": bool(row.audio_key),
+             "audio_candidates": [candidate_summary(item) for item in CANDIDATES.values() if item["catalog_id"] == row.id],
              "reviewed_at": row.reviewed_at, "references": SOURCES.get(row.tradition, [])}
             for row in await db.scalars(select(PrayerContent).order_by(PrayerContent.id))]
 
@@ -64,6 +67,8 @@ async def admin_catalog(admin: AdminUser, db: DB):
 async def curate(tradition: str, prayer_id: str, body: PrayerContentInput, admin: AdminUser, db: DB, request: Request):
     await throttle(request, "curation", 30, admin.id)
     row = await entry(db, f"{tradition}/{prayer_id}", True)
+    if body.reviewed and row.tradition != "umum" and not row.audio_key:
+        raise HTTPException(409, "Pasang rekaman doa sebelum menyetujui kurasi.")
     row.content = {"id": prayer_id, "nama": {"id": body.title}, "teks": {"id": body.text} if body.text else None,
                    "arti": {"id": body.translation} if body.translation else None, "sumber": body.source_attribution,
                    "source_url": body.source_url, "review_note": body.review_note,
@@ -71,6 +76,30 @@ async def curate(tradition: str, prayer_id: str, body: PrayerContentInput, admin
     row.reviewed, row.reviewed_by, row.reviewed_at = body.reviewed, admin.id, now()
     await db.commit()
     return {"id": row.id, "reviewed": row.reviewed}
+
+
+@router.get("/prayers/audio-candidates/{candidate_id}")
+async def preview_candidate(candidate_id: str):
+    item, path = candidate_file(candidate_id)
+    # Licensed source previews do not create a prayer session or acknowledgement.
+    return FileResponse(path, media_type=item["content_type"])
+
+
+@router.post("/admin/prayers/{tradition}/{prayer_id}/audio/candidate")
+async def use_candidate(tradition: str, prayer_id: str, body: PrayerAudioCandidateInput, admin: AdminUser, db: DB, request: Request):
+    await throttle(request, "curation-audio", 10, admin.id)
+    row = await entry(db, f"{tradition}/{prayer_id}", True)
+    item, _ = candidate_file(body.candidate_id)
+    if item["catalog_id"] != row.id:
+        raise HTTPException(422, "Rekaman tidak sesuai dengan entri doa ini.")
+    if item["noncommercial_only"] and not body.noncommercial_use:
+        raise HTTPException(422, "Rekaman ini hanya dapat digunakan tanpa penjualan atau penggunaan komersial.")
+    row.audio_key = "bundled:" + item["id"]
+    row.audio_meta = {key: item[key] for key in ("license", "license_url", "attribution", "duration_seconds", "language", "source_url", "sha256")}
+    row.audio_meta = {**row.audio_meta, "noncommercial_use": body.noncommercial_use}
+    row.reviewed, row.reviewed_by, row.reviewed_at = False, None, None
+    await db.commit()
+    return {"id": row.id, "reviewed": False}
 
 
 @router.post("/admin/prayers/{tradition}/{prayer_id}/audio/presign")
@@ -101,6 +130,7 @@ async def audio_complete(tradition: str, prayer_id: str, admin: AdminUser, db: D
         raise HTTPException(422, "Metadata audio tidak cocok.")
     row.audio_key, row.audio_meta = pending["key"], {k: v for k, v in pending.items() if k != "key"}
     row.reviewed = False
+    row.reviewed_by, row.reviewed_at = None, None
     await db.commit()
     return {"id": row.id, "reviewed": False}
 
@@ -125,8 +155,12 @@ async def start(message_id: UUID, body: PrayerStart, user: OptionalUser, db: DB,
     seconds = duration_seconds(row)
     audio_url = None
     if row.audio_key:
-        audio_url = await run_in_threadpool(storage(public=True).generate_presigned_url, "get_object",
-            Params={"Bucket": settings().s3_bucket, "Key": row.audio_key}, ExpiresIn=1200)
+        if row.audio_key.startswith("bundled:"):
+            item, _ = candidate_file(row.audio_key.removeprefix("bundled:"))
+            audio_url = candidate_summary(item)["audio_url"]
+        else:
+            audio_url = await run_in_threadpool(storage(public=True).generate_presigned_url, "get_object",
+                Params={"Bucket": settings().s3_bucket, "Key": row.audio_key}, ExpiresIn=1200)
     state = {"message_id": message.id, "identity": identity, "catalog_id": row.id,
              "started": time.time(), "seconds": seconds, "revision": revision(row)}
     await get_redis(request).set(token_key(token), json.dumps(state), ex=int(seconds) + 300)

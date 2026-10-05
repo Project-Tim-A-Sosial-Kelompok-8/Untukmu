@@ -33,7 +33,7 @@ async def readable_public(db, identifier, user):
 
 
 def public_view(row, user=None):
-    return {"id": row.id, "visibility": row.visibility, "public_body": open_public(row.id, row.public_body if row.visibility == "public_anon" else row.ciphertext),
+    return {"id": row.id, "entry_type": row.entry_type, "visibility": row.visibility, "public_body": open_public(row.id, row.public_body if row.visibility == "public_anon" else row.ciphertext),
             "date_label": row.date_label, "mood": row.mood, "tags": row.tags, "created_at": row.created_at,
             "prayer_count": row.prayer_count, "empathy_count": row.empathy_count,
             "is_mine": bool(user and user.id == row.author_id), "constellation_ids": [], "attachment_ids": [],

@@ -81,6 +81,10 @@ for (const viewport of [{ width: 1280, height: 800 }, { width: 390, height: 844 
     await frame.locator('#um-exp [data-act=sort][data-id=doa]').click();
     await frame.locator('#um-exp [data-act=filter]').click();
     await frame.locator('#um-exp [data-act=close]').click();
+    await frame.locator('.um-dock [data-act=doa]').click();
+    await expect(frame.locator('#um-doa')).toHaveClass(/on/);
+    await expect(frame.locator('#um-doa [data-act=hub-trad]')).toHaveCount(7);
+    await frame.locator('#um-doa [data-act=close]').click();
     await frame.locator('.um-dock [data-act=set]').click();
     await frame.locator('#um-set .um-close').click();
     await expectClearLayout(page);

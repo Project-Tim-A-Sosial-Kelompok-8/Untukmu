@@ -7,6 +7,9 @@
     "lint": "npm run lint --workspace apps/web",
     "test": "npm run test --workspace apps/web",
     "build": "npm run build --workspace apps/web",
-    "test:e2e": "npm run test:e2e --workspace apps/web"
+    "test:e2e": "npm run test:e2e --workspace apps/web",
+    "check:buttons": "node scripts/check-buttons.mjs",
+    "check:buttons:repeat": "node scripts/check-buttons.mjs --repeat-each=2",
+    "ui-ux:export": "node scripts/export-ui-ux.mjs"
   }
 }

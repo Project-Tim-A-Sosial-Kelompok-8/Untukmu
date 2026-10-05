@@ -1,119 +1,130 @@
-# Untukmu 
+# Untukmu
 
-Proyek fullstack berdasarkan **Untukmu(3).zip**, PRD Kelompok 8, dan instruksi kerja yang disertakan. Tampilan menggunakan markup, CSS, gambar, tekstur, partikel, dan gerak kamera sumber asli; layar tambahan memakai kelas visual yang sama.
+Untukmu adalah aplikasi untuk menyimpan pesan, kenangan, dan doa bagi seseorang. Setiap tujuan memiliki galaksi sendiri. Kamu juga bisa membaca ucapan publik dan memberi dukungan lewat doa.
 
-**Implementasi Fase 1–5 tersedia dalam paket ini.** Hasil ini adalah kandidat untuk pengujian integrasi, belum rilis produksi. Docker Compose, PostgreSQL/Redis/MinIO sungguhan, perangkat fisik, dan kurasi agama oleh manusia masih membutuhkan pemeriksaan operator. Tidak ada audio doa dalam ZIP asal; tidak ada rekaman pengganti yang dikarang atau diklaim sudah berlisensi.
+## Menjalankan aplikasi
 
-## Isi paket
-
-- `apps/web`: Next.js App Router, TypeScript strict, React, R3F, TanStack Query, Zustand, Framer Motion, Tailwind, enkripsi Argon2id WASM dalam Web Worker.
-- `apps/api`: FastAPI async, SQLAlchemy, Alembic, PostgreSQL, Redis, object storage S3/MinIO, worker moderasi.
-- `apps/web/legacy`: sumber engine, tampilan, foto, dan aset awal. Navigasi galaksi serta antarmuka telah direvisi; penyimpanan prototipe tidak dipakai pada produksi. Berkas `public/engine` dihasilkan dari sumber ini melalui `prepare:engine`.
-- `referensi/Untukmu-asli.zip`: ZIP sumber utuh, termasuk riwayat repositori. **203 berkas sumber dipertahankan.**
-- `docs`: pemetaan implementasi, keputusan arsitektur, hasil pengujian, OpenAPI, SQL PostgreSQL, perbandingan visual, dan audit.
-- `scripts/verify_original.py`: membandingkan setiap berkas sumber berdasarkan SHA-256.
-
-## Menjalankan pada Windows atau Linux
-
-Gunakan Docker Desktop dengan Compose v2 dan Python. Ekstrak ZIP terlebih dahulu; buka terminal pada folder `Untukmu`.
+Pasang **Docker Desktop dengan Compose v2** dan **Python 3.12**. Buka terminal di folder utama proyek, lalu jalankan:
 
 ```sh
 python scripts/init_env.py
-docker compose up --build
+docker compose up -d --build
 ```
 
-Generator `.env` membuat rahasia acak dan menolak menimpa konfigurasi yang sudah ada. Compose menyiapkan basis data, migrasi, bucket privat, worker, API, web, dan gateway.
+Perintah pertama membuat `.env` dengan konfigurasi lokal. Jika `.env` sudah ada, lewati generator dan gunakan konfigurasi tersebut. Perintah kedua menyiapkan database, penyimpanan berkas, API, dan website. Tunggu layanan selesai menyala, lalu buka **http://localhost:3000**.
 
-| Tujuan | Alamat |
+| Yang ingin dibuka | Alamat lokal |
 | --- | --- |
-| Aplikasi | http://localhost:3000 |
+| Aplikasi utama | http://localhost:3000 |
+| Fitur Doa | http://localhost:3000/doa |
+| Panel admin | http://localhost:3000/admin |
 | Dokumentasi API | http://localhost:3000/docs |
-| Kesehatan layanan | http://localhost:3000/api/v1/health |
-| Konsol MinIO lokal | http://localhost:9001 |
+| Pemeriksaan layanan API | http://localhost:3000/api/v1/health |
+| Penyimpanan berkas MinIO | http://localhost:9001 |
 
-Nama database adalah **untukmu**. Kredensial MinIO berasal dari `S3_ACCESS_KEY` dan `S3_SECRET_KEY` dalam `.env`. Jangan mengunggah `.env` ke repositori. Stack ini menggunakan PostgreSQL, bukan MySQL Laragon.
+Untuk menghentikan aplikasi, jalankan `docker compose down`. Data tetap tersimpan selama volume tidak dihapus. Konfigurasi dan kredensial lokal ada di `.env`; berkas ini tidak masuk Git.
 
-```sh
-docker compose logs api worker migrate init-storage web
-docker compose down
-```
+## Cara memakai aplikasi
 
-Perintah `down` tanpa `-v` mempertahankan volume data. Docker Compose belum dijalankan pada lingkungan pengerjaan; jangan menyamakan keberhasilan test SQLite dengan pengujian layanan produksi.
+Pada tampilan galaksi, menu utama berada di **bagian bawah layar**. Tombol **Tulis** dan **Doa** berdampingan di sana.
 
-## Fitur per fase
-
-| Fase | Perilaku yang diimplementasikan |
+| Menu | Kegunaan dan cara pakai |
 | --- | --- |
-| 1 | Pendaftaran/login, sesi JWT dan rotasi cookie HttpOnly, kunci Argon2id/AES-GCM, galaksi, kategori khusus, foto/lampiran terenkripsi, pesan privat, dashboard |
-| 2 | Publikasi anonim setelah moderasi, jelajah dan filter, empati idempoten, laporan, blokir dua arah, antrean serta audit keputusan moderator |
-| 3 | Katalog tujuh tradisi, kurasi teks/sumber, unggah audio dengan atribusi/lisensi, sesi doa berdurasi, hitungan unik, debu doa berdasarkan catatan nyata |
-| 4 | Satu pesan untuk maksimal 10 tujuan, pemulihan penuh tanpa mengganti master key, pencabutan sesi lama, ekspor terenkripsi termasuk media, edit/hapus pesan, tautan terbatas yang dapat dicabut |
-| 5 | PWA dengan cache aset publik, layar luring, akses keyboard/fokus/Escape, semantik dialog, CSP engine, audit akses dan kripto, pengukuran kamera, inventaris aset |
+| **Tulis** | Masuk atau daftar, pilih tujuan lama atau **+ Kenangan baru**, tulis pesan, pilih privasi, lalu simpan. Satu pesan bisa memiliki maksimal sepuluh tujuan. |
+| **Doa** | Menulis doa untuk seseorang atau mendoakan ucapan publik melalui audio yang tersedia maupun hening. Langkahnya dijelaskan di bawah. |
+| **Home / Rumah** | Mengembalikan tampilan ke galaksi utama, Milky Way. Galaksi yang kamu buat tetap tersimpan. |
+| **Peta** | **Kenangan** menampilkan bintang galaksi milikmu; klik untuk menuju galaksinya. **Konstelasi** menampilkan rasi bintang; klik bintang atau garis rasi untuk membaca informasinya. Geser layar untuk melihat bagian langit lain. Nama pribadi tidak ditampilkan mengambang di Peta. |
+| **Jelajah** | Membaca ucapan publik yang sudah disetujui admin, memberi empati, atau memilih ucapan untuk didoakan. |
+| **Ruang Pribadi** | Melihat galaksi, daftar Pesan, Doa tertulis, dan riwayat doa. Gunakan **Kelola pesan / Kelola doa** untuk mengedit atau menghapus tulisan. |
+| **Kunci** | Membuka kembali tulisan privat setelah halaman dimuat ulang. |
+| **Pengaturan** | Mengatur akun, sesi aktif, pemulihan, pemblokiran, dan ekspor data. |
 
-## Alur penggunaan
+Saat mendaftar, gunakan kata sandi minimal **12 karakter** dan simpan kode pemulihan yang ditampilkan. Tulisan privat dienkripsi pada perangkat sebelum dikirim. Tulisan publik anonim dan tautan terbatas menunggu persetujuan admin; foto serta lampiran tetap privat untuk pemilik.
 
-1. Pilih **Tulis → Buat akun**, gunakan kata sandi minimal 12 karakter, simpan kode pemulihan yang ditampilkan sekali.
-2. Tentukan tujuan, kategori, bentuk galaksi, foto opsional, isi pesan, serta lampiran. Tujuan tambahan dapat dipilih pada langkah pertama.
-3. Pesan privat langsung tersimpan terenkripsi. Publik dan tautan terbatas menunggu persetujuan moderator. Foto serta lampiran tetap privat untuk pemilik.
-4. Setelah memuat ulang halaman, buka **Kunci** untuk membaca pesan privat. **Ruang Pribadi** menampilkan data akun dari server.
-5. Pilih **Kelola pesan** pada pesan milik sendiri untuk mengedit, menghapus, atau membuat/mencabut tautan. Tautan baru membatalkan tautan sebelumnya; perubahan isi membutuhkan moderasi ulang.
-6. **Pengaturan → Akun dan keamanan** menyediakan sesi aktif, pemulihan, pemblokiran, dan ekspor. Verifikasi ekspor membaca berkas di perangkat tanpa mengimpor atau mengubah akun.
-7. **Pulihkan akun** pada layar masuk memakai surel dan kode pemulihan. Kode baru ditampilkan setelah pemulihan. Akun yang dibuat pada Fase 1–3 perlu mengaktifkan pemulihan dari sesi login dengan kata sandi lama dan kode yang benar terlebih dahulu.
+### Menulis doa untuk seseorang
 
-## Administrator dan kurator
+1. Buka **Doa → Tulis doa untuk seseorang**, lalu masuk ke akun.
+2. Pilih galaksi milikmu atau **+ Galaksi baru untuk seseorang**. Jika membuat galaksi, isi nama, hubungan/kategori, bentuk, warna, dan ukuran.
+3. Pilih agama atau tradisi, tulis doa, lalu tentukan privasinya.
+4. Tekan **Simpan doa**. Tulisan masuk ke bagian **Doa tertulis** di Ruang Pribadi dan galaksi tujuan.
 
-Daftarkan akun terlebih dahulu. Promosi administrator dilakukan oleh operator melalui terminal, bukan melalui endpoint publik:
+**Satu doa tertulis menambah Doa satu; satu pesan menambah Pesan satu.** Tag `doa` pada pesan biasa tidak mengubah jenisnya. Label galaksi menjumlahkan doa tertulis dan sesi doa yang diterima; kartu galaksi menampilkan keduanya secara terpisah. Mengedit tidak menambah hitungan, sedangkan menghapus mengurangi jenis tulisan yang dihapus.
+
+Doa ini disimpan dalam galaksimu, bukan dikirim langsung ke akun orang lain. Jika diminta membuka kunci, masukkan kata sandi lalu kembali ke formulir. Draf tetap ada selama halaman yang sama masih terbuka; memuat ulang halaman menghapus draf yang belum disimpan.
+
+### Mendoakan ucapan publik
+
+1. Buka **Doa**, atau pilih **Doakan ucapan ini** pada Jelajah.
+2. Pilih ucapan publik dan tradisi: Islam, Kristen, Katolik, Hindu, Buddha, Konghucu, atau Umum.
+3. Pilih jenis doa. Baca keterangan sumber dan ketersediaannya.
+4. Putar audio yang sudah disetujui kurator hingga selesai, atau pilih **Umum → Hening sejenak** selama 30 detik.
+
+Sesi yang selesai dicatat sebagai doa untuk ucapan tersebut. Menutup atau membatalkan sesi tidak menambah hitungan. Mengulang pencatatan tidak menggandakan jumlah pendoa yang sama pada ucapan yang sama.
+
+**Audio untuk semua agama belum lengkap.** Tiga rekaman tersedia untuk ditinjau admin dan belum disetujui otomatis. Pilihan yang belum siap diberi keterangan; hening umum dapat digunakan langsung. Lihat [sumber dan status audio doa](docs/konten-doa/SUMBER.md).
+
+### Filter dan halaman Jelajah
+
+Pilih suasana atau tag, lalu tekan **Terapkan filter**. **Hapus filter** menampilkan hasil tanpa filter. **Terbaru** mengurutkan berdasarkan waktu pembuatan; **Paling didoakan** mengurutkan berdasarkan jumlah pendoa.
+
+Satu halaman memuat maksimal **30 ucapan**. **Sebelumnya** aktif setelah halaman pertama. **Berikutnya** aktif jika masih ada hasil berikutnya. Tombol juga menunggu saat data sedang dimuat; jika gagal, gunakan **Coba lagi**. Bila tidak ada hasil, hapus filter atau tunggu ucapan publik disetujui admin.
+
+## Akun admin
+
+Tidak ada email atau kata sandi admin bawaan. Daftarkan akun melalui aplikasi terlebih dahulu, lalu jalankan perintah ini dari folder utama proyek:
 
 ```sh
-docker compose exec api python -m scripts.make_admin moderator@example.com
+docker compose exec api python -m scripts.make_admin emailanda@example.com
 ```
 
-Buka `/admin` atau tombol **Panel moderasi** pada pengaturan akun. Antrean hanya berisi pesan publik atau tautan terbatas. Pesan privat tidak dapat dibaca moderator. Keputusan menyertakan token revisi sehingga perubahan isi setelah peninjauan ditolak.
+Ganti email contoh dengan email akun yang sudah terdaftar. Masuk ulang, lalu buka **http://localhost:3000/admin** atau **Pengaturan → Akun dan keamanan → Panel moderasi**.
 
-Pada **Kurasi doa dan audio**, pilih entri, isi teks yang telah disetujui kurator, sumber HTTPS, catatan tinjauan, dan durasi. Rekaman memerlukan lisensi dan atribusi. Hanya centang persetujuan setelah isi serta rekaman benar-benar ditinjau. Entri agama dari sumber asli tetap menunggu kurasi; hanya sesi hening umum yang dapat digunakan langsung. Tujuh tradisi tetap tampil seluruhnya.
+Admin dapat meninjau tulisan publik/tautan terbatas dan mengelola katalog serta audio doa. Tulisan privat tidak bisa dibaca admin. **Daftar seluruh akun terdaftar belum tersedia di panel admin**; data akun disimpan pada tabel `users` di database.
 
-## Pengembangan lokal
+Cara meninjau dan mengaktifkan audio ada di [panduan sumber doa](docs/konten-doa/SUMBER.md).
 
-Jalankan PostgreSQL, Redis, dan MinIO:
+## Memakai perubahan terbaru
+
+Setelah kode diperbarui, bangun ulang layanan:
 
 ```sh
-docker compose up -d postgres redis minio
-python -m venv .venv
+docker compose up -d --build
 ```
 
-Aktifkan `.venv\Scripts\Activate.ps1` (PowerShell) atau `source .venv/bin/activate` (Linux/macOS), kemudian:
+Kemudian muat ulang browser. Jika masih menampilkan versi lama, tutup tab lalu buka kembali. Untuk melihat layanan yang bermasalah, jalankan `docker compose logs api worker migrate init-storage web`.
+
+Jika menjalankan frontend tanpa Docker, hentikan proses lama, jalankan `npm run build`, lalu `npm run start --workspace apps/web`. Panduan lengkapnya ada di [pengembangan lokal](docs/panduan/PENGEMBANGAN.md).
+
+## Susunan folder
+
+| Folder | Isi |
+| --- | --- |
+| `apps/web/src` | Halaman, komponen, akun, pesan, doa, dan koneksi frontend ke API. |
+| `apps/web/legacy` | Sumber tampilan galaksi, peta, tata surya, CSS, dan aset gambar. |
+| `apps/web/scripts` | Proses yang menggabungkan sumber tampilan dengan aplikasi React. |
+| `apps/api` | API, data katalog doa, migrasi database, dan tes backend. |
+| `infra` | Konfigurasi akses website melalui Caddy. |
+| `scripts` | Perintah untuk konfigurasi, pengujian, dan pembuatan paket. |
+| `docs/panduan` | Cara mengembangkan, mengonfigurasi, dan memahami alur sistem. |
+| `docs/ui-ux/mobile` | Panduan serta gambar antarmuka ponsel. |
+| `docs/ui-ux/desktop` | Panduan serta gambar antarmuka laptop/desktop. |
+| `docs/pengujian` | Ringkasan pemeriksaan dan laporan hasil tes. |
+| `docs/api` | Salinan skema API dan SQL migrasi untuk referensi. |
+| `docs/konten-doa`, `docs/lisensi`, `docs/referensi` | Sumber doa, catatan lisensi, dan PRD. |
+
+Mulai dari [panduan UI/UX](docs/ui-ux/README.md) atau buka [galeri tampilan mobile dan desktop](docs/ui-ux/index.html). Berkas `apps/web/public/engine` adalah hasil otomatis; edit sumbernya, bukan berkas hasil tersebut. Folder `.next`, `node_modules`, `.venv`, dan `test-results` berisi hasil build, dependensi, atau data uji lokal.
+
+UI/UX lengkap tersedia untuk [mobile](docs/ui-ux/mobile/index.html) dan [desktop](docs/ui-ux/desktop/index.html), termasuk seluruh formulir, panel, keadaan penting, alur penggunaan, serta [komponen dan warna aplikasi](docs/ui-ux/sistem-desain.html). Jalankan `npm run ui-ux:export` untuk memperbarui semuanya dari build web terbaru dengan akun contoh.
+
+## Memeriksa aplikasi
+
+Setelah dependensi frontend dan backend tersedia:
 
 ```sh
-pip install -r apps/api/requirements-dev.lock
-```
-
-Salin `.env` ke `apps/api/.env`. Dari `apps/api`, jalankan:
-
-```sh
-alembic upgrade head
-python -m scripts.init_storage
-uvicorn app.main:app --host 127.0.0.1 --port 8000 --reload
-```
-
-Terminal kedua, dari `apps/api`: `python -m app.worker`. Terminal ketiga, dari akar proyek:
-
-```sh
-npm ci
-npm run dev
-```
-
-Untuk build: `npm run build`. Jalankan dengan `npm run start --workspace apps/web`. Jika alamat object storage berbeda, sediakan `S3_PUBLIC_ENDPOINT` saat build frontend agar CSP mengizinkan endpoint tersebut.
-
-## Pemeriksaan
-
-```sh
-python scripts/verify_original.py
-npm run lint
 npx playwright install chromium
-npm test
-npm run build
+npm run check:buttons
 ```
 
-Dari `apps/api`: `ruff check app tests alembic scripts`, `pytest -q`, dan `alembic upgrade head --sql`. Untuk uji browser lokal terisolasi gunakan `node scripts/test-browser-local.mjs`; jika Python tidak ada di PATH, set `UNTUKMU_TEST_PYTHON` ke Python virtual environment. Skrip ini hanya menggunakan basis data pengujian SQLite/fakeredis, tanpa data contoh dalam aplikasi produksi.
+Perintah ini membuat build terbaru dan memeriksa tombol melalui browser dengan database uji sementara. Gunakan `npm run check:buttons:repeat` untuk mengulang skenario dua kali. Cara menjalankan tes lain dan batas hasilnya dijelaskan dalam [panduan pengujian](docs/pengujian/README.md).
 
-Lihat `docs/STATUS-PENGUJIAN.md` dan `docs/AUDIT-FASE-5.md` untuk cakupan dan batas hasil. Paket belum dipublikasikan. Seluruh pemberitahuan hak cipta asli dipertahankan. Ada ketidaksesuaian penyebutan lisensi dalam sumber; baca `docs/CATATAN-LISENSI.md` dan `THIRD-PARTY-NOTICES.md`.
+PRD tersimpan di [docs/referensi/PRD_Kelompok_8.docx](docs/referensi/PRD_Kelompok_8.docx). Atribusi aset tetap ada di [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md) dan [catatan lisensi](docs/lisensi/CATATAN.md).

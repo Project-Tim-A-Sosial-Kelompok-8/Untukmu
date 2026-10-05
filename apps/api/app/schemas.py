@@ -110,6 +110,7 @@ class Cipher(Strict):
 
 class MessageBase(Strict):
     id: UUID
+    entry_type: Literal["message", "prayer"] = "message"
     constellation_ids: list[UUID] = Field(min_length=1, max_length=10)
 
     @field_validator("constellation_ids")
@@ -238,6 +239,11 @@ class PrayerAudioInput(Strict):
     license: str = Field(min_length=3, max_length=500)
     attribution: str = Field(min_length=3, max_length=1000)
     duration_seconds: int = Field(ge=5, le=900)
+
+
+class PrayerAudioCandidateInput(Strict):
+    candidate_id: str = Field(min_length=1, max_length=100)
+    noncommercial_use: bool = False
 
 
 class RecoveryBegin(Strict):

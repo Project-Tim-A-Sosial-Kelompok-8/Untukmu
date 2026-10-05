@@ -83,6 +83,7 @@ class Message(Base):
     __tablename__ = "messages"
     id: Mapped[str] = mapped_column(String(36), primary_key=True, default=uid)
     author_id: Mapped[str] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"), index=True)
+    entry_type: Mapped[str] = mapped_column(String(20), default="message", server_default="message")
     ciphertext: Mapped[str | None] = mapped_column(Text, nullable=True)
     iv: Mapped[str | None] = mapped_column(String(24), nullable=True)
     kdf_salt: Mapped[str | None] = mapped_column(String(64), nullable=True)
@@ -101,6 +102,7 @@ class Message(Base):
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=now)
     __table_args__ = (
         CheckConstraint("visibility IN ('private','public_anon','unlisted')", name="message_visibility"),
+        CheckConstraint("entry_type IN ('message','prayer')", name="message_entry_type"),
         CheckConstraint(
             "(visibility = 'public_anon' AND public_body IS NOT NULL AND ciphertext IS NULL) OR (visibility IN ('private','unlisted') AND public_body IS NULL AND ciphertext IS NOT NULL AND iv IS NOT NULL)",
             name="message_privacy_boundary",

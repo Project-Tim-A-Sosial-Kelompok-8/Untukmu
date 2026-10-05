@@ -30,12 +30,20 @@ export function enhancePrayers(ui, replace) {
 
   function katalogAwalDoa(current) {
     var L = UM.i18n.getLang();
+    var selected = current.tradisi && UM.doaData.byId(current.tradisi);
+    var preview = selected ? '<section class="um-card" aria-label="Jenis doa"><h3 class="um-h3">Pilihan doa ' + teks(selected.label[L] || selected.label.id) + '</h3>' + selected.entri.map(function(entry) {
+      var available = entry.reviewed && (selected.id === 'umum' || entry.audio);
+      return '<div class="um-item"><div class="um-h3">' + teks(entry.nama[L] || entry.nama.id) + '</div><p class="um-hint">' +
+        (available ? (entry.audio ? 'Audio doa tersedia' : 'Sesi hening tersedia') + ' · ' + (entry.detik || 30) + ' detik' : entry.reviewed ? 'Teks sudah ditinjau. Audio belum tersedia.' : 'Materi sedang menunggu kurasi.') + '</p>' +
+        (entry.reviewed && entry.teks ? '<p>' + teks(entry.teks[L] || entry.teks.id) + '</p>' : '') +
+        '<p class="um-muted">Sumber: ' + teks(entry.sumber || 'Lihat rujukan tradisi') + '</p></div>';
+    }).join('') + '<p class="um-note">Pilih ucapan tujuan di bawah untuk memulai. Doa yang selesai akan dicatat pada ucapan tersebut.</p></section>' : '';
     return '<div class="um-h3">Doa lintas agama dan tradisi</div><p class="um-muted">Pilih tradisi sesuai keyakinanmu, lalu pilih ucapan publik di bawah. Audio dan teks agama tersedia setelah ditinjau kurator. Hening sejenak bisa digunakan tanpa audio.</p><div class="um-trad" aria-label="Pilihan agama atau tradisi">' +
       UM.doaData.tradisi.map(function(tr) {
-        var ready = tr.entri.filter(function(entry) { return entry.reviewed; });
+        var ready = tr.entri.filter(function(entry) { return entry.reviewed && (tr.id === 'umum' || entry.audio); });
         return '<button class="um-chip' + (current.tradisi === tr.id ? ' on' : '') + '" data-act="hub-trad" data-id="' + escAttr(tr.id) + '" aria-pressed="' + (current.tradisi === tr.id) + '">' + teks(tr.label[L] || tr.label.id) + '<span class="um-hint">' +
-          (ready.length ? (ready.some(function(e) { return e.audio; }) ? 'Audio tersedia' : 'Baca / hening tersedia') : 'Menunggu kurasi') + '</span></button>';
-      }).join('') + '</div>' + rujukanDoa(current.tradisi && UM.doaData.byId(current.tradisi)) + '<p class="um-hint">Doa dicatat untuk ucapan yang kamu pilih, setelah audio atau sesi hening selesai. Setiap orang dihitung satu kali per ucapan.</p>';
+          (ready.length ? (ready.some(function(e) { return e.audio; }) ? 'Audio tersedia' : 'Baca / hening tersedia') : 'Menunggu kurasi / audio') + '</span></button>';
+      }).join('') + '</div>' + preview + rujukanDoa(selected) + '<p class="um-hint">Doa dicatat untuk ucapan yang kamu pilih, setelah audio atau sesi hening selesai. Setiap orang dihitung satu kali per ucapan.</p>';
   }
 
   function rujukanDoa(tradition) {
@@ -83,7 +91,8 @@ export function enhancePrayers(ui, replace) {
     var current = doaState, L = UM.i18n.getLang();
     var busy = ['loading', 'audio-ready', 'hening', 'saving'].indexOf(current.fase) >= 0;
     var choosing = ['preparing', 'prepare-error', 'empty', 'target'].indexOf(current.fase) >= 0;
-    var isi = choosing ? katalogAwalDoa(current) : '';
+    var isi = !busy && current.fase !== 'finish-error' ? '<section class="um-card"><h2 class="um-h3">Tulis doa pribadi</h2><p class="um-muted">Pilih seseorang atau kenangan, lalu tulis doa dengan kata-katamu sendiri. Kamu dapat menyimpannya secara privat atau membagikannya.</p><button class="um-btn primary" data-act="write-prayer"' + (current.galaksiId ? ' data-id="' + escAttr(current.galaksiId) + '"' : '') + '>Tulis doa untuk seseorang</button></section>' : '';
+    isi += choosing ? katalogAwalDoa(current) : '';
     isi += '<div class="um-h3" style="margin-top:20px">1. Ucapan yang didoakan</div>';
     if (current.galaksiId) isi += '<p class="um-muted">Tujuan: ' + teks(namaTujuanDoa(current)) + '</p>';
     if (current.fase === 'preparing') {
@@ -93,7 +102,7 @@ export function enhancePrayers(ui, replace) {
         '<button class="um-btn" data-act="reload">Coba muat kembali</button>';
     } else if (current.fase === 'empty') {
       isi += '<p class="um-note">' + (current.hub ? 'Belum ada ucapan publik untuk didoakan pada halaman ini.' : 'Kenangan ini belum memiliki ucapan publik yang disetujui.') + ' Pesan privat dan pesan yang menunggu moderasi tidak bisa didoakan oleh pengunjung.</p>' +
-        '<button class="um-btn" data-act="all-targets">Lihat semua ucapan yang bisa didoakan</button>';
+        (current.hub ? '' : '<p class="um-muted">Pilih ucapan publik dari galaksi lain melalui daftar Doa.</p><button class="um-btn" data-act="all-targets">Pilih ucapan publik lain</button>');
     } else if (current.fase === 'target') {
       isi += '<p class="um-muted">Pilih ucapan berikut sebagai tujuan doamu. Identitas penulis tetap anonim.</p>' +
         '<div class="um-list">' + current.candidates.map(function(p) {
@@ -108,11 +117,11 @@ export function enhancePrayers(ui, replace) {
       isi += '<div class="um-h3" style="margin-top:20px">2. Pilih agama atau tradisi</div>' +
         '<p class="um-muted">Pilih sesuai keyakinanmu. Hening sejenak tersedia untuk semua orang. Teks agama dapat digunakan setelah ditinjau kurator.</p>' +
         '<div class="um-trad" role="group" aria-label="Pilihan agama atau tradisi">' + UM.doaData.tradisi.map(function(tr) {
-          var ready = tr.entri.some(function(e) { return e.reviewed; });
+          var ready = tr.entri.some(function(e) { return e.reviewed && (tr.id === 'umum' || e.audio); });
           var label = tr.id === 'umum' ? 'Umum / hening' : (tr.label[L] || tr.label.id);
           return '<button class="um-chip' + (current.tradisi === tr.id ? ' on' : '') + '" data-act="trad" data-id="' + escAttr(tr.id) +
             '" aria-pressed="' + (current.tradisi === tr.id) + '"' + (busy || current.fase === 'finish-error' ? ' disabled' : '') + '>' +
-            teks(label) + '<span class="um-hint" style="display:block">' + (ready ? 'Tersedia' : 'Menunggu kurasi') + '</span></button>';
+            teks(label) + '<span class="um-hint" style="display:block">' + (ready ? 'Tersedia' : 'Menunggu kurasi / audio') + '</span></button>';
         }).join('') + '</div>';
       var tr = current.tradisi && UM.doaData.byId(current.tradisi);
       if (tr) {
@@ -132,7 +141,7 @@ export function enhancePrayers(ui, replace) {
             (/^https:\/\//.test(entry.source_url || '') ? '<a class="um-muted" href="' + escAttr(entry.source_url) + '" target="_blank" rel="noopener noreferrer">Lihat sumber doa</a>' : '') +
             (entry.teks ? '<div class="tx">' + teks(entry.teks[L] || entry.teks.id) + '</div>' : '') +
             (entry.arti ? '<div class="tx">' + teks(entry.arti[L] || entry.arti.id) + '</div>' : '') +
-            '<p class="um-hint">' + (entry.audio ? 'Dengarkan audio sampai selesai' : 'Baca atau berdoa dalam hening') + ' · ' + (entry.detik || 30) + ' detik</p>';
+            '<p class="um-hint">' + (entry.audio ? 'Dengarkan audio sampai selesai' : (tr.id === 'umum' ? 'Berdoa dalam hening' : 'Audio belum tersedia; sesi doa belum dapat dimulai')) + ' · ' + (entry.detik || 30) + ' detik</p>';
         } else {
           isi += '<p class="um-note warn">Teks doa ini menunggu tinjauan kurator agama terkait dan belum dapat dimulai. Kamu tetap dapat mendoakan dengan kata-katamu sendiri melalui hening sejenak.</p>';
         }
@@ -152,10 +161,10 @@ export function enhancePrayers(ui, replace) {
           '<button class="um-btn primary" data-act="retry-finish">Coba catat doa kembali</button><button class="um-btn" data-act="cancel">Mulai sesi baru</button></div>';
       } else {
         if (current.error) isi += '<p class="um-note warn" role="alert">' + teks(current.error) + '</p>';
-        if (entry && entry.reviewed) isi += '<div class="um-btn-row"><button class="um-btn primary" data-act="start">' + (entry.audio ? 'Mulai dengarkan doa' : 'Mulai berdoa / hening') + '</button></div>';
+        if (entry && entry.reviewed && (tr.id === 'umum' || entry.audio)) isi += '<div class="um-btn-row"><button class="um-btn primary" data-act="start">' + (entry.audio ? 'Mulai dengarkan doa' : 'Mulai berdoa / hening') + '</button></div>';
         else if (!current.tradisi) isi += '<p class="um-hint">Pilih agama atau tradisi di atas untuk melihat pilihan doa.</p>';
         else if (!entry) isi += '<p class="um-hint">Pilih salah satu doa di atas.</p>';
-        if ((!tr || !tr.entri.some(function(e) { return e.reviewed; })) && UM.doaData.entri('umum', 'hening') && UM.doaData.entri('umum', 'hening').reviewed) {
+        if ((!tr || !tr.entri.some(function(e) { return e.reviewed && (tr.id === 'umum' || e.audio); })) && UM.doaData.entri('umum', 'hening') && UM.doaData.entri('umum', 'hening').reviewed) {
           isi += '<div class="um-btn-row"><button class="um-btn" data-act="silence">Pilih hening sejenak (untuk semua)</button></div>';
         }
         isi += '<p class="um-hint">Doa dicatat setelah sesi selesai. Menutup atau membatalkan sesi sebelum selesai tidak menambah hitungan doa.</p>';
@@ -172,7 +181,7 @@ export function enhancePrayers(ui, replace) {
 
   function mulaiDoa() {
     var current = doaState, entry = UM.doaData.entri(current.tradisi, current.entriId);
-    if (current.fase !== 'pick' || !entry || !entry.reviewed || !current.pesanId) return;
+    if (current.fase !== 'pick' || !entry || !entry.reviewed || (current.tradisi !== 'umum' && !entry.audio) || !current.pesanId) return;
     stopDoaTimer();
     var sequence = current.sequence;
     current.fase = 'loading'; current.error = ''; current.token = null; renderDoa();

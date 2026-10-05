@@ -14,11 +14,13 @@ interface GalaxyRecord {
   particle_count: number; created_at: string;
 }
 interface MessageRecord {
+  entry_type: "message" | "prayer";
   visibility: "private" | "public_anon" | "unlisted"; public_body: string | null; is_mine: boolean; moderation_status: string; empathy_count: number;
   id: string; constellation_ids: string[]; payload: Cipher; date_label: string | null;
   mood: string | null; tags: string[]; created_at: string; prayer_count: number; attachment_ids: string[];
 }
 export interface Message {
+  jenis: "pesan" | "doa";
   publicBody: string | null; moderationStatus: string; empathyCount: number;
   id: string; galaksiId: string; galaksiIds: string[]; privasi: "privat" | "publik" | "unlisted"; isi: Cipher; tanggal: string | null;
   mood: string | null; tag: string[]; dibuat: number; sendiri: boolean; piringan: true;
@@ -75,7 +77,7 @@ async function galaxy(row: GalaxyRecord): Promise<Galaxy> {
     foto: row.visual_ref ? await photoURL(row.visual_ref) : null, dibuat: Date.parse(row.created_at), sendiri: true, seed: false };
 }
 function message(row: MessageRecord): Message {
-  return { id: row.id, galaksiId: row.constellation_ids[0] || "", galaksiIds: row.constellation_ids, privasi: row.visibility === "public_anon" ? "publik" : row.visibility === "unlisted" ? "unlisted" : "privat", isi: row.payload,
+  return { jenis: row.entry_type === "prayer" ? "doa" : "pesan", id: row.id, galaksiId: row.constellation_ids[0] || "", galaksiIds: row.constellation_ids, privasi: row.visibility === "public_anon" ? "publik" : row.visibility === "unlisted" ? "unlisted" : "privat", isi: row.payload,
     tanggal: row.date_label, mood: row.mood, tag: row.tags, dibuat: Date.parse(row.created_at), sendiri: row.is_mine !== false,
     piringan: true, seed: false, pendoa: { total: row.prayer_count, tradisi: {} }, attachmentIds: row.attachment_ids, publicBody: row.public_body, moderationStatus: row.moderation_status, empathyCount: row.empathy_count };
 }
@@ -108,7 +110,7 @@ async function listPesan(galaksiId?: string) {
   await ready(); if (!currentUser()) return [];
   return (await allPages<MessageRecord>(galaksiId ? `/constellations/${galaksiId}/messages` : "/dashboard/messages")).map(message);
 }
-async function simpanPesan(input: { galaksiId: string; galaksiIds?: string[]; teks: string; privasi?: string; tanggal?: string; mood?: string; tag?: string[]; attachments?: File[] }) {
+async function simpanPesan(input: { galaksiId: string; galaksiIds?: string[]; teks: string; jenis?: "pesan" | "doa"; privasi?: string; tanggal?: string; mood?: string; tag?: string[]; attachments?: File[] }) {
   requireUser();
   if (!input.teks.trim() || input.teks.length > 40000) throw new Error("Isi pesan wajib 1–40.000 karakter.");
   const id = crypto.randomUUID();
@@ -118,7 +120,7 @@ async function simpanPesan(input: { galaksiId: string; galaksiIds?: string[]; te
   const attachmentIds = [];
   for (const file of input.attachments || []) attachmentIds.push(await upload(file));
   const row = await api<MessageRecord>("/messages", { method: "POST", body: JSON.stringify({
-    id, constellation_ids: [...new Set(input.galaksiIds || [input.galaksiId])], visibility: input.privasi === "unlisted" ? "unlisted" : isPublic ? "public_anon" : "private", payload,
+    id, entry_type: input.jenis === "doa" ? "prayer" : "message", constellation_ids: [...new Set(input.galaksiIds || [input.galaksiId])], visibility: input.privasi === "unlisted" ? "unlisted" : isPublic ? "public_anon" : "private", payload,
     public_body: isPublic ? input.teks : undefined, turnstile_token: challenge,
     date_label: input.tanggal || null, mood: input.mood || null, tags: input.tag || [], attachment_ids: attachmentIds,
   }) });
@@ -142,8 +144,8 @@ async function listDoa(galaksiId?: string) {
 }
 async function stats() {
   requireUser();
-  const result = await cached<{ constellations: number; messages: number; prayers_received: number; prayers_given: number; by_visibility: Record<string, number> }>("/dashboard/summary");
-  return { galaksi: result.constellations, pesan: result.messages, pesanMasuk: 0, doaDiterima: result.prayers_received,
+  const result = await cached<{ constellations: number; messages: number; written_prayers: number; prayers_received: number; prayers_given: number; by_visibility: Record<string, number> }>("/dashboard/summary");
+  return { galaksi: result.constellations, pesan: result.messages, doaTertulis: result.written_prayers, pesanMasuk: 0, doaDiterima: result.prayers_received,
     doaDiberikan: result.prayers_given, privat: result.by_visibility.private || 0, publik: result.by_visibility.public_anon || 0, unlisted: result.by_visibility.unlisted || 0 };
 }
 export const store = {

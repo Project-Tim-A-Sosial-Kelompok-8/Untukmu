@@ -3,7 +3,7 @@
  * Kubah langit milik engine dipakai sebagai layar navigasi. Dua lapisan:
  *
  *   Astronomi  → 25 rasi bintang asli (SKY_CONS), tidak diubah sama sekali
- *   Kenangan   → satu penanda per galaksi orang, berlabel nama + jumlah
+ *   Kenangan   → satu bintang yang dapat dipilih per galaksi orang
  *
  * Mengklik penanda tidak membuka kartu di sini, melainkan menutup Peta dan
  * menerbangkan kamera ke galaksi itu di ladang 3D (UM.galaksi). Jadi Peta
@@ -24,6 +24,7 @@ UM.sky = (function () {
 
   var host = null;
   var tmpV = null;
+  var kaitTerpasang = false;
 
   function three() { return typeof THREE !== 'undefined' ? THREE : null; }
   function engineSiap() {
@@ -68,6 +69,15 @@ UM.sky = (function () {
   function warnaAman(c) { return /^#[0-9a-f]{6}$/i.test(c || '') ? c : '#ffd9a0'; }
 
   function bangunPenanda(item) {
+    var T = three(), geometry = new T.BufferGeometry();
+    var position = item.dir.clone().multiplyScalar(SKY_R * 0.96);
+    geometry.setAttribute('position', new T.Float32BufferAttribute([position.x, position.y, position.z], 3));
+    item.marker = new T.Points(geometry, new T.PointsMaterial({
+      color: warnaAman(item.g.warna), size: 22, sizeAttenuation: false,
+      map: GLOW_TEX, transparent: true, depthWrite: false, blending: T.AdditiveBlending
+    }));
+    item.marker.name = 'kenangan-' + item.g.id;
+    skyScene.add(item.marker);
     var el = document.createElement('button');
     el.type = 'button';
     el.className = 'um-plabel';
@@ -85,7 +95,7 @@ UM.sky = (function () {
     if (!item.el) return;
     item.el.innerHTML =
       '<b><span class="dot" style="background:' + warnaAman(item.g.warna) + '"></span>' + esc(item.g.nama) + '</b>' +
-      '<small>' + item.nPesan + ' ' + esc(UM.i18n.t('commonPesan')) + ' · ' + item.nBatu + ' ' + esc(UM.i18n.t('commonDoa')) + '</small>';
+      '<small>' + item.nPesan + ' ' + esc(UM.i18n.t('commonPesan')) + ' · ' + (item.nDoaTertulis + item.nBatu) + ' ' + esc(UM.i18n.t('commonDoa')) + '</small>';
     item.el.title = item.g.nama;
     item.el.setAttribute('aria-label', 'Kunjungi kenangan ' + item.g.nama);
   }
@@ -95,19 +105,14 @@ UM.sky = (function () {
   function perbaruiLabel() {
     if (!host) return;
     var tampil = typeof viewMode !== 'undefined' && viewMode === 'sky' && state.mode === 'kenangan';
-    host.style.display = tampil ? '' : 'none';
+    host.style.display = 'none';
     if (!tampil) return;
     skyCamera.updateMatrixWorld();
     for (var i = 0; i < state.daftar.length; i++) {
       var item = state.daftar[i];
       tmpV.copy(item.dir).multiplyScalar(SKY_R * 0.96).project(skyCamera);
       var vis = tmpV.z > -1 && tmpV.z < 1 && Math.abs(tmpV.x) < 1 && Math.abs(tmpV.y) < 1;
-      item.el.style.display = vis ? '' : 'none'; item.terlihat = vis;
-      if (vis) {
-        var margin = item.el.offsetWidth / 2 + 12;
-        item.el.style.left = Math.max(margin, Math.min(window.innerWidth - margin, (tmpV.x * 0.5 + 0.5) * window.innerWidth)) + 'px';
-        item.el.style.top = Math.max(item.el.offsetHeight / 2 + 12, Math.min(window.innerHeight - item.el.offsetHeight / 2 - 12, (-tmpV.y * 0.5 + 0.5) * window.innerHeight)) + 'px';
-      }
+      item.el.style.display = 'none'; item.terlihat = vis;
     }
   }
 
@@ -119,26 +124,27 @@ UM.sky = (function () {
       var galaksi = r[0], pesan = r[1];
       pastikanHost();
 
-      /* Dihitung dengan pembagian yang sama seperti di ladang galaksi:
-           piringan → pesan yang kamu tulis sendiri
-           sabuk    → pesan dari orang lain
-         Tanpa ini, label Peta akan menampilkan 38 pesan untuk Ibu (termasuk
-         butir sabuk) sementara kartu galaksinya menampilkan 4. */
-      var nPesan = {}, nBatu = {};
+      // Use the same entry types and all destinations as the galaxy labels.
+      var catatanPer = {};
       pesan.forEach(function (p) {
-        if (p.sendiri === false) nBatu[p.galaksiId] = (nBatu[p.galaksiId] || 0) + 1;
-        else nPesan[p.galaksiId] = (nPesan[p.galaksiId] || 0) + 1;
+        if (p.sendiri === false && !p.piringan) return;
+        var tujuan = p.galaksiIds && p.galaksiIds.length ? p.galaksiIds : [p.galaksiId];
+        tujuan.forEach(function(id) { if (id) (catatanPer[id] = catatanPer[id] || []).push(p); });
       });
 
       // penanda lama dibuang; jumlah galaksi sedikit sehingga membangun ulang
       // seluruhnya lebih sederhana daripada mencocokkan satu per satu
-      state.daftar.forEach(function (item) { if (item.el && item.el.parentNode) item.el.parentNode.removeChild(item.el); });
+      state.daftar.forEach(function (item) {
+        if (item.el && item.el.parentNode) item.el.parentNode.removeChild(item.el);
+        if (item.marker) { skyScene.remove(item.marker); item.marker.geometry.dispose(); item.marker.material.dispose(); }
+      });
       state.daftar = [];
 
       galaksi.forEach(function (g) {
+        var jumlah = UM.galaksi.hitungCatatan(catatanPer[g.id]);
         var item = {
           g: g, dir: arahDariId(g.id), terlihat: false,
-          nPesan: nPesan[g.id] || 0, nBatu: nBatu[g.id] || 0
+          nPesan: jumlah.pesan, nDoaTertulis: jumlah.doaTertulis, nBatu: jumlah.doaDiterima
         };
         state.daftar.push(item);
         bangunPenanda(item);
@@ -154,6 +160,7 @@ UM.sky = (function () {
   /* ── mode: astronomi ↔ kenangan ──────────────────────────────────────────── */
 
   function setMode(mode) {
+    if (typeof clearSkySelection === 'function') clearSkySelection();
     state.mode = (mode === 'astronomi') ? 'astronomi' : 'kenangan';
     document.body.setAttribute('data-sky-mode', state.mode);
     terapkanMode();
@@ -170,14 +177,17 @@ UM.sky = (function () {
     if (typeof SKY_CONS !== 'undefined') {
       SKY_CONS.forEach(function (c) {
         c.lineMat.visible = !kenangan;
-        c.starMat.visible = !kenangan;
+        // Keep the original stars in both layers; only constellation lines
+        // and deep-sky galaxy markers belong to the astronomy layer.
+        c.starMat.visible = true;
         // label engine memakai cache `shown`; dipaksa salah supaya frame
         // berikutnya menghitung ulang tampil/sembunyi dengan benar
         c.shown = false;
       });
     }
     if (typeof SKY_GAL !== 'undefined') SKY_GAL.forEach(function (g) { g.sprite.visible = !kenangan; g.shown = false; });
-    if (host) host.style.display = (typeof viewMode !== 'undefined' && viewMode === 'sky' && kenangan) ? '' : 'none';
+    state.daftar.forEach(function(item) { item.marker.visible = kenangan; });
+    if (host) host.style.display = 'none';
     if (document.body) document.body.classList.toggle('um-sky', typeof viewMode !== 'undefined' && viewMode === 'sky');
   }
 
@@ -206,11 +216,54 @@ UM.sky = (function () {
     if (host) host.style.display = 'none';
   }
 
+  // Pick stars/lines at their projected world positions. Hidden DOM labels
+  // are never used as hit targets, so orbiting the camera moves each target
+  // together with the geometry, rather than clamping a name to the edge.
+  function pilihDiKanvas(e) {
+    if (typeof viewMode === 'undefined' || viewMode !== 'sky' || clickWasDrag(e)) return;
+    var rect = renderer.domElement.getBoundingClientRect(), best = null, distance = 18 * 18;
+    skyCamera.updateMatrixWorld();
+    function project(dir, radius) {
+      var v = dir.clone().multiplyScalar(radius).project(skyCamera);
+      if (v.z < -1 || v.z > 1) return null;
+      return { x: rect.left + (v.x * 0.5 + 0.5) * rect.width, y: rect.top + (-v.y * 0.5 + 0.5) * rect.height };
+    }
+    function candidate(point, target) {
+      if (!point) return;
+      var d = Math.pow(point.x - e.clientX, 2) + Math.pow(point.y - e.clientY, 2);
+      if (d < distance) { distance = d; best = target; }
+    }
+    if (state.mode === 'kenangan') {
+      state.daftar.forEach(function(item) { candidate(project(item.dir, SKY_R * 0.96), { galaxy: item.g.id }); });
+    } else {
+      SKY_CONS.forEach(function(c, index) {
+        var stars = c.z.stars.map(function(s) { return project(raDecDir(s[0], s[1]), SKY_R); });
+        stars.forEach(function(p) { candidate(p, { constellation: index }); });
+        c.z.lines.forEach(function(line) {
+          var a = stars[line[0]], b = stars[line[1]];
+          if (!a || !b) return;
+          var dx = b.x - a.x, dy = b.y - a.y, length = dx * dx + dy * dy;
+          var t = length ? Math.max(0, Math.min(1, ((e.clientX - a.x) * dx + (e.clientY - a.y) * dy) / length)) : 0;
+          candidate({ x: a.x + t * dx, y: a.y + t * dy }, { constellation: index });
+        });
+      });
+      SKY_GAL.forEach(function(g, index) { candidate(project(g.dir, SKY_R), { deepSky: index }); });
+    }
+    if (!best) return;
+    e.stopPropagation();
+    if (best.galaxy) terbangKeGalaksi(best.galaxy);
+    else if (best.constellation != null) selectSky(best.constellation);
+    else selectSkyGal(best.deepSky);
+  }
+
   function pasangKait() {
+    if (kaitTerpasang) return true;
     var T = three();
     if (!T || typeof skyScene === 'undefined' || !skyScene) return false;
     tmpV = new T.Vector3();
     pastikanHost();
+    renderer.domElement.addEventListener('click', pilihDiKanvas);
+    kaitTerpasang = true;
 
     // label engine tetap dijalankan; kita menambahkan penanda Peta di atasnya,
     // sekaligus memakai panggilan per frame ini untuk memproyeksikan penanda

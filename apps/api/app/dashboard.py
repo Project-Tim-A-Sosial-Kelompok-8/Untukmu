@@ -39,7 +39,9 @@ async def summary(user: CurrentUser, db: DB, request: Request):
     cache = get_redis(request)
     cached = await cache.get(f"summary:{user.id}")
     if cached:
-        return json.loads(cached)
+        previous = json.loads(cached)
+        if "written_prayers" in previous:
+            return previous
     galaxies = await db.scalar(select(func.count()).select_from(Constellation).where(Constellation.owner_id == user.id))
     counts = dict(
         (
@@ -53,11 +55,16 @@ async def summary(user: CurrentUser, db: DB, request: Request):
     prayer_count = await db.scalar(
         select(func.coalesce(func.sum(Message.prayer_count), 0)).where(Message.author_id == user.id)
     )
+    written_prayers = await db.scalar(
+        select(func.count()).select_from(Message).where(Message.author_id == user.id, Message.entry_type == "prayer")
+    )
     given = await db.scalar(select(func.count()).select_from(Prayer).where(Prayer.visitor_hash == visitor_identity(request, user)))
     result = {
         "constellations": galaxies,
         "targets": galaxies,
-        "messages": sum(counts.values()),
+        "messages": sum(counts.values()) - written_prayers,
+        "written_prayers": written_prayers,
+        "entries": sum(counts.values()),
         "prayers_received": prayer_count,
         "prayers_given": given,
         "by_visibility": counts,

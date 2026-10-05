@@ -1,0 +1,3065 @@
+{
+  "description": "SHA-256 of packaged files, excluding this manifest itself",
+  "files": [
+    {
+      "path": ".dockerignore",
+      "bytes": 176,
+      "sha256": "4cd07e17b04d25015d8f08131387506a0fc1d6a3f9c5eea8a1ca9017132ba649"
+    },
+    {
+      "path": ".env.example",
+      "bytes": 646,
+      "sha256": "e02e6f4de90431ac48bf0dd5932161c405af5321f5cd24a934217175f5464e85"
+    },
+    {
+      "path": ".github/workflows/ci.yml",
+      "bytes": 1765,
+      "sha256": "0647882a92e7e82643dafaa94a40485dd632ae31dc2ec9c6a5b64f77d2acd4b1"
+    },
+    {
+      "path": ".gitignore",
+      "bytes": 170,
+      "sha256": "dce2be60b32dca63dd29d707aaa6cd517db7f3bae5e03d880f865873d1ca347f"
+    },
+    {
+      "path": "apps/api/alembic/catalog-v1.json",
+      "bytes": 10181,
+      "sha256": "c2cb89b289551b71dade1873af1a2cf5e342031c492c3bb4f7ebe44645e231a3"
+    },
+    {
+      "path": "apps/api/alembic/env.py",
+      "bytes": 1249,
+      "sha256": "9371b9487965358661010fe6388fe391c8591b17eac213a85a3e9c33dc9fa966"
+    },
+    {
+      "path": "apps/api/alembic/versions/0001_foundation.py",
+      "bytes": 10718,
+      "sha256": "ef574000dfcb4a3c06e2067887e9dbcae60f46fb38fbdb692a0e155bf468f10d"
+    },
+    {
+      "path": "apps/api/alembic/versions/0002_social.py",
+      "bytes": 1944,
+      "sha256": "e62f1b0266a98e5910be043d9ff05cb6d67dad88300f3804262666dc31641812"
+    },
+    {
+      "path": "apps/api/alembic/versions/0003_prayers.py",
+      "bytes": 1876,
+      "sha256": "de1b7b9b4f3fbd615d6047b10c70a7528d48061e25784c036658540ddd03f63d"
+    },
+    {
+      "path": "apps/api/alembic/versions/0004_recovery.py",
+      "bytes": 382,
+      "sha256": "1b5c00a61c5f666ba5b83904cae30e75104142806704af6cbe1ba47025cc5f39"
+    },
+    {
+      "path": "apps/api/alembic/versions/0005_written_prayers.py",
+      "bytes": 1294,
+      "sha256": "abf5d3b06ed7a88827bce8b0867e445f2d7e0d7d30e7ffc67c206419858aaa09"
+    },
+    {
+      "path": "apps/api/alembic.ini",
+      "bytes": 528,
+      "sha256": "ad5362b8c20d0d381a99202dddfec3733576e4cbab2d35257dd3d79ddaa47893"
+    },
+    {
+      "path": "apps/api/app/__init__.py",
+      "bytes": 1,
+      "sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+    },
+    {
+      "path": "apps/api/app/auth.py",
+      "bytes": 7350,
+      "sha256": "0af4d3f47319fe528c0e04fe4f0221137526ca615793644c57c7c7a8b0ce8278"
+    },
+    {
+      "path": "apps/api/app/config.py",
+      "bytes": 2542,
+      "sha256": "b3401d32cfd19e4892632d3e2fe20fbbedc2976fde0b07b0b67ac609f8d770ef"
+    },
+    {
+      "path": "apps/api/app/content.py",
+      "bytes": 10152,
+      "sha256": "e8d24b5514451df698fe02a0a778bd74b6e60bf0c9d3d0b02c8c03ae63e6e9a8"
+    },
+    {
+      "path": "apps/api/app/dashboard.py",
+      "bytes": 2964,
+      "sha256": "cc957524c0dc891e4cad83a5bf93cc804b64b0e1cb5cbf84370e4aeeec44c073"
+    },
+    {
+      "path": "apps/api/app/db.py",
+      "bytes": 325,
+      "sha256": "df1443d3d29947fb82edcf3fc3521ca951a5ee68b2528205f29929ba8883767e"
+    },
+    {
+      "path": "apps/api/app/export.py",
+      "bytes": 1065,
+      "sha256": "6373b469f82617ece84fb60215c0295fb0f8062c7a9e96a16b7fdb4d5b3c3bed"
+    },
+    {
+      "path": "apps/api/app/main.py",
+      "bytes": 3133,
+      "sha256": "fba7ca1c74b0147f260293fceb8cdb919f02415678b49361e1e4cc302d98bf8f"
+    },
+    {
+      "path": "apps/api/app/models.py",
+      "bytes": 10496,
+      "sha256": "49366436e67cc58d22b8b4c2df6fb4a5aa6e2ebada469cbe154bc6f296b3a557"
+    },
+    {
+      "path": "apps/api/app/prayer_audio.py",
+      "bytes": 1082,
+      "sha256": "b31ad265ed327772481f3756c14769d3c2d47c643ea6abdc054a8bcb26ecfb95"
+    },
+    {
+      "path": "apps/api/app/prayer_catalog.py",
+      "bytes": 822,
+      "sha256": "47d0993e8308482f3c6597f0819b805cc825a6c37de7aa7823fc5c503dc0df6e"
+    },
+    {
+      "path": "apps/api/app/prayers.py",
+      "bytes": 10825,
+      "sha256": "fcb512a99673f165f6a062b23d57d9248cc22d9dafa9548deea36bad541b9746"
+    },
+    {
+      "path": "apps/api/app/public_content.py",
+      "bytes": 1110,
+      "sha256": "b32aedbf4c16083c7aec36d9a49600d218ac243352e74a0a4ce06452913403bc"
+    },
+    {
+      "path": "apps/api/app/recovery.py",
+      "bytes": 2574,
+      "sha256": "81ebcfb36778b3569b59fab08808eafcac6f0f765ded57e0243cb48a2e8d5670"
+    },
+    {
+      "path": "apps/api/app/schemas.py",
+      "bytes": 8530,
+      "sha256": "b1901a11570b8785dcaa3c5090eeeb1c94bfa5d7c925215e5d071ed4be83b775"
+    },
+    {
+      "path": "apps/api/app/security.py",
+      "bytes": 7435,
+      "sha256": "2eac3e0027cdb77e503993f0b6e6e8eb5864d1c7c9e5164205f0c6afbab348d2"
+    },
+    {
+      "path": "apps/api/app/sharing.py",
+      "bytes": 1820,
+      "sha256": "ded671bfd019d4db63625f1939f04e75cc9296abba4c3e2de7251b5ff61a7398"
+    },
+    {
+      "path": "apps/api/app/social.py",
+      "bytes": 8407,
+      "sha256": "f3e79d721cb2de8caf0969b5c3fba8aefcc8025662ec11ea80cdbdbdecd1a987"
+    },
+    {
+      "path": "apps/api/app/uploads.py",
+      "bytes": 3404,
+      "sha256": "bef89a3b044a81b6cf6efc3b474dda51fee9f70bb3036e8ec43cd8df3c077973"
+    },
+    {
+      "path": "apps/api/app/worker.py",
+      "bytes": 1791,
+      "sha256": "83da2ae13fc04d575e64c095af58be9d954255d830448ed95a2b10c3273af62e"
+    },
+    {
+      "path": "apps/api/data/prayer-audio/gayatri.ogg",
+      "bytes": 988195,
+      "sha256": "5ee305bed7630cc4a98803f3d00ecb3b913d643dde929209e4bc1af2efa258c3"
+    },
+    {
+      "path": "apps/api/data/prayer-audio/karaniya-metta.mp3",
+      "bytes": 3051648,
+      "sha256": "34aff0c63bef2d68cb4f26b0bd8c47b14e33f34eb716a8e748466b5547f2ad14"
+    },
+    {
+      "path": "apps/api/data/prayer-audio/NOTICE.md",
+      "bytes": 1437,
+      "sha256": "32c305e1ec81d26cc10fbd1edb36a309de2cc0ac4c8c383f73ace181a46e8b15"
+    },
+    {
+      "path": "apps/api/data/prayer-audio/pater-noster-latin.ogg",
+      "bytes": 256327,
+      "sha256": "32e8c41c0a88aa4d5bec2a51e73d3db1e526f09528fc57a40c9ea33ddda711ce"
+    },
+    {
+      "path": "apps/api/data/prayer-audio-candidates.json",
+      "bytes": 3364,
+      "sha256": "e6bd704178a06849a6cf6bfe26e17eb014ac7c7ae106f1e72a1d8c6947a1573b"
+    },
+    {
+      "path": "apps/api/data/prayer-sources.json",
+      "bytes": 3720,
+      "sha256": "07303621bc52f8d27787411eb71b94b25ad430117ba51ae6b7fda15b930a34ac"
+    },
+    {
+      "path": "apps/api/data/prayers-v1.json",
+      "bytes": 10181,
+      "sha256": "c2cb89b289551b71dade1873af1a2cf5e342031c492c3bb4f7ebe44645e231a3"
+    },
+    {
+      "path": "apps/api/Dockerfile",
+      "bytes": 521,
+      "sha256": "4e5edc2471d0594cd58db5436782d59e877ae2864c6bcf479b291e5581098890"
+    },
+    {
+      "path": "apps/api/pyproject.toml",
+      "bytes": 204,
+      "sha256": "0eb60c11098f3a2fbe9b97c596b8da3b6c63480607ceecdb2b8656f47cd2a1da"
+    },
+    {
+      "path": "apps/api/requirements-dev.lock",
+      "bytes": 3172,
+      "sha256": "c35585fb6c32190fdc29abed0f0b3d4599c56374a60410a2f33e6fd09385a401"
+    },
+    {
+      "path": "apps/api/requirements-dev.txt",
+      "bytes": 112,
+      "sha256": "57edd39ed3be2d65ec80222dc1cffbbc85392fbaa0ab2e8b832231c99c8683e9"
+    },
+    {
+      "path": "apps/api/requirements.lock",
+      "bytes": 2698,
+      "sha256": "e93f697ea40133d0102ba3b2cdca687f4f6638111e1cf6c968b1c6c9facf16d0"
+    },
+    {
+      "path": "apps/api/requirements.txt",
+      "bytes": 257,
+      "sha256": "7ab91744652b73c6763a16baefda9e54aafcc7b9fa39524f47608d86f5f12b82"
+    },
+    {
+      "path": "apps/api/scripts/init_storage.py",
+      "bytes": 793,
+      "sha256": "c608d606f8e7517adfe9dc17c6954ca7615fa809f003857ce7bce5beb0faa43b"
+    },
+    {
+      "path": "apps/api/scripts/make_admin.py",
+      "bytes": 733,
+      "sha256": "c415871b43f72c9d146544b4c8d1b6f7000a79b106d1b90ae29c7cada5cbcced"
+    },
+    {
+      "path": "apps/api/tests/__init__.py",
+      "bytes": 1,
+      "sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+    },
+    {
+      "path": "apps/api/tests/browser_server.py",
+      "bytes": 1359,
+      "sha256": "6fd9b23d260d5960bf3b20a5988cca8ae5de49b62606a0269fa4aa109a901afb"
+    },
+    {
+      "path": "apps/api/tests/conftest.py",
+      "bytes": 3279,
+      "sha256": "091ab99c1a62158553d95f61034f06ac8cda4ceed23b4603ed63cdcee1ec8447"
+    },
+    {
+      "path": "apps/api/tests/promote_browser_admin.py",
+      "bytes": 683,
+      "sha256": "2fe69c1df337bcb064b0b7e43b61908ba9c94853cda3c3273eeb66356b82a39f"
+    },
+    {
+      "path": "apps/api/tests/seed_ui_ux.py",
+      "bytes": 3137,
+      "sha256": "9b119a3162a4ef4b42c031bf37ee71c7d8d669183983afffda942dd4eca21776"
+    },
+    {
+      "path": "apps/api/tests/test_advanced.py",
+      "bytes": 5550,
+      "sha256": "34111d31679c85adb53d0a0c126f90bbfee0342810f88e55c30d8d3e8308e19f"
+    },
+    {
+      "path": "apps/api/tests/test_foundation.py",
+      "bytes": 10072,
+      "sha256": "77652d3cdc21287ff5483ef3ac32a04de8387c507723654d9031c042600cd1ac"
+    },
+    {
+      "path": "apps/api/tests/test_prayers.py",
+      "bytes": 9813,
+      "sha256": "d6ef7afb9fcd1979893a4180b207f6c67f85bb589a38678cc817d68bafa8052d"
+    },
+    {
+      "path": "apps/api/tests/test_security_release.py",
+      "bytes": 2876,
+      "sha256": "f318e4a8442a19359b635738c1d56cead23f2e9282f5de9d7c11c4c5832f26a3"
+    },
+    {
+      "path": "apps/api/tests/test_social.py",
+      "bytes": 6866,
+      "sha256": "3b657172ace8d296e4bab237cb2ee233057c72daeda49a6e32920199ef7163ee"
+    },
+    {
+      "path": "apps/api/tests/test_written_prayers.py",
+      "bytes": 3885,
+      "sha256": "d0723305b2bd5be772db6cf4cbcee6d25405eeadc013d7a2f06c442b183ee56d"
+    },
+    {
+      "path": "apps/web/Dockerfile",
+      "bytes": 878,
+      "sha256": "19d0d30232ff08f44d7300ca26cf6fa0b49918210b2c20030397a17dd9004a9c"
+    },
+    {
+      "path": "apps/web/eslint.config.mjs",
+      "bytes": 292,
+      "sha256": "bdd0503e856b0a5380ee05c01b53e72e1453fa740351444d96f25eb4c88f3578"
+    },
+    {
+      "path": "apps/web/legacy/.github/workflows/deploy-pages.yml",
+      "bytes": 724,
+      "sha256": "dd139fb93bb34b8ad6713164cee9107e8b0e329fa7901f8cae182ffd9c8bf45c"
+    },
+    {
+      "path": "apps/web/legacy/.gitignore",
+      "bytes": 1497,
+      "sha256": "b115e6108252e665f8e5ba0d8fe03877653dbc88a3f0a6b033baf960bf444278"
+    },
+    {
+      "path": "apps/web/legacy/audio/README.md",
+      "bytes": 398,
+      "sha256": "48eccb2c9de6169cfdae251fa7adc406a1673c360bd4c34cab020ee6c03c791c"
+    },
+    {
+      "path": "apps/web/legacy/dev.bat",
+      "bytes": 223,
+      "sha256": "0309b6ca289b81ba06df2771ac1ce9686269cf11ec335ce085a6c16318988f47"
+    },
+    {
+      "path": "apps/web/legacy/dev.command",
+      "bytes": 325,
+      "sha256": "037720936a6f2d9f75f8fbc2d66a8bb49ef76b8d800814360282682f0ad669b1"
+    },
+    {
+      "path": "apps/web/legacy/images/andromeda.jpg",
+      "bytes": 243837,
+      "sha256": "9c970c675fc401fd3e76c37ac3e7c4c8521a73772b282afe40bed0899cd95f51"
+    },
+    {
+      "path": "apps/web/legacy/images/antares.jpg",
+      "bytes": 39471,
+      "sha256": "ea7f08e10d00762282cb1e132cc6bcc03bd6dc5249607c8b8850e82e5501e470"
+    },
+    {
+      "path": "apps/web/legacy/images/betelgeuse.jpg",
+      "bytes": 44079,
+      "sha256": "60b21ec2e28df4fbf3d3c3464e86ddd19f1dcac3311acadf655416511c806bee"
+    },
+    {
+      "path": "apps/web/legacy/images/carina-nebula.jpg",
+      "bytes": 205682,
+      "sha256": "bc367181622712a118d4b1d6e367c49779b0af4753bce6d19c8a09765f38921d"
+    },
+    {
+      "path": "apps/web/legacy/images/cen-a.jpg",
+      "bytes": 375375,
+      "sha256": "5cc5527b1e2a2ca4dcbc88905b53fd50c5f4999fdef9ae95d5c3e8dfb62d751a"
+    },
+    {
+      "path": "apps/web/legacy/images/cena-jet.jpg",
+      "bytes": 337588,
+      "sha256": "ddf67c8ff560fe9cc4a34d4c78cd58dbbe652921bdfcc0085690045b01094257"
+    },
+    {
+      "path": "apps/web/legacy/images/cena-plate.png",
+      "bytes": 902735,
+      "sha256": "43a031ee9fba3061d7db811af5e86e7bd00c28a1250dd7c5b73058523d6786ff"
+    },
+    {
+      "path": "apps/web/legacy/images/cena-sfr.jpg",
+      "bytes": 384289,
+      "sha256": "ac8da29e0d566ec70a615f48a15e7c5316447bc24879ca5b9f8ab786615c289d"
+    },
+    {
+      "path": "apps/web/legacy/images/comet-halley.jpg",
+      "bytes": 319448,
+      "sha256": "b62b3a8392a8c475ff156598069de8658e3c3ebaca475c91407a92b683fb8b97"
+    },
+    {
+      "path": "apps/web/legacy/images/cons-andromeda.jpg",
+      "bytes": 644883,
+      "sha256": "42955afbd46b61ddba5e012b12ffac7d7b62ceda137fa969a8a8376acb55c444"
+    },
+    {
+      "path": "apps/web/legacy/images/cons-canis-major.jpg",
+      "bytes": 464317,
+      "sha256": "e96d96ef22c9a00664b3258277236182573480432ae44f46baa26ded71f79141"
+    },
+    {
+      "path": "apps/web/legacy/images/cons-cassiopeia.jpg",
+      "bytes": 461795,
+      "sha256": "9f5ed3c864e11aef135df99f6b849ab8f3c1e21030167a1a722493dfe99ba87b"
+    },
+    {
+      "path": "apps/web/legacy/images/cons-centaurus.jpg",
+      "bytes": 641548,
+      "sha256": "6b97af2346eaa67f5601de40c479b02d5cdb713ac8e0e698379a2bf5b64d68c2"
+    },
+    {
+      "path": "apps/web/legacy/images/cons-crux.jpg",
+      "bytes": 473929,
+      "sha256": "24d35053c6847d5c2594318bdf45ba1457eae54eea50e995a2aa28d02d1f2825"
+    },
+    {
+      "path": "apps/web/legacy/images/cons-cygnus.jpg",
+      "bytes": 421337,
+      "sha256": "f46a5d8483329bb0f8939ff54c13b3ceecae982c9cdc86306e85f03e47235425"
+    },
+    {
+      "path": "apps/web/legacy/images/cons-dorado.jpg",
+      "bytes": 632937,
+      "sha256": "5ccd11cd6c0b6eeed06130e1b595cea40ad777a6403c6f6fddfc8d6cc2dbb177"
+    },
+    {
+      "path": "apps/web/legacy/images/cons-lyra.jpg",
+      "bytes": 371069,
+      "sha256": "81b1c5228be4699570673c33360f4e6750457b927aae68dc1e6bc6f08773226b"
+    },
+    {
+      "path": "apps/web/legacy/images/cons-orion.jpg",
+      "bytes": 404941,
+      "sha256": "cc59553a81260187c32f08fdb7dd09cc4510b425458f440401dfd2be66620192"
+    },
+    {
+      "path": "apps/web/legacy/images/cons-triangulum.jpg",
+      "bytes": 613942,
+      "sha256": "66c0fad80675f64c6cd2b3b2cc956eefe161f8cd48618e854785db59b35bdf29"
+    },
+    {
+      "path": "apps/web/legacy/images/cons-tucana.jpg",
+      "bytes": 580696,
+      "sha256": "a1756a5f8ad05eed578dd743ca2386c78899c22e2d04bbdbe6bcd3e92ecb709c"
+    },
+    {
+      "path": "apps/web/legacy/images/cons-ursa-major.jpg",
+      "bytes": 409762,
+      "sha256": "473c7bf87cd94248270e743d4f8b4bb698c6cda8d408b98322e45634eb638dce"
+    },
+    {
+      "path": "apps/web/legacy/images/cons-ursa-minor.jpg",
+      "bytes": 447643,
+      "sha256": "3b9ec0f0c9961b727979323c645104292d2e957caf4931d3e4ea071b416fbbfa"
+    },
+    {
+      "path": "apps/web/legacy/images/constellations/aquarius.png",
+      "bytes": 1266316,
+      "sha256": "1aecc4f917ac994c7d7c36c80cf0ba83e0e8582d464930c0d30b425a931e5c01"
+    },
+    {
+      "path": "apps/web/legacy/images/constellations/aquarius_stars.png",
+      "bytes": 1104096,
+      "sha256": "5a6af76ed15f2e140494cfe0349b1e884abdc73ddb6e9c4b1a665c25db86ca8e"
+    },
+    {
+      "path": "apps/web/legacy/images/constellations/aries.png",
+      "bytes": 1205063,
+      "sha256": "dceefab45293aeba06905f76f4561c4f31cd9aec5f8242b18ff40ad5f87bae96"
+    },
+    {
+      "path": "apps/web/legacy/images/constellations/aries_stars.png",
+      "bytes": 1061281,
+      "sha256": "2307c288c3a0b39268f1b02d5eb7a269f5aca3d6f72fd575f5e594f60143b676"
+    },
+    {
+      "path": "apps/web/legacy/images/constellations/cancer.png",
+      "bytes": 1117789,
+      "sha256": "019a5e8aece625b72f372a21008be66a73a47a5c8b74da63559a94e5bdd6a51e"
+    },
+    {
+      "path": "apps/web/legacy/images/constellations/cancer_stars.png",
+      "bytes": 996844,
+      "sha256": "f25d680df42e62aee81f94c36af23055b039eb29dd4ff718c1a25e738407c77c"
+    },
+    {
+      "path": "apps/web/legacy/images/constellations/capricornus.png",
+      "bytes": 1205234,
+      "sha256": "be22984aec148f035a9d6898408e9ec4d4be31e992a3cc8ebe95273cfb57b2ea"
+    },
+    {
+      "path": "apps/web/legacy/images/constellations/capricornus_stars.png",
+      "bytes": 1056120,
+      "sha256": "fdfadb5f9fb22a3c68341417e5fb19627e402e205bfa84467188a97276d32e35"
+    },
+    {
+      "path": "apps/web/legacy/images/constellations/gemini.png",
+      "bytes": 1126083,
+      "sha256": "99ff8e8c99443bf03a39a0cd3093210dd540589d5098fc3c798c39beec52054b"
+    },
+    {
+      "path": "apps/web/legacy/images/constellations/gemini_stars.png",
+      "bytes": 1007170,
+      "sha256": "645b43bd2db33dcad1ad01fefda3d760651852c0d66ceae62d59d98878a019e7"
+    },
+    {
+      "path": "apps/web/legacy/images/constellations/leo.png",
+      "bytes": 1156897,
+      "sha256": "5ac9e855b11b8026011175d49b03538418851d0e5846239c7a04de52d51ce456"
+    },
+    {
+      "path": "apps/web/legacy/images/constellations/leo_stars.png",
+      "bytes": 1023553,
+      "sha256": "f5b4cd10557016abaeb30c17aa7c65bc3d65bbddbe3db36fe63f980805f16870"
+    },
+    {
+      "path": "apps/web/legacy/images/constellations/libra.png",
+      "bytes": 1078828,
+      "sha256": "4edb0fb154ca443c270f07defad8d5b37189b088ccc8258a849b6d4e1c820e3e"
+    },
+    {
+      "path": "apps/web/legacy/images/constellations/libra_stars.png",
+      "bytes": 968862,
+      "sha256": "816200f5b66438fa134ff2b676ba23d20814fe687d571d3b78a02893850477cb"
+    },
+    {
+      "path": "apps/web/legacy/images/constellations/pisces.png",
+      "bytes": 974097,
+      "sha256": "4a49e5a12b7a0d369dc3af0d5ba7178f5d8aea830291ed773a8c8eebeca420fd"
+    },
+    {
+      "path": "apps/web/legacy/images/constellations/pisces_stars.png",
+      "bytes": 976076,
+      "sha256": "e4f4eeb59767ef1c756ccfc695ea15a6f1422b0465b5fdc389cfb28b695ecd56"
+    },
+    {
+      "path": "apps/web/legacy/images/constellations/sagittarius.png",
+      "bytes": 1183899,
+      "sha256": "afb94fbb9cc979c8fec842aa03d78088ba385fb2d3c2a140065453e6ad343d35"
+    },
+    {
+      "path": "apps/web/legacy/images/constellations/sagittarius_stars.png",
+      "bytes": 1050748,
+      "sha256": "65f41779c3b4e225f2b82496fb6857d95dac3f7faf1bd22b6e21e2d267e736df"
+    },
+    {
+      "path": "apps/web/legacy/images/constellations/scorpius.png",
+      "bytes": 1164377,
+      "sha256": "44a199b5b7bd581c436521c0fc4cf349a2b0cc06d71c5b771bd47393923dd752"
+    },
+    {
+      "path": "apps/web/legacy/images/constellations/scorpius_stars.png",
+      "bytes": 1033624,
+      "sha256": "3931aecf2ed5aa8b950d4e6265bc7e48a8b7e994c24f74369d6f5b46dd5335eb"
+    },
+    {
+      "path": "apps/web/legacy/images/constellations/taurus.png",
+      "bytes": 1199381,
+      "sha256": "1ad8b968b649d401f711335ab6ec1fc19e2801f965d81a1f7d0cc64e15842ebb"
+    },
+    {
+      "path": "apps/web/legacy/images/constellations/taurus_stars.png",
+      "bytes": 1063673,
+      "sha256": "692713a0218907fd80237c6b7c61c950d5079b887363488a07c7867b5541030b"
+    },
+    {
+      "path": "apps/web/legacy/images/constellations/virgo.png",
+      "bytes": 1160224,
+      "sha256": "8c2c5b8c80044eb7b1a3c3c39b379e68f8045bfd85a2288081bebdcab57de941"
+    },
+    {
+      "path": "apps/web/legacy/images/constellations/virgo_stars.png",
+      "bytes": 1028985,
+      "sha256": "9146ae5a52a14a880d26020feb670643b269113f88c75b8b418196e888315aef"
+    },
+    {
+      "path": "apps/web/legacy/images/crab-nebula.jpg",
+      "bytes": 298414,
+      "sha256": "618af7da5fad3955e4669d011234efc47731f9a74e9b4e29c37b6549baf14679"
+    },
+    {
+      "path": "apps/web/legacy/images/cygnus-x1.jpg",
+      "bytes": 207666,
+      "sha256": "7ae54c4de53f7a3ade068f7b0f961210f48f0baa897122b850f1bf0868322191"
+    },
+    {
+      "path": "apps/web/legacy/images/eagle-nebula.jpg",
+      "bytes": 449793,
+      "sha256": "1b7d3c2c8758f6025e30b4897b107ab88255965b31f6fb400afbe90bb3c6ef81"
+    },
+    {
+      "path": "apps/web/legacy/images/g1.jpg",
+      "bytes": 166716,
+      "sha256": "f7ced718969f06f1ce71248c2e89bf1510ab6af6523dceff6266b73b5dffcca4"
+    },
+    {
+      "path": "apps/web/legacy/images/helix-nebula.jpg",
+      "bytes": 112602,
+      "sha256": "50179989ee8ea7fce1d8df08c1cbb08113d1a9de86a7066cbd9a04e90d54bd73"
+    },
+    {
+      "path": "apps/web/legacy/images/hercules-cluster.jpg",
+      "bytes": 412089,
+      "sha256": "caf955ab785acb7f7abeea8823acfe831e9d981f9c9c7be7008c4467a08aafee"
+    },
+    {
+      "path": "apps/web/legacy/images/horsehead-nebula.jpg",
+      "bytes": 180399,
+      "sha256": "8d76ca3b111ad965d6f1103c4018e2202d529ec5d4104ef2c2eb3122c55440e8"
+    },
+    {
+      "path": "apps/web/legacy/images/lagoon-nebula.jpg",
+      "bytes": 133592,
+      "sha256": "0e690d1698261cbe468f1a415b0e4b2328ed5e36497bd42f3dc57cb0a32691cf"
+    },
+    {
+      "path": "apps/web/legacy/images/lmc-plate.png",
+      "bytes": 1542266,
+      "sha256": "c1ab340777aa4983bf5424f19c1bd5ee51ace20801083afa5c4ec2ce1ab6e642"
+    },
+    {
+      "path": "apps/web/legacy/images/lmc.jpg",
+      "bytes": 482204,
+      "sha256": "3ea4fa604fa14b7bd88babda9f88b5d6ecf21eda354fbaaa30c332fa1aab985e"
+    },
+    {
+      "path": "apps/web/legacy/images/m104.jpg",
+      "bytes": 120043,
+      "sha256": "3a49a30c7ed2c3beef2e2cd6a1ceeab4ece34734176864a031387a22c0f139c6"
+    },
+    {
+      "path": "apps/web/legacy/images/m15.jpg",
+      "bytes": 484820,
+      "sha256": "0550f09cc7a0a31cb4a7944612f7e86159383efa5e5e54e054f089d2bda4cdcf"
+    },
+    {
+      "path": "apps/web/legacy/images/m22.jpg",
+      "bytes": 493985,
+      "sha256": "534be6722169cadca193c5d01e2cf847c076b5b7f17651560e3bc4f6c0153031"
+    },
+    {
+      "path": "apps/web/legacy/images/m33.jpg",
+      "bytes": 189281,
+      "sha256": "2429b62c83ac72057f710b2ac8417741f9cedcb3a490e4065a1aad3a97c858b5"
+    },
+    {
+      "path": "apps/web/legacy/images/m5.jpg",
+      "bytes": 448932,
+      "sha256": "1fc63db5ad1927b0a48cddb66b35661b778c6b4917afb1b0a133505cb4e2a93d"
+    },
+    {
+      "path": "apps/web/legacy/images/m87-jet.jpg",
+      "bytes": 212497,
+      "sha256": "085c7976dd42ca47301f31467fe8e09cf17513c59cd36c2d44c4b846cde98a6b"
+    },
+    {
+      "path": "apps/web/legacy/images/m87.jpg",
+      "bytes": 28409,
+      "sha256": "04c40a232c5d607ee741c0c516c1926f01be4a9f7d34164dc881ac87d513c346"
+    },
+    {
+      "path": "apps/web/legacy/images/ngc206.jpg",
+      "bytes": 322748,
+      "sha256": "7feeb0c27259541146c0587f1952c989bfd0044b24e8c87624daf0ec76cc3fb0"
+    },
+    {
+      "path": "apps/web/legacy/images/ngc346.jpg",
+      "bytes": 461673,
+      "sha256": "854d936572f8ba8dc2c1ba4df108a58526ee7299aae181459df335baad0803df"
+    },
+    {
+      "path": "apps/web/legacy/images/ngc604.jpg",
+      "bytes": 313473,
+      "sha256": "be1d724bb750706585e33fe555d580186977c478dfd54fd29021eeff8030360d"
+    },
+    {
+      "path": "apps/web/legacy/images/omega-centauri.jpg",
+      "bytes": 281561,
+      "sha256": "d644c68d6a37531cb414ddd650918aaa791002db0a742e58f2676189ed905add"
+    },
+    {
+      "path": "apps/web/legacy/images/orion-nebula.jpg",
+      "bytes": 162194,
+      "sha256": "a62bcf07d0e48be1a2e254e301c8afc5605129297a4b6821584e9426b65d1d53"
+    },
+    {
+      "path": "apps/web/legacy/images/pleiades.jpg",
+      "bytes": 152637,
+      "sha256": "9675c8c258ba802ce9eabb8baa8ef767058d49856dfe174856e0aff6d1a76dd1"
+    },
+    {
+      "path": "apps/web/legacy/images/polaris.jpg",
+      "bytes": 317493,
+      "sha256": "93d2cefc6ef29f532509b1f295794b8019cc3dcd1686dcdc57116c2a80cf3b1c"
+    },
+    {
+      "path": "apps/web/legacy/images/proxima.jpg",
+      "bytes": 61717,
+      "sha256": "51cf178761b83ce67ba0cd3bc89a9a65f5bd4d04978e6ab65cc2569cc0395a23"
+    },
+    {
+      "path": "apps/web/legacy/images/ring-nebula.jpg",
+      "bytes": 135837,
+      "sha256": "36b1db75c31ce7d27e9afc3b69d7a22c2b718838bafb01ae8b74015b1880f18e"
+    },
+    {
+      "path": "apps/web/legacy/images/sgr-a.jpg",
+      "bytes": 36147,
+      "sha256": "96cb8bce6065f24bcc8e38898643a35b8c7e73a07315b98a5b691f8b408c1bce"
+    },
+    {
+      "path": "apps/web/legacy/images/sirius.jpg",
+      "bytes": 141584,
+      "sha256": "979ad6f204bfc688f6e42c0ef0ae259918d9e7a2145235d4d52b6e5c22af4a2e"
+    },
+    {
+      "path": "apps/web/legacy/images/smc-plate.png",
+      "bytes": 1798917,
+      "sha256": "677d79b31daee3ba47c8e318e94585abd7a4297900839c599c90345e6445ef2e"
+    },
+    {
+      "path": "apps/web/legacy/images/smc.jpg",
+      "bytes": 471395,
+      "sha256": "8ba4e71e6ebb4e1ff2597fcebae10e09d1fd3c3b355979cace07103503bbd0fa"
+    },
+    {
+      "path": "apps/web/legacy/images/sn1987a.jpg",
+      "bytes": 205477,
+      "sha256": "26cfc71bf812960d708b8d60d8bf2c729b830b9078c6264f0ba97cf37d008f1e"
+    },
+    {
+      "path": "apps/web/legacy/images/solar-system/build-relief-maps.sh",
+      "bytes": 1464,
+      "sha256": "935b0ce8f98dec6509fdf042f253bde9cc3940c5456674db6d4dcc008ae1f4dc"
+    },
+    {
+      "path": "apps/web/legacy/images/solar-system/callisto.jpg",
+      "bytes": 491156,
+      "sha256": "70e123b69f407a3b9a463dfd716c79f99493aa0f23fcaeb918fbe294dedf9b90"
+    },
+    {
+      "path": "apps/web/legacy/images/solar-system/cards/callisto.jpg",
+      "bytes": 187195,
+      "sha256": "a1dc6cbecfde643a07e89a31fd8c522e525c8634ab7350f2b642507e33977fdc"
+    },
+    {
+      "path": "apps/web/legacy/images/solar-system/cards/ceres.jpg",
+      "bytes": 95420,
+      "sha256": "0a824fa1f595e4ceef3ce4df08f4d83b71487666c6680dd46885e665b2242ac6"
+    },
+    {
+      "path": "apps/web/legacy/images/solar-system/cards/earth.jpg",
+      "bytes": 320514,
+      "sha256": "0423cc6073c7fcb99b93da89cc84bd20a1fba8817706dfbeeaa5e1628f5f3a67"
+    },
+    {
+      "path": "apps/web/legacy/images/solar-system/cards/europa.jpg",
+      "bytes": 197732,
+      "sha256": "e207fb1485ec6092b83e0a42a18b81d4bcb5ce1e31d1f1bd816b8e3d9c112a04"
+    },
+    {
+      "path": "apps/web/legacy/images/solar-system/cards/ganymede.jpg",
+      "bytes": 154934,
+      "sha256": "df7b1a1beb8a033386a0983e0347ce35fdfecd8b6a17098e059f3d504fbf75e7"
+    },
+    {
+      "path": "apps/web/legacy/images/solar-system/cards/io.jpg",
+      "bytes": 211238,
+      "sha256": "9a21ec03ffb1229a4315ec501c70d55a3fb9bcf112030b4882ab2740dea99e1e"
+    },
+    {
+      "path": "apps/web/legacy/images/solar-system/cards/jupiter.jpg",
+      "bytes": 88960,
+      "sha256": "1d0f580c1c77b549b1e5ff2d0343db84972183a4c3c31b32600e0683988f3942"
+    },
+    {
+      "path": "apps/web/legacy/images/solar-system/cards/mars.jpg",
+      "bytes": 234625,
+      "sha256": "dc7b44b8c4a6ccb5d89f1e08699c320ac4fab6ae927cefb91594c61a4fc83fb0"
+    },
+    {
+      "path": "apps/web/legacy/images/solar-system/cards/mercury.jpg",
+      "bytes": 149086,
+      "sha256": "4046e20f6bd8bb2393a28a83555d30ba2c15945d06b7c62fc794bc059f9c6d68"
+    },
+    {
+      "path": "apps/web/legacy/images/solar-system/cards/moon.jpg",
+      "bytes": 347110,
+      "sha256": "6b31eeb67857290cd7402f1f6c5d87e17eaccfc7683d939cd4d4ed9379c74ba6"
+    },
+    {
+      "path": "apps/web/legacy/images/solar-system/cards/neptune.jpg",
+      "bytes": 140320,
+      "sha256": "18838642d2ff8364274e882c46e91410d6fc9f8705f5ae1096cb874cd135e359"
+    },
+    {
+      "path": "apps/web/legacy/images/solar-system/cards/pluto.jpg",
+      "bytes": 249377,
+      "sha256": "70344ce4f5f7ac1cdbc8804acb1b885338652e427c1d7eea586c499fa1b55eea"
+    },
+    {
+      "path": "apps/web/legacy/images/solar-system/cards/saturn.jpg",
+      "bytes": 31303,
+      "sha256": "f8bfe0734fa7648349540aa2d74c525b3c6528636471a5b9b0b97c25a32783eb"
+    },
+    {
+      "path": "apps/web/legacy/images/solar-system/cards/sun.jpg",
+      "bytes": 284615,
+      "sha256": "59f6bff88a2c1585eedfc0f5045676d00365cf96531c6c86cc917e47d7db4da9"
+    },
+    {
+      "path": "apps/web/legacy/images/solar-system/cards/titan.jpg",
+      "bytes": 68553,
+      "sha256": "c4c54da1ef30ee3bba5a3f63259de9e7aa42196ee17ce31e529c56333704c973"
+    },
+    {
+      "path": "apps/web/legacy/images/solar-system/cards/triton.jpg",
+      "bytes": 241760,
+      "sha256": "662eb9e66f0117bec7c31b1de44aa770844563f5ee635a7478b57d6431bc2625"
+    },
+    {
+      "path": "apps/web/legacy/images/solar-system/cards/uranus.jpg",
+      "bytes": 60189,
+      "sha256": "a4acd23f2c30627523f4eca9ee08399219e5147f697e698138675b9a462024e4"
+    },
+    {
+      "path": "apps/web/legacy/images/solar-system/cards/venus.jpg",
+      "bytes": 51261,
+      "sha256": "99335f7d3d07920d7475893e0322d97b1afcc34d7c76ba1cecc19d17b76c82b1"
+    },
+    {
+      "path": "apps/web/legacy/images/solar-system/ceres.jpg",
+      "bytes": 185326,
+      "sha256": "dc92eb63042c1eba12a11fb73c8e62c043e7e4272260c51804dc85b50b2f387f"
+    },
+    {
+      "path": "apps/web/legacy/images/solar-system/earth-clouds.png",
+      "bytes": 2509803,
+      "sha256": "ce136db7ba632ed87aebfd02967d1c7cd3022727d511321d534e50c5a0a5af69"
+    },
+    {
+      "path": "apps/web/legacy/images/solar-system/earth-night.jpg",
+      "bytes": 843973,
+      "sha256": "e93272cff3486df07442f92191a43b4bec68904c42305a4cc4e7c7cf6b2874d3"
+    },
+    {
+      "path": "apps/web/legacy/images/solar-system/earth.jpg",
+      "bytes": 1408283,
+      "sha256": "ab0eb5c3e97b68190b8c34670d1db343f7d62d7994b613d21a1aeef7483e0363"
+    },
+    {
+      "path": "apps/web/legacy/images/solar-system/europa.jpg",
+      "bytes": 274303,
+      "sha256": "8a3a2f180ac9beb0d19a0b8f93ae349c0aeefc29d628906154e0c9cee8ea9dc4"
+    },
+    {
+      "path": "apps/web/legacy/images/solar-system/ganymede.jpg",
+      "bytes": 388874,
+      "sha256": "6b4779efa7c18a41da34c4a12da7f661877689ec247a14e3a7045410e5d89a85"
+    },
+    {
+      "path": "apps/web/legacy/images/solar-system/io.jpg",
+      "bytes": 273072,
+      "sha256": "7ba57e53a3b85204bf89266c2a934c43ecf3a2b622c83c2f412e2c7e03e18c5c"
+    },
+    {
+      "path": "apps/web/legacy/images/solar-system/jupiter.jpg",
+      "bytes": 2541943,
+      "sha256": "2256a5d79d099d253a647ec4d1ad9132f9d2f10522c3160da22340629d9a3fc6"
+    },
+    {
+      "path": "apps/web/legacy/images/solar-system/mars-normal.png",
+      "bytes": 815273,
+      "sha256": "9013bf146ff92704e146ef0f7c8fe023252788709656192f58c5d9be6ea465ab"
+    },
+    {
+      "path": "apps/web/legacy/images/solar-system/mars.jpg",
+      "bytes": 2517226,
+      "sha256": "d617e89861031d6f2a8e9d974a5d3b9875a2277d71d922efb32998e637fe5491"
+    },
+    {
+      "path": "apps/web/legacy/images/solar-system/mercury.jpg",
+      "bytes": 948864,
+      "sha256": "a3e682f487112220d4d6367e45b4818df27e2bf8bb5e4370294b7641a4d8553e"
+    },
+    {
+      "path": "apps/web/legacy/images/solar-system/moon-normal.png",
+      "bytes": 1013810,
+      "sha256": "819e66c64d7744daa44bea9cd38a88957eafddb1a945f3ee5e868731fbae1056"
+    },
+    {
+      "path": "apps/web/legacy/images/solar-system/moon.jpg",
+      "bytes": 4588317,
+      "sha256": "fd7c97e710e01ca3c4809e8fdccda69d41bc8bfa732db2714896bbb3ea9438b3"
+    },
+    {
+      "path": "apps/web/legacy/images/solar-system/neptune.jpg",
+      "bytes": 224712,
+      "sha256": "c043b3c0854609ec060e37c82a6862145bba47933b1687881754d15bc28675be"
+    },
+    {
+      "path": "apps/web/legacy/images/solar-system/pluto.jpg",
+      "bytes": 346097,
+      "sha256": "edd220b49bb484844d1c17a2db10dc15a0d140ddb0e0f7ce347c2f2e63a5dbf7"
+    },
+    {
+      "path": "apps/web/legacy/images/solar-system/README.md",
+      "bytes": 9418,
+      "sha256": "3ac82b3c9f57c73b575128ca1bfb711ae42d4f412a41e8c7bd87879f9e03e3ce"
+    },
+    {
+      "path": "apps/web/legacy/images/solar-system/saturn-rings.png",
+      "bytes": 1014989,
+      "sha256": "4d74d4ccc1f1efb5a1a4ceed3588384e75ccd4875216cb1cae53885c5991c273"
+    },
+    {
+      "path": "apps/web/legacy/images/solar-system/saturn.jpg",
+      "bytes": 987157,
+      "sha256": "73aadcde0d0b202930245164d7d836aa32e6fdbaa1f6720dc7275bbbb6aab597"
+    },
+    {
+      "path": "apps/web/legacy/images/solar-system/sun.jpg",
+      "bytes": 3230387,
+      "sha256": "f3bade1d040ec22754be64da06c79b7173537976f4548908180b81a06d2facf2"
+    },
+    {
+      "path": "apps/web/legacy/images/solar-system/titan.jpg",
+      "bytes": 43325,
+      "sha256": "801dfd2142733bc3bd9c942c6a51646d8250c7a3e0971ac0fe4b1076671cb0aa"
+    },
+    {
+      "path": "apps/web/legacy/images/solar-system/triton.jpg",
+      "bytes": 85462,
+      "sha256": "72017632d7334e0f0f7ea270920da836d2520135cc741a3af0af94d9b4b9661f"
+    },
+    {
+      "path": "apps/web/legacy/images/solar-system/uranus.jpg",
+      "bytes": 130115,
+      "sha256": "741ab383ba64753d8cb2752ebb52a874eb8276c08f17c383e2bf410a24a2e0d3"
+    },
+    {
+      "path": "apps/web/legacy/images/solar-system/venus.jpg",
+      "bytes": 252409,
+      "sha256": "241f7c23794abbc9c72892275ad2f62caf208b029f8bded3dad6af312c212031"
+    },
+    {
+      "path": "apps/web/legacy/images/solar-system-family.jpg",
+      "bytes": 76301,
+      "sha256": "c9fdaa0b68e51e8be40fbb96c24b5787cb04a0a400ca55796ed9ebf2cdef2168"
+    },
+    {
+      "path": "apps/web/legacy/images/tarantula.jpg",
+      "bytes": 418095,
+      "sha256": "0be62d980f0ba6e54b548495634a475dbfde276a5bdbfa63366f6c172f0bf107"
+    },
+    {
+      "path": "apps/web/legacy/images/trappist1.jpg",
+      "bytes": 107142,
+      "sha256": "9701b9a5ed329fba8c24b47fb47e9baf0e7bcd8ce4f77db25f831dd081a05bee"
+    },
+    {
+      "path": "apps/web/legacy/images/uy-scuti.jpg",
+      "bytes": 196148,
+      "sha256": "1e471edc89583a2328ef38e4047a50645002f76ff58da28581ac8c474fc9b2b4"
+    },
+    {
+      "path": "apps/web/legacy/images/veil-nebula.jpg",
+      "bytes": 229536,
+      "sha256": "f7a15090fc7ebe0bf46a38dad40f91f1f5f224177044c34ec86549710816b8f8"
+    },
+    {
+      "path": "apps/web/legacy/images/zodiac-aquarius.jpg",
+      "bytes": 434302,
+      "sha256": "4bf79f0f3ef0afe810b3938d5e268d761e56b28113ea062ae6123efc043156c0"
+    },
+    {
+      "path": "apps/web/legacy/images/zodiac-aries.jpg",
+      "bytes": 435610,
+      "sha256": "3d1da2664785571fa4e10e84a7ba18fbe2c231a1c5f6eb5510362654fcfea5e7"
+    },
+    {
+      "path": "apps/web/legacy/images/zodiac-cancer.jpg",
+      "bytes": 451728,
+      "sha256": "1f8397822161bc386dd89337b1ced0f053e078c1fa5f2da74838ad7d36d60161"
+    },
+    {
+      "path": "apps/web/legacy/images/zodiac-capricornus.jpg",
+      "bytes": 476073,
+      "sha256": "fcb2947cea4aac9d0d235a1c44261b23cd5c62fffffe38018ef8f0addb2bacc8"
+    },
+    {
+      "path": "apps/web/legacy/images/zodiac-gemini.jpg",
+      "bytes": 387702,
+      "sha256": "751fbc4ea3c0540a9a2de31a53c7db5e6da1713af69b2967143f455031465746"
+    },
+    {
+      "path": "apps/web/legacy/images/zodiac-leo.jpg",
+      "bytes": 413951,
+      "sha256": "971aa303451514fcbbf9a6d119d853ab1dc22a6159d86d8a770fb33097212215"
+    },
+    {
+      "path": "apps/web/legacy/images/zodiac-libra.jpg",
+      "bytes": 445434,
+      "sha256": "cb0d18d339ded6273e1332cf8ae425ad64dcf61c344e00128d61442ba8277d71"
+    },
+    {
+      "path": "apps/web/legacy/images/zodiac-pisces.jpg",
+      "bytes": 425301,
+      "sha256": "6156ee0ab3ca29906928880eba3deb409eba301a232386a65a2a252e593cbcf1"
+    },
+    {
+      "path": "apps/web/legacy/images/zodiac-sagittarius.jpg",
+      "bytes": 479411,
+      "sha256": "94b733402289c334561a573ccd6a103f023742fff1c0a7929f8065fc1853bbb6"
+    },
+    {
+      "path": "apps/web/legacy/images/zodiac-scorpius.jpg",
+      "bytes": 496565,
+      "sha256": "6c5168faac207837b317b0e26d1b959e20b628be4bf505eb5a4b6ab13531c4c1"
+    },
+    {
+      "path": "apps/web/legacy/images/zodiac-taurus.jpg",
+      "bytes": 477241,
+      "sha256": "1655108b36032d954e99668031164898f7a034876b59ada6d5a31b4e07c9a00f"
+    },
+    {
+      "path": "apps/web/legacy/images/zodiac-virgo.jpg",
+      "bytes": 414142,
+      "sha256": "c15c51aa7794f36935f27cd96343ba8f5c0f8bd22d04d4295afdb0b5a18db455"
+    },
+    {
+      "path": "apps/web/legacy/index.html",
+      "bytes": 664741,
+      "sha256": "5d88a38b65c7b1a217be635fae1881273e67c53ed4b74d7eb962393dcea1856c"
+    },
+    {
+      "path": "apps/web/legacy/THIRD-PARTY-NOTICES.md",
+      "bytes": 24938,
+      "sha256": "312cac11504bf1de55c40b09a52b92339d4f14bda8dd48786fb5341d8a543184"
+    },
+    {
+      "path": "apps/web/legacy/untukmu/dev/verify-node.cjs",
+      "bytes": 33497,
+      "sha256": "044a5080c38cabdc134b30ca7be840f93506f27540694c063c2d40a4d9aa2f97"
+    },
+    {
+      "path": "apps/web/legacy/untukmu/js/um-app.js",
+      "bytes": 6744,
+      "sha256": "63f4c8a7a9b7264f5346597ba77ab79591124399aad9ba0c5d02b02317f7597e"
+    },
+    {
+      "path": "apps/web/legacy/untukmu/js/um-crypto.js",
+      "bytes": 10719,
+      "sha256": "7b48c2c101d1e18f4bf7639c28f6168d325affabb62b978796b8e19d1a490c53"
+    },
+    {
+      "path": "apps/web/legacy/untukmu/js/um-doa.js",
+      "bytes": 11796,
+      "sha256": "73d0edfe50df93554ea28652d126d2e8270436d550bf6b687171f56869ad0eba"
+    },
+    {
+      "path": "apps/web/legacy/untukmu/js/um-galaksi.js",
+      "bytes": 66239,
+      "sha256": "7442cb47aa3bce8125766879d4035ca8f5d0e32fcf8c9381a582e23b2fe535cb"
+    },
+    {
+      "path": "apps/web/legacy/untukmu/js/um-i18n.js",
+      "bytes": 23101,
+      "sha256": "c9ee74335d0fde88676512dbc2a761d8bcf9afdaa0e7b152fed86a95340c7344"
+    },
+    {
+      "path": "apps/web/legacy/untukmu/js/um-sky.js",
+      "bytes": 12524,
+      "sha256": "472f1abf8a79a553a0d00c44e79649c1a1f87402d4b0c1da67b9ac9cc72096ab"
+    },
+    {
+      "path": "apps/web/legacy/untukmu/js/um-store.js",
+      "bytes": 29018,
+      "sha256": "8369d1e269be54b1269104783f0fdb31f522fab4bec38157c33ab4956479cded"
+    },
+    {
+      "path": "apps/web/legacy/untukmu/js/um-tests.js",
+      "bytes": 33415,
+      "sha256": "d33a4d13ff0285a0a54a202855de4720a0fadb868e819d73fb62a8e0cd7f1a8f"
+    },
+    {
+      "path": "apps/web/legacy/untukmu/js/um-ui.js",
+      "bytes": 68307,
+      "sha256": "95ecb3f814a1ba5a584ce1eef04ce2ca2c3156e151eed1ddec54426e14577d08"
+    },
+    {
+      "path": "apps/web/legacy/untukmu/untukmu.css",
+      "bytes": 23380,
+      "sha256": "5e4295cc544598263b73f0e0862842d3a0d8e27af048a38d8f5515d3be6fedea"
+    },
+    {
+      "path": "apps/web/legacy/vendor/CopyShader.js",
+      "bytes": 653,
+      "sha256": "8cf05bda35383ea2502decc388d91a4adcf6ab3d9fa1d35a600fee4e49ec796b"
+    },
+    {
+      "path": "apps/web/legacy/vendor/EffectComposer.js",
+      "bytes": 6555,
+      "sha256": "72dcd55f4626f1533a9f98dd03021a5de415ffc15f1ad688ef84997612b04de0"
+    },
+    {
+      "path": "apps/web/legacy/vendor/LuminosityHighPassShader.js",
+      "bytes": 1299,
+      "sha256": "1b6eaa1f4f1c6d240001cd310e604551274968c7aaa55f7cc9c6c1a8aae45526"
+    },
+    {
+      "path": "apps/web/legacy/vendor/OrbitControls.js",
+      "bytes": 27420,
+      "sha256": "5742860df2533c1c5ed580f939228f2a0d88b14967bb167dc9954ceedb1616e8"
+    },
+    {
+      "path": "apps/web/legacy/vendor/RenderPass.js",
+      "bytes": 1820,
+      "sha256": "3a08e1adbe3a5d915d75323ecc9d6b836057ae06afd3d39704dea180795823cd"
+    },
+    {
+      "path": "apps/web/legacy/vendor/ShaderPass.js",
+      "bytes": 1479,
+      "sha256": "9ed292e0b177cab987d00000070a779202a7c86b6d738ee24f3864ccfa0c79ed"
+    },
+    {
+      "path": "apps/web/legacy/vendor/three.min.js",
+      "bytes": 603451,
+      "sha256": "7ae04663bb431808bc025280122162029ea3a354efc5fcca8bd8f95d1a1933e9"
+    },
+    {
+      "path": "apps/web/legacy/vendor/UnrealBloomPass.js",
+      "bytes": 12978,
+      "sha256": "0030802645409fc2c35ad87d4f794619b379a1a208edf6a1a9c5d0002f9831f7"
+    },
+    {
+      "path": "apps/web/next-env.d.ts",
+      "bytes": 288,
+      "sha256": "1862ac4bbbc5192d4bf562161df66ea547ed3e67173100656ab606ae9797db2b"
+    },
+    {
+      "path": "apps/web/next.config.ts",
+      "bytes": 641,
+      "sha256": "43c9e1e66e225352d846fd2d7c7d0e0d533d8a2613b0e906fb9dda2dff95149f"
+    },
+    {
+      "path": "apps/web/package.json",
+      "bytes": 1338,
+      "sha256": "a5d830f9cd4ce44631824e1232afe8102b9160122d41efc267202e8223afb9a3"
+    },
+    {
+      "path": "apps/web/playwright.config.ts",
+      "bytes": 676,
+      "sha256": "5286822e0da14dedc36b8baf25c3b28a0750113e4ba139a05d7d1940fd7e35af"
+    },
+    {
+      "path": "apps/web/postcss.config.mjs",
+      "bytes": 90,
+      "sha256": "367fbca6f16a783112387d94ee7bb91ec72e3b36b6d61228f6247cda6ee46d47"
+    },
+    {
+      "path": "apps/web/public/icons/icon-192.png",
+      "bytes": 3468,
+      "sha256": "ca2a5c75bc880dc116fb53794a0e64fa907a45ffde7b65f0e89cd34b7c6b20d5"
+    },
+    {
+      "path": "apps/web/public/icons/icon-512.png",
+      "bytes": 15113,
+      "sha256": "d4852f490c93a6b34e4e90c31701f1820213b0b7a598b89cdddc6eecaa953656"
+    },
+    {
+      "path": "apps/web/public/offline.html",
+      "bytes": 762,
+      "sha256": "52e39125b8ea3c057479bd80fbb2fdb7546cdcd97ff9453ad18cbacb9dd3f474"
+    },
+    {
+      "path": "apps/web/public/offline.js",
+      "bytes": 82,
+      "sha256": "060e796dcf8f20b5a5815993957138a16df1a7efc6e70a4de32dace17d4fbb12"
+    },
+    {
+      "path": "apps/web/public/sw.js",
+      "bytes": 1946,
+      "sha256": "d6c288d585361afd261c30f3a0529d4de13d2214b4fbdbc500c08a67286a36d0"
+    },
+    {
+      "path": "apps/web/scripts/enhance-advanced.mjs",
+      "bytes": 2359,
+      "sha256": "4f787ca1f54bc01a28b31dc561e0cdd3102d66f55338bee0029ae9de4245f88a"
+    },
+    {
+      "path": "apps/web/scripts/enhance-explore.mjs",
+      "bytes": 7845,
+      "sha256": "880babac32b329f1b20d311b6f5aa8297a5d4fa2f8489ba1f1244a7ced5ebc80"
+    },
+    {
+      "path": "apps/web/scripts/enhance-prayers.mjs",
+      "bytes": 22640,
+      "sha256": "a81242da9841d3bbd2efc894637bbb309a48c9388ee7d0b8dbeec7a88629da73"
+    },
+    {
+      "path": "apps/web/scripts/enhance-social.mjs",
+      "bytes": 1796,
+      "sha256": "22034b0cba3b9ef128a22a3dfb686fc4f4d37b5c6ee4c3fe570db5facf7b67a7"
+    },
+    {
+      "path": "apps/web/scripts/port-react-ui.mjs",
+      "bytes": 792,
+      "sha256": "348574bd5eada66478142ec753a92cd76352e9b9aea25b9366da78d0a96dea60"
+    },
+    {
+      "path": "apps/web/scripts/prepare-engine.mjs",
+      "bytes": 11417,
+      "sha256": "63192ee28db0208c60aea176136b9272f2eb46bc4ac364b04481bdbcfb22d29d"
+    },
+    {
+      "path": "apps/web/scripts/start.mjs",
+      "bytes": 654,
+      "sha256": "718705db0b7762ee3df860f2d6a915e90321c8b57b62fd2a94e9236a87d18cad"
+    },
+    {
+      "path": "apps/web/src/app/admin/page.tsx",
+      "bytes": 154,
+      "sha256": "e0952b6e8d0aef41d56790605f9dbf9cc3be99b8147a68d74a2b474ec7e6341a"
+    },
+    {
+      "path": "apps/web/src/app/bagi/page.tsx",
+      "bytes": 378,
+      "sha256": "3903c3de8f4de07746d6b7a06fae228a754a73188e03902910ef34b1871e0f19"
+    },
+    {
+      "path": "apps/web/src/app/doa/page.tsx",
+      "bytes": 152,
+      "sha256": "e5991a0bdf52e37d6a6ed5d4f21cff87ef8595b960a27a458faca7c5e27fa2fd"
+    },
+    {
+      "path": "apps/web/src/app/globals.css",
+      "bytes": 432,
+      "sha256": "8965d8b87c94875c81e504a71149f9eb8da3b314b6427fb06cf8c7bbdfd45cd8"
+    },
+    {
+      "path": "apps/web/src/app/icon.svg",
+      "bytes": 194,
+      "sha256": "94c8d7914f396a958a52645854d6c066f843aa6c4dfb97c0984c103c4aa25fed"
+    },
+    {
+      "path": "apps/web/src/app/kebijakan-privasi/page.tsx",
+      "bytes": 2305,
+      "sha256": "6afdf0e5075db325678449b3f5afe6661bf6f4a0dff5b2d932ddb3c3c698cb86"
+    },
+    {
+      "path": "apps/web/src/app/layout.tsx",
+      "bytes": 519,
+      "sha256": "bc96934a7b932700070e3087a9dfec6ca3ea011272334f7d8a3c3747e5a07615"
+    },
+    {
+      "path": "apps/web/src/app/manifest.ts",
+      "bytes": 523,
+      "sha256": "d01b8b6929f61dfe2df3755db3e2dc1ef3d0a34efac294d4fffcf86ada1c1d70"
+    },
+    {
+      "path": "apps/web/src/app/page.tsx",
+      "bytes": 123,
+      "sha256": "3b1e6496d52a745a12a6e6879f3fae3c914efc9193d863c210a02b51f347133c"
+    },
+    {
+      "path": "apps/web/src/features/account/AccountScreen.tsx",
+      "bytes": 12274,
+      "sha256": "8a35411f28ab7f3dfc3ffafbcd8950bcaa7a16d5dc895a275c6e01d6c6f50647"
+    },
+    {
+      "path": "apps/web/src/features/account/Challenge.tsx",
+      "bytes": 1495,
+      "sha256": "297055916b4464635d4512fe205f09bb33bc2e4c95b5412dee72cff148bba78f"
+    },
+    {
+      "path": "apps/web/src/features/account/ExportScreen.tsx",
+      "bytes": 3472,
+      "sha256": "a25136e6a9305e16c4ccbbd146dbdabd0247623b59f055aad1008e64944c932e"
+    },
+    {
+      "path": "apps/web/src/features/account/RecoveryScreen.tsx",
+      "bytes": 3715,
+      "sha256": "9e0513f4f137286e92cd0517d48a20fa227e9017a33f4995b70df38b40900072"
+    },
+    {
+      "path": "apps/web/src/features/account/state.ts",
+      "bytes": 732,
+      "sha256": "42ba9bd63d92a2ffe73cce91ac7ed9cd6530baef8ad9949f5ebf8ca63dce4ef4"
+    },
+    {
+      "path": "apps/web/src/features/account/Turnstile.tsx",
+      "bytes": 1472,
+      "sha256": "5cc5c62c9eb37bee1c81f9c1f24edb164b2ad5154cd6519c613682cdd7fb2093"
+    },
+    {
+      "path": "apps/web/src/features/galaxy/FiberBridge.tsx",
+      "bytes": 2990,
+      "sha256": "05ded5ba26de2ce1f59e4a1e1237fbe82fe9afb4523a46f801b0a57ecb34d57b"
+    },
+    {
+      "path": "apps/web/src/features/galaxy/GalaxyEngine.tsx",
+      "bytes": 513,
+      "sha256": "8c18aeb30c67805cc0e2ba26ac71af5e9347bf646478c0fcb7cc6146dcd6fefa"
+    },
+    {
+      "path": "apps/web/src/features/messages/ManageMessage.tsx",
+      "bytes": 3815,
+      "sha256": "9e91fd77fa5d672657311db86860c145aef2130b3e677bac4239b3b9217f1692"
+    },
+    {
+      "path": "apps/web/src/features/messages/SharedMessage.tsx",
+      "bytes": 949,
+      "sha256": "52604ceb1525de27ce79e99450d50a0892aa12b574c404f79d6035b6ec783de5"
+    },
+    {
+      "path": "apps/web/src/features/prayers/PrayerAdmin.tsx",
+      "bytes": 9356,
+      "sha256": "6db4ad40d0d87d20aac0b1b95c08d6ecaf53bf65e1e6245479e46c55b081ac83"
+    },
+    {
+      "path": "apps/web/src/features/prayers/WrittenPrayerScreen.tsx",
+      "bytes": 13517,
+      "sha256": "43dc3a2f18d3750b7887d2be06b7ec9fe1ebd03e1b050233adc33783a88d1b6b"
+    },
+    {
+      "path": "apps/web/src/features/pwa/Register.tsx",
+      "bytes": 319,
+      "sha256": "0b9c09a0c1c7e9590a8ec48ec572aaa38f43df956acb588e40f25e72f039a2d2"
+    },
+    {
+      "path": "apps/web/src/features/screens/PreservedScreens.tsx",
+      "bytes": 2708,
+      "sha256": "63cad1a85b97b3874d2ac6bd7d9579e175516e963bc07ce987e33c053c00f32e"
+    },
+    {
+      "path": "apps/web/src/features/social/SocialScreens.tsx",
+      "bytes": 6213,
+      "sha256": "08631e9e5542b01a501b66ce022c936d798005aef6628b943e91eec17409aabb"
+    },
+    {
+      "path": "apps/web/src/lib/api/client.ts",
+      "bytes": 4136,
+      "sha256": "73ac705b159e9edcb582182b83897502c989e9f14e425695d8ba33344c9be90a"
+    },
+    {
+      "path": "apps/web/src/lib/api/store.ts",
+      "bytes": 13258,
+      "sha256": "5c44d528b18403317a85043be3081abd5c7f4d8f3c310b991743e8e60452efe3"
+    },
+    {
+      "path": "apps/web/src/lib/crypto/argon2.worker.ts",
+      "bytes": 762,
+      "sha256": "0a2c9432b63177efffdcb55e464f9ca99b3f9c893cde940b7e547dc4f6c0ed5e"
+    },
+    {
+      "path": "apps/web/src/lib/crypto/types.ts",
+      "bytes": 467,
+      "sha256": "7eb58221ca7e1ede611e81c91f980ca13cde23940d56b31125b2ab90103cfe4a"
+    },
+    {
+      "path": "apps/web/src/lib/crypto/vault.ts",
+      "bytes": 10278,
+      "sha256": "532ffa6b61f48693d2d0dba9fdf0579ab335949126718b67dfefa34a9cfbd324"
+    },
+    {
+      "path": "apps/web/src/runtime/accessibility.ts",
+      "bytes": 3292,
+      "sha256": "308f288dfb3f966e64885833ee8e294a7bd42f11e605dc2f5cef5f740f81df96"
+    },
+    {
+      "path": "apps/web/src/runtime/bootstrap.tsx",
+      "bytes": 6010,
+      "sha256": "592b4e328e3c14ac811fb674deae21e3677faa45b187fc7c96bd3d6fb5644b3e"
+    },
+    {
+      "path": "apps/web/src/runtime/globals.d.ts",
+      "bytes": 1369,
+      "sha256": "c0b73672be1f35464e228bba78fe88c998dda6753f25c1fd461b75a9f3ae60a0"
+    },
+    {
+      "path": "apps/web/tailwind.config.ts",
+      "bytes": 387,
+      "sha256": "857f22f9bb408f42f1b47ccdabac81b84389cbfcfcdb86ebb09eb85a3c514871"
+    },
+    {
+      "path": "apps/web/tests/e2e/advanced.spec.ts",
+      "bytes": 2624,
+      "sha256": "50912c5f16801887f3d6c7d3d283e938d4787798c15b4640463faf9b5640b0ab"
+    },
+    {
+      "path": "apps/web/tests/e2e/artifacts.ts",
+      "bytes": 354,
+      "sha256": "387b0671111f4a5ca98cf984a2f0a18c39ccfef535a1dacecb380a7871916e05"
+    },
+    {
+      "path": "apps/web/tests/e2e/foundation.spec.ts",
+      "bytes": 4995,
+      "sha256": "96aa93c559658bc11fb3025a55ceb47427eb495006121f134537fc50df55d338"
+    },
+    {
+      "path": "apps/web/tests/e2e/frontend-navigation.spec.ts",
+      "bytes": 2527,
+      "sha256": "14a0cc2dc722c65ef6952f72a49f0870e189b9ed4db1e126ed3664041fb49ba2"
+    },
+    {
+      "path": "apps/web/tests/e2e/galaxy-counts.spec.ts",
+      "bytes": 6358,
+      "sha256": "a7a431f290f0de5d33ef22ea33993148434a926f00205f9016e1ab38e8c311d6"
+    },
+    {
+      "path": "apps/web/tests/e2e/galaxy.spec.ts",
+      "bytes": 9702,
+      "sha256": "03bc3212a6eb9beec2dbe4214604c2ca4fa233d29d3739bbe9e2dba6315e8e95"
+    },
+    {
+      "path": "apps/web/tests/e2e/helpers.ts",
+      "bytes": 1164,
+      "sha256": "a5bd388e05036aac29969bc3babc57e7c0f03e6bb1f43b6a094853286d0871cc"
+    },
+    {
+      "path": "apps/web/tests/e2e/interaction-regressions.spec.ts",
+      "bytes": 8419,
+      "sha256": "e04b46b8a5f6bab6cca45bf1cc78c2ddfcf1d8588dc353382adcecd1e82171b6"
+    },
+    {
+      "path": "apps/web/tests/e2e/map-stars.spec.ts",
+      "bytes": 6845,
+      "sha256": "9d28fa1f29c4e58d39cd94189c3a01b01773c1eaf56d6910587df13212c46472"
+    },
+    {
+      "path": "apps/web/tests/e2e/navigation.spec.ts",
+      "bytes": 7822,
+      "sha256": "35a5e94c92b3ae4ad50bb9e50823ecbfee19383bdb4aac85f9f92675660f1365"
+    },
+    {
+      "path": "apps/web/tests/e2e/prayer-admin.spec.ts",
+      "bytes": 2837,
+      "sha256": "9fd42810d2d82c1f84eaa22282dc9f50987691cad6b416dc6d39646d7967213f"
+    },
+    {
+      "path": "apps/web/tests/e2e/prayers.spec.ts",
+      "bytes": 8418,
+      "sha256": "422232a6c2008ce5c315073af068a3f6ad16cf554e21f20ef507574320373812"
+    },
+    {
+      "path": "apps/web/tests/e2e/quality.spec.ts",
+      "bytes": 3487,
+      "sha256": "8c0fe300bbd417b6f586f614fc1ff8f4500dc7ebe5b364ee4d23689b2dc5fc79"
+    },
+    {
+      "path": "apps/web/tests/e2e/settings.spec.ts",
+      "bytes": 4469,
+      "sha256": "584233f23fdb5a018ea4664a4f532ec1f3a1003ab476ffce3bb6538c0e85a033"
+    },
+    {
+      "path": "apps/web/tests/e2e/social.spec.ts",
+      "bytes": 3956,
+      "sha256": "22d0a9015c3feb07201992582d8a9b31f0d65a70380f9a80748be4945baa3c06"
+    },
+    {
+      "path": "apps/web/tests/e2e/ui-ux.spec.ts",
+      "bytes": 32664,
+      "sha256": "c1ebd1c1f3bbf0aa3a0c0bb97546f236b5083cb6e69ba8aeee31f7a8a0b2f7fa"
+    },
+    {
+      "path": "apps/web/tests/e2e/visual.spec.ts",
+      "bytes": 3011,
+      "sha256": "a7bd76ce8f1ec2fc3e2277ec5f32eb4355678bb1a99f8c75f90d8e9ffc5eaefe"
+    },
+    {
+      "path": "apps/web/tests/e2e/written-prayers.spec.ts",
+      "bytes": 10231,
+      "sha256": "fd654dcd6879a3d1a86bddc65128592531711d5885bf229d6ee9927cd31cdc7f"
+    },
+    {
+      "path": "apps/web/tests/legacy.test.ts",
+      "bytes": 2953,
+      "sha256": "c3dde8848e89678e6570e59c0807c7efe2ef8b474981cf4948b745e216838e23"
+    },
+    {
+      "path": "apps/web/tests/preservation.test.ts",
+      "bytes": 2063,
+      "sha256": "e2886aea7bbce0e24ef6df13acb0a5b63f99e48bed68a078c621441b2ff5f4b5"
+    },
+    {
+      "path": "apps/web/tsconfig.json",
+      "bytes": 778,
+      "sha256": "94ffd92d627acbfc727556c9740325049f2387b6c3591a6fd04ab279500a0b4c"
+    },
+    {
+      "path": "apps/web/vitest.config.ts",
+      "bytes": 179,
+      "sha256": "4e72401499b27badecd2da725699d02bf697ae30c541207df5b88c78ac0d9399"
+    },
+    {
+      "path": "docker-compose.yml",
+      "bytes": 3079,
+      "sha256": "60fa3804a75309ae1e53cd27fa9331edf7b229a651f56887a43c2d62565e1475"
+    },
+    {
+      "path": "docs/api/migration-postgresql.sql",
+      "bytes": 18090,
+      "sha256": "a5cb95bd14ce5a6134f447c7c2f14431bc3604dad0298d293cff1058bc7580ea"
+    },
+    {
+      "path": "docs/api/openapi.json",
+      "bytes": 86906,
+      "sha256": "e1005083afbc469cd93e04083a91bb4b5baed61791bc3cfb64523775350b7356"
+    },
+    {
+      "path": "docs/konten-doa/SUMBER.md",
+      "bytes": 5052,
+      "sha256": "a975e82850b73432036863b9960cd58d3495e70feb328819a3b67e5cd72f42af"
+    },
+    {
+      "path": "docs/lisensi/CATATAN.md",
+      "bytes": 661,
+      "sha256": "fbfb29b7411c9d0768f3a2244eca945209876a7f965075719a0445a75a2e34f9"
+    },
+    {
+      "path": "docs/panduan/PENGEMBANGAN.md",
+      "bytes": 9753,
+      "sha256": "0fc2eeec5ae15e456aabb15d366babbde32defa3c23b9f7dc9dcc4b55c4dc888"
+    },
+    {
+      "path": "docs/pengujian/hasil/browser-recheck-results.json",
+      "bytes": 5616,
+      "sha256": "26a915900ef2c43141d20e98766a0f21e36fcce8b570895556e1842b795938bf"
+    },
+    {
+      "path": "docs/pengujian/hasil/browser-results.json",
+      "bytes": 22641,
+      "sha256": "ca476615c822b7960a93afd29049932309fe8311ce3920837f2683eae1d164e6"
+    },
+    {
+      "path": "docs/pengujian/hasil/button-audit-recheck-results.json",
+      "bytes": 7728,
+      "sha256": "dbb57b48c6856c668617175027ddb74a326d7fc3df50447e95ad5d4b4483594e"
+    },
+    {
+      "path": "docs/pengujian/hasil/button-audit-results.json",
+      "bytes": 33922,
+      "sha256": "55c062548dc2a707ec67dcfe28a27c720296f871169ca013b2650dac0cf3f860"
+    },
+    {
+      "path": "docs/pengujian/hasil/camera-metrics.json",
+      "bytes": 402,
+      "sha256": "d4693e4059574e7ab7b9f422fd850a6b90c39a965598df2209cc86ee45eb1b08"
+    },
+    {
+      "path": "docs/pengujian/hasil/final-interaction-results.json",
+      "bytes": 7871,
+      "sha256": "f656cd0f93cb35cd368ae1e41439100b919f4d894ae0656a3b47696d2e5c3381"
+    },
+    {
+      "path": "docs/pengujian/hasil/galaxy-counts-final-results.json",
+      "bytes": 10035,
+      "sha256": "e1ddd950b78342c35560df131a1c377588c90d06fa735709f9da19176fe7554c"
+    },
+    {
+      "path": "docs/pengujian/hasil/galaxy-counts-recheck-results.json",
+      "bytes": 3162,
+      "sha256": "2830ef984dc0e65733489072353ec89891605d44890d856f7e87f85e9518e22a"
+    },
+    {
+      "path": "docs/pengujian/hasil/galaxy-counts-results.json",
+      "bytes": 10701,
+      "sha256": "d6ffb08f1773f2a8b8b354d181b31f00a53ba933ecf9e4085afc6fb0a48b50eb"
+    },
+    {
+      "path": "docs/pengujian/hasil/interaction-recheck-results.json",
+      "bytes": 9720,
+      "sha256": "fb374e63f393f84a7aa9ec454949028abeab54fee152c91887ff765b3e43314b"
+    },
+    {
+      "path": "docs/pengujian/hasil/interaction-results.json",
+      "bytes": 13601,
+      "sha256": "898d23e311379dfef80017b762cf7ec7c0ebceb7fcaccdfa9cd19a6005699d6b"
+    },
+    {
+      "path": "docs/pengujian/hasil/map-explore-results.json",
+      "bytes": 4313,
+      "sha256": "a19ac12e7b5c9b7e67731cf5ac9b3ef28a874bd5dec4a196258623e37237e588"
+    },
+    {
+      "path": "docs/pengujian/hasil/npm-audit-production.json",
+      "bytes": 365,
+      "sha256": "cba1d0b3ba546651fa2745e5a86d6f867650ead63195ab2c17bf04729222f0f9"
+    },
+    {
+      "path": "docs/pengujian/hasil/personal-prayers-map-final-results.json",
+      "bytes": 9876,
+      "sha256": "421e086a7f63ac9fcb179e3350d17f6bb2363db19b6bda3804b3e273fd17cf4c"
+    },
+    {
+      "path": "docs/pengujian/hasil/personal-prayers-map-layout-results.json",
+      "bytes": 7496,
+      "sha256": "34cdb6f71b0f66147b3b45cf60cb4961f0a038e5aca0f6e8897a5467e8a9eb52"
+    },
+    {
+      "path": "docs/pengujian/hasil/personal-prayers-map-recheck-results.json",
+      "bytes": 3138,
+      "sha256": "735ea0a55d3ba598dbbf913eac520d3dc0e7a0b79ac3f9a2e5ac163e433c8c50"
+    },
+    {
+      "path": "docs/pengujian/hasil/personal-prayers-map-results.json",
+      "bytes": 26092,
+      "sha256": "157454f552a7dd0e297d60383b9a9b778bc06905089d336d3a1527520a4298ac"
+    },
+    {
+      "path": "docs/pengujian/hasil/prayer-availability-results.json",
+      "bytes": 6285,
+      "sha256": "8e823c440ba73c26b4d5a16590493b1aaa7d0d2c5c5bf937db737c21583fde2c"
+    },
+    {
+      "path": "docs/pengujian/hasil/prayer-entry-results.json",
+      "bytes": 8637,
+      "sha256": "c66af0850ca9e44f8af72795596ca998e0a10c44cf7209542933272df1153857"
+    },
+    {
+      "path": "docs/pengujian/hasil/prayer-integration-results.json",
+      "bytes": 5925,
+      "sha256": "3ce9d6941a6e4dde3a016775f423c075dc8af323f5aa7422bbc2bc2b3ca5b798"
+    },
+    {
+      "path": "docs/pengujian/hasil/prayer-source-recheck-results.json",
+      "bytes": 3244,
+      "sha256": "3bd1ea559159d7584d975cb6673aa3a96cc8be222a48ad12c25096da2b5269c6"
+    },
+    {
+      "path": "docs/pengujian/hasil/prayer-source-results.json",
+      "bytes": 13094,
+      "sha256": "0bedeb8c7e91c0c9101b15d66c0b4f0d5cbc4a6bb3450c9c5f9b79098479af93"
+    },
+    {
+      "path": "docs/pengujian/hasil/structure-cleanup-results.json",
+      "bytes": 11342,
+      "sha256": "7e6c9f69810c8643185fbf772758f54291fe51407d2bb86614087248fe266e8b"
+    },
+    {
+      "path": "docs/pengujian/hasil/ui-ux-full-results.json",
+      "bytes": 21545,
+      "sha256": "bbace2b429d0e5511c2429018b8b747302982c611974306b1859b93cb077de09"
+    },
+    {
+      "path": "docs/pengujian/hasil/written-prayer-recheck-results.json",
+      "bytes": 5575,
+      "sha256": "b9b24e9b78033a33f7f8c93b8d31cd42bd248f360982c9858a87ceefa6e9c8b8"
+    },
+    {
+      "path": "docs/pengujian/hasil/written-prayer-results.json",
+      "bytes": 22058,
+      "sha256": "9e6211421c48e2c9badfe1600ceb4e84f3298af0ecc54394c509ae4ce36183f2"
+    },
+    {
+      "path": "docs/pengujian/README.md",
+      "bytes": 8879,
+      "sha256": "03ba66370457a3a88eecabb9a3b0dbe61d409597d9fa885f75cf347e378881bb"
+    },
+    {
+      "path": "docs/referensi/Instruksi-Kerja.md",
+      "bytes": 26150,
+      "sha256": "52108ecaec6a07709a977277544476f33354185307ee5553e400d9e6edccb1b3"
+    },
+    {
+      "path": "docs/referensi/manifest-asli.json",
+      "bytes": 48678,
+      "sha256": "416be4326559631808db8a6e4cd2e04378e9a01bfea5c42b4c5fd5f3fef46c9d"
+    },
+    {
+      "path": "docs/referensi/PRD_Kelompok_8.docx",
+      "bytes": 17533,
+      "sha256": "edeadef8426fc3720afa30cbbdac600099467cca7ee5d1c83b2e02272bd10ce5"
+    },
+    {
+      "path": "docs/ui-ux/assets/untukmu.css",
+      "bytes": 23380,
+      "sha256": "5e4295cc544598263b73f0e0862842d3a0d8e27af048a38d8f5515d3be6fedea"
+    },
+    {
+      "path": "docs/ui-ux/cakupan.json",
+      "bytes": 118181,
+      "sha256": "00ac7f20cf3b09def7634a81778cbae3ca64cf2778c8db5f65f36da749d847d2"
+    },
+    {
+      "path": "docs/ui-ux/desktop/doa-1366.png",
+      "bytes": 190847,
+      "sha256": "fa8ac4e06aba65f7f1dd06b6107fb4a7e27ccc9a561ec484fa102e63407a1361"
+    },
+    {
+      "path": "docs/ui-ux/desktop/entry-asli.png",
+      "bytes": 206388,
+      "sha256": "d0095733f76fee0cad225deaf35b7ad5900df0731a1cd6b9f96e3364009cf5a0"
+    },
+    {
+      "path": "docs/ui-ux/desktop/entry-sekarang.png",
+      "bytes": 200103,
+      "sha256": "fae67cc3e79585c12928969b965d7ab8c2dc9e3887bc611b207d436ba5654413"
+    },
+    {
+      "path": "docs/ui-ux/desktop/index.html",
+      "bytes": 2907,
+      "sha256": "4a50e6beb41ca6f5893bd8192e02092dba5f05e67abd64062466795cb44fb6da"
+    },
+    {
+      "path": "docs/ui-ux/desktop/layar/01-halaman-awal.png",
+      "bytes": 211610,
+      "sha256": "e272d02e886189059178ac145f973eb50e0731723874a37241a5f476ec022d8b"
+    },
+    {
+      "path": "docs/ui-ux/desktop/layar/02-rumah-milky-way.png",
+      "bytes": 345464,
+      "sha256": "434874444e729845e81b5519ab5ef8b024ae82e10391fb1a8b1f5e31041531f8"
+    },
+    {
+      "path": "docs/ui-ux/desktop/layar/03-jelajah-kosong.png",
+      "bytes": 185762,
+      "sha256": "59b963e0642e19012e792c5d169c8c3c34ba292bceb5859807eb942313b0b499"
+    },
+    {
+      "path": "docs/ui-ux/desktop/layar/04-doa-kosong.png",
+      "bytes": 189094,
+      "sha256": "7197c34370fc45a76f5f2adf09691b5e4f1123a5ea76695e77226405bcf6fac8"
+    },
+    {
+      "path": "docs/ui-ux/desktop/layar/05-masuk.png",
+      "bytes": 159525,
+      "sha256": "d78d40c9e23919e92dc29f88e5171f34f750b1473e2c21dc2d915597093ebfc4"
+    },
+    {
+      "path": "docs/ui-ux/desktop/layar/06-pemulihan-tamu.png",
+      "bytes": 153004,
+      "sha256": "0588b2985c014a1d3a566b28e5275601fcd0b4e3f15ffe14f3cd0bbb618f3f9b"
+    },
+    {
+      "path": "docs/ui-ux/desktop/layar/07-daftar.png",
+      "bytes": 160290,
+      "sha256": "951ddc80d33eb122fa12efa865b27c63c8e944e724df9c1123250930e77e33e6"
+    },
+    {
+      "path": "docs/ui-ux/desktop/layar/08-daftar-validasi.png",
+      "bytes": 157542,
+      "sha256": "aaac048e1694e675eb09ff80b89a90195e82ebab5554d52b001b0083526eb87b"
+    },
+    {
+      "path": "docs/ui-ux/desktop/layar/09-kode-pemulihan.png",
+      "bytes": 180339,
+      "sha256": "659a29149312fae1288e781cd07a9faeb1c5c6d16a9c13fd2851dd24044da54e"
+    },
+    {
+      "path": "docs/ui-ux/desktop/layar/10-ruang-pribadi-kosong.png",
+      "bytes": 130879,
+      "sha256": "065f547affea788297eb649986f1d342cf2cf91abd7f4fdc99dcdb9e11367955"
+    },
+    {
+      "path": "docs/ui-ux/desktop/layar/11-tulis-tujuan-baru.png",
+      "bytes": 152720,
+      "sha256": "72c0914bd445d353d4481e8e56fc354effb1d227a3751ffed4c67c59406874dd"
+    },
+    {
+      "path": "docs/ui-ux/desktop/layar/12-tulis-bentuk-galaksi.png",
+      "bytes": 164835,
+      "sha256": "8912d4419cf5ec4554f05eef9dc199b912950e8a40df4b08ad94767573df090e"
+    },
+    {
+      "path": "docs/ui-ux/desktop/layar/13-tulis-isi-pesan.png",
+      "bytes": 158596,
+      "sha256": "c7d534fe95888bf03191faa4711892032ef56c3c6ab228e3b01e6fab1104d9d9"
+    },
+    {
+      "path": "docs/ui-ux/desktop/layar/14-tulis-privasi-privat.png",
+      "bytes": 156728,
+      "sha256": "292948c5a75cb2ccf1d5a4af18a471e57072a3bf64245052c78c38c874fa0a3b"
+    },
+    {
+      "path": "docs/ui-ux/desktop/layar/15-tulis-privasi-publik.png",
+      "bytes": 160461,
+      "sha256": "7d2e2e76d6059932fdcf144877277f385447361250fdf536e4aafc8b526e0a98"
+    },
+    {
+      "path": "docs/ui-ux/desktop/layar/16-tulis-privasi-unlisted.png",
+      "bytes": 160029,
+      "sha256": "e3b5570a987717eddfe31e9dabd7b13d888637227f4b51856b419370b21f7481"
+    },
+    {
+      "path": "docs/ui-ux/desktop/layar/17-tulis-tujuan-lama.png",
+      "bytes": 186213,
+      "sha256": "71819feda839017e4876d9d6414df76e63a260704121fc574ec5b035f11b90cc"
+    },
+    {
+      "path": "docs/ui-ux/desktop/layar/18-tulis-doa-tujuan-lama.png",
+      "bytes": 167054,
+      "sha256": "ae83e7faee1b2c727124cda3001a0a63e530eb0a320a23657bf3cd6a4a292f0b"
+    },
+    {
+      "path": "docs/ui-ux/desktop/layar/19-tulis-doa-galaksi-baru-bagian-2.png",
+      "bytes": 157929,
+      "sha256": "9b71ecc4b73dcb05bd444bf9fa89e374bafe292b66d42a6990125efadb2712ce"
+    },
+    {
+      "path": "docs/ui-ux/desktop/layar/19-tulis-doa-galaksi-baru.png",
+      "bytes": 171962,
+      "sha256": "64d49ba8248cb2676bcfb724ba6674bc8c48e63378381adbd92a97eee60e43aa"
+    },
+    {
+      "path": "docs/ui-ux/desktop/layar/20-doa-tertulis-tersimpan.png",
+      "bytes": 139384,
+      "sha256": "8b09b543b3025ac29eeb9ac7f8249dcfeace0590a5abf436a9a7504b34359832"
+    },
+    {
+      "path": "docs/ui-ux/desktop/layar/21-ruang-pribadi-terisi-bagian-2.png",
+      "bytes": 145564,
+      "sha256": "93c7c9e0f68d41d85bd08623141ee4cee66a854cb5488b648f24136bc870cccd"
+    },
+    {
+      "path": "docs/ui-ux/desktop/layar/21-ruang-pribadi-terisi.png",
+      "bytes": 145273,
+      "sha256": "cd7d1c4625ed7a709f8851203c1e4eff7d99a1ac10506207ba45721c13d3e07c"
+    },
+    {
+      "path": "docs/ui-ux/desktop/layar/22-kelola-doa.png",
+      "bytes": 143163,
+      "sha256": "32a4570f864851279b76cb1d324c8c57e97b329284da803be502e68945c96654"
+    },
+    {
+      "path": "docs/ui-ux/desktop/layar/23-kelola-pesan.png",
+      "bytes": 150580,
+      "sha256": "3f9e7e8faaac79d1183c6aef5969059fbfb69bfbe821f319814a5023177ae8a8"
+    },
+    {
+      "path": "docs/ui-ux/desktop/layar/24-kelola-tautan-terbatas.png",
+      "bytes": 171532,
+      "sha256": "25b110c714ca1b4c71f346d7bd7bba0c759a37ef7dbd65a4dca19da201efc587"
+    },
+    {
+      "path": "docs/ui-ux/desktop/layar/25-kartu-galaksi.png",
+      "bytes": 106903,
+      "sha256": "797dae7d7a3f1f54396cd6ca41a049e969e59d5b113ae1ca117993fba8018373"
+    },
+    {
+      "path": "docs/ui-ux/desktop/layar/26-kartu-bintang-pesan.png",
+      "bytes": 89480,
+      "sha256": "8086e4bf2ea66499e9d68451dd815b2678b53e95a6b037caa1693352f2f5627e"
+    },
+    {
+      "path": "docs/ui-ux/desktop/layar/27-jelajah-terbaru-bagian-2.png",
+      "bytes": 172842,
+      "sha256": "9e2421cd5767ec25fc6d10ff98d2ac41650fb3d3f6d2952571c4bad076b794c8"
+    },
+    {
+      "path": "docs/ui-ux/desktop/layar/27-jelajah-terbaru-bagian-3.png",
+      "bytes": 178356,
+      "sha256": "81a033ff23906963b4db4128444d2228eac0768fea59ab742629243e033a17c8"
+    },
+    {
+      "path": "docs/ui-ux/desktop/layar/27-jelajah-terbaru.png",
+      "bytes": 170353,
+      "sha256": "87ba229057c4c74af813ca70545c3f29a15beb17e1bb0d10e2a00695f9a23c51"
+    },
+    {
+      "path": "docs/ui-ux/desktop/layar/28-jelajah-paling-didoakan-bagian-2.png",
+      "bytes": 172924,
+      "sha256": "923d700764419a3af0f4a94708f48176396e2ddc12ad9630fe1cd3abe5492af9"
+    },
+    {
+      "path": "docs/ui-ux/desktop/layar/28-jelajah-paling-didoakan-bagian-3.png",
+      "bytes": 177637,
+      "sha256": "ac57ed0590e2458f2fef9212c449725ed90826aefd0b43926e7ee07bb56e99b4"
+    },
+    {
+      "path": "docs/ui-ux/desktop/layar/28-jelajah-paling-didoakan.png",
+      "bytes": 171893,
+      "sha256": "f1e543b355e73a57e8523100b58be99472efa487de18d656829ff556d0db5744"
+    },
+    {
+      "path": "docs/ui-ux/desktop/layar/29-jelajah-halaman-kedua-bagian-2.png",
+      "bytes": 180508,
+      "sha256": "dfb4b8d784736f409ac0a83a07cd76e53786e36df483a7750c8c11cc04b6a253"
+    },
+    {
+      "path": "docs/ui-ux/desktop/layar/29-jelajah-halaman-kedua.png",
+      "bytes": 172345,
+      "sha256": "6ab6a98b79bc299a358c8c7790f309895111afa28f805aca4a7f14165193539f"
+    },
+    {
+      "path": "docs/ui-ux/desktop/layar/30-jelajah-filter-bagian-2.png",
+      "bytes": 172546,
+      "sha256": "bee05dda1661ae0d83fb21e6f296a7677c5581d7a247e076809e0d86a4947934"
+    },
+    {
+      "path": "docs/ui-ux/desktop/layar/30-jelajah-filter-bagian-3.png",
+      "bytes": 180370,
+      "sha256": "c89feef0274093377d598dab5940db0ad8a8b55ee80ea6cfbd4ce5bc66839972"
+    },
+    {
+      "path": "docs/ui-ux/desktop/layar/30-jelajah-filter.png",
+      "bytes": 171511,
+      "sha256": "95280562b8e42f93dbe99914fc87f63a7b802989bda0df03cbc138d48fe2b58a"
+    },
+    {
+      "path": "docs/ui-ux/desktop/layar/31-jelajah-filter-kosong.png",
+      "bytes": 165725,
+      "sha256": "1179ae7a3a1a8e700e13de5bb679d63a1887c96927f6c3c7ce0fd4ed4f5bab4c"
+    },
+    {
+      "path": "docs/ui-ux/desktop/layar/32-laporkan-ucapan.png",
+      "bytes": 145675,
+      "sha256": "b473bfb740d3447cb013a76e019d8d8e36cbe93cb1ec98adf1dfe32afba64857"
+    },
+    {
+      "path": "docs/ui-ux/desktop/layar/33-konfirmasi-blokir.png",
+      "bytes": 142468,
+      "sha256": "42338e8fab95adfb8a59680731a7a83b8a1a704dc08cbeb4f9cef7361deb8f28"
+    },
+    {
+      "path": "docs/ui-ux/desktop/layar/34-daftar-pemblokiran.png",
+      "bytes": 130037,
+      "sha256": "c119fdea1a31baa45ab42366bc1e272c15e3ee8f0d43b664a307cf2a865ed6a9"
+    },
+    {
+      "path": "docs/ui-ux/desktop/layar/35-doa-daftar-ucapan-bagian-2.png",
+      "bytes": 176090,
+      "sha256": "d93d889c1c070b903b5ae760442c9af0f7c38dd4512288b7051d50a6db1c0921"
+    },
+    {
+      "path": "docs/ui-ux/desktop/layar/35-doa-daftar-ucapan-bagian-3.png",
+      "bytes": 179069,
+      "sha256": "8f75914f42ae7a61e5b0834d1433e5032df51d90be9c34f4263df6be1f807770"
+    },
+    {
+      "path": "docs/ui-ux/desktop/layar/35-doa-daftar-ucapan.png",
+      "bytes": 203343,
+      "sha256": "2fb34bcc26563c8b1fca9f67e8967181617cd16884d8c492162113cc2353fae4"
+    },
+    {
+      "path": "docs/ui-ux/desktop/layar/36-doa-tradisi-islam-bagian-2.png",
+      "bytes": 181118,
+      "sha256": "2efcdb6073d2b9d5b2e1df7db56df70c4a9201e70bee6d117509fa8193b3f1c4"
+    },
+    {
+      "path": "docs/ui-ux/desktop/layar/36-doa-tradisi-islam-bagian-3.png",
+      "bytes": 173934,
+      "sha256": "f53d3f3e6926e17a347468f34db12deaa0d9e2d633eb38feda3d9df7c9e1b911"
+    },
+    {
+      "path": "docs/ui-ux/desktop/layar/36-doa-tradisi-islam.png",
+      "bytes": 208207,
+      "sha256": "b7e92b976b30522866c1f51bee801fb22fc1b8771aee6389a6b6a5c661296ec8"
+    },
+    {
+      "path": "docs/ui-ux/desktop/layar/37-doa-tradisi-kristen-bagian-2.png",
+      "bytes": 179018,
+      "sha256": "4387564d51c40632fd842469316adef031261f1477389bff463c2f9dbbbcedf9"
+    },
+    {
+      "path": "docs/ui-ux/desktop/layar/37-doa-tradisi-kristen-bagian-3.png",
+      "bytes": 174039,
+      "sha256": "31c56131da780d32aba38e72e9e7d9583c575d051eaccd78fee74e1b2327f905"
+    },
+    {
+      "path": "docs/ui-ux/desktop/layar/37-doa-tradisi-kristen.png",
+      "bytes": 200202,
+      "sha256": "0d23e770c2566e8053719bc0c8f35b0ead8af276c43d645af6920cdaeacf7283"
+    },
+    {
+      "path": "docs/ui-ux/desktop/layar/38-doa-tradisi-katolik-bagian-2.png",
+      "bytes": 180309,
+      "sha256": "712874bebd1d923d13e6bceb114c359c0181648de8832ba01609440248f71fd7"
+    },
+    {
+      "path": "docs/ui-ux/desktop/layar/38-doa-tradisi-katolik-bagian-3.png",
+      "bytes": 173667,
+      "sha256": "1ae3ac7fc93910214a0b708556354eb1b8a422954ea3617774b5dabdeb7f76da"
+    },
+    {
+      "path": "docs/ui-ux/desktop/layar/38-doa-tradisi-katolik.png",
+      "bytes": 202331,
+      "sha256": "1c049e3f595ac753a0009dc3ba577fa46dd25bb905c3e8aef12d61f941bfb401"
+    },
+    {
+      "path": "docs/ui-ux/desktop/layar/39-doa-tradisi-hindu-bagian-2.png",
+      "bytes": 178804,
+      "sha256": "026f3b7fab0e5c90af43bb38d8e34e61851b750f3e7a88462233adc791fd2f38"
+    },
+    {
+      "path": "docs/ui-ux/desktop/layar/39-doa-tradisi-hindu-bagian-3.png",
+      "bytes": 173667,
+      "sha256": "1ae3ac7fc93910214a0b708556354eb1b8a422954ea3617774b5dabdeb7f76da"
+    },
+    {
+      "path": "docs/ui-ux/desktop/layar/39-doa-tradisi-hindu.png",
+      "bytes": 199721,
+      "sha256": "d69393ab06c5d29696861951a5e9565a2773b623785f1059a6fd1220213c9e36"
+    },
+    {
+      "path": "docs/ui-ux/desktop/layar/40-doa-tradisi-buddha-bagian-2.png",
+      "bytes": 181547,
+      "sha256": "015deb906ccbf49e642b874d04a3838b7075e12c0af081b8f9bf9dba9defb0c0"
+    },
+    {
+      "path": "docs/ui-ux/desktop/layar/40-doa-tradisi-buddha-bagian-3.png",
+      "bytes": 173773,
+      "sha256": "212e887840e539069758fca7085e4b27d313dd288c9f297575f31b6b530371f7"
+    },
+    {
+      "path": "docs/ui-ux/desktop/layar/40-doa-tradisi-buddha.png",
+      "bytes": 203892,
+      "sha256": "c963aff268e7069b9b49640773770cf2f525e37475e4c618aff8cc2ee71cb536"
+    },
+    {
+      "path": "docs/ui-ux/desktop/layar/41-doa-tradisi-konghucu-bagian-2.png",
+      "bytes": 180991,
+      "sha256": "81e463259fe750cd747bb921dc122a8ed8a4859ec4522601d600dc1941ef4f1b"
+    },
+    {
+      "path": "docs/ui-ux/desktop/layar/41-doa-tradisi-konghucu-bagian-3.png",
+      "bytes": 173773,
+      "sha256": "212e887840e539069758fca7085e4b27d313dd288c9f297575f31b6b530371f7"
+    },
+    {
+      "path": "docs/ui-ux/desktop/layar/41-doa-tradisi-konghucu.png",
+      "bytes": 202561,
+      "sha256": "4c779b712925ed0b0db1316a5f12f75f52402659faf983ec691624fd712cee52"
+    },
+    {
+      "path": "docs/ui-ux/desktop/layar/42-doa-tradisi-umum-bagian-2.png",
+      "bytes": 179120,
+      "sha256": "e562e05d76239204e0df305bd5161d0856835221dea4bbe28df6e1cdd0114ccb"
+    },
+    {
+      "path": "docs/ui-ux/desktop/layar/42-doa-tradisi-umum-bagian-3.png",
+      "bytes": 173819,
+      "sha256": "128caef61d1c39921b847564f58effc6d77551d6d1d87f1d308b7a546a1c05ee"
+    },
+    {
+      "path": "docs/ui-ux/desktop/layar/42-doa-tradisi-umum.png",
+      "bytes": 201003,
+      "sha256": "3f446d039124838399c03e744b54315e4be24a925702ce93c4c8e5810cc1de9a"
+    },
+    {
+      "path": "docs/ui-ux/desktop/layar/43-doa-menunggu-kurasi-bagian-2.png",
+      "bytes": 188354,
+      "sha256": "0586d30ea1a4a4e184b74daa5d70bcf072f8af38a8adfee797a729dafe285940"
+    },
+    {
+      "path": "docs/ui-ux/desktop/layar/43-doa-menunggu-kurasi.png",
+      "bytes": 193456,
+      "sha256": "5bde5ac86eef5751af89a029f24037ba424789613286210700cce59e49dcb46e"
+    },
+    {
+      "path": "docs/ui-ux/desktop/layar/44-doa-siap-hening-bagian-2.png",
+      "bytes": 187136,
+      "sha256": "9f8a3cef7262e6d8fe44ed139af2ba55db71ec72b31ab6e7a709a617f8fa26ef"
+    },
+    {
+      "path": "docs/ui-ux/desktop/layar/44-doa-siap-hening.png",
+      "bytes": 191466,
+      "sha256": "4e14afba2cdd7fd1a13fa6a687ba62d07dadd25712fe24e6840a3e08d4d2514a"
+    },
+    {
+      "path": "docs/ui-ux/desktop/layar/45-doa-hening-berjalan-bagian-2.png",
+      "bytes": 180222,
+      "sha256": "124ed9e4b8e7b05821e1fea89ef2d620f6df6105443b08f58ba9d11b8ebd097b"
+    },
+    {
+      "path": "docs/ui-ux/desktop/layar/45-doa-hening-berjalan.png",
+      "bytes": 184564,
+      "sha256": "602f00b85ced0e408862392135d3005c751558a5a890e803969c4446fcd7fd7a"
+    },
+    {
+      "path": "docs/ui-ux/desktop/layar/46-doa-selesai-bagian-2.png",
+      "bytes": 187500,
+      "sha256": "8ac9a49ff87c2672112d04181ca67b8c8d1b4b74c73780e7fad5f3eeffd7ab23"
+    },
+    {
+      "path": "docs/ui-ux/desktop/layar/46-doa-selesai.png",
+      "bytes": 191466,
+      "sha256": "4e14afba2cdd7fd1a13fa6a687ba62d07dadd25712fe24e6840a3e08d4d2514a"
+    },
+    {
+      "path": "docs/ui-ux/desktop/layar/47-doa-pemutar-audio-bagian-2.png",
+      "bytes": 178053,
+      "sha256": "97b4b3ac6a8487b06c172e290f9b68f1d34a393af078d7b03c37527a5c1968ba"
+    },
+    {
+      "path": "docs/ui-ux/desktop/layar/47-doa-pemutar-audio.png",
+      "bytes": 183579,
+      "sha256": "4098f29a488b27f5f329159283a042e3cb1eafc2032687172560933849eb4453"
+    },
+    {
+      "path": "docs/ui-ux/desktop/layar/48-pengaturan.png",
+      "bytes": 172434,
+      "sha256": "936f262102063e6f5faa7d3d60c5f291530376aa9f740d5c88f8c7aefb8e4a18"
+    },
+    {
+      "path": "docs/ui-ux/desktop/layar/49-akun-keamanan-sesi-bagian-2.png",
+      "bytes": 157219,
+      "sha256": "28ed8e3ca4c839050c2be5e2a6a41d58bd40319d76e34ee746eeccd2c62d6772"
+    },
+    {
+      "path": "docs/ui-ux/desktop/layar/49-akun-keamanan-sesi.png",
+      "bytes": 161283,
+      "sha256": "9b725e7adc21391b54b3eaf4c90b32b6ded48f8a9d6d438e8b42da71cd457612"
+    },
+    {
+      "path": "docs/ui-ux/desktop/layar/50-ekspor-diverifikasi-bagian-2.png",
+      "bytes": 159570,
+      "sha256": "d64ef5aad3c1e52b655022d7ce8a352e7b861ff5e04fc883009d6272da12b42d"
+    },
+    {
+      "path": "docs/ui-ux/desktop/layar/50-ekspor-diverifikasi.png",
+      "bytes": 161196,
+      "sha256": "c90cfeed44a05fa0cba2992b2d91ed78a0a4831cba66885842a4d82a3327e4dc"
+    },
+    {
+      "path": "docs/ui-ux/desktop/layar/51-pemulihan-akun-masuk.png",
+      "bytes": 131744,
+      "sha256": "0eb68834f8a27e3e0094fe988dcaf83bbccfcbc26879ef3cc301eaf19321302a"
+    },
+    {
+      "path": "docs/ui-ux/desktop/layar/52-kunci-terbuka.png",
+      "bytes": 142182,
+      "sha256": "5d896362f86b4fab929e03000253efd82330dd3b0cfb44c7cf81056601e1cc43"
+    },
+    {
+      "path": "docs/ui-ux/desktop/layar/53-kunci-tertutup.png",
+      "bytes": 149610,
+      "sha256": "2d3ba2b93cd510238dbe8837e98a1d95b6190969fff21c816ab4203cc33e8fd9"
+    },
+    {
+      "path": "docs/ui-ux/desktop/layar/54-kunci-kata-sandi-salah.png",
+      "bytes": 150958,
+      "sha256": "436cf0971ae5871163fea0621c3f57563c94834e8e41d29addd9b1d15625a826"
+    },
+    {
+      "path": "docs/ui-ux/desktop/layar/55-peta-kenangan.png",
+      "bytes": 69566,
+      "sha256": "e589db639e235f629f0c2e35564b9dad7d7b848c9daefb5c30619b6615c7819e"
+    },
+    {
+      "path": "docs/ui-ux/desktop/layar/56-peta-konstelasi.png",
+      "bytes": 69157,
+      "sha256": "2a970db638e264f6d16f5c0a8e0e85af82b8d4dacd430c7316c339c81b59be03"
+    },
+    {
+      "path": "docs/ui-ux/desktop/layar/57-peta-kartu-rasi.png",
+      "bytes": 160891,
+      "sha256": "9314a5631ca2bf1b209c905663cd0a3d10d2826d26e2e8ba2c33042fb540e6c8"
+    },
+    {
+      "path": "docs/ui-ux/desktop/layar/58-astronomi-kartu-objek.png",
+      "bytes": 162516,
+      "sha256": "c1327182d33383927918b884db88cd4e2210f6e4f35ba84f83ca83f07f503af5"
+    },
+    {
+      "path": "docs/ui-ux/desktop/layar/59-tata-surya.png",
+      "bytes": 265604,
+      "sha256": "0f5647f63fbb332d2dd7a201e8b24ecfe4dd6f6d539d0cc4b6d48d7621726942"
+    },
+    {
+      "path": "docs/ui-ux/desktop/layar/60-tata-surya-kartu-planet.png",
+      "bytes": 283393,
+      "sha256": "0565881d30b43d4889139442bf502e5aa508846e507fabf9d7916db7ea5683bb"
+    },
+    {
+      "path": "docs/ui-ux/desktop/layar/61-admin-moderasi-bagian-2.png",
+      "bytes": 133053,
+      "sha256": "40dab8d89a71a26de6f3775bd723734864797e6640fc578ce69fa4a1580a0869"
+    },
+    {
+      "path": "docs/ui-ux/desktop/layar/61-admin-moderasi.png",
+      "bytes": 140888,
+      "sha256": "13bf5a02aa7b776692d2258732fb664764d41d1eef4262cd34dac70f8fba2faf"
+    },
+    {
+      "path": "docs/ui-ux/desktop/layar/62-admin-kurasi-katolik-bagian-2.png",
+      "bytes": 112426,
+      "sha256": "7dc98a257ec9464daf1b67e123781669a379dd1d774110404108acbf46349abd"
+    },
+    {
+      "path": "docs/ui-ux/desktop/layar/62-admin-kurasi-katolik-bagian-3.png",
+      "bytes": 118572,
+      "sha256": "ac36e46f02ed938835f52c102b24ef2532b9ae984aadefb27277f525e4d457fe"
+    },
+    {
+      "path": "docs/ui-ux/desktop/layar/62-admin-kurasi-katolik-bagian-4.png",
+      "bytes": 133494,
+      "sha256": "82b949d36bb91edd58af8e67feb1546a91c53fdf8d19ead2fb76706c33a49994"
+    },
+    {
+      "path": "docs/ui-ux/desktop/layar/62-admin-kurasi-katolik.png",
+      "bytes": 144051,
+      "sha256": "2a6b6efbff4fca18b627bdf27e51c0b1b24073e66f08acd1594c4c30dd2f12ca"
+    },
+    {
+      "path": "docs/ui-ux/desktop/layar/63-admin-kurasi-hindu-bagian-2.png",
+      "bytes": 116503,
+      "sha256": "ccb7154adc08b3b02c64b434beda8d94b3683381080af58a6e40deb159905c93"
+    },
+    {
+      "path": "docs/ui-ux/desktop/layar/63-admin-kurasi-hindu-bagian-3.png",
+      "bytes": 111520,
+      "sha256": "51dda7e306e3084ab1f2f36f0058e4af70c5773bcd5e30136b4ddcf7258fc87f"
+    },
+    {
+      "path": "docs/ui-ux/desktop/layar/63-admin-kurasi-hindu-bagian-4.png",
+      "bytes": 132119,
+      "sha256": "c65b73bce393dd730d03c405144129bb93017a0b6c0f4da443f1765724bc1de4"
+    },
+    {
+      "path": "docs/ui-ux/desktop/layar/63-admin-kurasi-hindu.png",
+      "bytes": 145496,
+      "sha256": "9a439b02b04e27fa1e3f583a526e49aeb2bb03af507c004044b7fc9e62872130"
+    },
+    {
+      "path": "docs/ui-ux/desktop/layar/64-admin-kurasi-buddha-bagian-2.png",
+      "bytes": 110576,
+      "sha256": "b110dc50953d0aa7635f6c173f9352c20d7993beb60f00fce5b1bf0336f3b1b3"
+    },
+    {
+      "path": "docs/ui-ux/desktop/layar/64-admin-kurasi-buddha-bagian-3.png",
+      "bytes": 113538,
+      "sha256": "a86fd7add79ae61c6b98f9e81e384adc44af3773d4dbe8141237205ddfaa80ab"
+    },
+    {
+      "path": "docs/ui-ux/desktop/layar/64-admin-kurasi-buddha-bagian-4.png",
+      "bytes": 132078,
+      "sha256": "7ff60bb7e7cc5bac48c13527decf9ca005b22d5afdfc14721320ee9dd523d022"
+    },
+    {
+      "path": "docs/ui-ux/desktop/layar/64-admin-kurasi-buddha.png",
+      "bytes": 147594,
+      "sha256": "c902e0fd6aa245eed970efd92d78b6c6002215b3ffcf319c9adcf0cd7359bbf0"
+    },
+    {
+      "path": "docs/ui-ux/desktop/layar/65-admin-audio-draf-bagian-2.png",
+      "bytes": 112530,
+      "sha256": "2789ef8a99be10162335f192e83eb2dc0678d3abc8fea3e09610df562521deec"
+    },
+    {
+      "path": "docs/ui-ux/desktop/layar/65-admin-audio-draf-bagian-3.png",
+      "bytes": 116717,
+      "sha256": "763bb3381e46a704d0b2b9c40542c6044a36e03754db4c56b3c838e9481600c6"
+    },
+    {
+      "path": "docs/ui-ux/desktop/layar/65-admin-audio-draf-bagian-4.png",
+      "bytes": 133457,
+      "sha256": "ae105a0e38efa1f3cdeb7aa57d384c44a37dbeb599d7e958ade0983fbb6d1648"
+    },
+    {
+      "path": "docs/ui-ux/desktop/layar/65-admin-audio-draf.png",
+      "bytes": 141231,
+      "sha256": "7bc6ff74fa3674fbad76f833cbb45237a262b267364226b5127d55802d5840d6"
+    },
+    {
+      "path": "docs/ui-ux/desktop/layar/66-admin-antrean-kosong.png",
+      "bytes": 126246,
+      "sha256": "09bcefba8d0683c3a14c202fc3d90d653bb8ad153badb77b3d3effbaeca3a97d"
+    },
+    {
+      "path": "docs/ui-ux/desktop/layar/67-tautan-pesan-valid.png",
+      "bytes": 125085,
+      "sha256": "8ee098aaedfd5e0d2dcd2eee86746fd4d0ce50f8cf2b5f7b79008cb0fe1f03b1"
+    },
+    {
+      "path": "docs/ui-ux/desktop/layar/68-tautan-pesan-tidak-valid.png",
+      "bytes": 123081,
+      "sha256": "900610e8cdc778d59866d8485ec35a0f996f82e32d51243beca76fe05c26e93e"
+    },
+    {
+      "path": "docs/ui-ux/desktop/layar/69-kebijakan-privasi.png",
+      "bytes": 99645,
+      "sha256": "ce4835b11758970eab715b495fac8e12d10ba4e594e1cf689a0535b18cff0909"
+    },
+    {
+      "path": "docs/ui-ux/desktop/layar/70-halaman-luring.png",
+      "bytes": 12430,
+      "sha256": "81c27d4ffd41890c3ecaa94706bac47df4a17031b7b3be95e218bcf0a7b7f42d"
+    },
+    {
+      "path": "docs/ui-ux/desktop/layar/71-halaman-tidak-ditemukan.png",
+      "bytes": 7701,
+      "sha256": "2c0a86ee2d644911f06448130c6f445cebf0036268a81ff62669f354b3ecf754"
+    },
+    {
+      "path": "docs/ui-ux/desktop/manifest.json",
+      "bytes": 51369,
+      "sha256": "6e7250252be8cf48a13baa2d708bca2e504ce531c83dcf3d9aae7d9385d26d49"
+    },
+    {
+      "path": "docs/ui-ux/desktop/peta-kenangan-1366.png",
+      "bytes": 57408,
+      "sha256": "b144917e554e95a25c05e03c11ceaeef38b6f2ff5c18cf820a6b381c6e554d6a"
+    },
+    {
+      "path": "docs/ui-ux/desktop/peta-konstelasi-1366.png",
+      "bytes": 159059,
+      "sha256": "ba68ea642ed70de00612a12e8f1fe03cba86a8cd49161a6415a2e09ccfec7a6b"
+    },
+    {
+      "path": "docs/ui-ux/desktop/README.md",
+      "bytes": 9572,
+      "sha256": "0eb4dcaf54edd365824863efce24fb637a67516f622cee293dbd3dd21b42acdc"
+    },
+    {
+      "path": "docs/ui-ux/galeri-data.js",
+      "bytes": 74684,
+      "sha256": "4d408f8fc149d02eba02c3126cc09531606b0682dd0dc480f3943e0bd02eeb8c"
+    },
+    {
+      "path": "docs/ui-ux/galeri.css",
+      "bytes": 4054,
+      "sha256": "ed6ff4093a978801de8b1bd205d55788ec56d1218095d2d7fcc5d673e51d0d25"
+    },
+    {
+      "path": "docs/ui-ux/galeri.js",
+      "bytes": 4949,
+      "sha256": "a3bd65fcb95f158878a13c0364817ccc7cc835c3690e42df7e46074722368867"
+    },
+    {
+      "path": "docs/ui-ux/index.html",
+      "bytes": 2847,
+      "sha256": "b6a30dc9e1b7de15fda04100722b6e1a551d19420525a599841fe1f2377b54c3"
+    },
+    {
+      "path": "docs/ui-ux/mobile/doa-320.png",
+      "bytes": 73469,
+      "sha256": "0e2c75bcc52f619fc2fe2db480f7964387a4f76689c59f4b54845b1088707559"
+    },
+    {
+      "path": "docs/ui-ux/mobile/doa-390.png",
+      "bytes": 77112,
+      "sha256": "e3a960d71ea6a87a4822c3992630a4bfd7a9d4cf7f5ae838e4772df5dc080361"
+    },
+    {
+      "path": "docs/ui-ux/mobile/entry-asli.png",
+      "bytes": 131564,
+      "sha256": "c9c5a0b36b7637dd9d7ce6621b1f443a0ec9874fc9d1bc2808cc2346ceb40202"
+    },
+    {
+      "path": "docs/ui-ux/mobile/entry-sekarang.png",
+      "bytes": 129769,
+      "sha256": "d97e38014a7973d6624b4c19ee4b195ee8adf22589ef4ebc31d786baa3a3fc92"
+    },
+    {
+      "path": "docs/ui-ux/mobile/index.html",
+      "bytes": 2904,
+      "sha256": "25ebb54f1fd9824d4251a080f7e27e1aeab186da6dd0d8a955d082389be1b1a6"
+    },
+    {
+      "path": "docs/ui-ux/mobile/layar/01-halaman-awal.png",
+      "bytes": 129852,
+      "sha256": "8733ef4c6d29457a3f2d55e33c896042f637826619574fccebb66be6b4b658c9"
+    },
+    {
+      "path": "docs/ui-ux/mobile/layar/02-rumah-milky-way.png",
+      "bytes": 238027,
+      "sha256": "667d9f783eb243e0321fa142d5e22022564fada82a716e20c70fb8f4785636cd"
+    },
+    {
+      "path": "docs/ui-ux/mobile/layar/03-jelajah-kosong-bagian-2.png",
+      "bytes": 88643,
+      "sha256": "00d9c812e8666c6a0f7e1f1695afaab85d0d0027f198aba2b01b6e353b841ddf"
+    },
+    {
+      "path": "docs/ui-ux/mobile/layar/03-jelajah-kosong.png",
+      "bytes": 83665,
+      "sha256": "600a99da44dcfdea57f9ce255545551d73cba56e5c39af48427a7e4a3a763457"
+    },
+    {
+      "path": "docs/ui-ux/mobile/layar/04-doa-kosong-bagian-2.png",
+      "bytes": 65916,
+      "sha256": "35fd693f51a4868dfd04c2a826eaa2392eef8c9816f83726a718db8f5ce5d842"
+    },
+    {
+      "path": "docs/ui-ux/mobile/layar/04-doa-kosong.png",
+      "bytes": 77274,
+      "sha256": "6f76e123e2d2bb497405826cfb0c5392e24876f6c55762f5cea38acff9f948ba"
+    },
+    {
+      "path": "docs/ui-ux/mobile/layar/05-masuk.png",
+      "bytes": 72070,
+      "sha256": "444fb867d6c58c2ade36f442434ff209055b34fb48c2f547bf7faa56968a8712"
+    },
+    {
+      "path": "docs/ui-ux/mobile/layar/06-pemulihan-tamu.png",
+      "bytes": 62107,
+      "sha256": "e9503b4c8276be4f8acdb06327c284eb8ce7661dde99e35838756d108da62a2f"
+    },
+    {
+      "path": "docs/ui-ux/mobile/layar/07-daftar.png",
+      "bytes": 69544,
+      "sha256": "80afdea2746689de1f1e87c317589b1ba115fa05095d7aa008ae2d885c13bda1"
+    },
+    {
+      "path": "docs/ui-ux/mobile/layar/08-daftar-validasi.png",
+      "bytes": 66680,
+      "sha256": "663cb6ad889a01e6490774b4096501f683cef5fec7b1caac48188fb6cfd44b71"
+    },
+    {
+      "path": "docs/ui-ux/mobile/layar/09-kode-pemulihan.png",
+      "bytes": 90228,
+      "sha256": "e4167454c3af891a8094e4d95909be2e0f9f074dd995716f7b06124cc0828515"
+    },
+    {
+      "path": "docs/ui-ux/mobile/layar/10-ruang-pribadi-kosong-bagian-2.png",
+      "bytes": 65716,
+      "sha256": "4e790b38dd343444710c6a2c94045ebc40fa07483d149af481280c4921300408"
+    },
+    {
+      "path": "docs/ui-ux/mobile/layar/10-ruang-pribadi-kosong.png",
+      "bytes": 76572,
+      "sha256": "c8d46a5c8ed790537e3fdb12804f7ff9d6cba4391caa141988d8c1a3746c5841"
+    },
+    {
+      "path": "docs/ui-ux/mobile/layar/11-tulis-tujuan-baru.png",
+      "bytes": 68371,
+      "sha256": "1e0320ff7af22305754f8538e41acde5e4920c1e55dc0b5eb6b1c4c3bef6ca3c"
+    },
+    {
+      "path": "docs/ui-ux/mobile/layar/12-tulis-bentuk-galaksi-bagian-2.png",
+      "bytes": 54253,
+      "sha256": "18e0d372e07144250000c2c8754248543aabf38906ad67099f3f33ef476a89a2"
+    },
+    {
+      "path": "docs/ui-ux/mobile/layar/12-tulis-bentuk-galaksi.png",
+      "bytes": 61606,
+      "sha256": "8ff5f1460994ca33aff0051da2259731655a7f00394176509033487fa517311b"
+    },
+    {
+      "path": "docs/ui-ux/mobile/layar/13-tulis-isi-pesan-bagian-2.png",
+      "bytes": 53648,
+      "sha256": "8e27c56f5e63a74bd06786d82b9c2235e8bfacd5d0472ff17b73619dc2950291"
+    },
+    {
+      "path": "docs/ui-ux/mobile/layar/13-tulis-isi-pesan.png",
+      "bytes": 57506,
+      "sha256": "06de6caf2d66646b24c34eab3b5809f737d009f38d9d08aa01b1300587b2cdf0"
+    },
+    {
+      "path": "docs/ui-ux/mobile/layar/14-tulis-privasi-privat.png",
+      "bytes": 65542,
+      "sha256": "aa6f9b777e57681b25d21c4ee43d2f6fd59437b9edfa53d824ba23625082ffe1"
+    },
+    {
+      "path": "docs/ui-ux/mobile/layar/15-tulis-privasi-publik.png",
+      "bytes": 64232,
+      "sha256": "c8dc37bf27b46591a5e0d11f3bbc1845ce7a1919a489a36296c5a13144f7e709"
+    },
+    {
+      "path": "docs/ui-ux/mobile/layar/16-tulis-privasi-unlisted.png",
+      "bytes": 63264,
+      "sha256": "8ddd8ce04ad0a507f4058dab7d6f95c09f2da8289e8cd242f1eda6dbe09adf23"
+    },
+    {
+      "path": "docs/ui-ux/mobile/layar/17-tulis-tujuan-lama.png",
+      "bytes": 73320,
+      "sha256": "fba90e8df05417eaa9937b67ede5432a9d42b9e3c6c800ea1390846768e5d987"
+    },
+    {
+      "path": "docs/ui-ux/mobile/layar/18-tulis-doa-tujuan-lama.png",
+      "bytes": 58665,
+      "sha256": "20a877cc04d6b9a65b47c9ee096e0a3d8d0030bbb8154e7001d01e2715782dc3"
+    },
+    {
+      "path": "docs/ui-ux/mobile/layar/19-tulis-doa-galaksi-baru-bagian-2.png",
+      "bytes": 41790,
+      "sha256": "a2621f44a72f4a16639f08d75e98b31b255930cc4fe7edf6bc66d28e81b863c0"
+    },
+    {
+      "path": "docs/ui-ux/mobile/layar/19-tulis-doa-galaksi-baru.png",
+      "bytes": 62302,
+      "sha256": "ac2542a58a5cf54cd8347b4f66f5905f433b2cfe8e60a14dee3436e387eacd51"
+    },
+    {
+      "path": "docs/ui-ux/mobile/layar/20-doa-tertulis-tersimpan.png",
+      "bytes": 59646,
+      "sha256": "66625204b8b53cdf05815c6d97f0e1f191317df9716ef3d9f37efdbd3852d90f"
+    },
+    {
+      "path": "docs/ui-ux/mobile/layar/21-ruang-pribadi-terisi-bagian-2.png",
+      "bytes": 55038,
+      "sha256": "ecdb4795a5e5e93328ff2feeb31b30eceda4342b840c816f0f0d10aed9c5e134"
+    },
+    {
+      "path": "docs/ui-ux/mobile/layar/21-ruang-pribadi-terisi-bagian-3.png",
+      "bytes": 54750,
+      "sha256": "a8af8ef7835768fd90feaa58cb037558e94c9712f3fcebf99e969e0bb8ecd3ec"
+    },
+    {
+      "path": "docs/ui-ux/mobile/layar/21-ruang-pribadi-terisi.png",
+      "bytes": 76566,
+      "sha256": "9b57c42923db1cdafe177a2b5118a0a5b04be37bb0d950a5beb179f657f276bd"
+    },
+    {
+      "path": "docs/ui-ux/mobile/layar/22-kelola-doa.png",
+      "bytes": 58893,
+      "sha256": "f7aedc7a567bd2e7d438536defe9afe2cd11b05514a7edd983fdccf11edd24e7"
+    },
+    {
+      "path": "docs/ui-ux/mobile/layar/23-kelola-pesan.png",
+      "bytes": 60757,
+      "sha256": "4328a9918f854c12f3167ed2e54a7dc49b36530c8e91320e134bcd8de0d8d622"
+    },
+    {
+      "path": "docs/ui-ux/mobile/layar/24-kelola-tautan-terbatas.png",
+      "bytes": 54582,
+      "sha256": "4cb42809cf3a8aedcf7f08da400c1ab34d313f3dd5b7370c49300450c97a08f2"
+    },
+    {
+      "path": "docs/ui-ux/mobile/layar/25-kartu-galaksi.png",
+      "bytes": 49054,
+      "sha256": "d65b0c50f7733493bd1907949cfb91137b31f5e1a30a0fb1a1285d923977077c"
+    },
+    {
+      "path": "docs/ui-ux/mobile/layar/26-kartu-bintang-pesan.png",
+      "bytes": 41108,
+      "sha256": "502e1565a1fdb4c26c63f9f7a7fac7498eded0f582a481fa0f7c4c545c32208c"
+    },
+    {
+      "path": "docs/ui-ux/mobile/layar/27-jelajah-terbaru-bagian-2.png",
+      "bytes": 53336,
+      "sha256": "f28b613999b028acde4a6fb8b6724b0d7be71760149612cfb0afc349c3ac2bf2"
+    },
+    {
+      "path": "docs/ui-ux/mobile/layar/27-jelajah-terbaru-bagian-3.png",
+      "bytes": 59418,
+      "sha256": "11be61dc33167626e7a264903fa96423bb925316dd72647e8c49da25e226e6ae"
+    },
+    {
+      "path": "docs/ui-ux/mobile/layar/27-jelajah-terbaru.png",
+      "bytes": 74345,
+      "sha256": "4105128b73cd20bd3d9a54c8bb0db823c9db29a7337a7439200da31a01226f86"
+    },
+    {
+      "path": "docs/ui-ux/mobile/layar/28-jelajah-paling-didoakan-bagian-2.png",
+      "bytes": 52614,
+      "sha256": "55a10f85eed5eb5775256458bf7540b633b6d078b2ae87f85f933645e93be59c"
+    },
+    {
+      "path": "docs/ui-ux/mobile/layar/28-jelajah-paling-didoakan-bagian-3.png",
+      "bytes": 59329,
+      "sha256": "d116046f24e0f453290a3399834f7f9849a8e0680aaba66c6e00f55dc9d395d3"
+    },
+    {
+      "path": "docs/ui-ux/mobile/layar/28-jelajah-paling-didoakan.png",
+      "bytes": 74501,
+      "sha256": "dd496e179c87d3ac49421e13f3b538be24a0cd5acac28c5439ee522ce5057feb"
+    },
+    {
+      "path": "docs/ui-ux/mobile/layar/29-jelajah-halaman-kedua-bagian-2.png",
+      "bytes": 53010,
+      "sha256": "429e6a5fa5e50f15f6fedbf0a53eb928137cbf2ead67689b5b5f2ba7c8d0a782"
+    },
+    {
+      "path": "docs/ui-ux/mobile/layar/29-jelajah-halaman-kedua-bagian-3.png",
+      "bytes": 63091,
+      "sha256": "9c2a8464c160f90390d941b0343354aee3c214b1f2e93469cec9917c8444fdc1"
+    },
+    {
+      "path": "docs/ui-ux/mobile/layar/29-jelajah-halaman-kedua.png",
+      "bytes": 74600,
+      "sha256": "5babe238f5def38b729082481418d31ae9bcddc46560b5cac7f8cc6468e1cc14"
+    },
+    {
+      "path": "docs/ui-ux/mobile/layar/30-jelajah-filter-bagian-2.png",
+      "bytes": 52492,
+      "sha256": "41d87502ee4ca67d49e9a01755478e3abc8362a4998d0051709ed150e0b8f366"
+    },
+    {
+      "path": "docs/ui-ux/mobile/layar/30-jelajah-filter-bagian-3.png",
+      "bytes": 66759,
+      "sha256": "4567e047618dc3265195d2cb2321f75c7e1ace1aeaa5a891f2e9a8ae24224fc7"
+    },
+    {
+      "path": "docs/ui-ux/mobile/layar/30-jelajah-filter.png",
+      "bytes": 74465,
+      "sha256": "a0ef9c804a2ce7164bb282890843cc6e81e85ee9708e0e7c6c9e56b5593691ff"
+    },
+    {
+      "path": "docs/ui-ux/mobile/layar/31-jelajah-filter-kosong-bagian-2.png",
+      "bytes": 72459,
+      "sha256": "14fd824b10b62d422c4b96c8549a9b85fab3b0f7fac7366609eb167aefe07ef6"
+    },
+    {
+      "path": "docs/ui-ux/mobile/layar/31-jelajah-filter-kosong.png",
+      "bytes": 82282,
+      "sha256": "5070eac90b7e0f1f522e37ed5bca54fc1a2694f650c6b152a7de42ea8ca9e6c7"
+    },
+    {
+      "path": "docs/ui-ux/mobile/layar/32-laporkan-ucapan.png",
+      "bytes": 61385,
+      "sha256": "ddb2db2eb89ce1aa4d4416713ba1d540ad8c5a06628de36d79d39ce8dd480f10"
+    },
+    {
+      "path": "docs/ui-ux/mobile/layar/33-konfirmasi-blokir.png",
+      "bytes": 67366,
+      "sha256": "d5c3a70f416f1616979edf1c38997ea10dae87165b190fa8301a33a93dafe023"
+    },
+    {
+      "path": "docs/ui-ux/mobile/layar/34-daftar-pemblokiran.png",
+      "bytes": 52905,
+      "sha256": "8131d8e07daa1d348eb1f2749b22a937bada77be1c61751b8457e130294932b6"
+    },
+    {
+      "path": "docs/ui-ux/mobile/layar/35-doa-daftar-ucapan-bagian-2.png",
+      "bytes": 55636,
+      "sha256": "7eb388995d4ae020cbf6f7aa5f8102e6047555cd293be42b8236e5c041ef6a09"
+    },
+    {
+      "path": "docs/ui-ux/mobile/layar/35-doa-daftar-ucapan-bagian-3.png",
+      "bytes": 47868,
+      "sha256": "c53cd24a7464d5f76c776db85ff87844e26331c5f2c82e0929b8e9791096e2fb"
+    },
+    {
+      "path": "docs/ui-ux/mobile/layar/35-doa-daftar-ucapan.png",
+      "bytes": 81878,
+      "sha256": "087706fa1afa023ced7a2e767d266a69a4b30b285d28330ff01f869389acc59e"
+    },
+    {
+      "path": "docs/ui-ux/mobile/layar/36-doa-tradisi-islam-bagian-2.png",
+      "bytes": 58181,
+      "sha256": "4cd8784041a791c0057d1e59c8f1e6576a063bee9eef004410c1ed807d5bada5"
+    },
+    {
+      "path": "docs/ui-ux/mobile/layar/36-doa-tradisi-islam-bagian-3.png",
+      "bytes": 47967,
+      "sha256": "3abfb7c6adf7c0590747dce05b190cacf2e15c077d45749a07aa8b2b43460171"
+    },
+    {
+      "path": "docs/ui-ux/mobile/layar/36-doa-tradisi-islam.png",
+      "bytes": 82001,
+      "sha256": "c5f96e48819a58fe2aa86ad5fd572483aed5e6ce2a867d4a07f7bde6289ebbe6"
+    },
+    {
+      "path": "docs/ui-ux/mobile/layar/37-doa-tradisi-kristen-bagian-2.png",
+      "bytes": 50032,
+      "sha256": "9990da8be980bf7cd374f679f1f700e95ed1ccf58d6b92a635dd234aeb42c1f2"
+    },
+    {
+      "path": "docs/ui-ux/mobile/layar/37-doa-tradisi-kristen-bagian-3.png",
+      "bytes": 41348,
+      "sha256": "a78f5bfa72f4e8a063d6e5d8c134d15c6686cfc0be3b4d6e8d5b326428315a8e"
+    },
+    {
+      "path": "docs/ui-ux/mobile/layar/37-doa-tradisi-kristen.png",
+      "bytes": 78043,
+      "sha256": "f3f123a122b2047d8b128782ae29e3ab64c2b5e9c4c33e5c0548795de1418080"
+    },
+    {
+      "path": "docs/ui-ux/mobile/layar/38-doa-tradisi-katolik-bagian-2.png",
+      "bytes": 51946,
+      "sha256": "ad94f862a87ca9ca82407e9db950078a953ad5db913ea5480fdbcc4610e87dae"
+    },
+    {
+      "path": "docs/ui-ux/mobile/layar/38-doa-tradisi-katolik-bagian-3.png",
+      "bytes": 41418,
+      "sha256": "b5990df17ecdef6dbce5d41bcd6eeed496b39d3941950d650fad2767cdc6b508"
+    },
+    {
+      "path": "docs/ui-ux/mobile/layar/38-doa-tradisi-katolik.png",
+      "bytes": 78030,
+      "sha256": "e77296cf2e98456cfe47ad0097427ac0a672ea9d384285a28edb55e2389b2bc3"
+    },
+    {
+      "path": "docs/ui-ux/mobile/layar/39-doa-tradisi-hindu-bagian-2.png",
+      "bytes": 49886,
+      "sha256": "a43b5e05644ca9f2ac9a5e042f86004a7c2a5e17a002b81b6d19b323642a727a"
+    },
+    {
+      "path": "docs/ui-ux/mobile/layar/39-doa-tradisi-hindu-bagian-3.png",
+      "bytes": 41274,
+      "sha256": "ba2fcf7e17e8b16bdc59a3f6953239c1835648168442dde0b585ec93fdde1db5"
+    },
+    {
+      "path": "docs/ui-ux/mobile/layar/39-doa-tradisi-hindu.png",
+      "bytes": 77800,
+      "sha256": "a5f8f26e0a610002297d6c2982b6d22ce510dac2a832d18b1ceedc7dc45009ce"
+    },
+    {
+      "path": "docs/ui-ux/mobile/layar/40-doa-tradisi-buddha-bagian-2.png",
+      "bytes": 53523,
+      "sha256": "3744618e82cf9b03c64ccdaab313485fbd84bb89000937627f8b34ee46ae8da3"
+    },
+    {
+      "path": "docs/ui-ux/mobile/layar/40-doa-tradisi-buddha-bagian-3.png",
+      "bytes": 41369,
+      "sha256": "16eab7454fd2e9621e46fbc8ef9255ef12e9f63f457bc3d37bfef5a680ef287b"
+    },
+    {
+      "path": "docs/ui-ux/mobile/layar/40-doa-tradisi-buddha.png",
+      "bytes": 77810,
+      "sha256": "38c67fee6dd5004b3b824515469b63bc7133eb4e696e0a61aeefa0f73b872e07"
+    },
+    {
+      "path": "docs/ui-ux/mobile/layar/41-doa-tradisi-konghucu-bagian-2.png",
+      "bytes": 52447,
+      "sha256": "61a9781469effebf1a8f06c52936a0171af34605aaff596fa6410fded1d584a9"
+    },
+    {
+      "path": "docs/ui-ux/mobile/layar/41-doa-tradisi-konghucu-bagian-3.png",
+      "bytes": 41380,
+      "sha256": "b25713f85bdfecc16bcde1c56575428368350acef1e496a3eb1b8f012a557cd5"
+    },
+    {
+      "path": "docs/ui-ux/mobile/layar/41-doa-tradisi-konghucu.png",
+      "bytes": 78207,
+      "sha256": "bfda9455bf4de3af40335a55f389d4a77ed78735cf257d3fc3a68c8f5048aaff"
+    },
+    {
+      "path": "docs/ui-ux/mobile/layar/42-doa-tradisi-umum-bagian-2.png",
+      "bytes": 51511,
+      "sha256": "54e74311c4b98c7b6cc608986de287225bb8d2787befb222d1d95b3fe3d0570b"
+    },
+    {
+      "path": "docs/ui-ux/mobile/layar/42-doa-tradisi-umum-bagian-3.png",
+      "bytes": 41274,
+      "sha256": "ba2fcf7e17e8b16bdc59a3f6953239c1835648168442dde0b585ec93fdde1db5"
+    },
+    {
+      "path": "docs/ui-ux/mobile/layar/42-doa-tradisi-umum.png",
+      "bytes": 78046,
+      "sha256": "ef5ce4cf37c8e3fa82e531565f7552f5825f0a5d936c48c47ada8e1167388a1e"
+    },
+    {
+      "path": "docs/ui-ux/mobile/layar/43-doa-menunggu-kurasi-bagian-2.png",
+      "bytes": 54461,
+      "sha256": "93391255c7b26f4990cd40ac5881b4b4781e4780b96dcb94889813eccd804c0c"
+    },
+    {
+      "path": "docs/ui-ux/mobile/layar/43-doa-menunggu-kurasi.png",
+      "bytes": 73556,
+      "sha256": "3c27894b160b3e89aff3b34d2f3207efaccae6b640b7d5d1400c74ee8e3e4ab4"
+    },
+    {
+      "path": "docs/ui-ux/mobile/layar/44-doa-siap-hening-bagian-2.png",
+      "bytes": 55393,
+      "sha256": "a383a62d414bc04f440ff673e0788fe5d3c85cba938af6f9ac6b9f2bffe59040"
+    },
+    {
+      "path": "docs/ui-ux/mobile/layar/44-doa-siap-hening.png",
+      "bytes": 73249,
+      "sha256": "ddc704645717fdebbc309826bbb5ba1165613a7d897fa8dc68466e806feee4fa"
+    },
+    {
+      "path": "docs/ui-ux/mobile/layar/45-doa-hening-berjalan-bagian-2.png",
+      "bytes": 49052,
+      "sha256": "477ab66ee27ff838e630e8c50bcc2220a7ba7f8cf7b95e5548aa3f05fee22ea6"
+    },
+    {
+      "path": "docs/ui-ux/mobile/layar/45-doa-hening-berjalan.png",
+      "bytes": 72390,
+      "sha256": "5a9a43e7acd56c6e7587f822aa8aa5d4a64acb587fa6e3700a1fc227b17618f5"
+    },
+    {
+      "path": "docs/ui-ux/mobile/layar/46-doa-selesai-bagian-2.png",
+      "bytes": 53366,
+      "sha256": "b61358a3dbc6cd9d74885df55ca6dbf855d2e23a891735cd38991104bc28ed71"
+    },
+    {
+      "path": "docs/ui-ux/mobile/layar/46-doa-selesai.png",
+      "bytes": 73249,
+      "sha256": "ddc704645717fdebbc309826bbb5ba1165613a7d897fa8dc68466e806feee4fa"
+    },
+    {
+      "path": "docs/ui-ux/mobile/layar/47-doa-pemutar-audio-bagian-2.png",
+      "bytes": 50278,
+      "sha256": "6c1f82bedaf3d2fb90e0092eec0265afb2432c33f0b94727e2d0113d46021386"
+    },
+    {
+      "path": "docs/ui-ux/mobile/layar/47-doa-pemutar-audio.png",
+      "bytes": 71864,
+      "sha256": "7956912b1a3427034a0811727761c68c32a14ec63bfb79e343b8091f2975b247"
+    },
+    {
+      "path": "docs/ui-ux/mobile/layar/48-pengaturan.png",
+      "bytes": 65028,
+      "sha256": "b327d8402dd71e598560851f71c8dd43771b0c3d31039f7a2551a33b9152f5c7"
+    },
+    {
+      "path": "docs/ui-ux/mobile/layar/49-akun-keamanan-sesi-bagian-2.png",
+      "bytes": 52035,
+      "sha256": "4fc75b1915c8c21bac87be434012e8b3057ac992eb544a19e6ddf6daeca65e5c"
+    },
+    {
+      "path": "docs/ui-ux/mobile/layar/49-akun-keamanan-sesi.png",
+      "bytes": 62318,
+      "sha256": "36e7d28d686ec170e0363c56a795aeb1a8bd7f53624d4260bff2472fe4678fd8"
+    },
+    {
+      "path": "docs/ui-ux/mobile/layar/50-ekspor-diverifikasi-bagian-2.png",
+      "bytes": 53771,
+      "sha256": "08c31d273a23c217da5249ab9ce336157ea32ad7dc86375e6a33278f1d32bb97"
+    },
+    {
+      "path": "docs/ui-ux/mobile/layar/50-ekspor-diverifikasi.png",
+      "bytes": 62956,
+      "sha256": "68c4d23562fdccda6a9cbf7b482c647670e63e2505edc6bc7b1928c8d77b5f88"
+    },
+    {
+      "path": "docs/ui-ux/mobile/layar/51-pemulihan-akun-masuk.png",
+      "bytes": 51605,
+      "sha256": "d987d2c3429fafb814f42858d451b88d446c2fa4e7b0e22aba5237831f42dfda"
+    },
+    {
+      "path": "docs/ui-ux/mobile/layar/52-kunci-terbuka.png",
+      "bytes": 52452,
+      "sha256": "378d763661eb9d6cc921cbaabbed48e9cbcd330b797eadd1656a218135639f03"
+    },
+    {
+      "path": "docs/ui-ux/mobile/layar/53-kunci-tertutup.png",
+      "bytes": 51457,
+      "sha256": "ed0c7ad75f64ed95ef73d13263a54a79a75da87cea326300538a7ac0efd371af"
+    },
+    {
+      "path": "docs/ui-ux/mobile/layar/54-kunci-kata-sandi-salah.png",
+      "bytes": 52333,
+      "sha256": "ab8cf2b2885b563a19ac3e46b64786a9088da9345b4e25cc97c1b957a7f379c1"
+    },
+    {
+      "path": "docs/ui-ux/mobile/layar/55-peta-kenangan.png",
+      "bytes": 41545,
+      "sha256": "e7df28cb1ed44d677e773a2c20c6623c28b8586c7c282a2fbd8e103e72eec653"
+    },
+    {
+      "path": "docs/ui-ux/mobile/layar/56-peta-konstelasi.png",
+      "bytes": 44843,
+      "sha256": "4c63e35e2ca2651bc6ba0f48d7d648aa3e72a12adb49831c92e57859cdd587fe"
+    },
+    {
+      "path": "docs/ui-ux/mobile/layar/57-peta-kartu-rasi.png",
+      "bytes": 127785,
+      "sha256": "7ced0a0208617556c92ba1175a5e3bdd4788d6381c50de76371e0db458dba0b3"
+    },
+    {
+      "path": "docs/ui-ux/mobile/layar/58-astronomi-kartu-objek.png",
+      "bytes": 56255,
+      "sha256": "1be25be1d04fede8a053061cdaadcba26c43b07b3b0a81e6616af76dcd2a7e73"
+    },
+    {
+      "path": "docs/ui-ux/mobile/layar/59-tata-surya.png",
+      "bytes": 121952,
+      "sha256": "c70e5b79656a0d27615b6501b8ca1bcab9626f7d8769bed6cc92a97cc9d21f35"
+    },
+    {
+      "path": "docs/ui-ux/mobile/layar/60-tata-surya-kartu-planet.png",
+      "bytes": 113438,
+      "sha256": "9cf8892d3dc0df7531fb4f6047355de97551479441fbd34a7594f461a7a7f781"
+    },
+    {
+      "path": "docs/ui-ux/mobile/layar/61-admin-moderasi-bagian-2.png",
+      "bytes": 65940,
+      "sha256": "bebfa56ed7f43c881db639eb8b075ef3101becfa95788b32e2cdef428aa2de25"
+    },
+    {
+      "path": "docs/ui-ux/mobile/layar/61-admin-moderasi.png",
+      "bytes": 75645,
+      "sha256": "d26701127a00223043c92ba1a96cf9a5c768d2a76dbd6d5c855a73635702e887"
+    },
+    {
+      "path": "docs/ui-ux/mobile/layar/62-admin-kurasi-katolik-bagian-2.png",
+      "bytes": 47706,
+      "sha256": "1b551116a037ebcb193c9367b145fbcb56c93236c6ec24ff331e5772f72557a3"
+    },
+    {
+      "path": "docs/ui-ux/mobile/layar/62-admin-kurasi-katolik-bagian-3.png",
+      "bytes": 43683,
+      "sha256": "e87bc0359201a07e56fe9c8a84d43be389db037b58589115dd3b8b21efd24ace"
+    },
+    {
+      "path": "docs/ui-ux/mobile/layar/62-admin-kurasi-katolik-bagian-4.png",
+      "bytes": 67011,
+      "sha256": "232097c22e1ea52b6c58c4e5b08c19e20dcfbea1e41bed89192c665f14d4a82e"
+    },
+    {
+      "path": "docs/ui-ux/mobile/layar/62-admin-kurasi-katolik.png",
+      "bytes": 69355,
+      "sha256": "b99f6e6486f44518119c0be8895a5840072b1eb9c2edb77e0d3a9c1866e2a681"
+    },
+    {
+      "path": "docs/ui-ux/mobile/layar/63-admin-kurasi-hindu-bagian-2.png",
+      "bytes": 50134,
+      "sha256": "2ae59f6249882b78b839ac408ebee14d386ef90a762c41d6bf4d6f2dba814ed2"
+    },
+    {
+      "path": "docs/ui-ux/mobile/layar/63-admin-kurasi-hindu-bagian-3.png",
+      "bytes": 42125,
+      "sha256": "31d1db20ac7f6195635da8d17ab08cb8b5fe0783a626a8e3068780554782b8a0"
+    },
+    {
+      "path": "docs/ui-ux/mobile/layar/63-admin-kurasi-hindu-bagian-4.png",
+      "bytes": 66888,
+      "sha256": "07cd7c6f39cf517184835fb2f5e29aacbec5f6bb0e6c44b5fb7e723ef38c3c64"
+    },
+    {
+      "path": "docs/ui-ux/mobile/layar/63-admin-kurasi-hindu.png",
+      "bytes": 68217,
+      "sha256": "b2da0c01bd3d99f366613ac41d2064554d643a59e52af402f6bff9cedc05721f"
+    },
+    {
+      "path": "docs/ui-ux/mobile/layar/64-admin-kurasi-buddha-bagian-2.png",
+      "bytes": 45597,
+      "sha256": "580f6e6bc24d26e9af1ba469c9a1a7517123cdec1fc52dbb5278519650b363af"
+    },
+    {
+      "path": "docs/ui-ux/mobile/layar/64-admin-kurasi-buddha-bagian-3.png",
+      "bytes": 37357,
+      "sha256": "98a005aa947ba74a631a9b810510a511487c8a56c77bee5ee84ca829164d5584"
+    },
+    {
+      "path": "docs/ui-ux/mobile/layar/64-admin-kurasi-buddha-bagian-4.png",
+      "bytes": 66861,
+      "sha256": "7c975db4c649afcbe4ee47c6335fd51c4485708ae1fdc718d024d00054bc1fa4"
+    },
+    {
+      "path": "docs/ui-ux/mobile/layar/64-admin-kurasi-buddha.png",
+      "bytes": 68586,
+      "sha256": "38ac91d1f384a4420eb58a4227159b7525edd02e1579ee8a6ab08d4ffb488a05"
+    },
+    {
+      "path": "docs/ui-ux/mobile/layar/65-admin-audio-draf-bagian-2.png",
+      "bytes": 49127,
+      "sha256": "6714583315155e6617b65d1011163ee048f66200450fb6d11662973feefb17cd"
+    },
+    {
+      "path": "docs/ui-ux/mobile/layar/65-admin-audio-draf-bagian-3.png",
+      "bytes": 43556,
+      "sha256": "221f540ae701ed121ca447be62558dc5495869a8681f7da1341df13f9eac3526"
+    },
+    {
+      "path": "docs/ui-ux/mobile/layar/65-admin-audio-draf-bagian-4.png",
+      "bytes": 66839,
+      "sha256": "dd4e784da594b611f8a65e86b04a325a37a20fa13409a45a0215f9fe22546345"
+    },
+    {
+      "path": "docs/ui-ux/mobile/layar/65-admin-audio-draf.png",
+      "bytes": 65116,
+      "sha256": "25ca70b32f5c5939bfa9ca89600e29443a5b7235f9bf5027c49bc1a2aee2630a"
+    },
+    {
+      "path": "docs/ui-ux/mobile/layar/66-admin-antrean-kosong.png",
+      "bytes": 71721,
+      "sha256": "41c876e7055be359a1ec62b595702ae99ccc206f932fa06df1d54599a6ca13a6"
+    },
+    {
+      "path": "docs/ui-ux/mobile/layar/67-tautan-pesan-valid.png",
+      "bytes": 63842,
+      "sha256": "78ee910c7e461dd90ab95b370b71231b2c626a381ca1532f1e14f970a3e2b937"
+    },
+    {
+      "path": "docs/ui-ux/mobile/layar/68-tautan-pesan-tidak-valid.png",
+      "bytes": 64407,
+      "sha256": "0e7328cc7e443b0595e656a34b5e855b6cba40a49860f530eca744b5e8fea054"
+    },
+    {
+      "path": "docs/ui-ux/mobile/layar/69-kebijakan-privasi.png",
+      "bytes": 92581,
+      "sha256": "4e69283f8f9f11ef1d61c9838dfcfcf010f4b738a61df1e5eb0c4dc147ff98a3"
+    },
+    {
+      "path": "docs/ui-ux/mobile/layar/70-halaman-luring.png",
+      "bytes": 9239,
+      "sha256": "51266b86926f64ccf2fae2c69b6c97122aabefbe38b3baead9119ff11fe20193"
+    },
+    {
+      "path": "docs/ui-ux/mobile/layar/71-halaman-tidak-ditemukan.png",
+      "bytes": 5117,
+      "sha256": "21b49b30d36e873d619b05454821be485cbecb8c7720c5691a5300e3048b6a2b"
+    },
+    {
+      "path": "docs/ui-ux/mobile/manifest.json",
+      "bytes": 53139,
+      "sha256": "1fe47fcf094a5b81714b39f482209729076aa63a2513217a181c2ebaef541355"
+    },
+    {
+      "path": "docs/ui-ux/mobile/peta-kenangan-390.png",
+      "bytes": 27681,
+      "sha256": "6f2d26edd0fc6d5f3a58a01214423e7fa0f0ca9ce523aca07ca5159320bd6a9c"
+    },
+    {
+      "path": "docs/ui-ux/mobile/peta-konstelasi-390.png",
+      "bytes": 119995,
+      "sha256": "f2fdedc004fe0aa00d9f01d7e628cb61cd358c47664d3ca0c29a3d09f44c2a2a"
+    },
+    {
+      "path": "docs/ui-ux/mobile/README.md",
+      "bytes": 10015,
+      "sha256": "d4f650bb3b5ac0eaad1bad5a7ff5b64405e9ec5fd964c9785a050396e8ad0e36"
+    },
+    {
+      "path": "docs/ui-ux/mobile/tulis-doa-390.png",
+      "bytes": 59926,
+      "sha256": "4fc9fb6d0bec18142f95b274d3940e8857703092798df6b7d66e454b2a71d9c4"
+    },
+    {
+      "path": "docs/ui-ux/README.md",
+      "bytes": 7357,
+      "sha256": "0b657fe498078366b721d48acaeb973a24a54eea7d3646a19b3b31e8d43b52a8"
+    },
+    {
+      "path": "docs/ui-ux/sistem-desain.html",
+      "bytes": 4320,
+      "sha256": "050839a2798ae6db5417b5bcd75ec4c669e2dc52791b9459df8df273333592bf"
+    },
+    {
+      "path": "infra/Caddyfile",
+      "bytes": 284,
+      "sha256": "ab2677a05bf14ac9dc0ca11bc5d2da26403832817444c688673f861a5ec41276"
+    },
+    {
+      "path": "infra/Caddyfile.production.example",
+      "bytes": 384,
+      "sha256": "6898397b2ce142d0dd0da020913efe5120ad8621312447f153ba3a306b5ade3f"
+    },
+    {
+      "path": "package-lock.json",
+      "bytes": 318648,
+      "sha256": "bb45371ad5522e45cbe0b557065c23254cf79f48a20ccbc50cb70e396c55a6b5"
+    },
+    {
+      "path": "package.json",
+      "bytes": 541,
+      "sha256": "51605aae3da5402ed09fe399c28365460a7cd2c7d3ce15c6310b29ff4f13137d"
+    },
+    {
+      "path": "README.md",
+      "bytes": 8885,
+      "sha256": "886016e074f881d86862fc5c0d15dac1578cac44b138b38ccdcc058d525a38f4"
+    },
+    {
+      "path": "scripts/check-buttons.mjs",
+      "bytes": 995,
+      "sha256": "e99801e3c8676cce997a4a31d901ee161f8164d15107c1ab6717a2efbd1d986b"
+    },
+    {
+      "path": "scripts/checkpoint.py",
+      "bytes": 631,
+      "sha256": "d6257daeb40a1a42dde7835e82f1f3637376be30c8b7eeeb14157ce06a125523"
+    },
+    {
+      "path": "scripts/export-ui-ux.mjs",
+      "bytes": 974,
+      "sha256": "05cf160167a6f9e72f11f24a3d365bbf6e73b25d5397a76552f5f58b681fd7de"
+    },
+    {
+      "path": "scripts/fetch-prayer-candidates.py",
+      "bytes": 1397,
+      "sha256": "c9ca8ddf9c306fdae494c5c0a11dad6468a374a22d329d1987508d649add4ad0"
+    },
+    {
+      "path": "scripts/init_env.py",
+      "bytes": 991,
+      "sha256": "05129f5d437cbe34d702313a97de4dda3e4b7e9e1c8175e1a3a06c623685a64d"
+    },
+    {
+      "path": "scripts/package_release.py",
+      "bytes": 1972,
+      "sha256": "cc70ee3b58f763b6951b7fa1779350d5052a5bf251c41a05e391a49ad937c7c2"
+    },
+    {
+      "path": "scripts/render-ui-ux.mjs",
+      "bytes": 10701,
+      "sha256": "1c69661eb179265c3dedb6e33f4c33a3b26c0a92f5db3592a27e3784eef970aa"
+    },
+    {
+      "path": "scripts/test-browser-local.mjs",
+      "bytes": 4175,
+      "sha256": "160754a108b12edcebc827f8a3de0f793d28fcd9e04df7d8dd828ea2973833e1"
+    },
+    {
+      "path": "scripts/verify_original.py",
+      "bytes": 1925,
+      "sha256": "f18284934e86f51ec2953d2b9dc69959d605078f19031fc91a91f85833dc9973"
+    },
+    {
+      "path": "THIRD-PARTY-NOTICES.md",
+      "bytes": 24938,
+      "sha256": "312cac11504bf1de55c40b09a52b92339d4f14bda8dd48786fb5341d8a543184"
+    }
+  ]
+}

@@ -1,23 +1,81 @@
 {
   "islam": [
-    {"title": "Al-Baqarah 2:201 — Quran.com", "url": "https://quran.com/id/sapi-betina/201-221", "kind": "Teks dan tilawah di situs sumber", "note": "Rujukan doa kebaikan dunia dan akhirat. Izin distribusi rekaman dalam aplikasi belum dikonfirmasi."},
-    {"title": "Qur’an Kemenag", "url": "https://quran.kemenag.go.id/", "kind": "Rujukan pembanding teks", "note": "Aplikasi resmi Kementerian Agama. Buka Al-Baqarah ayat 201 untuk peninjauan terjemahan."}
+    {
+      "title": "Al-Baqarah 2:201 — Quran.com",
+      "url": "https://quran.com/id/sapi-betina/201-221",
+      "kind": "Teks dan tilawah di situs sumber",
+      "note": "Rujukan doa kebaikan dunia dan akhirat. Izin distribusi rekaman dalam aplikasi belum dikonfirmasi."
+    },
+    {
+      "title": "Qur’an Kemenag",
+      "url": "https://quran.kemenag.go.id/",
+      "kind": "Rujukan pembanding teks",
+      "note": "Aplikasi resmi Kementerian Agama. Buka Al-Baqarah ayat 201 untuk peninjauan terjemahan."
+    }
   ],
   "kristen": [
-    {"title": "Matius 6:9 — Lembaga Alkitab Indonesia", "url": "https://alkitab.or.id/cari-alkitab/bimk/matius/6/9", "kind": "Teks dan layanan audio di situs sumber", "note": "Lanjutkan sampai ayat 13 untuk doa Bapa Kami; versi BIMK. Izin penggunaan teks dan rekaman harus mengikuti ketentuan LAI."}
+    {
+      "title": "Matius 6:9 — Lembaga Alkitab Indonesia",
+      "url": "https://alkitab.or.id/cari-alkitab/bimk/matius/6/9",
+      "kind": "Teks dan layanan audio di situs sumber",
+      "note": "Lanjutkan sampai ayat 13 untuk doa Bapa Kami; versi BIMK. Izin penggunaan teks dan rekaman harus mengikuti ketentuan LAI."
+    }
   ],
   "katolik": [
-    {"title": "Doa Bapa Kami — Iman Katolik", "url": "https://www.imankatolik.or.id/bapakami.html", "kind": "Teks doa", "note": "Situs menyatakan materi boleh dikutip dengan atribusi. Tidak ditemukan rekaman berlisensi pada halaman ini."}
+    {
+      "title": "Doa Bapa Kami — Iman Katolik",
+      "url": "https://www.imankatolik.or.id/bapakami.html",
+      "kind": "Teks doa",
+      "note": "Situs menyatakan materi boleh dikutip dengan atribusi. Tidak ditemukan rekaman berlisensi pada halaman ini."
+    },
+    {
+      "title": "Bapa Kami / Pater Noster (Latin)",
+      "url": "https://commons.wikimedia.org/wiki/File:Pater-Noster.ogg",
+      "kind": "Rekaman Latin - CC0 1.0",
+      "note": "Berkas tersedia dalam panel kurasi. Cocokkan naskah dengan rekaman sebelum menerbitkan."
+    }
   ],
   "hindu": [
-    {"title": "Buku Doa Dalam Agama Hindu — PAKIS Bali / Pemerintah Provinsi Bali", "url": "https://dpma.baliprov.go.id/wp-content/uploads/2022/03/PAKIS-Bali_Buku-Doa-Dalam-Agama-Hindu_compressed.pdf", "kind": "Buku rujukan", "note": "PDF terindeks berisi Tri Sandhya; pengambilan langsung belum berhasil saat pemeriksaan. Kurator perlu memeriksa naskah dan kesesuaian doa dengan tujuan."},
-    {"title": "Pray from Home — Ditjen Bimas Hindu", "url": "https://bimashindu.kemenag.go.id/berita-pusat/wujudkan-5m-plus-ditjen-bimas-hindu-gelar-pray-from-home-POFvn", "kind": "Rujukan penyelenggara rekaman", "note": "Dokumentasi doa Tri Sandhya dan Panca Sembah melalui kanal Bimas Hindu RI. Belum ada berkas audio beserta izin distribusi ulang."}
+    {
+      "title": "Buku Doa Dalam Agama Hindu — PAKIS Bali / Pemerintah Provinsi Bali",
+      "url": "https://dpma.baliprov.go.id/wp-content/uploads/2022/03/PAKIS-Bali_Buku-Doa-Dalam-Agama-Hindu_compressed.pdf",
+      "kind": "Buku rujukan",
+      "note": "PDF terindeks berisi Tri Sandhya; pengambilan langsung belum berhasil saat pemeriksaan. Kurator perlu memeriksa naskah dan kesesuaian doa dengan tujuan."
+    },
+    {
+      "title": "Pray from Home — Ditjen Bimas Hindu",
+      "url": "https://bimashindu.kemenag.go.id/berita-pusat/wujudkan-5m-plus-ditjen-bimas-hindu-gelar-pray-from-home-POFvn",
+      "kind": "Rujukan penyelenggara rekaman",
+      "note": "Dokumentasi doa Tri Sandhya dan Panca Sembah melalui kanal Bimas Hindu RI. Belum ada berkas audio beserta izin distribusi ulang."
+    },
+    {
+      "title": "Mantram Gayatri",
+      "url": "https://commons.wikimedia.org/wiki/File:Gayatri_mantra.ogg",
+      "kind": "Rekaman Sanskerta - CC0 1.0",
+      "note": "Berkas tersedia dalam panel kurasi. Cocokkan naskah dengan rekaman sebelum menerbitkan."
+    }
   ],
   "buddha": [
-    {"title": "Paritta — DhammaCitta", "url": "https://dhammacitta.org/download/audio.html", "kind": "Katalog rekaman MP3", "note": "Memuat Karaniyametta Sutta, dengan atribusi Vihara Samaggi Jaya dan Bhante Dhammadiro. Ketersediaan unduhan belum membuktikan izin distribusi ulang dalam aplikasi."}
+    {
+      "title": "Paritta — DhammaCitta",
+      "url": "https://dhammacitta.org/download/audio.html",
+      "kind": "Katalog rekaman MP3",
+      "note": "Memuat Karaniyametta Sutta, dengan atribusi Vihara Samaggi Jaya dan Bhante Dhammadiro. Ketersediaan unduhan belum membuktikan izin distribusi ulang dalam aplikasi."
+    },
+    {
+      "title": "Karaṇīya Mettā Sutta",
+      "url": "https://www.dhammatalks.org/chant_index.html",
+      "kind": "Rekaman Pali - CC BY-NC 4.0",
+      "note": "Berkas tersedia dalam panel kurasi. Cocokkan naskah dengan rekaman sebelum menerbitkan."
+    }
   ],
   "konghucu": [
-    {"title": "Doa Untuk Indonesia — MATAKIN", "url": "https://www.matakin.or.id/category/berita/read/ws-budi-suniarto-memimpin-upacara-sembahyang-doa-untuk-indonesia-pada-perayaan-imlek-2572-kongzili", "kind": "Rujukan rekaman resmi", "note": "Halaman MATAKIN menunjuk rekaman upacara yang dipimpin Ws. Budi Suniarto. Ini doa kebangsaan; bukan pengganti otomatis doa untuk orang tertentu."}
+    {
+      "title": "Doa Untuk Indonesia — MATAKIN",
+      "url": "https://www.matakin.or.id/category/berita/read/ws-budi-suniarto-memimpin-upacara-sembahyang-doa-untuk-indonesia-pada-perayaan-imlek-2572-kongzili",
+      "kind": "Rujukan rekaman resmi",
+      "note": "Halaman MATAKIN menunjuk rekaman upacara yang dipimpin Ws. Budi Suniarto. Ini doa kebangsaan; bukan pengganti otomatis doa untuk orang tertentu."
+    }
   ],
   "umum": []
 }

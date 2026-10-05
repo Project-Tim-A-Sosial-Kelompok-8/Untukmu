@@ -1,5 +1,13 @@
 import { expect, test } from "@playwright/test";
 
+test('halaman Doa dapat dibuka langsung tanpa melewati layar pembuka', async ({ page }) => {
+  await page.goto('/doa');
+  const frame = page.frameLocator('iframe');
+  await expect(frame.locator('#um-doa')).toHaveClass(/on/);
+  await expect(frame.locator('#um-entry')).not.toHaveClass(/on/);
+  await expect(frame.locator('#um-doa [data-act=hub-trad]')).toHaveCount(7);
+});
+
 for (const width of [320, 390, 1280]) {
   test(`doa: tujuan, pilihan agama, batal, dan retry tetap sinkron (${width}px)`, async ({ page }) => {
     const errors: string[] = [];
@@ -7,11 +15,16 @@ for (const width of [320, 390, 1280]) {
     await page.setViewportSize({ width, height: 844 });
     await page.goto("/");
     const frame = page.frameLocator("iframe");
-    await frame.locator("#um-entry [data-act=skip]").click();
-    await frame.locator('.um-dock [data-act=doa]').click();
+    await expect(frame.locator('#um-entry .acts button').nth(1)).toHaveAttribute('data-act', 'doa');
+    await frame.locator('#um-entry [data-act=doa]').click();
     await expect(frame.locator('#um-doa')).toHaveClass(/on/);
     await expect(frame.locator('#um-doa [data-act=hub-trad]')).toHaveCount(7);
     await expect(frame.locator('#um-exp')).not.toHaveClass(/on/);
+    await frame.locator('#um-doa [data-act=hub-trad][data-id=umum]').click();
+    await expect(frame.locator('#um-doa [aria-label="Jenis doa"]')).toContainText('Sesi hening tersedia');
+    await frame.locator('#um-doa [data-act=close]').click();
+    await frame.locator('.um-dock [data-act=doa]').click();
+    await expect(frame.locator('#um-doa')).toHaveClass(/on/);
     const engine = page.frames()[1];
     // Isolate slow/retried responses here; social.spec exercises a complete
     // prayer with the real API, moderation, duration, and anonymous identity.
@@ -45,6 +58,14 @@ for (const width of [320, 390, 1280]) {
     await frame.locator('#um-doa [data-act=entri]').first().click();
     await expect(frame.locator('#um-doa .um-prayer')).toContainText('menunggu tinjauan kurator');
     await expect(frame.locator('#um-doa [data-act=start]')).toHaveCount(0);
+    await engine.evaluate(`(() => {
+      const entry = UM.doaData.byId('islam').entri[0];
+      entry.reviewed = true; entry.audio = false;
+    })()`);
+    await frame.locator('#um-doa [data-act=entri]').first().click();
+    await expect(frame.locator('#um-doa .um-prayer')).toContainText('Audio belum tersedia');
+    await expect(frame.locator('#um-doa [data-act=start]')).toHaveCount(0);
+    await expect(frame.locator('#um-doa [data-act=silence]')).toBeVisible();
 
     const layout = await engine.evaluate(() => {
       const screen = document.querySelector<HTMLElement>('#um-doa')!;

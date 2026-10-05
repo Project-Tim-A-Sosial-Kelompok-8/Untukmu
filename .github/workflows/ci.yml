@@ -1,5 +1,10 @@
 name: Untukmu 
-on: [push, pull_request]
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 1 * * 1' # Senin 08.00 WIB
 jobs:
   verify:
     runs-on: ubuntu-latest
@@ -23,7 +28,9 @@ jobs:
         env:
           JWT_SECRET: ci-only-random-test-key-not-a-deployment-secret-123
       - run: node scripts/test-browser-local.mjs
-      - run: python scripts/verify_original.py
+        env:
+          UNTUKMU_BROWSER_REPORT: ../../docs/pengujian/hasil/button-audit-results.json
+      - run: python scripts/verify_original.py --archive-only --if-present
       - run: python scripts/init_env.py
       - run: docker compose up -d --build --wait
       - run: npm run test:e2e
@@ -38,5 +45,6 @@ jobs:
             apps/api/migration.sql
             apps/web/playwright-report
             apps/web/test-results
+            docs/pengujian/hasil/button-audit-results.json
       - if: always()
         run: docker compose down

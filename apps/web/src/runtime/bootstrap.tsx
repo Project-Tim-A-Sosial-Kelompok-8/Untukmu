@@ -3,6 +3,7 @@ import { ManageMessage, openMessage } from "../features/messages/ManageMessage";
 import { SharedMessage } from "../features/messages/SharedMessage";
 import { Challenge } from "../features/account/Challenge";
 import { SocialScreens, openSocial } from "../features/social/SocialScreens";
+import { WrittenPrayerScreen, openWrittenPrayer } from "../features/prayers/WrittenPrayerScreen";
 import { renderPreservedScreen, trackScreen } from "../features/screens/PreservedScreens";
 import { mountFiberEngine } from "../features/galaxy/FiberBridge";
 import { createRoot } from "react-dom/client";
@@ -16,6 +17,7 @@ import { requireLogin } from "../features/account/state";
 window.UM.renderScreen = renderPreservedScreen;
 window.UM.trackScreen = trackScreen;
 window.UM.openSocial = openSocial;
+window.UM.openWrittenPrayer = openWrittenPrayer;
 if (window.UM_ENGINE) void mountFiberEngine(window.UM_ENGINE).catch(() => { document.body.insertAdjacentHTML("beforeend", '<p role="alert" class="um-toast on">Galaksi gagal dimuat. Muat ulang halaman.</p>'); });
 window.UM.store = store;
 window.UM.crypto = { ...vault, lock() { vault.lock(); clearPrivateMedia(); }, reason: () => vault.available() ? null : "no-webcrypto", kdfId: () => "Argon2id", iterations: () => 3 };
@@ -24,13 +26,19 @@ window.UM.account = { require: requireLogin, open: openAccount, logout: signOut,
 const host = document.createElement("div");
 host.id = "um-react-account";
 document.body.append(host);
-createRoot(host).render(<QueryClientProvider client={queryClient}><AccountScreen /><SocialScreens /><ManageMessage /><Challenge />{new URLSearchParams(location.search).get("screen") === "shared" && <SharedMessage />}</QueryClientProvider>);
+createRoot(host).render(<QueryClientProvider client={queryClient}><AccountScreen /><SocialScreens /><ManageMessage /><WrittenPrayerScreen /><Challenge />{new URLSearchParams(location.search).get("screen") === "shared" && <SharedMessage />}</QueryClientProvider>);
 
 if (new URLSearchParams(location.search).get("screen") === "admin") void store.ready().then(() => setTimeout(() => void openSocial("admin"), 100));
+let clearingData = false;
 document.addEventListener("click", event => {
   const target = event.target instanceof Element ? event.target.closest<HTMLElement>("[data-act], #um-b-empati") : null;
   if (!target) return;
   const action = target.dataset.act;
+  if (action === "write-prayer") {
+    event.stopImmediatePropagation(); event.preventDefault();
+    void openWrittenPrayer(target.dataset.id).catch(error => window.UM.ui.toast(error instanceof Error ? error.message : "Formulir doa belum dapat dibuka."));
+    return;
+  }
   if (action === "download" && target.dataset.id) {
     event.stopImmediatePropagation(); event.preventDefault();
     void store.readFile(target.dataset.id).then(file => {
@@ -54,10 +62,25 @@ document.addEventListener("click", event => {
   }
   if (action === "reset") {
     event.stopImmediatePropagation(); event.preventDefault();
+    if(clearingData) return;
     if(!currentUser()) {openAccount();return;}
     if(!confirm("Hapus seluruh pesan dan tujuan dari akun ini? Berkas unggahan tetap tersedia dalam ekspor. Tindakan ini tidak dapat dibatalkan.")) return;
     const password=prompt("Masukkan kata sandi akun untuk mengonfirmasi:"); if(!password) return;
-    void vault.authCredential(password,currentUser()!.email).then(credential=>api("/users/me/clear",{method:"POST",body:JSON.stringify({password:credential})})).then(()=>location.reload()).catch(error=>window.UM.ui.toast(error.message));
+    const email = currentUser()!.email;
+    const controls = Array.from(target.closest('.um-screen')?.querySelectorAll<HTMLButtonElement>('button') || []).map(button => ({ button, disabled: button.disabled }));
+    const label = target.textContent;
+    clearingData = true;
+    controls.forEach(({ button }) => { button.disabled = true; });
+    target.textContent = 'Menghapus pesan dan tujuan…';
+    void vault.authCredential(password,email)
+      .then(credential=>api("/users/me/clear",{method:"POST",body:JSON.stringify({password:credential})}))
+      .then(()=>location.reload())
+      .catch(error=>window.UM.ui.toast(error.message))
+      .finally(() => {
+        clearingData = false;
+        controls.forEach(({ button, disabled }) => { button.disabled = disabled; });
+        target.textContent = label;
+      });
   }
 
 }, true);
@@ -69,7 +92,7 @@ setInterval(()=>{
   if(document.hidden || !currentUser() || document.querySelector('#um-comp.on')) return;
   void api<{prayers_received:number}>("/dashboard/summary").then(async summary=>{
     if(lastPrayerCount!==null && lastPrayerCount!==summary.prayers_received) {
-      await queryClient.invalidateQueries({queryKey:["api"]});await window.UM.galaksi.refresh();
+      await queryClient.invalidateQueries({queryKey:["api"]});await Promise.all([window.UM.galaksi.refresh(),window.UM.sky.refresh()]);
       if(document.querySelector('#um-dash.on')) window.UM.ui.renderSemua();
     }
     lastPrayerCount=summary.prayers_received;

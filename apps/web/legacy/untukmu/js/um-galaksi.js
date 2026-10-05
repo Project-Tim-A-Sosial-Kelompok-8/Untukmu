@@ -302,6 +302,8 @@ UM.galaksi = (function () {
       return { pesan: p, doa: (doaPesan && doaPesan[p.id]) || null };
     });
     var total = daftar.length;
+    item.batuTotal = total;
+    item.batuDigambar = 0;
     if (!total || !item.lod) return;
     var digambar = Math.min(total, MAKS_BATU);
 
@@ -354,7 +356,6 @@ UM.galaksi = (function () {
     item.lod.pts.add(grup);
     item.batu = grup;
     item.batuPoints = pts;
-    item.batuTotal = total;
     item.batuDigambar = digambar;
   }
 
@@ -382,14 +383,26 @@ UM.galaksi = (function () {
     perbaruiTeksLabel(item);
   }
 
+  // Written prayers and messages share clickable stars, but each entry must
+  // increment only its own counter. Received prayer sessions remain prayers.
+  function hitungCatatan(rows) {
+    var jumlah = { pesan: 0, doaTertulis: 0, doaDiterima: 0 };
+    (rows || []).forEach(function(p) {
+      if (p.jenis === 'doa') jumlah.doaTertulis++;
+      else jumlah.pesan++;
+      jumlah.doaDiterima += (p.pendoa && p.pendoa.total) || 0;
+    });
+    jumlah.doa = jumlah.doaTertulis + jumlah.doaDiterima;
+    return jumlah;
+  }
+
   function perbaruiTeksLabel(item) {
     if (!item.el) return;
-    var nPesan = (item.pesanSendiri || []).length;
-    var nBatu = item.batuTotal || 0;
+    var jumlah = hitungCatatan(item.pesanSendiri);
     item.el.innerHTML =
       '<b><span class="dot" style="background:' + warnaAman(item.g.warna) + '"></span>' +
       esc(item.g.nama) + (item.g.rumah ? ' ⌂' : '') + '</b>' +
-      '<small>' + nPesan + ' ' + esc(UM.i18n.t('commonPesan')) + ' · ' + nBatu + ' ' + esc(UM.i18n.t('commonDoa')) + '</small>';
+      '<small><span data-count="pesan">' + jumlah.pesan + ' ' + esc(UM.i18n.t('commonPesan')) + '</span> · <span data-count="doa">' + jumlah.doa + ' ' + esc(UM.i18n.t('commonDoa')) + '</span></small>';
     item.el.title = item.g.nama;
     item.el.setAttribute('aria-label', 'Kunjungi galaksi ' + item.g.nama);
   }
@@ -1422,6 +1435,7 @@ UM.galaksi = (function () {
     kembaliKeRumah: kembaliKeRumah, bersihkanPilihan: bersihkanPilihan,
     kirimPerjalanan: kirimPerjalanan, kilat: kilat,
     segarkanTeks: segarkanTeks, perbaruiLabel: perbaruiLabel,
+    hitungCatatan: hitungCatatan,
     generatorAda: generatorAda,
     setGalaksiBawaan: setGalaksiBawaan,
     MAKS_BATU: MAKS_BATU,

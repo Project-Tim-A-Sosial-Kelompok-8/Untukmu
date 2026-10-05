@@ -61,6 +61,7 @@ UM.i18n = (function () {
 
       /* kartu galaksi, bintang, batu */
       gkBintang: 'Pesanmu',
+      gkDoaTertulis: 'Doa tertulismu',
       gkBatu: 'Pesan orang lain',
       gkDoa: 'Doa diterima',
       gkHint: 'Scroll untuk mendekat, lalu klik satu bintang atau satu butir debu untuk membaca isinya.',
@@ -306,6 +307,7 @@ UM.i18n = (function () {
 
       /* galaxy, star, rock cards */
       gkBintang: 'Your messages',
+      gkDoaTertulis: 'Your written prayers',
       gkBatu: 'Messages from others',
       gkDoa: 'Prayers received',
       gkHint: 'Scroll closer, then click a star or a mote of dust to read it.',
