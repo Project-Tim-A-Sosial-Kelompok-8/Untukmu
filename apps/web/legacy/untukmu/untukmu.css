@@ -396,10 +396,9 @@ body[data-sky-mode="kenangan"] #skylabels { display: none !important; }
 
 /* ── Sembunyikan elemen Galaxy Explorer asli yang tidak diperlukan ──────────── */
 
-/* Label dan tombol Peta digantikan UM.sky. Kontrol galaksi dan tata surya
+/* Label Peta digantikan UM.sky. Kontrol navigasi, galaksi, dan tata surya
    tetap mengikuti mode engine agar pilihan objek dan waktu bisa digunakan. */
-#skylabels,
-#skyback {
+#skylabels {
   display: none !important;
 }
 
