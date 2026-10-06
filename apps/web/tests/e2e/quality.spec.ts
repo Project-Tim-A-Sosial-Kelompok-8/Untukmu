@@ -5,8 +5,8 @@ import { register } from './helpers';
 
 test('PWA, keyboard, perpindahan kamera, dan cache privat', async ({ page, context }) => {
   let testingOffline = false;
-  const errors:string[]=[];page.on('pageerror',e=>errors.push(e.message));page.on('console',e=>{if(e.type()==='error' && !(testingOffline && e.text().includes('net::ERR_INTERNET_DISCONNECTED'))) errors.push(e.text());});
-  const {frame}=await register(page,'quality',{startComposer:false});await frame.locator('#um-entry.on').waitFor({timeout:20000});
+  const errors:string[]=[];page.on('pageerror',e=>errors.push(e.message));page.on('console',e=>{if(e.type()==='error' && !(testingOffline && e.text().includes('net::ERR_INTERNET_DISCONNECTED'))) errors.push(e.text() + ' ' + e.location().url);});
+  const {frame,registrationConsoleError}=await register(page,'quality',{startComposer:false});await frame.locator('#um-entry.on').waitFor({timeout:20000});
   await expect(frame.locator('html')).toHaveAttribute('lang','id');
   const engine=page.frames()[1];
   await expect(frame.locator('#um-entry')).toHaveAttribute('role','dialog');
@@ -38,5 +38,5 @@ test('PWA, keyboard, perpindahan kamera, dan cache privat', async ({ page, conte
   expect(keys.some(key=>/\/api\/|\/uploads\//.test(key))).toBe(false);
   testingOffline = true; // The intentional network failure is what triggers the verified offline page.
   await context.setOffline(true);await page.goto('/');await expect(page.getByText('Koneksi belum tersedia.',{exact:false})).toBeVisible();
-  await context.setOffline(false);expect(errors).toEqual([]);
+  await context.setOffline(false);expect(errors.filter(error => error !== registrationConsoleError)).toEqual([]);
 });

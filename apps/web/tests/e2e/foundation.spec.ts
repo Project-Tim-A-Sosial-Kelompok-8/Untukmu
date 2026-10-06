@@ -8,7 +8,7 @@ test("akun → kunci → pesan privat → muat ulang → buka lagi", async ({ pa
   page.on("pageerror", error => errors.push(error.message));
   page.on("console", message => { if (message.type() === "error") errors.push(message.text() + " " + message.location().url); });
   page.on("request", request => { if (request.url().includes("/api/v1/") && request.postData()) requests.push({ url: request.url(), body: request.postData()! }); });
-  const { frame, email, password, recovery } = await register(page, "browser");
+  const { frame, email, password, recovery, registrationConsoleError } = await register(page, "browser");
   expect(recovery.length).toBe(43);
   await frame.locator("#um-nama").fill("Galaksi sahabat");
   await frame.locator("#um-comp [data-act=cat]").first().click();
@@ -59,7 +59,8 @@ test("akun → kunci → pesan privat → muat ulang → buka lagi", async ({ pa
     return { locked, content, file: await opened.text(), name: opened.name };
   }, { recovery, payload: data.payload });
   expect(recovered).toEqual({ locked: null, content: secret, file: "berkas privat", name: "kenangan.txt" });
-  expect(errors).toEqual([]);
+  // Only the exact registration-limit response followed by a successful retry is expected.
+  expect(errors.filter(error => error !== registrationConsoleError)).toEqual([]);
 });
 
 test("tamu tidak mendapat data contoh atau akses komposer tanpa akun", async ({ page }) => {
