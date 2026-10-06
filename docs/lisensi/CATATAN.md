@@ -1,5 +1,5 @@
-# Pemberitahuan sumber asli
+# Atribusi visual
 
-Berkas `index.html` dari ZIP menyebut © 2026 Justin Zhang Jun dan PolyForm Noncommercial License 1.0.0. `THIRD-PARTY-NOTICES.md` dalam ZIP yang sama menyebut proyek berlisensi MIT dan merujuk `LICENSE`, tetapi ZIP tidak memuat berkas `LICENSE`.
+Kontrol kamera dan sebagian tampilan diadaptasi dari kode Justin Zhang Jun yang memuat PolyForm Noncommercial License 1.0.0. Atribusi tersebut tetap tercantum pada `frontend/visual/index.html` dan `scene.js`.
 
-Kedua pemberitahuan dipertahankan persis seperti sumber. Paket migrasi tidak membuat lisensi pengganti atau menyelesaikan ketidaksesuaian tersebut. Konfirmasi hak penggunaan dengan pemilik sumber diperlukan sebelum penggunaan yang bergantung pada kepastian lisensi, khususnya penggunaan komersial. Atribusi vendor dan tekstur tetap tersedia pada berkas asli serta README aset terkait.
+Vendor Three.js r128 dan OrbitControls masih digunakan; pemberitahuan MIT dan hak cipta berada di `frontend/visual/THIRD-PARTY-NOTICES.md`. Foto astronomi, tekstur planet, dan rekaman internet tambahan telah dilepas, sehingga daftar sumber aset tersebut tidak lagi disertakan.

@@ -1,0 +1,83 @@
+<!doctype html>
+<!-- Visual controls adapted from Justin Zhang Jun's engine, PolyForm Noncommercial License 1.0.0. See THIRD-PARTY-NOTICES.md. -->
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Untukmu — Pesan, Kenangan, dan Doa</title>
+  <style>
+  :root { color-scheme: dark; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; background: #03040a; color: #e5e7eb;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; overflow: hidden;
+    user-select: none; -webkit-user-select: none; }
+  #cv { display: block; width: 100vw; height: 100vh; }
+
+  .overlay { position: fixed; z-index: 5; }
+  #skyback { top: 64px; left: 18px; z-index: 6; display: none; cursor: pointer; font: inherit; font-size: 13px;
+    color: #cbd5e1; background: rgba(10,14,24,.72); border: 1px solid #243049; border-radius: 8px; padding: 6px 12px; }
+  #skyback:hover { border-color: #6366f1; color: #fff; }
+  button:focus-visible, select:focus-visible, [tabindex]:focus-visible { outline: 2px solid #9cc0ff; outline-offset: 3px; }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; }
+  }
+  /* beacon info panel — desktop: fixed right side */
+  #beacon-panel { top: 74px; right: 14px; width: 300px; max-height: calc(100vh - 130px); overflow-y: auto;
+    z-index: 7; background: rgba(10,14,24,.92); border-radius: 12px; padding: 16px 18px 18px;
+    color: #e5e7eb; box-shadow: 0 8px 30px rgba(0,0,0,.5); display: none; }
+  #beacon-panel.open { display: block; animation: bpIn .18s ease; }
+  @keyframes bpIn { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: none; } }
+  #bp-close { position: absolute; top: 8px; right: 10px; background: transparent; border: 0; color: #9ca3af;
+    font-size: 20px; line-height: 1; cursor: pointer; padding: 2px 6px; }
+  #bp-close:hover { color: #fff; }
+  #bp-name { font-size: 18px; font-weight: 600; margin: 0 20px 6px 0; }
+  #bp-type { display: inline-block; font-size: 11px; letter-spacing: .04em; padding: 2px 8px; border-radius: 999px;
+    background: rgba(255,255,255,.08); color: #cbd5e1; margin-bottom: 10px; }
+  .bp-row { display: flex; justify-content: space-between; gap: 12px; font-size: 12.5px; padding: 4px 0;
+    border-top: 1px solid rgba(255,255,255,.07); }
+  .bp-row .k { color: #93a5c4; } .bp-row .v { color: #e5e7eb; text-align: right; }
+  #bp-desc { font-size: 13px; line-height: 1.55; color: #cbd5e1; margin-top: 10px; }
+  #bp-cat { font-size: 10.5px; color: #6b7280; margin-top: 10px; }
+  #bp-img { display: block; width: 100%; height: 150px; object-fit: cover; border-radius: 8px;
+    margin: 10px 0 3px; background: rgba(255,255,255,.04); }
+  #bp-credit { font-size: 9px; line-height: 1.35; color: #5b6578; margin-bottom: 6px; }
+  #return-home { position: fixed; top: 16px; left: 50%; transform: translateX(-50%); z-index: 50; display: none;
+    padding: 8px 16px; border-radius: 20px; cursor: pointer; background: rgba(20,26,40,.72);
+    border: 1px solid rgba(255,255,255,.14); color: #cfe0ff; font-size: 13px; -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); }
+  #return-home:hover { background: rgba(30,40,60,.85); color: #fff; }
+  body.gx-cinema #beacon-panel { display: none !important; }
+  /* mobile: panel becomes a bottom drawer */
+  @media (max-width: 640px) {
+    #beacon-panel { top: auto; bottom: 0; right: 0; left: 0; width: auto; max-height: 52vh;
+      border-radius: 14px 14px 0 0; padding: 14px max(16px, env(safe-area-inset-right)) max(18px, env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left)); }
+    #beacon-panel.open { animation: bpUp .2s ease; }
+    @keyframes bpUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
+    #skyback { left: max(12px, env(safe-area-inset-left)); top: max(64px, calc(env(safe-area-inset-top) + 52px)); }
+  }
+  .gx-cinema .um-brand,.gx-cinema .um-dock,.gx-cinema #return-home,.gx-cinema #skyback,.gx-cinema #beacon-panel,.gx-cinema .um-skyctl{display:none!important}
+  </style>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body data-view-mode="galaxy">
+  <canvas id="cv"></canvas>
+  <button id="skyback" class="overlay" type="button">← Kembali ke kenangan</button>
+  <div id="beacon-panel" class="overlay" aria-live="polite"><button id="bp-close" aria-label="Tutup kenangan">×</button><div id="bp-body"></div></div>
+  <script src="vendor/three.min.js"></script>
+  <script src="vendor/OrbitControls.js"></script>
+  <script src="vendor/CopyShader.js"></script>
+  <script src="vendor/LuminosityHighPassShader.js"></script>
+  <script src="vendor/EffectComposer.js"></script>
+  <script src="vendor/RenderPass.js"></script>
+  <script src="vendor/ShaderPass.js"></script>
+  <script src="vendor/UnrealBloomPass.js"></script>
+  <script src="scene.js"></script>
+  <script src="background.js"></script>
+  <script src="language.js"></script>
+  <script src="prayers.js"></script>
+  <script src="runtime.js"></script>
+  <script src="map.js"></script>
+  <script src="galaxy.js"></script>
+  <script src="ui.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

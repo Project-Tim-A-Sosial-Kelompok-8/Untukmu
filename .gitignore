@@ -8,7 +8,7 @@ __pycache__/
 !.env.example
 *.db
 *.tsbuildinfo
-apps/web/public/engine/
+frontend/public/visual/
 playwright-report/
 test-results/
 *.log

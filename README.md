@@ -1,132 +1,61 @@
 # Untukmu
 
-Untukmu adalah aplikasi untuk menyimpan pesan, kenangan, dan doa bagi seseorang. Setiap tujuan memiliki galaksi sendiri. Kamu juga bisa membaca ucapan publik dan memberi dukungan lewat doa.
+Website untuk menyimpan pesan dan kenangan bagi seseorang, membaca pesan publik anonim, serta memberi dukungan melalui doa pilihan. Perilaku produk mengikuti `docs/referensi/PRD_Kelompok_8.docx`.
 
-## Menjalankan aplikasi
+## Menjalankan
 
-Pasang **Docker Desktop dengan Compose v2** dan **Python 3.12**. Buka terminal di folder utama proyek, lalu jalankan:
+Pasang Docker Desktop dengan Compose v2 dan Python 3.12, lalu jalankan dari folder proyek:
 
 ```sh
 python scripts/init_env.py
-docker compose up -d --build
+docker compose up -d --build --wait
 ```
 
-Perintah pertama membuat `.env` dengan konfigurasi lokal. Jika `.env` sudah ada, lewati generator dan gunakan konfigurasi tersebut. Perintah kedua menyiapkan database, penyimpanan berkas, API, dan website. Tunggu layanan selesai menyala, lalu buka **http://localhost:3000**.
+Generator membuat `.env` lokal hanya jika belum ada. Kredensial tidak masuk Git. Buka http://localhost:3000; halaman doa tersedia di `/doa`, admin di `/admin`, dan dokumentasi API aktif di `/docs`. `docker compose down` menghentikan layanan tanpa menghapus volume data.
 
-MinIO dibangun dari sumber resmi versi `RELEASE.2025-04-22T22-12-26Z`, dengan commit dan checksum arsip yang dikunci pada `infra/minio/Dockerfile`. Build pertama juga mengunduh dependensi Go dan mengompilasi MinIO; tidak memerlukan akun registry MinIO.
+MinIO dibangun dari sumber resmi dengan versi dan checksum yang dikunci di `infra/minio/Dockerfile`.
 
-| Yang ingin dibuka | Alamat lokal |
-| --- | --- |
-| Aplikasi utama | http://localhost:3000 |
-| Fitur Doa | http://localhost:3000/doa |
-| Panel admin | http://localhost:3000/admin |
-| Dokumentasi API | http://localhost:3000/docs |
-| Pemeriksaan layanan API | http://localhost:3000/api/v1/health |
-| Penyimpanan berkas MinIO | http://localhost:9001 |
+## Fitur
 
-Untuk menghentikan aplikasi, jalankan `docker compose down`. Data tetap tersimpan selama volume tidak dihapus. Konfigurasi dan kredensial lokal ada di `.env`; berkas ini tidak masuk Git.
+- Setiap masuk atau memuat ulang aplikasi, pengguna memilih Masuk atau Daftar akun. Kata sandi dan kunci pesan asli tidak dikirim ke server.
+- Tulis pesan untuk satu atau beberapa orang/kenangan, pilih bentuk dan warna visual, lalu tentukan privasi. Foto dan lampiran pengguna tetap terenkripsi.
+- Rumah menampilkan kenangan pengguna dan galaksi publik. Galaksi publik memuat 100 pesan terbaru yang disetujui; Jelajah menyediakan halaman berikutnya dan filter. Pesan privat, tulisan yang belum disetujui, dan pengirim yang diblokir tidak masuk tampilan publik.
+- Tampilan awal mempertahankan Milky Way dan tujuh galaksi bawaan tanpa label astronomi. Peta Kenangan mempertahankan latar dan kontrol sebelumnya, dengan bintang berwarna dari data aplikasi. Arahkan kursor untuk nama dan jumlah pesan/doa; klik untuk mengunjungi kenangan.
+- Doa memakai pilihan Islam, Kristen, Katolik, Hindu, Buddha, Konghucu, dan Umum. Pilih pesan publik, tradisi, dan jenis doa. Dukungan tercatat setelah audio atau sesi hening selesai, satu kali per orang per pesan.
+- Ruang Pribadi menampilkan pesan, kenangan, dan dukungan doa yang diterima/diberikan. Doa tertulis lama tetap disimpan sebagai pesan; formulir doa manual telah dilepas.
+- Pengaturan menyediakan Ganti akun tanpa menghapus akun lama, pengelolaan sesi, ekspor, pemulihan, dan Hapus akun dengan pilihan mempertahankan atau menghapus tulisan. Tulisan publik yang dipertahankan tetap anonim; tulisan privat tetap terenkripsi dan tidak menjadi publik.
 
-## Cara memakai aplikasi
+Audio agama asli belum disertakan dalam checkout ini. Tiga rekaman internet tambahan telah dilepas. Katalog JS bawaan tetap digunakan; kurator dapat mengunggah audio tim dan meninjau teks sebelum mengaktifkannya. Hening pada pilihan Umum tersedia. Baca [pengelolaan doa](docs/konten-doa/SUMBER.md).
 
-Pada tampilan galaksi, menu utama berada di **bagian bawah layar**. Tombol **Tulis** dan **Doa** berdampingan di sana.
-
-| Menu | Kegunaan dan cara pakai |
-| --- | --- |
-| **Tulis** | Masuk atau daftar, pilih tujuan lama atau **+ Kenangan baru**, tulis pesan, pilih privasi, lalu simpan. Satu pesan bisa memiliki maksimal sepuluh tujuan. |
-| **Doa** | Menulis doa untuk seseorang atau mendoakan ucapan publik melalui audio yang tersedia maupun hening. Langkahnya dijelaskan di bawah. |
-| **Home / Rumah** | Mengembalikan tampilan ke galaksi utama, Milky Way. Galaksi yang kamu buat tetap tersimpan. |
-| **Peta** | **Kenangan** menampilkan bintang galaksi milikmu; klik untuk menuju galaksinya. **Konstelasi** menampilkan rasi bintang; klik bintang atau garis rasi untuk membaca informasinya. Geser layar untuk melihat bagian langit lain. Nama pribadi tidak ditampilkan mengambang di Peta. |
-| **Jelajah** | Membaca ucapan publik yang sudah disetujui admin, memberi empati, atau memilih ucapan untuk didoakan. |
-| **Ruang Pribadi** | Melihat galaksi, daftar Pesan, Doa tertulis, dan riwayat doa. Gunakan **Kelola pesan / Kelola doa** untuk mengedit atau menghapus tulisan. |
-| **Kunci** | Membuka kembali tulisan privat setelah halaman dimuat ulang. |
-| **Pengaturan** | Mengatur akun, sesi aktif, pemulihan, pemblokiran, dan ekspor data. |
-
-Saat mendaftar, gunakan kata sandi minimal **12 karakter** dan simpan kode pemulihan yang ditampilkan. Tulisan privat dienkripsi pada perangkat sebelum dikirim. Tulisan publik anonim dan tautan terbatas menunggu persetujuan admin; foto serta lampiran tetap privat untuk pemilik.
-
-### Menulis doa untuk seseorang
-
-1. Buka **Doa → Tulis doa untuk seseorang**, lalu masuk ke akun.
-2. Pilih galaksi milikmu atau **+ Galaksi baru untuk seseorang**. Jika membuat galaksi, isi nama, hubungan/kategori, bentuk, warna, dan ukuran.
-3. Pilih agama atau tradisi, tulis doa, lalu tentukan privasinya.
-4. Tekan **Simpan doa**. Tulisan masuk ke bagian **Doa tertulis** di Ruang Pribadi dan galaksi tujuan.
-
-**Satu doa tertulis menambah Doa satu; satu pesan menambah Pesan satu.** Tag `doa` pada pesan biasa tidak mengubah jenisnya. Label galaksi menjumlahkan doa tertulis dan sesi doa yang diterima; kartu galaksi menampilkan keduanya secara terpisah. Mengedit tidak menambah hitungan, sedangkan menghapus mengurangi jenis tulisan yang dihapus.
-
-Doa ini disimpan dalam galaksimu, bukan dikirim langsung ke akun orang lain. Jika diminta membuka kunci, masukkan kata sandi lalu kembali ke formulir. Draf tetap ada selama halaman yang sama masih terbuka; memuat ulang halaman menghapus draf yang belum disimpan.
-
-### Mendoakan ucapan publik
-
-1. Buka **Doa**, atau pilih **Doakan ucapan ini** pada Jelajah.
-2. Pilih ucapan publik dan tradisi: Islam, Kristen, Katolik, Hindu, Buddha, Konghucu, atau Umum.
-3. Pilih jenis doa. Baca keterangan sumber dan ketersediaannya.
-4. Putar audio yang sudah disetujui kurator hingga selesai, atau pilih **Umum → Hening sejenak** selama 30 detik.
-
-Sesi yang selesai dicatat sebagai doa untuk ucapan tersebut. Menutup atau membatalkan sesi tidak menambah hitungan. Mengulang pencatatan tidak menggandakan jumlah pendoa yang sama pada ucapan yang sama.
-
-**Audio untuk semua agama belum lengkap.** Tiga rekaman tersedia untuk ditinjau admin dan belum disetujui otomatis. Pilihan yang belum siap diberi keterangan; hening umum dapat digunakan langsung. Lihat [sumber dan status audio doa](docs/konten-doa/SUMBER.md).
-
-### Filter dan halaman Jelajah
-
-Pilih suasana atau tag, lalu tekan **Terapkan filter**. **Hapus filter** menampilkan hasil tanpa filter. **Terbaru** mengurutkan berdasarkan waktu pembuatan; **Paling didoakan** mengurutkan berdasarkan jumlah pendoa.
-
-Satu halaman memuat maksimal **30 ucapan**. **Sebelumnya** aktif setelah halaman pertama. **Berikutnya** aktif jika masih ada hasil berikutnya. Tombol juga menunggu saat data sedang dimuat; jika gagal, gunakan **Coba lagi**. Bila tidak ada hasil, hapus filter atau tunggu ucapan publik disetujui admin.
-
-## Akun admin
-
-Tidak ada email atau kata sandi admin bawaan. Daftarkan akun melalui aplikasi terlebih dahulu, lalu jalankan perintah ini dari folder utama proyek:
-
-```sh
-docker compose exec api python -m scripts.make_admin emailanda@example.com
-```
-
-Ganti email contoh dengan email akun yang sudah terdaftar. Masuk ulang, lalu buka **http://localhost:3000/admin** atau **Pengaturan → Akun dan keamanan → Panel moderasi**.
-
-Admin dapat meninjau tulisan publik/tautan terbatas dan mengelola katalog serta audio doa. Tulisan privat tidak bisa dibaca admin. **Daftar seluruh akun terdaftar belum tersedia di panel admin**; data akun disimpan pada tabel `users` di database.
-
-Cara meninjau dan mengaktifkan audio ada di [panduan sumber doa](docs/konten-doa/SUMBER.md).
-
-## Memakai perubahan terbaru
-
-Setelah kode diperbarui, bangun ulang layanan:
-
-```sh
-docker compose up -d --build
-```
-
-Kemudian muat ulang browser. Jika masih menampilkan versi lama, tutup tab lalu buka kembali. Untuk melihat layanan yang bermasalah, jalankan `docker compose logs api worker migrate init-storage web`.
-
-Jika menjalankan frontend tanpa Docker, hentikan proses lama, jalankan `npm run build`, lalu `npm run start --workspace apps/web`. Panduan lengkapnya ada di [pengembangan lokal](docs/panduan/PENGEMBANGAN.md).
-
-## Susunan folder
+## Folder
 
 | Folder | Isi |
 | --- | --- |
-| `apps/web/src` | Halaman, komponen, akun, pesan, doa, dan koneksi frontend ke API. |
-| `apps/web/legacy` | Sumber tampilan galaksi, peta, tata surya, CSS, dan aset gambar. |
-| `apps/web/scripts` | Proses yang menggabungkan sumber tampilan dengan aplikasi React. |
-| `apps/api` | API, data katalog doa, migrasi database, dan tes backend. |
-| `infra` | Konfigurasi akses website melalui Caddy. |
-| `scripts` | Perintah untuk konfigurasi, pengujian, dan pembuatan paket. |
-| `docs/panduan` | Cara mengembangkan, mengonfigurasi, dan memahami alur sistem. |
-| `docs/ui-ux/mobile` | Panduan serta gambar antarmuka ponsel. |
-| `docs/ui-ux/desktop` | Panduan serta gambar antarmuka laptop/desktop. |
-| `docs/pengujian` | Ringkasan pemeriksaan dan laporan hasil tes. |
-| `docs/api` | Salinan skema API dan SQL migrasi untuk referensi. |
-| `docs/konten-doa`, `docs/lisensi`, `docs/referensi` | Sumber doa, catatan lisensi, dan PRD. |
+| `frontend/src` | Halaman, komponen React, API client, dan kripto browser |
+| `frontend/visual` | Adegan kenangan, peta, katalog doa JS, CSS, dan vendor yang digunakan |
+| `frontend/scripts` | Build visual dan integrasi tampilan React |
+| `frontend/tests` | Pengujian frontend dan browser |
+| `backend/app` | API FastAPI dan worker |
+| `backend/alembic` | Migrasi database |
+| `backend/data` | Katalog doa untuk API |
+| `backend/tests` | Pengujian API dan migrasi |
+| `infra` | Gateway dan build MinIO |
+| `scripts` | Konfigurasi lokal dan pemeriksaan browser |
+| `docs` | PRD, panduan pengembangan, doa, tes, dan atribusi |
 
-Mulai dari [panduan UI/UX](docs/ui-ux/README.md) atau buka [galeri tampilan mobile dan desktop](docs/ui-ux/index.html). Berkas `apps/web/public/engine` adalah hasil otomatis; edit sumbernya, bukan berkas hasil tersebut. Folder `.next`, `node_modules`, `.venv`, dan `test-results` berisi hasil build, dependensi, atau data uji lokal.
+`frontend/public/visual` dihasilkan otomatis. `.next`, `node_modules`, `.venv`, `test-results`, dan laporan browser adalah berkas lokal yang diabaikan Git. Nama/katalog astronomi, mode Astronomi, tata surya, foto kartu objek, serta laporan/arsip lama yang tidak digunakan telah dilepas. Milky Way, galaksi latar, tiga tekstur yang diperlukan untuk bentuk galaksi, dan tema panel tetap digunakan.
 
-UI/UX lengkap tersedia untuk [mobile](docs/ui-ux/mobile/index.html) dan [desktop](docs/ui-ux/desktop/index.html), termasuk seluruh formulir, panel, keadaan penting, alur penggunaan, serta [komponen dan warna aplikasi](docs/ui-ux/sistem-desain.html). Jalankan `npm run ui-ux:export` untuk memperbarui semuanya dari build web terbaru dengan akun contoh.
-
-## Memeriksa aplikasi
-
-Setelah dependensi frontend dan backend tersedia:
+## Pengembangan dan pengujian
 
 ```sh
-npx playwright install chromium
-npm run check:buttons
+npm ci
+npm run lint
+npm test
+npm run build
+python -m pip install -r backend/requirements-dev.lock
+cd backend
+python -m ruff check app tests alembic
+python -m pytest -q
 ```
 
-Perintah ini membuat build terbaru dan memeriksa tombol melalui browser dengan database uji sementara. Gunakan `npm run check:buttons:repeat` untuk mengulang skenario dua kali. Cara menjalankan tes lain dan batas hasilnya dijelaskan dalam [panduan pengujian](docs/pengujian/README.md).
-
-PRD tersimpan di [docs/referensi/PRD_Kelompok_8.docx](docs/referensi/PRD_Kelompok_8.docx). Atribusi aset tetap ada di [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md) dan [catatan lisensi](docs/lisensi/CATATAN.md).
+Untuk browser lokal, kembali ke akar proyek lalu jalankan `node scripts/test-browser-local.mjs`. Pengujian produksi memakai `npm run test:e2e` setelah Docker aktif. Detail berada di [panduan pengembangan](docs/panduan/PENGEMBANGAN.md).
