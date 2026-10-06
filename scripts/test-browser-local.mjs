@@ -7,8 +7,8 @@ import { resolve, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
-const web = resolve(root, "apps/web");
-const standalone = resolve(web, ".next/standalone/apps/web");
+const web = resolve(root, "frontend");
+const standalone = resolve(web, ".next/standalone/frontend");
 async function freePort() {
   const server = createServer();
   await new Promise((done, reject) => { server.once("error", reject); server.listen(0, "127.0.0.1", done); });
@@ -45,7 +45,7 @@ function service(command, args, options) {
   children.push(child);
   return child;
 }
-service(process.env.UNTUKMU_TEST_PYTHON || "python", ["-m", "uvicorn", "tests.browser_server:app", "--host", "127.0.0.1", "--port", String(apiPort)], { cwd: resolve(root, "apps/api"), env: environment });
+service(process.env.UNTUKMU_TEST_PYTHON || "python", ["-m", "uvicorn", "tests.browser_server:app", "--host", "127.0.0.1", "--port", String(apiPort)], { cwd: resolve(root, "backend"), env: environment });
 service(process.execPath, [resolve(standalone, "server.js")], { cwd: standalone, env: { ...environment, PORT: String(webPort), HOSTNAME: "127.0.0.1" } });
 try {
   for (const url of [`${baseURL}/api/v1/capabilities`, baseURL]) {
@@ -57,7 +57,7 @@ try {
       await new Promise(done => setTimeout(done, 200));
     }
   }
-  const scriptPath = "/engine/untukmu/js/um-ui.js";
+  const scriptPath = "/visual/ui.js";
   if (await (await fetch(baseURL + scriptPath)).text() !== await readFile(resolve(web, "public" + scriptPath), "utf8")) throw new Error("Test server menyajikan engine yang berbeda dari hasil build.");
   console.log(`Browser test terisolasi: ${baseURL}`);
   const command = spawn(process.execPath, [resolve(root, "node_modules/@playwright/test/cli.js"), "test", ...process.argv.slice(2)], { cwd: web, env: environment, stdio: "inherit" });

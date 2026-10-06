@@ -8,8 +8,10 @@ node_modules
 **/*.db
 **/test-results
 **/playwright-report
-**/public/engine
+**/public/visual
 .env
 **/.env
 docs
 *.zip
+
+**/.venv
