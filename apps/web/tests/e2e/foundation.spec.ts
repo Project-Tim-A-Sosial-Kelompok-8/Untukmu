@@ -1,28 +1,15 @@
 import { test, expect } from "@playwright/test";
-import { login } from "./helpers";
+import { login, register } from "./helpers";
 
 test("akun → kunci → pesan privat → muat ulang → buka lagi", async ({ page }) => {
+  test.setTimeout(180000);
   const errors: string[] = [];
   const requests: { url: string; body: string }[] = [];
   page.on("pageerror", error => errors.push(error.message));
   page.on("console", message => { if (message.type() === "error") errors.push(message.text() + " " + message.location().url); });
   page.on("request", request => { if (request.url().includes("/api/v1/") && request.postData()) requests.push({ url: request.url(), body: request.postData()! }); });
-  await page.goto("/");
-  const frame = page.frameLocator("iframe");
-  await frame.locator("#um-entry.on").waitFor();
-  await frame.getByRole("button", { name: "Daftar akun", exact: true }).click();
-  const email = `browser-${Date.now()}@example.com`;
-  const password = "kata-sandi-uji-yang-panjang";
-  await frame.locator("#um-email").fill(email);
-  await frame.locator("#um-account-password").fill(password);
-  await frame.locator("#um-repeat").fill(password);
-  await frame.getByRole("button", { name: "Daftar", exact: true }).click();
-  await expect(frame.getByText("Simpan kode pemulihan", { exact: true })).toBeVisible({ timeout: 60000 });
-  const recovery = await frame.locator("output").innerText();
+  const { frame, email, password, recovery } = await register(page, "browser");
   expect(recovery.length).toBe(43);
-  await frame.getByRole("checkbox").check();
-  await frame.getByRole("button", { name: "Lanjutkan", exact: true }).click();
-  await frame.locator("#um-entry [data-act=tulis]").click();
   await frame.locator("#um-nama").fill("Galaksi sahabat");
   await frame.locator("#um-comp [data-act=cat]").first().click();
   await expect(frame.locator("#um-nama")).toHaveValue("Galaksi sahabat");

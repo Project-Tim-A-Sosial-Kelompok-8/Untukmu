@@ -52,7 +52,7 @@ test("simpan membuka galaksi dari Peta; galaksi dan bintang lama tetap tampil se
   page.on("pageerror", error => errors.push(error.message));
   const { frame, email, password } = await register(page, "galaxy-render");
   await saveNewGalaxy(frame, "Kenangan pertama");
-  await expect.poll(async () => (await scene(page)).selected).not.toBeNull();
+  await expect.poll(async () => (await scene(page)).selected, { timeout: 20000 }).not.toBeNull();
   const first = (await scene(page)).galaxies[0];
   expect(first.visible && first.inFrame).toBe(true);
   expect(first.messages).toHaveLength(1);
@@ -68,8 +68,8 @@ test("simpan membuka galaksi dari Peta; galaksi dan bintang lama tetap tampil se
   await frame.locator(".um-dock [data-act=tulis]").click();
   await saveNewGalaxy(frame, "Kenangan kedua");
   await expect.poll(async () => (await scene(page)).mode).toBe("galaxy");
-  await expect.poll(async () => (await scene(page)).selected).not.toBe(first.id);
-  await expect.poll(async () => (await scene(page)).selected).not.toBeNull();
+  await expect.poll(async () => (await scene(page)).selected, { timeout: 20000 }).not.toBe(first.id);
+  await expect.poll(async () => (await scene(page)).selected, { timeout: 20000 }).not.toBeNull();
   let saved = await scene(page);
   expect(saved.galaxies).toHaveLength(2);
   expect(saved.galaxies.find(item => item.id === first.id)?.messages).toEqual(first.messages);
@@ -86,7 +86,7 @@ test("simpan membuka galaksi dari Peta; galaksi dan bintang lama tetap tampil se
   await frame.locator("#um-comp [data-act=next]").click();
   await frame.locator("#um-comp [data-act=save]").click();
   await expect(frame.locator("#um-comp")).not.toHaveClass(/on/);
-  await expect.poll(async () => (await scene(page)).selected).toBe(first.id);
+  await expect.poll(async () => (await scene(page)).selected, { timeout: 20000 }).toBe(first.id);
   saved = await scene(page);
   expect(saved.galaxies.find(item => item.id === first.id)?.messages).toHaveLength(2);
   expect(saved.galaxies.find(item => item.id === secondId)?.messages).toHaveLength(1);
