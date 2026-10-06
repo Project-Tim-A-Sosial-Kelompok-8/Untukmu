@@ -1,12 +1,14 @@
 import hmac
+import logging
 from uuid import UUID
 
 from fastapi import APIRouter, HTTPException, Request, Response
-from sqlalchemy import select, delete
+from sqlalchemy import select, delete, update
 from sqlalchemy.exc import IntegrityError
+from redis.exceptions import RedisError
 
-from .models import Session, User, now, Message, Constellation
-from .schemas import Login, Register, UserSettings, ConfirmCredential, EnableRecovery
+from .models import Session, User, now, Message, Constellation, Upload, StorageDeletion
+from .schemas import Login, Register, UserSettings, ConfirmCredential, EnableRecovery, DeleteAccount
 from .security import (
     CurrentUser,
     DB,
@@ -22,6 +24,7 @@ from .security import (
 )
 
 router = APIRouter(tags=["Akun dan sesi"])
+logger = logging.getLogger(__name__)
 
 
 @router.get("/auth/status")
@@ -198,3 +201,36 @@ async def clear_data(body: ConfirmCredential, user: CurrentUser, db: DB, request
     await db.commit()
     from .content import invalidate
     await invalidate(request, user.id)
+
+
+@router.delete('/users/me', status_code=204)
+async def delete_account(body: DeleteAccount, user: CurrentUser, db: DB, request: Request, response: Response):
+    verify_origin(request)
+    await throttle(request, 'delete-account', 3, user.id)
+    if not await check_password(user.password_hash, body.password):
+        raise HTTPException(403, 'Kata sandi tidak cocok. Akun belum dihapus.')
+    user_id = user.id
+    if body.content_action == 'delete':
+        keys = await db.scalars(select(Upload.storage_key).where(Upload.owner_id == user_id))
+        db.add_all([StorageDeletion(storage_key=key) for key in keys])
+        await db.execute(delete(Message).where(Message.author_id == user_id))
+        await db.execute(delete(Constellation).where(Constellation.owner_id == user_id))
+        await db.execute(delete(Upload).where(Upload.owner_id == user_id))
+    else:
+        # Preserve ciphertext and public moderation decisions without retaining
+        # credentials or transferring ownership to an account with the same email.
+        # Old restricted links cannot be managed after deletion, so revoke them.
+        await db.execute(update(Message).where(Message.author_id == user_id).values(author_id=None, share_token_hash=None))
+        await db.execute(update(Constellation).where(Constellation.owner_id == user_id).values(owner_id=None))
+        await db.execute(update(Upload).where(Upload.owner_id == user_id).values(owner_id=None))
+    await db.delete(user)
+    await db.commit()
+    response.delete_cookie('um_refresh', path='/api/v1/auth', samesite='strict', httponly=True,
+                          secure=request.url.scheme == 'https')
+    from .content import invalidate
+    try:
+        await invalidate(request, user_id)
+    except RedisError:
+        # Deletion is already committed and all credentials are invalid. Never
+        # tell the client the account still exists because a short-lived cache failed.
+        logger.warning("Account deleted; public cache invalidation will recover after expiry.")

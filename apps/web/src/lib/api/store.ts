@@ -6,7 +6,7 @@ import type { Cipher, KeyRecord } from "../crypto/types";
 export interface Galaxy {
   id: string; nama: string; kategori: string; kind: "spiral" | "ellipsoid" | "irregular";
   warna: string; radius: 110 | 140 | 175; count: number; foto: string | null; dibuat: number;
-  sendiri: true; seed: false;
+  sendiri: boolean; seed: false;
 }
 interface GalaxyRecord {
   id: string; target_label: string; target_kind: string; custom_category: string | null;
@@ -14,12 +14,14 @@ interface GalaxyRecord {
   particle_count: number; created_at: string;
 }
 interface MessageRecord {
+  author_deleted?: boolean;
   entry_type: "message" | "prayer";
   visibility: "private" | "public_anon" | "unlisted"; public_body: string | null; is_mine: boolean; moderation_status: string; empathy_count: number;
   id: string; constellation_ids: string[]; payload: Cipher; date_label: string | null;
   mood: string | null; tags: string[]; created_at: string; prayer_count: number; attachment_ids: string[];
 }
 export interface Message {
+  authorDeleted: boolean;
   jenis: "pesan" | "doa";
   publicBody: string | null; moderationStatus: string; empathyCount: number;
   id: string; galaksiId: string; galaksiIds: string[]; privasi: "privat" | "publik" | "unlisted"; isi: Cipher; tanggal: string | null;
@@ -77,7 +79,7 @@ async function galaxy(row: GalaxyRecord): Promise<Galaxy> {
     foto: row.visual_ref ? await photoURL(row.visual_ref) : null, dibuat: Date.parse(row.created_at), sendiri: true, seed: false };
 }
 function message(row: MessageRecord): Message {
-  return { jenis: row.entry_type === "prayer" ? "doa" : "pesan", id: row.id, galaksiId: row.constellation_ids[0] || "", galaksiIds: row.constellation_ids, privasi: row.visibility === "public_anon" ? "publik" : row.visibility === "unlisted" ? "unlisted" : "privat", isi: row.payload,
+  return { authorDeleted: !!row.author_deleted, jenis: row.entry_type === "prayer" ? "doa" : "pesan", id: row.id, galaksiId: row.constellation_ids[0] || "", galaksiIds: row.constellation_ids, privasi: row.visibility === "public_anon" ? "publik" : row.visibility === "unlisted" ? "unlisted" : "privat", isi: row.payload,
     tanggal: row.date_label, mood: row.mood, tag: row.tags, dibuat: Date.parse(row.created_at), sendiri: row.is_mine !== false,
     piringan: true, seed: false, pendoa: { total: row.prayer_count, tradisi: {} }, attachmentIds: row.attachment_ids, publicBody: row.public_body, moderationStatus: row.moderation_status, empathyCount: row.empathy_count };
 }
@@ -109,6 +111,27 @@ async function saveGalaksi(input: Partial<Galaxy> & { nama: string; kategori?: s
 async function listPesan(galaksiId?: string) {
   await ready(); if (!currentUser()) return [];
   return (await allPages<MessageRecord>(galaksiId ? `/constellations/${galaksiId}/messages` : "/dashboard/messages")).map(message);
+}
+const PUBLIC_GALAXY_ID = "publik-bersama";
+const publicGalaxy: Galaxy = { id: PUBLIC_GALAXY_ID, nama: "Galaksi publik", kategori: "pesan publik bersama",
+  kind: "spiral", warna: "#88baff", radius: 140, count: 8500, foto: null, dibuat: 0, sendiri: false, seed: false };
+async function publicEntries() {
+  await ready();
+  if (!currentUser()) return [];
+  return (await cached<MessageRecord[]>("/explore?limit=100&sort=new")).map(message);
+}
+async function listGalaksiLadang() {
+  const [owned, shared] = await Promise.all([listGalaksi(), publicEntries()]);
+  return shared.length ? [...owned, publicGalaxy] : owned;
+}
+async function listPesanLadang(galaksiId?: string) {
+  if (galaksiId && galaksiId !== PUBLIC_GALAXY_ID) return listPesan(galaksiId);
+  const [owned, shared] = await Promise.all([listPesan(), publicEntries()]);
+  const sharedIds = new Set(shared.map(entry => entry.id));
+  if (galaksiId === PUBLIC_GALAXY_ID) return shared.map(entry => ({ ...entry, galaksiId: PUBLIC_GALAXY_ID, galaksiIds: [PUBLIC_GALAXY_ID] }));
+  const ownedIds = new Set(owned.map(entry => entry.id));
+  return [...owned.map(entry => sharedIds.has(entry.id) ? { ...entry, galaksiIds: [...entry.galaksiIds, PUBLIC_GALAXY_ID] } : entry),
+    ...shared.filter(entry => !ownedIds.has(entry.id)).map(entry => ({ ...entry, galaksiId: PUBLIC_GALAXY_ID, galaksiIds: [PUBLIC_GALAXY_ID] }))];
 }
 async function simpanPesan(input: { galaksiId: string; galaksiIds?: string[]; teks: string; jenis?: "pesan" | "doa"; privasi?: string; tanggal?: string; mood?: string; tag?: string[]; attachments?: File[] }) {
   requireUser();
@@ -160,7 +183,8 @@ export const store = {
   empathy: async (id: string) => api(`/messages/${id}/empathy`, { method: "POST", body: JSON.stringify({ turnstile_token: currentUser() ? undefined : await requestChallenge("empathy") }) }),
   report: async (id: string, reason: string) => api("/reports", { method: "POST", body: JSON.stringify({ message_id: id, reason, turnstile_token: currentUser() ? undefined : await requestChallenge("report") }) }),
   block: async (id: string) => { requireUser(); await api("/users/blocks", { method: "POST", body: JSON.stringify({ message_id: id }) }); await invalidate(); },
-  ready, identitas: async () => currentUser(), listGalaksi, getGalaksi, saveGalaksi, saveGalaksiBaru: saveGalaksi,
+  ready, identitas: async () => currentUser(), listGalaksi, listGalaksiLadang, listPesanLadang, getGalaksi, saveGalaksi, saveGalaksiBaru: saveGalaksi,
+  publicVersion: async () => JSON.stringify((await publicEntries()).map(row => [row.id, row.pendoa.total, row.empathyCount, row.publicBody, row.authorDeleted])),
   listPesan, getPesan: async (id: string) => message(await cached<MessageRecord>(`/messages/${id}`)), simpanPesan,
   bacaIsi: (item: Message) => item.privasi !== "privat" ? Promise.resolve(item.publicBody) : vault.decryptPesan(item.isi), getMeta, setMeta, stats, listDoa,
   pesanTitik: async () => null, listPesanSabuk: async () => [],
@@ -170,7 +194,7 @@ export const store = {
     window.UM.doaData.tradisi.splice(0, window.UM.doaData.tradisi.length, ...catalog);
     if (id?.startsWith("prayer-")) throw new Error("Pilih pesan asal untuk mengirim doa.");
     if (id) { const p = await api<MessageRecord>(`/messages/${id}`); if(p.visibility !== "public_anon" || p.moderation_status !== "approved") throw new Error("Doa tersedia untuk pesan publik yang telah disetujui."); return id; }
-    const candidates = await listPesan(gid); const p = candidates.find(p => p.privasi === "publik" && p.moderationStatus === "approved");
+    const candidates = await listPesanLadang(gid); const p = candidates.find(p => p.privasi === "publik" && p.moderationStatus === "approved");
     if (!p) throw new Error("Galaksi ini belum memiliki pesan publik yang disetujui."); return p.id;
   },
   startPrayer: async (id: string, catalog_id: string) => api<{ playback_token: string; seconds: number; audio_url: string | null }>(`/messages/${id}/prayers/start`, { method: "POST", body: JSON.stringify({ catalog_id, turnstile_token: currentUser() ? undefined : await requestChallenge("prayer") }) }),

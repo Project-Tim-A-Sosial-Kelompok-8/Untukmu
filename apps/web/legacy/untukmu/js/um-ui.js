@@ -233,6 +233,7 @@ UM.ui = (function () {
   function bukaKomposer(galaksiId) {
     if (comp.saving) return;
     galaksiId = galaksiId || UM.galaksi.state.aktif || null;
+    if (galaksiId === 'publik-bersama') galaksiId = null;
     comp.step = 0; comp.err = ''; comp.isi = ''; comp.mood = ''; comp.tag = '';
     comp.tanggal = new Date().toISOString().slice(0, 10);
     comp.privasi = 'privat'; comp.newFoto = null;
@@ -532,7 +533,7 @@ UM.ui = (function () {
     var g = item.g;
     var requestId = ++kartuRequest;
     var panelBefore = bpBody.firstChild;
-    Promise.all([UM.store.listPesan(g.id), UM.store.listDoa(g.id)]).then(function (r) {
+    Promise.all([(UM.store.listPesanLadang || UM.store.listPesan)(g.id), UM.store.listDoa(g.id)]).then(function (r) {
       if (requestId !== kartuRequest || bpBody.firstChild !== panelBefore) return;
       var semua = r[0], doa = r[1];
       /* Sama seperti pelapis di um-galaksi.js: piringan = bintang, sabuk = debu.

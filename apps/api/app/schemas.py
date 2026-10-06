@@ -64,6 +64,11 @@ class Login(Strict):
     password: str = Field(min_length=1, max_length=256)
 
 
+class DeleteAccount(Strict):
+    password: str = Field(min_length=1, max_length=256)
+    content_action: Literal["keep", "delete"]
+
+
 class GalaxyInput(Strict):
     target_kind: Literal["orang_tua", "saudara", "sahabat", "pasangan", "seseorang", "diri_sendiri", "custom"]
     target_label: str = Field(min_length=1, max_length=100)

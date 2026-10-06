@@ -1,14 +1,15 @@
 import { expect, test } from '@playwright/test';
 import { execFileSync } from 'node:child_process';
 import { resolve } from 'node:path';
-import { register } from './helpers';
+import { register, login } from './helpers';
 
 test('kurator dapat mendengarkan sumber dan memasang audio tanpa menerbitkan draf', async ({ page }) => {
   test.skip(process.env.UNTUKMU_BROWSER_TEST !== '1', 'Requires an isolated admin fixture.');
-  const { frame, email } = await register(page, 'prayer-curator');
+  const { frame, email, password } = await register(page, 'prayer-curator');
   await frame.locator('#um-comp .um-close').click();
   execFileSync(process.env.UNTUKMU_TEST_PYTHON || 'python', [resolve('../api/tests/promote_browser_admin.py'), email], { env: process.env });
   await page.goto('/admin');
+  await login(page, email, password);
   await expect(frame.getByText('Kurasi doa dan audio', { exact: true })).toBeVisible();
   await frame.locator('#prayer-catalog').selectOption('katolik/bapa-kami-katolik');
   const preview = frame.getByLabel('Pratinjau Bapa Kami / Pater Noster (Latin)');

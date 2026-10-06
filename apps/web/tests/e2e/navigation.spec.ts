@@ -24,8 +24,7 @@ for (const viewport of [{ width: 1280, height: 800 }, { width: 390, height: 844 
     const errors: string[] = [];
     page.on("pageerror", error => errors.push(error.message));
     await page.setViewportSize(viewport);
-    await page.goto("/");
-    const frame = page.frameLocator("iframe");
+    const { frame } = await register(page, `navigation-${viewport.width}`, { startComposer: false });
     const engine = page.frames()[1];
     await frame.locator("#um-entry [data-act=skip]").click();
     await expectClearLayout(page);
@@ -71,11 +70,11 @@ for (const viewport of [{ width: 1280, height: 800 }, { width: 390, height: 844 
     await frame.locator('.um-dock [data-act=rumah]').click();
     await expect.poll(() => engine.evaluate(() => window.UM_ENGINE!.metrics().mode)).toBe("galaxy");
 
-    for (const action of ["tulis", "dash", "setup"]) {
+    for (const [action, screen] of [["tulis", "um-comp"], ["dash", "um-dash"], ["setup", "um-setup"]]) {
       await frame.locator(`.um-dock [data-act=${action}]`).click();
-      await expect(frame.locator('#um-account-title')).toBeVisible();
-      await frame.locator('#um-react-account .um-close').click();
-      await expect(frame.locator('#um-account-title')).not.toBeVisible();
+      await expect(frame.locator(`#${screen}`)).toHaveClass(/on/);
+      await frame.locator(`#${screen} .um-close`).click();
+      await expect(frame.locator(`#${screen}`)).not.toHaveClass(/on/);
     }
     await frame.locator('.um-dock [data-act=jelajah]').click();
     await frame.locator('#um-exp [data-act=sort][data-id=doa]').click();

@@ -12,7 +12,7 @@ import { api, currentUser, queryClient } from "../lib/api/client";
 import { store, clearPrivateMedia } from "../lib/api/store";
 import * as vault from "../lib/crypto/vault";
 import { AccountScreen, openAccount, signOut } from "../features/account/AccountScreen";
-import { requireLogin } from "../features/account/state";
+import { requireLogin, requireEntryLogin } from "../features/account/state";
 
 window.UM.renderScreen = renderPreservedScreen;
 window.UM.trackScreen = trackScreen;
@@ -22,11 +22,14 @@ if (window.UM_ENGINE) void mountFiberEngine(window.UM_ENGINE).catch(() => { docu
 window.UM.store = store;
 window.UM.crypto = { ...vault, lock() { vault.lock(); clearPrivateMedia(); }, reason: () => vault.available() ? null : "no-webcrypto", kdfId: () => "Argon2id", iterations: () => 3 };
 vault.setRecordReader(async () => currentUser()?.encryption_record || null);
+window.addEventListener("untukmu-session-ended", () => { vault.lock(); clearPrivateMedia(); location.reload(); });
 window.UM.account = { require: requireLogin, open: openAccount, logout: signOut, isLogged: () => !!currentUser() };
 const host = document.createElement("div");
 host.id = "um-react-account";
 document.body.append(host);
-createRoot(host).render(<QueryClientProvider client={queryClient}><AccountScreen /><SocialScreens /><ManageMessage /><WrittenPrayerScreen /><Challenge />{new URLSearchParams(location.search).get("screen") === "shared" && <SharedMessage />}</QueryClientProvider>);
+const initialScreen = new URLSearchParams(location.search).get("screen");
+if (initialScreen !== "shared") requireEntryLogin();
+createRoot(host).render(<QueryClientProvider client={queryClient}><AccountScreen /><SocialScreens /><ManageMessage /><WrittenPrayerScreen /><Challenge />{initialScreen === "shared" && <SharedMessage />}</QueryClientProvider>);
 
 if (new URLSearchParams(location.search).get("screen") === "admin") void store.ready().then(() => setTimeout(() => void openSocial("admin"), 100));
 let clearingData = false;
@@ -51,6 +54,8 @@ document.addEventListener("click", event => {
   }
   if (action === "manage" && target.dataset.id) { event.stopImmediatePropagation(); event.preventDefault(); void openMessage(target.dataset.id); return; }
   if (action === "account") { event.stopImmediatePropagation(); event.preventDefault(); openAccount(); return; }
+  if (action === "switch-account") { event.stopImmediatePropagation(); event.preventDefault(); void signOut().catch(error => window.UM.ui.toast(error.message)); return; }
+  if (action === "delete-account") { event.stopImmediatePropagation(); event.preventDefault(); openAccount("delete"); return; }
   if (["tulis", "dash", "setup"].includes(action || "") && !currentUser()) {
     event.stopImmediatePropagation(); event.preventDefault();
     void requireLogin().then(success => {
@@ -88,13 +93,15 @@ document.addEventListener("click", event => {
 installAccessibility();
 
 let lastPrayerCount: number | null = null;
+let lastPublicVersion: string | null = null;
 setInterval(()=>{
   if(document.hidden || !currentUser() || document.querySelector('#um-comp.on')) return;
-  void api<{prayers_received:number}>("/dashboard/summary").then(async summary=>{
-    if(lastPrayerCount!==null && lastPrayerCount!==summary.prayers_received) {
+  void Promise.all([api<{prayers_received:number}>("/dashboard/summary"), store.publicVersion()]).then(async ([summary, publicVersion])=>{
+    if(lastPrayerCount!==null && lastPrayerCount!==summary.prayers_received || lastPublicVersion !== publicVersion) {
       await queryClient.invalidateQueries({queryKey:["api"]});await Promise.all([window.UM.galaksi.refresh(),window.UM.sky.refresh()]);
       if(document.querySelector('#um-dash.on')) window.UM.ui.renderSemua();
     }
     lastPrayerCount=summary.prayers_received;
+    lastPublicVersion=publicVersion;
   }).catch(()=>{/* Retry on the next visible poll; do not interrupt a composition. */});
 },20000);

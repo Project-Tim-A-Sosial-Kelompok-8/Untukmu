@@ -1,25 +1,23 @@
 import { expect, test } from '@playwright/test';
 import { uiScreenshotPath } from './artifacts';
-import { register } from './helpers';
+import { register, login } from './helpers';
 
-test('pengunjung dapat membuka Doa; menulis doa meminta akun dan pembatalan kembali ke Doa', async ({ page }) => {
+test('halaman Doa meminta login awal sebelum menulis doa', async ({ page }) => {
   await page.goto('/doa');
   const frame = page.frameLocator('iframe');
-  await frame.locator('#um-doa [data-act=write-prayer]').click();
   await expect(frame.locator('#um-account-title')).toHaveText('Masuk ke Untukmu');
   await expect(frame.locator('#um-written-prayer')).toHaveCount(0);
-  await frame.locator('#um-react-account .um-close').click();
-  await expect(frame.locator('#um-account-title')).not.toBeVisible();
+  await page.keyboard.press('Escape');
+  await expect(frame.locator('#um-account-title')).toBeVisible();
   await expect(frame.locator('#um-doa')).toHaveClass(/on/);
-  await expect(frame.locator('#um-doa [data-act=write-prayer]')).toBeEnabled();
-  await expect(frame.locator('#um-doa [data-act=all-targets]')).toHaveCount(0);
+  await expect(frame.getByRole('button', { name: 'Daftar akun', exact: true })).toBeVisible();
 });
 
 test('doa tertulis tersimpan pada tujuan yang benar; retry tidak menggandakan galaksi; draf tetap ada saat membuka kunci', async ({ page }) => {
   test.setTimeout(180000);
   const errors: string[] = [];
   page.on('pageerror', error => errors.push(error.message));
-  const { frame, password } = await register(page, 'written-prayer');
+  const { frame, email, password } = await register(page, 'written-prayer');
   await frame.locator('#um-comp [data-act=cancel]').first().click();
   const previousTarget = await page.frames()[1].evaluate(async () =>
     window.UM.store.saveGalaksi({ nama: 'Kenangan yang sudah ada', kategori: 'sahabat' }));
@@ -125,6 +123,8 @@ test('doa tertulis tersimpan pada tujuan yang benar; retry tidak menggandakan ga
   await frame.locator('#um-react-account .um-screen.on').getByRole('button', { name: 'Tutup', exact: true }).click();
 
   await page.reload();
+  await login(page, email, password);
+  await page.frames()[1].evaluate(() => window.UM.crypto.lock());
   await frame.locator('#um-entry [data-act=skip]').click();
   await frame.locator('.um-dock [data-act=doa]').click();
   await frame.locator('#um-doa [data-act=write-prayer]').click();

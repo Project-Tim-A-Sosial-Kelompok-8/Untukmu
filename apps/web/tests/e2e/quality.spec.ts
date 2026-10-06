@@ -1,11 +1,12 @@
 import { test, expect } from "@playwright/test";
 import { mkdir, writeFile } from "node:fs/promises";
 import { resolve } from "node:path";
+import { register } from './helpers';
 
 test('PWA, keyboard, perpindahan kamera, dan cache privat', async ({ page, context }) => {
   let testingOffline = false;
   const errors:string[]=[];page.on('pageerror',e=>errors.push(e.message));page.on('console',e=>{if(e.type()==='error' && !(testingOffline && e.text().includes('net::ERR_INTERNET_DISCONNECTED'))) errors.push(e.text());});
-  await page.goto('/');const frame=page.frameLocator('iframe');await frame.locator('#um-entry.on').waitFor({timeout:20000});
+  const {frame}=await register(page,'quality',{startComposer:false});await frame.locator('#um-entry.on').waitFor({timeout:20000});
   await expect(frame.locator('html')).toHaveAttribute('lang','id');
   const engine=page.frames()[1];
   await expect(frame.locator('#um-entry')).toHaveAttribute('role','dialog');

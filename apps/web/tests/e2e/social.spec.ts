@@ -1,7 +1,7 @@
 import { test, expect } from "@playwright/test";
 import { execFileSync } from "node:child_process";
 import { resolve } from "node:path";
-import { register } from "./helpers";
+import { register, login } from "./helpers";
 
 test("publikasi → moderasi → jelajah anonim → empati dan laporan", async ({ page, browser }) => {
   // Includes registration/key derivation, two browser contexts, and a real
@@ -11,7 +11,7 @@ test("publikasi → moderasi → jelajah anonim → empati dan laporan", async (
   const errors: string[] = [];
   page.on("pageerror", error => errors.push(error.message));
   page.on("console", message => { if (message.type() === "error") errors.push(message.text()); });
-  const { frame, email } = await register(page, "social");
+  const { frame, email, password } = await register(page, "social");
   await frame.locator("#um-nama").fill("Untuk sahabat");
   await frame.locator("#um-comp [data-act=next]").click();
   await frame.locator("#um-comp [data-act=next]").click();
@@ -26,6 +26,7 @@ test("publikasi → moderasi → jelajah anonim → empati dan laporan", async (
   await expect(frame.locator("#um-exp .um-item")).toHaveCount(0);
   execFileSync(process.env.UNTUKMU_TEST_PYTHON || "python", [resolve("../api/tests/promote_browser_admin.py"), email], { env: process.env });
   await page.goto("/admin");
+  await login(page, email, password);
   await expect(frame.getByText("Peninjauan konten", { exact: true })).toBeVisible();
   await expect(frame.getByText(text, { exact: true })).toBeVisible();
   await frame.getByRole("button", { name: "Setujui", exact: true }).click();
@@ -33,8 +34,7 @@ test("publikasi → moderasi → jelajah anonim → empati dan laporan", async (
   const context = await browser.newContext();
   const visitor = await context.newPage();
   visitor.on("pageerror", error => errors.push(error.message));
-  await visitor.goto("/");
-  const guest = visitor.frameLocator("iframe");
+  const { frame: guest } = await register(visitor, 'social-viewer', { startComposer: false });
   await guest.locator("#um-entry [data-act=skip]").click();
   await guest.locator('.um-dock [data-act=jelajah]').click();
   await expect(guest.locator("#um-exp .txt").filter({ hasText: text })).toBeVisible();

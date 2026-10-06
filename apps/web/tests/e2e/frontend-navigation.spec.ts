@@ -1,14 +1,14 @@
 import { expect, test } from '@playwright/test';
 import { uiScreenshotPath } from './artifacts';
+import { register } from './helpers';
 
 for (const width of [320, 390, 1366]) {
   test(`Tulis dan Doa tersedia pada navigasi bawah tanpa tombol tambahan di atas (${width}px)`, async ({ page }) => {
     await page.setViewportSize({ width, height: 844 });
     const errors: string[] = [];
     page.on('pageerror', error => errors.push(error.message));
-    await page.goto('/');
+    const { frame } = await register(page, `frontend-nav-${width}`, { startComposer: false });
     await expect(page.locator('.app-navigation')).toHaveCount(0);
-    const frame = page.frameLocator('iframe');
     await frame.locator('#um-entry [data-act=skip]').click();
     const navigation = frame.locator('.um-dock');
     const prayer = navigation.locator('[data-act=doa]');
@@ -38,9 +38,9 @@ for (const width of [320, 390, 1366]) {
     await page.screenshot({ path: await uiScreenshotPath(width <= 640 ? 'mobile' : 'desktop', `doa-${width}.png`) });
     await frame.locator('#um-doa [data-act=close]').click();
     await write.click();
-    await expect(frame.locator('#um-account-title')).toBeVisible();
-    await frame.locator('#um-react-account .um-close').click();
-    await expect(frame.locator('#um-account-title')).not.toBeVisible();
+    await expect(frame.locator('#um-comp')).toHaveClass(/on/);
+    await frame.locator('#um-comp .um-close').click();
+    await expect(frame.locator('#um-comp')).not.toHaveClass(/on/);
     await prayer.click();
     await expect(frame.locator('#um-doa')).toHaveClass(/on/);
     expect(errors).toEqual([]);

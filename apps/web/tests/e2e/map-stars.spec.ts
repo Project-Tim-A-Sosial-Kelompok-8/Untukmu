@@ -3,7 +3,7 @@ import { uiScreenshotPath } from './artifacts';
 import { register } from './helpers';
 type ScreenPoint = { x: number; y: number };
 
-test('bintang Kenangan dan 25 konstelasi terlihat dan dapat diklik langsung pada langit', async ({ page }) => {
+test('bintang Kenangan dan 25 konstelasi terlihat dan dapat diklik langsung pada langit', async ({ page }, testInfo) => {
   test.setTimeout(180000);
   const errors: string[] = [];
   page.on('pageerror', error => errors.push(error.message));
@@ -12,6 +12,8 @@ test('bintang Kenangan dan 25 konstelasi terlihat dan dapat diklik langsung pada
   const engine = page.frames()[1];
   const target = await engine.evaluate(async () => {
     const target = await window.UM.store.saveGalaksi({ nama: 'Bintang kenangan Ibu', kategori: 'orang-tua', warna: '#b9a7ff' });
+    await window.UM.store.simpanPesan({ galaksiId: target.id, teks: 'Pesan untuk Ibu' });
+    await window.UM.store.simpanPesan({ galaksiId: target.id, teks: 'Doa untuk Ibu', jenis: 'doa' });
     await Promise.all([window.UM.galaksi.refresh(), window.UM.sky.refresh()]);
     return target;
   });
@@ -24,13 +26,24 @@ test('bintang Kenangan dan 25 konstelasi terlihat dan dapat diklik langsung pada
       skyControls.autoRotate = false; skyControls.enableDamping = false;
       skyCamera.position.copy(item.dir).multiplyScalar(-.1);
       skyControls.target.set(0,0,0); skyControls.update();
+      skyCamera.updateMatrixWorld();
       const v = item.dir.clone().multiplyScalar(SKY_R * .96).project(skyCamera);
       return {x:(v.x*.5+.5)*innerWidth,y:(-v.y*.5+.5)*innerHeight,
         visible:item.marker.visible, points:item.marker.geometry.attributes.position.count,
         originalStars:SKY_CONS.every(c=>c.starMat.visible), lines:SKY_CONS.some(c=>c.lineMat.visible)};
     })()`);
     expect(position).toMatchObject({ visible: true, points: 1, originalStars: true, lines: false });
-    await expect(frame.locator('#um-petalabels')).not.toBeVisible();
+    const tooltip = frame.locator('.um-memory-tooltip').filter({ hasText: target.nama });
+    await expect(tooltip).not.toBeVisible();
+    await page.mouse.move(position.x, position.y);
+    await expect(tooltip).toBeVisible();
+    await expect(tooltip).toContainText('1 pesan · 1 doa');
+    const bounds = await tooltip.boundingBox();
+    expect(bounds!.x).toBeGreaterThanOrEqual(0);
+    expect(bounds!.x + bounds!.width).toBeLessThanOrEqual(width);
+    await page.screenshot({ path: testInfo.outputPath(`tooltip-kenangan-${width}.png`) });
+    await page.mouse.move(5, 150);
+    await expect(tooltip).not.toBeVisible();
     await page.screenshot({ path: await uiScreenshotPath(width <= 640 ? 'mobile' : 'desktop', `peta-kenangan-${width}.png`) });
     await page.mouse.move(position.x, position.y);
     await page.mouse.down();

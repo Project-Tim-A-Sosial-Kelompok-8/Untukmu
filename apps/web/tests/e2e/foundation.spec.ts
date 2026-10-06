@@ -1,4 +1,5 @@
 import { test, expect } from "@playwright/test";
+import { login } from "./helpers";
 
 test("akun → kunci → pesan privat → muat ulang → buka lagi", async ({ page }) => {
   const errors: string[] = [];
@@ -9,8 +10,7 @@ test("akun → kunci → pesan privat → muat ulang → buka lagi", async ({ pa
   await page.goto("/");
   const frame = page.frameLocator("iframe");
   await frame.locator("#um-entry.on").waitFor();
-  await frame.locator("#um-entry [data-act=tulis]").click();
-  await frame.getByRole("button", { name: "Buat akun", exact: true }).click();
+  await frame.getByRole("button", { name: "Daftar akun", exact: true }).click();
   const email = `browser-${Date.now()}@example.com`;
   const password = "kata-sandi-uji-yang-panjang";
   await frame.locator("#um-email").fill(email);
@@ -22,6 +22,7 @@ test("akun → kunci → pesan privat → muat ulang → buka lagi", async ({ pa
   expect(recovery.length).toBe(43);
   await frame.getByRole("checkbox").check();
   await frame.getByRole("button", { name: "Lanjutkan", exact: true }).click();
+  await frame.locator("#um-entry [data-act=tulis]").click();
   await frame.locator("#um-nama").fill("Galaksi sahabat");
   await frame.locator("#um-comp [data-act=cat]").first().click();
   await expect(frame.locator("#um-nama")).toHaveValue("Galaksi sahabat");
@@ -41,8 +42,10 @@ test("akun → kunci → pesan privat → muat ulang → buka lagi", async ({ pa
   expect(data.payload.alg).toBe("A256GCM");
   expect(data.payload.ct).toBeTruthy();
   await page.reload();
+  await login(page, email, password);
   await frame.locator("#um-entry.on").waitFor();
   await frame.locator("#um-entry [data-act=skip]").click();
+  await page.frames()[1].evaluate(() => window.UM.crypto.lock());
   await frame.locator(".um-dock [data-act=setup]").click();
   await frame.locator("#um-pw").fill(password);
   await frame.locator("#um-setup [data-act=unlock]").click();
@@ -83,7 +86,8 @@ test("tamu tidak mendapat data contoh atau akses komposer tanpa akun", async ({ 
   expect(state.galaxies).toEqual([]);
   expect(state.messages).toEqual([]);
   expect(state.databases).toEqual([]);
-  await frame.locator("#um-entry [data-act=tulis]").click();
+  await page.keyboard.press("Escape");
+  await expect(frame.locator("#um-account-title")).toHaveText("Masuk ke Untukmu");
   await expect(frame.getByRole("dialog")).toBeVisible();
   await expect(frame.locator("#um-comp")).not.toHaveClass(/on/);
 });

@@ -23,11 +23,12 @@ export function enhanceExplore(ui, replace) {
       '<div aria-live="polite" aria-busy="' + expBusy + '">' + (expBusy ? '<p class="um-note" role="status">Memuat ucapan…</p>' : expError ? '<p class="um-note warn" role="alert">' + teks(expError) + '</p><button class="um-btn" data-act="retry">Coba lagi</button>' :
       expRows.length ? '<ul class="um-list um-card" style="margin-top:14px">' + expRows.map(function(p) {
         return '<li class="um-item"><div class="um-item-top"><span class="who">' + teks(p.sendiri ? T('expMine') : T('expAnon')) + '</span><span class="um-badge publik">' + ((p.pendoa && p.pendoa.total) || 0) + ' pendoa</span><span class="when">' + teks(ntah(p.dibuat)) + '</span></div>' +
+          (p.authorDeleted ? '<div class="um-muted">Tulisan dipertahankan secara anonim; akun penulis sudah dihapus.</div>' : '') +
           '<div class="txt" data-isi="' + escAttr(p.id) + '">' + teks(p.publicBody || '') + '</div><div class="um-item-acts">' +
           '<button class="um-btn small primary" data-act="doa" data-id="' + escAttr(p.id) + '" data-g="' + escAttr(p.galaksiId) + '">Doakan ucapan ini</button>' +
           '<button class="um-btn small" data-act="empati" data-id="' + escAttr(p.id) + '">Sampaikan empati</button>' +
           '<button class="um-btn small ghost" data-act="lapor" data-id="' + escAttr(p.id) + '">Laporkan</button>' +
-          (p.sendiri ? '' : '<button class="um-btn small ghost" data-act="block" data-id="' + escAttr(p.id) + '">Blokir pengirim</button>') + '</div></li>';
+          (p.sendiri || p.authorDeleted ? '' : '<button class="um-btn small ghost" data-act="block" data-id="' + escAttr(p.id) + '">Blokir pengirim</button>') + '</div></li>';
       }).join('') + '</ul>' : '<p class="um-empty">Belum ada ucapan publik yang sesuai. Coba hapus filter. Pesan privat atau yang menunggu moderasi tidak tampil di sini.</p>') + '</div>' +
       '<p id="um-exp-page-status" class="um-hint" role="status">' + (expBusy ? 'Memuat halaman...' : expError ? 'Gagal memuat halaman. Tekan Coba lagi.' : expRows.length ? 'Menampilkan ucapan ' + (expOffset + 1) + ' sampai ' + (expOffset + expRows.length) + '. Maksimal 30 ucapan per halaman.' : 'Tidak ada ucapan untuk ditampilkan.') + '</p>' +
       '<nav aria-describedby="um-exp-page-status" class="um-btn-row between" aria-label="Halaman ucapan"><button class="um-btn" data-act="prev-page"' + (!expOffset || expBusy ? ' disabled' : '') + '>Sebelumnya</button><span class="um-muted">Halaman ' + (Math.floor(expOffset / 30) + 1) + '</span><button class="um-btn" data-act="next-page"' + (!expMore || expBusy || expError ? ' disabled' : '') + '>Berikutnya</button></nav>' +

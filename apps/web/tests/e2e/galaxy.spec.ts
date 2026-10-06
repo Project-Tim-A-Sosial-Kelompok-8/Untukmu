@@ -1,5 +1,5 @@
 import { expect, test, type FrameLocator, type Page } from "@playwright/test";
-import { register } from "./helpers";
+import { register, login } from "./helpers";
 
 interface GalaxySnapshot {
   mode: string;
@@ -19,7 +19,7 @@ function scene(page: Page) {
     active: UM.galaksi.state.aktif,
     target: controls.target.toArray(),
     flying: !!flyState,
-    galaxies: UM.galaksi.state.daftar.map(item => {
+    galaxies: UM.galaksi.state.daftar.filter(item => item.g.sendiri !== false).map(item => {
       const screen = item.pos.clone().project(camera);
       const points = item.lod?.pts;
       return {
@@ -50,7 +50,7 @@ async function saveNewGalaxy(frame: FrameLocator, name: string) {
 test("simpan membuka galaksi dari Peta; galaksi dan bintang lama tetap tampil setelah muat ulang", async ({ page }, testInfo) => {
   const errors: string[] = [];
   page.on("pageerror", error => errors.push(error.message));
-  const { frame } = await register(page, "galaxy-render");
+  const { frame, email, password } = await register(page, "galaxy-render");
   await saveNewGalaxy(frame, "Kenangan pertama");
   await expect.poll(async () => (await scene(page)).selected).not.toBeNull();
   const first = (await scene(page)).galaxies[0];
@@ -96,6 +96,8 @@ test("simpan membuka galaksi dari Peta; galaksi dan bintang lama tetap tampil se
   for (const viewport of [{ width: 1280, height: 800 }, { width: 390, height: 844 }]) {
     await page.setViewportSize(viewport);
     await page.reload();
+    await login(page, email, password);
+    await page.frames()[1].evaluate(() => window.UM.crypto.lock());
     await frame.locator("#um-entry.on").waitFor();
     const loaded = await scene(page);
     expect(loaded.target).toEqual([0, 0, 0]);
@@ -120,8 +122,7 @@ test("simpan membuka galaksi dari Peta; galaksi dan bintang lama tetap tampil se
 });
 
 test("Home membatalkan perjalanan doa dan galaksi dibuka dengan transisi utuh", async ({ page }) => {
-  await page.goto("/");
-  const frame = page.frameLocator("iframe");
+  const { frame } = await register(page, "smooth-navigation", { startComposer: false });
   await frame.locator("#um-entry.on").waitFor();
   const engine = page.frames()[1];
   const result = await engine.evaluate<{ unchanged: boolean; flight: boolean; centered: boolean; particles: number }>(`(async () => {
@@ -129,6 +130,8 @@ test("Home membatalkan perjalanan doa dan galaksi dibuka dengan transisi utuh", 
     const g = {id:'smooth-navigation',nama:'Galaksi tujuan',radius:140,count:8500,kind:'spiral',warna:'#ffd9a0'};
     UM.store.listGalaksi = async () => [g];
     UM.store.listPesan = async () => [];
+    UM.store.listGalaksiLadang = (...args) => UM.store.listGalaksi(...args);
+    UM.store.listPesanLadang = (...args) => UM.store.listPesan(...args);
     UM.store.listDoa = async () => [];
     await UM.galaksi.refresh();
     const item = UM.galaksi.state.daftar[0];
@@ -153,7 +156,7 @@ test("Home membatalkan perjalanan doa dan galaksi dibuka dengan transisi utuh", 
 });
 
 test("bintang lama tidak tertimpa oleh pesan baru atau hasil refresh yang terlambat", async ({ page }) => {
-  await page.goto("/");
+  await register(page, "stars-regression", { startComposer: false });
   await page.frameLocator("iframe").locator("#um-entry.on").waitFor();
   const result = await page.frames()[1].evaluate<{
     before: number; after: number; stable: boolean; galaxies: number; drawn: boolean;
@@ -163,6 +166,8 @@ test("bintang lama tidak tertimpa oleh pesan baru atau hasil refresh yang terlam
     const messages = Array.from({length:450}, (_, i) => ({id:'message-'+i,galaksiId:galaxies[0].id,privasi:'privat',dibuat:i+1}));
     UM.store.listGalaksi = async () => galaxies;
     UM.store.listPesan = async () => messages;
+    UM.store.listGalaksiLadang = (...args) => UM.store.listGalaksi(...args);
+    UM.store.listPesanLadang = (...args) => UM.store.listPesan(...args);
     UM.store.listDoa = async () => [];
     await UM.galaksi.refresh();
     const item = UM.galaksi.state.daftar[0];

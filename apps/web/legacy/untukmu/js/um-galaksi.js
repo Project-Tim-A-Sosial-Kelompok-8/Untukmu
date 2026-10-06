@@ -443,8 +443,8 @@ UM.galaksi = (function () {
     if (bersihkanHover) bersihkanHover(); // tanda hover lama bisa menunjuk titik yang sudah dibangun ulang
     
     return Promise.all([
-      UM.store.listGalaksi(),
-      UM.store.listPesan(),
+      (UM.store.listGalaksiLadang || UM.store.listGalaksi)(),
+      (UM.store.listPesanLadang || UM.store.listPesan)(),
       UM.store.listDoa()
     ]).then(function (r) {
       if (versi !== refreshTerakhir) return false;

@@ -1,11 +1,11 @@
 import { expect, test } from '@playwright/test';
-import { register } from './helpers';
+import { register, login } from './helpers';
 
 test('pengaturan tersimpan; hapus dapat dibatalkan dan dicoba ulang; keluar menutup sesi', async ({ page }) => {
   test.setTimeout(180000);
   const errors: string[] = [];
   page.on('pageerror', error => errors.push(error.message));
-  const { frame, password } = await register(page, 'settings');
+  const { frame, email, password } = await register(page, 'settings');
   await frame.locator('#um-comp [data-act=cancel]').first().click();
   await page.frames()[1].evaluate(async () => {
     const galaxy = await window.UM.store.saveGalaksi({ nama: 'Kenangan pengaturan', kategori: 'keluarga' });
@@ -15,6 +15,7 @@ test('pengaturan tersimpan; hapus dapat dibatalkan dan dicoba ulang; keluar menu
   await frame.locator('#um-set [data-act=gb][data-id="0"]').click();
   await expect(frame.locator('#um-set [data-act=gb][data-id="0"]')).toHaveClass(/on/);
   await page.reload();
+  await login(page, email, password);
   await frame.locator('#um-entry [data-act=skip]').click();
   await frame.locator('.um-dock [data-act=set]').click();
   await expect(frame.locator('#um-set [data-act=gb][data-id="0"]')).toHaveClass(/on/);
@@ -53,6 +54,7 @@ test('pengaturan tersimpan; hapus dapat dibatalkan dan dicoba ulang; keluar menu
   await expect(frame.locator('#um-set .um-close')).toBeDisabled();
   await expect(frame.locator('#um-set')).toHaveClass(/on/);
   await frame.locator('#um-entry.on').waitFor({ timeout: 60000 });
+  await login(page, email, password);
   expect(await page.frames()[1].evaluate(async () => ({
     messages: (await window.UM.store.listPesan()).length,
     galaxies: (await window.UM.store.listGalaksi()).length,
@@ -62,11 +64,8 @@ test('pengaturan tersimpan; hapus dapat dibatalkan dan dicoba ulang; keluar menu
   await frame.locator('#um-set [data-act=account]').click();
   await expect(frame.locator('#um-profile')).toHaveValue('public');
   await frame.getByRole('button', { name: 'Keluar', exact: true }).click();
-  await frame.locator('#um-entry.on').waitFor({ timeout: 20000 });
-  await frame.locator('#um-entry [data-act=skip]').click();
-  const write = frame.locator('.um-dock [data-act=tulis]');
-  await expect(write).toBeEnabled();
-  await write.click();
-  await expect(frame.locator('#um-account-title')).toHaveText('Masuk ke Untukmu');
+  await expect(frame.locator('#um-account-title')).toHaveText('Masuk ke Untukmu', { timeout: 20000 });
+  await expect(frame.getByRole('button', { name: 'Daftar akun', exact: true })).toBeVisible();
+  expect(await page.frames()[1].evaluate(() => window.UM.account.isLogged())).toBe(false);
   expect(errors).toEqual([]);
 });

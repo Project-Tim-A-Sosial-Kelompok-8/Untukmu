@@ -28,20 +28,28 @@ Untuk menghentikan aplikasi, jalankan `docker compose down`. Data tetap tersimpa
 
 ## Cara memakai aplikasi
 
-Pada tampilan galaksi, menu utama berada di **bagian bawah layar**. Tombol **Tulis** dan **Doa** berdampingan di sana.
+Setiap kali aplikasi dibuka atau dimuat ulang, pilih **Masuk** menggunakan akun yang sudah ada atau **Daftar akun**. Login awal wajib; sesi dari kunjungan sebelumnya tidak langsung membuka aplikasi. Setelah masuk, menu utama berada di **bagian bawah layar**. Tombol **Tulis** dan **Doa** berdampingan di sana.
+
+**Galaksi publik** menampilkan hingga 100 pesan/doa publik terbaru yang sudah disetujui moderator, termasuk tulisan akun lain. Daftar lengkap tersedia melalui **Jelajah**. Tulisan privat dan yang belum disetujui tidak tampil di galaksi bersama; pemblokiran tetap dihormati.
 
 | Menu | Kegunaan dan cara pakai |
 | --- | --- |
 | **Tulis** | Masuk atau daftar, pilih tujuan lama atau **+ Kenangan baru**, tulis pesan, pilih privasi, lalu simpan. Satu pesan bisa memiliki maksimal sepuluh tujuan. |
 | **Doa** | Menulis doa untuk seseorang atau mendoakan ucapan publik melalui audio yang tersedia maupun hening. Langkahnya dijelaskan di bawah. |
 | **Home / Rumah** | Mengembalikan tampilan ke galaksi utama, Milky Way. Galaksi yang kamu buat tetap tersimpan. |
-| **Peta** | **Kenangan** menampilkan bintang galaksi milikmu; klik untuk menuju galaksinya. **Konstelasi** menampilkan rasi bintang; klik bintang atau garis rasi untuk membaca informasinya. Geser layar untuk melihat bagian langit lain. Nama pribadi tidak ditampilkan mengambang di Peta. |
+| **Peta** | **Kenangan** menampilkan bintang galaksi; arahkan kursor atau fokus keyboard ke bintang untuk melihat nama serta jumlah pesan/doa, lalu klik untuk menuju galaksinya. **Konstelasi** menampilkan rasi bintang; klik bintang atau garis rasi untuk membaca informasinya. Geser layar untuk melihat bagian langit lain. |
 | **Jelajah** | Membaca ucapan publik yang sudah disetujui admin, memberi empati, atau memilih ucapan untuk didoakan. |
 | **Ruang Pribadi** | Melihat galaksi, daftar Pesan, Doa tertulis, dan riwayat doa. Gunakan **Kelola pesan / Kelola doa** untuk mengedit atau menghapus tulisan. |
-| **Kunci** | Membuka kembali tulisan privat setelah halaman dimuat ulang. |
-| **Pengaturan** | Mengatur akun, sesi aktif, pemulihan, pemblokiran, dan ekspor data. |
+| **Kunci** | Mengunci atau membuka kembali tulisan privat. Login dengan kata sandi juga membuka kunci data akun. |
+| **Pengaturan** | Mengatur akun, sesi aktif, pemulihan, pemblokiran, ekspor, **Ganti akun**, dan **Hapus akun**. |
 
 Saat mendaftar, gunakan kata sandi minimal **12 karakter** dan simpan kode pemulihan yang ditampilkan. Tulisan privat dienkripsi pada perangkat sebelum dikirim. Tulisan publik anonim dan tautan terbatas menunggu persetujuan admin; foto serta lampiran tetap privat untuk pemilik.
+
+**Ganti akun** mengakhiri sesi perangkat ini dan kembali ke formulir masuk/daftar. Akun lama beserta pesan dan doanya tetap tersimpan, dan bisa dibuka kembali dengan kredensialnya.
+
+**Hapus akun** meminta kata sandi, konfirmasi penghapusan permanen, dan pilihan eksplisit: **Pertahankan pesan dan doa** atau **Hapus pesan dan doa juga**. Pilihan mempertahankan menyimpan tulisan tanpa pemilik; hanya konten publik yang disetujui tetap terlihat secara anonim. Tulisan privat tetap terenkripsi dan tidak dapat dibuka melalui akun yang dihapus. Unduh ekspor sebelum menghapus akun jika membutuhkan salinan. Tautan terbatas dicabut dan seluruh sesi akun berakhir. Mendaftar lagi dengan surel yang sama membuat akun baru tanpa kepemilikan atas data lama.
+
+Jika semua tulisan ikut dihapus, lampiran masuk antrean pembersihan penyimpanan yang diproses worker dengan retry. Pilihan ini hanya menghapus data milik akun tersebut; tulisan milik pengguna lain tetap ada.
 
 ### Menulis doa untuk seseorang
 

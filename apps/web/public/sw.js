@@ -1,5 +1,5 @@
 /* Only public static files are eligible. Auth, API, HTML sessions and uploads are never cached. */
-const CACHE = "untukmu-static-29dfb1ca2eec72a4";
+const CACHE = "untukmu-static-e02acd782b990f33";
 const OFFLINE = "/offline.html";
 self.addEventListener("install", event => event.waitUntil(caches.open(CACHE).then(cache => cache.addAll([OFFLINE,"/offline.js","/icons/icon-192.png","/icons/icon-512.png"]))));
 self.addEventListener("activate", event => event.waitUntil((async()=>{for(const name of await caches.keys()) if(name.startsWith("untukmu-static-")&&name!==CACHE) await caches.delete(name); await self.clients.claim();})()));

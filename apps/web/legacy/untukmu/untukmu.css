@@ -369,7 +369,6 @@ body.um-on.um-sky #beacon-panel { bottom: calc(var(--um-dock-space) + max(12px, 
 .um-plabel { font-family: inherit; }
 .skylabel { max-width: min(220px, calc(100vw - 24px)); white-space: normal; overflow-wrap: anywhere; }
 .um-glabel, .um-plabel { max-width: min(220px, calc(100vw - 24px)); white-space: normal; overflow-wrap: anywhere; }
-body[data-view-mode="sky"] #um-petalabels,
 body[data-view-mode="sky"] #skylabels,
 body[data-view-mode="sky"] #um-galaksilabels,
 body[data-view-mode="solar"] #um-galaksilabels,
@@ -377,6 +376,15 @@ body[data-view-mode="solar"] #um-petalabels,
 body[data-view-mode="galaxy"] #um-petalabels,
 body[data-sky-mode="astronomi"] #um-petalabels,
 body[data-sky-mode="kenangan"] #skylabels { display: none !important; }
+.um-memory-star { position: absolute; width: 44px; height: 44px; transform: translate(-50%, -50%); padding: 0; border: 0; background: transparent; color: var(--um-text); pointer-events: none; }
+.um-memory-tooltip { position: absolute; top: calc(100% + 8px); left: 50%; transform: translateX(calc(-50% + var(--um-tip-shift, 0px))); width: max-content; max-width: min(240px, calc(100vw - 24px)); padding: 10px 14px; border: 1px solid var(--um-accent); border-radius: 12px; background: rgba(10, 16, 30, .96); text-align: left; font-family: inherit; font-size: 13px; line-height: 1.5; overflow-wrap: anywhere; visibility: hidden; opacity: 0; pointer-events: none; }
+.um-memory-tooltip b, .um-memory-tooltip small { display: block; }
+.um-memory-tooltip small { color: var(--um-dim); margin-top: 4px; }
+.um-memory-tooltip .dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; margin-right: 6px; }
+.um-memory-star.is-hovered .um-memory-tooltip, .um-memory-star:focus-visible .um-memory-tooltip { visibility: visible; opacity: 1; }
+.um-memory-star.tip-above .um-memory-tooltip { top: auto; bottom: calc(100% + 8px); }
+.um-delete-options { border: 0; padding: 0; margin: 16px 0; }
+.um-delete-options .um-priv-opt { margin: 12px 0; }
 .um-trad .um-hint { display: block; }
 [data-prayer-audio] audio { display: block; width: 100%; max-width: 100%; margin-top: 12px; }
 .um-head > div { min-width: 0; }

@@ -25,8 +25,14 @@ function errorMessage(data: unknown) {
 async function renew(): Promise<boolean> {
   const send = async () => {
     const result = await fetch("/api/v1/auth/refresh", { method: "POST", credentials: "same-origin" });
-    if (!result.ok) { accessToken = null; user = null; return false; }
+    if (!result.ok) { endSession(); return false; }
     const value: { access_token: string } = await result.json();
+    const identity = await fetch("/api/v1/users/me", { headers: { Authorization: `Bearer ${value.access_token}` }, credentials: "same-origin", cache: "no-store" });
+    if (!identity.ok || (await identity.json() as User).id !== user?.id) {
+      // Another tab may have logged into a different account sharing this cookie.
+      // Never reuse its token with the previous account's cache or encryption key.
+      endSession(); return false;
+    }
     accessToken = value.access_token;
     return true;
   };
@@ -55,8 +61,8 @@ export async function api<T>(path: string, init: RequestInit = {}, retry = true)
 }
 
 export async function restore() {
-  const status = await api<{ authenticated: boolean }>("/auth/status");
-  if (status.authenticated && await refresh()) user = await api<User>("/users/me");
+  // A new application document always asks for credentials. Refresh rotation
+  // only extends a session that was explicitly opened in this document.
   return user;
 }
 export async function authenticate(mode: "login" | "register" | "recovery/finish", input: Record<string, unknown>) {
@@ -68,8 +74,10 @@ export async function authenticate(mode: "login" | "register" | "recovery/finish
 }
 export async function logout() {
   await api("/auth/logout", { method: "POST" });
-  accessToken = null; user = null; queryClient.clear();
+  clearAccount();
 }
+export function clearAccount() { accessToken = null; user = null; queryClient.clear(); }
+function endSession() { clearAccount(); window.dispatchEvent(new Event("untukmu-session-ended")); }
 export async function updateUser(settings: { default_message_visibility: "private" | "public_anon" | "unlisted"; profile_visibility: "private" | "public"; galaxy_background: boolean }) {
   user = await api<User>("/users/me/settings", { method: "PATCH", body: JSON.stringify(settings) });
   return user;

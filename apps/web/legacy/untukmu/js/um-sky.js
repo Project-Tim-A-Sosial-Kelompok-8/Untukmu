@@ -25,6 +25,8 @@ UM.sky = (function () {
   var host = null;
   var tmpV = null;
   var kaitTerpasang = false;
+  var pointer = null, dragging = false;
+  var refreshVersion = 0;
 
   function three() { return typeof THREE !== 'undefined' ? THREE : null; }
   function engineSiap() {
@@ -80,7 +82,7 @@ UM.sky = (function () {
     skyScene.add(item.marker);
     var el = document.createElement('button');
     el.type = 'button';
-    el.className = 'um-plabel';
+    el.className = 'um-memory-star';
     el.style.display = 'none';
     el.addEventListener('click', function (e) {
       e.stopPropagation();
@@ -94,10 +96,9 @@ UM.sky = (function () {
   function tulisPenanda(item) {
     if (!item.el) return;
     item.el.innerHTML =
-      '<b><span class="dot" style="background:' + warnaAman(item.g.warna) + '"></span>' + esc(item.g.nama) + '</b>' +
-      '<small>' + item.nPesan + ' ' + esc(UM.i18n.t('commonPesan')) + ' · ' + (item.nDoaTertulis + item.nBatu) + ' ' + esc(UM.i18n.t('commonDoa')) + '</small>';
-    item.el.title = item.g.nama;
-    item.el.setAttribute('aria-label', 'Kunjungi kenangan ' + item.g.nama);
+      '<span class="um-memory-tooltip" role="tooltip"><b><span class="dot" style="background:' + warnaAman(item.g.warna) + '"></span>' + esc(item.g.nama) + '</b>' +
+      '<small>' + item.nPesan + ' ' + esc(UM.i18n.t('commonPesan')) + ' · ' + (item.nDoaTertulis + item.nBatu) + ' ' + esc(UM.i18n.t('commonDoa')) + '</small></span>';
+    item.el.setAttribute('aria-label', 'Kunjungi kenangan ' + item.g.nama + ', ' + item.nPesan + ' pesan dan ' + (item.nDoaTertulis + item.nBatu) + ' doa');
   }
 
   function segarkanTeks() { state.daftar.forEach(tulisPenanda); }
@@ -105,22 +106,38 @@ UM.sky = (function () {
   function perbaruiLabel() {
     if (!host) return;
     var tampil = typeof viewMode !== 'undefined' && viewMode === 'sky' && state.mode === 'kenangan';
-    host.style.display = 'none';
+    host.style.display = tampil ? 'block' : 'none';
     if (!tampil) return;
+    var rect = renderer.domElement.getBoundingClientRect(), hovered = null, distance = 22 * 22;
     skyCamera.updateMatrixWorld();
     for (var i = 0; i < state.daftar.length; i++) {
       var item = state.daftar[i];
       tmpV.copy(item.dir).multiplyScalar(SKY_R * 0.96).project(skyCamera);
       var vis = tmpV.z > -1 && tmpV.z < 1 && Math.abs(tmpV.x) < 1 && Math.abs(tmpV.y) < 1;
-      item.el.style.display = 'none'; item.terlihat = vis;
+      item.el.style.display = vis ? 'block' : 'none'; item.terlihat = vis;
+      if (!vis) { item.el.classList.remove('is-hovered'); continue; }
+      var x = rect.left + (tmpV.x * 0.5 + 0.5) * rect.width;
+      var y = rect.top + (-tmpV.y * 0.5 + 0.5) * rect.height;
+      item.el.style.left = x + 'px'; item.el.style.top = y + 'px';
+      var tip = item.el.firstChild, width = tip.offsetWidth;
+      var shift = Math.max(12 - x + width / 2, Math.min(0, innerWidth - 12 - x - width / 2));
+      item.el.style.setProperty('--um-tip-shift', shift + 'px');
+      item.el.classList.toggle('tip-above', y + tip.offsetHeight + 38 > innerHeight - 100);
+      if (pointer && !dragging) {
+        var d = Math.pow(x - pointer.x, 2) + Math.pow(y - pointer.y, 2);
+        if (d < distance) { distance = d; hovered = item; }
+      }
     }
+    state.daftar.forEach(function(item) { item.el.classList.toggle('is-hovered', item === hovered); });
   }
 
   /* ── membangun ulang dari data ───────────────────────────────────────────── */
 
   function refresh() {
     if (!engineSiap()) return Promise.resolve(false);
-    return Promise.all([UM.store.listGalaksi(), UM.store.listPesan()]).then(function (r) {
+    var version = ++refreshVersion;
+    return Promise.all([(UM.store.listGalaksiLadang || UM.store.listGalaksi)(), (UM.store.listPesanLadang || UM.store.listPesan)()]).then(function (r) {
+      if (version !== refreshVersion) return false;
       var galaksi = r[0], pesan = r[1];
       pastikanHost();
 
@@ -134,7 +151,9 @@ UM.sky = (function () {
 
       // penanda lama dibuang; jumlah galaksi sedikit sehingga membangun ulang
       // seluruhnya lebih sederhana daripada mencocokkan satu per satu
+      var focusedId = null;
       state.daftar.forEach(function (item) {
+        if (document.activeElement === item.el) focusedId = item.g.id;
         if (item.el && item.el.parentNode) item.el.parentNode.removeChild(item.el);
         if (item.marker) { skyScene.remove(item.marker); item.marker.geometry.dispose(); item.marker.material.dispose(); }
       });
@@ -153,6 +172,10 @@ UM.sky = (function () {
       state.siap = true;
       terapkanMode();
       perbaruiLabel();
+      if (focusedId) {
+        var focused = state.daftar.find(function(item) { return item.g.id === focusedId; });
+        if (focused && focused.terlihat) focused.el.focus({ preventScroll: true });
+      }
       return true;
     });
   }
@@ -212,6 +235,7 @@ UM.sky = (function () {
     perbaruiLabel();
   }
   function onExit() {
+    pointer = null;
     if (document.body) document.body.classList.remove('um-sky');
     if (host) host.style.display = 'none';
   }
@@ -263,6 +287,10 @@ UM.sky = (function () {
     tmpV = new T.Vector3();
     pastikanHost();
     renderer.domElement.addEventListener('click', pilihDiKanvas);
+    renderer.domElement.addEventListener('pointermove', function(e) { pointer = { x: e.clientX, y: e.clientY }; perbaruiLabel(); });
+    renderer.domElement.addEventListener('pointerleave', function() { pointer = null; perbaruiLabel(); });
+    renderer.domElement.addEventListener('pointerdown', function() { dragging = true; pointer = null; perbaruiLabel(); });
+    window.addEventListener('pointerup', function() { dragging = false; pointer = null; perbaruiLabel(); });
     kaitTerpasang = true;
 
     // label engine tetap dijalankan; kita menambahkan penanda Peta di atasnya,

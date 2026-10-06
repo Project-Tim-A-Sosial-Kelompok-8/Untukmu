@@ -17,7 +17,7 @@ test('Jelajah menerapkan filter, mengurutkan, dan menavigasi lebih dari 30 pesan
     const offset = Number(q.get('offset'));
     await route.fulfill({ json: filtered.slice(offset, offset + Number(q.get('limit'))) });
   });
-  await page.goto('/'); const frame = page.frameLocator('iframe');
+  const { frame } = await register(page, 'explore-regression', { startComposer: false });
   await frame.locator('#um-entry [data-act=skip]').click();
   await frame.locator('.um-dock [data-act=jelajah]').click();
   await expect(frame.locator('#um-exp .um-item')).toHaveCount(30);
@@ -45,7 +45,7 @@ test('Jelajah menerapkan filter, mengurutkan, dan menavigasi lebih dari 30 pesan
   await expect(frame.locator('#um-filter-mood')).toHaveValue('');
   expect(requests.some(url => url.searchParams.get('mood') === 'rindu' && url.searchParams.get('tag') === 'keluarga' && url.searchParams.get('sort') === 'prayers')).toBe(true);
   expect(requests.some(url => url.searchParams.get('offset') === '60')).toBe(true);
-  expect(requests.every(url => url.searchParams.get('limit') === '31')).toBe(true);
+  expect(requests.filter(url => url.searchParams.has('offset')).every(url => url.searchParams.get('limit') === '31')).toBe(true);
   await frame.locator('#um-filter-tag').fill('tidak-ada');
   await frame.locator('#um-exp [data-act=filter]').click();
   await expect(frame.locator('#um-exp .um-item')).toHaveCount(0);
@@ -91,7 +91,7 @@ test('komposer kedua dapat memilih nama, kenangan baru, kategori, dan silang', a
   await expect(frame.locator('#um-comp')).not.toHaveClass(/on/);
 });
 
-test('semua label Peta tersembunyi pada Kenangan dan Konstelasi saat kamera digeser', async ({ page }) => {
+test('tooltip Kenangan dan label Konstelasi tersembunyi saat kamera digeser menjauh', async ({ page }) => {
   const { frame } = await register(page, 'map-labels');
   await frame.locator('#um-nama').fill('Kenangan dengan nama yang sangat panjang untuk pemeriksaan tepi layar');
   await frame.locator('#um-comp [data-act=next]').click();
@@ -118,7 +118,8 @@ test('semua label Peta tersembunyi pada Kenangan dan Konstelasi saat kamera dige
       await page.mouse.down();
       await page.mouse.move(width / 2 + 80, 360, { steps: 10 });
       await page.mouse.up();
-      await expect(frame.locator('#um-petalabels')).not.toBeVisible();
+      if (mode === 'kenangan') await expect(frame.locator('#um-petalabels .um-memory-tooltip').first()).not.toBeVisible();
+      else await expect(frame.locator('#um-petalabels')).not.toBeVisible();
       await expect(frame.locator('#um-galaksilabels')).not.toBeVisible();
       await expect(frame.locator('#skylabels')).not.toBeVisible();
     }

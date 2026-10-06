@@ -1,8 +1,8 @@
 import { expect, test } from "@playwright/test";
+import { register } from './helpers';
 
 test('halaman Doa dapat dibuka langsung tanpa melewati layar pembuka', async ({ page }) => {
-  await page.goto('/doa');
-  const frame = page.frameLocator('iframe');
+  const { frame } = await register(page, 'prayer-direct', { path: '/doa', startComposer: false });
   await expect(frame.locator('#um-doa')).toHaveClass(/on/);
   await expect(frame.locator('#um-entry')).not.toHaveClass(/on/);
   await expect(frame.locator('#um-doa [data-act=hub-trad]')).toHaveCount(7);
@@ -13,8 +13,7 @@ for (const width of [320, 390, 1280]) {
     const errors: string[] = [];
     page.on("pageerror", error => errors.push(error.message));
     await page.setViewportSize({ width, height: 844 });
-    await page.goto("/");
-    const frame = page.frameLocator("iframe");
+    const { frame } = await register(page, `prayer-${width}`, { startComposer: false });
     await expect(frame.locator('#um-entry .acts button').nth(1)).toHaveAttribute('data-act', 'doa');
     await frame.locator('#um-entry [data-act=doa]').click();
     await expect(frame.locator('#um-doa')).toHaveClass(/on/);
@@ -111,7 +110,7 @@ test('pemutar audio dapat dijeda, dibatalkan, dan mencatat hanya setelah berakhi
   wav.writeUInt32LE(8000, 24); wav.writeUInt32LE(16000, 28); wav.writeUInt16LE(2, 32);
   wav.writeUInt16LE(16, 34); wav.write('data', 36); wav.writeUInt32LE(samples * 2, 40);
   await page.route('**/test-prayer.wav', route => route.fulfill({ body: wav, contentType: 'audio/wav' }));
-  await page.goto('/'); const frame = page.frameLocator('iframe');
+  const { frame } = await register(page, 'prayer-audio', { startComposer: false });
   await frame.locator('#um-entry [data-act=skip]').click();
   const engine = page.frames()[1];
   await engine.evaluate(`(() => {

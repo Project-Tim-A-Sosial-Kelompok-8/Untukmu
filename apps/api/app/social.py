@@ -36,7 +36,8 @@ def public_view(row, user=None):
     return {"id": row.id, "entry_type": row.entry_type, "visibility": row.visibility, "public_body": open_public(row.id, row.public_body if row.visibility == "public_anon" else row.ciphertext),
             "date_label": row.date_label, "mood": row.mood, "tags": row.tags, "created_at": row.created_at,
             "prayer_count": row.prayer_count, "empathy_count": row.empathy_count,
-            "is_mine": bool(user and user.id == row.author_id), "constellation_ids": [], "attachment_ids": [],
+            "is_mine": bool(user and user.id == row.author_id), "author_deleted": row.author_id is None,
+            "constellation_ids": [], "attachment_ids": [],
             "moderation_status": "approved"}
 
 
@@ -105,6 +106,8 @@ async def report(body: ReportInput, user: OptionalUser, db: DB, request: Request
 async def block(body: BlockInput, user: CurrentUser, db: DB, request: Request):
     await throttle(request, "write", 60, user.id)
     message = await readable_public(db, body.message_id, user)
+    if message.author_id is None:
+        raise HTTPException(409, "Akun penulis sudah dihapus. Konten tetap dapat dilaporkan kepada moderator.")
     if message.author_id == user.id:
         raise HTTPException(422, "Akun sendiri tidak dapat diblokir.")
     row = Block(blocker_id=user.id, blocked_id=message.author_id)

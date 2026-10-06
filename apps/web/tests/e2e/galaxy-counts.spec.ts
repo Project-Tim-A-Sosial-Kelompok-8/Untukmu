@@ -1,11 +1,11 @@
 import { expect, test } from '@playwright/test';
-import { register } from './helpers';
+import { register, login } from './helpers';
 
 test('label dan kartu galaksi menghitung doa serta pesan sesuai jenis, termasuk setelah edit dan hapus', async ({ page }) => {
   test.setTimeout(180000);
   const errors: string[] = [];
   page.on('pageerror', error => errors.push(error.message));
-  const { frame } = await register(page, 'galaxy-counts');
+  const { frame, email, password } = await register(page, 'galaxy-counts');
   let engine = page.frames()[1];
   await frame.locator('#um-comp .um-close').click();
   await frame.locator('.um-dock [data-act=doa]').click();
@@ -106,6 +106,7 @@ test('label dan kartu galaksi menghitung doa serta pesan sesuai jenis, termasuk 
     return {pesan:g.nPesan,doa:g.nDoaTertulis+g.nBatu};
   })()`)).toEqual({ pesan: 1, doa: 0 });
   await page.reload();
+  await login(page, email, password);
   await frame.locator('#um-entry [data-act=skip]').click();
   engine = page.frames()[1];
   await counts(2, 1);

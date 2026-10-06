@@ -66,7 +66,7 @@ class Session(Base):
 class Constellation(Base):
     __tablename__ = "constellations"
     id: Mapped[str] = mapped_column(String(36), primary_key=True, default=uid)
-    owner_id: Mapped[str] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"), index=True)
+    owner_id: Mapped[str | None] = mapped_column(ForeignKey("users.id", ondelete="SET NULL"), index=True, nullable=True)
     target_kind: Mapped[str] = mapped_column(String(30))
     target_label: Mapped[str] = mapped_column(String(100))
     custom_category: Mapped[str | None] = mapped_column(String(80), nullable=True)
@@ -82,7 +82,7 @@ class Constellation(Base):
 class Message(Base):
     __tablename__ = "messages"
     id: Mapped[str] = mapped_column(String(36), primary_key=True, default=uid)
-    author_id: Mapped[str] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"), index=True)
+    author_id: Mapped[str | None] = mapped_column(ForeignKey("users.id", ondelete="SET NULL"), index=True, nullable=True)
     entry_type: Mapped[str] = mapped_column(String(20), default="message", server_default="message")
     ciphertext: Mapped[str | None] = mapped_column(Text, nullable=True)
     iv: Mapped[str | None] = mapped_column(String(24), nullable=True)
@@ -122,11 +122,18 @@ class MessageConstellation(Base):
 class Upload(Base):
     __tablename__ = "uploads"
     id: Mapped[str] = mapped_column(String(36), primary_key=True, default=uid)
-    owner_id: Mapped[str] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"), index=True)
+    owner_id: Mapped[str | None] = mapped_column(ForeignKey("users.id", ondelete="SET NULL"), index=True, nullable=True)
     storage_key: Mapped[str] = mapped_column(String(200), unique=True)
     byte_size: Mapped[int] = mapped_column(Integer)
     encryption_meta: Mapped[dict] = mapped_column(Json)
     complete: Mapped[bool] = mapped_column(Boolean, default=False)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=now)
+
+
+class StorageDeletion(Base):
+    __tablename__ = "storage_deletions"
+    id: Mapped[str] = mapped_column(String(36), primary_key=True, default=uid)
+    storage_key: Mapped[str] = mapped_column(String(200), unique=True)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=now)
 
 
@@ -188,7 +195,7 @@ class ModerationDecision(Base):
     __tablename__ = "moderation_decisions"
     id: Mapped[str] = mapped_column(String(36), primary_key=True, default=uid)
     message_id: Mapped[str] = mapped_column(ForeignKey("messages.id", ondelete="CASCADE"), index=True)
-    reviewer_id: Mapped[str] = mapped_column(ForeignKey("users.id", ondelete="RESTRICT"))
+    reviewer_id: Mapped[str | None] = mapped_column(ForeignKey("users.id", ondelete="SET NULL"), nullable=True)
     decision: Mapped[str] = mapped_column(String(20))
     reason: Mapped[str] = mapped_column(String(1000), default="")
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=now)
