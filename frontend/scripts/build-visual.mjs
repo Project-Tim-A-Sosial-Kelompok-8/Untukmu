@@ -15,7 +15,8 @@ if (!output.startsWith(resolve(root, "public") + "/") && !output.startsWith(reso
 await rm(output, { recursive: true, force: true });
 await mkdir(output, { recursive: true });
 await cp(resolve(original, "vendor"), resolve(output, "vendor"), { recursive: true });
-for (const name of ["styles.css", "scene.js", "language.js", "prayers.js", "map.js", "app.js"]) await cp(resolve(original, name), resolve(output, name));
+await cp(resolve(original, "images"), resolve(output, "images"), { recursive: true });
+for (const name of ["styles.css", "scene.js", "background.js", "language.js", "prayers.js", "map.js", "app.js"]) await cp(resolve(original, name), resolve(output, name));
 function replaceOnce(source, before, after) {
   if (!source.includes(before)) throw new Error(`Source anchor missing: ${before.slice(0, 100)}`);
   return source.replace(before, after);
@@ -65,7 +66,7 @@ await build({ entryPoints: [resolve(root, "src/runtime/bootstrap.tsx")], outfile
 await build({ entryPoints: [resolve(root, "src/lib/crypto/argon2.worker.ts")], outfile: resolve(output, "argon2.worker.js"), bundle: true, format: "iife", platform: "browser", target: "es2022", minify: true });
 
 const fingerprint = createHash("sha256");
-for (const name of ["index.html", "styles.css", "scene.js", "language.js", "prayers.js", "map.js", "app.js", "galaxy.js", "ui.js", "runtime.js", "argon2.worker.js"]) fingerprint.update(await readFile(resolve(output, name)));
+for (const name of ["index.html", "styles.css", "scene.js", "background.js", "language.js", "prayers.js", "map.js", "app.js", "galaxy.js", "ui.js", "runtime.js", "argon2.worker.js"]) fingerprint.update(await readFile(resolve(output, name)));
 const swPath = resolve(root, "public/sw.js");
 await writeFile(swPath, (await readFile(swPath, "utf8")).replace(/const CACHE = "untukmu-static-[^"]+";/, 'const CACHE = "untukmu-static-' + fingerprint.digest("hex").slice(0, 16) + '";'));
-console.log("Visual kenangan disiapkan tanpa katalog astronomi dan data contoh.");
+console.log("Visual Milky Way dan Kenangan disiapkan tanpa nama atau mode astronomi.");

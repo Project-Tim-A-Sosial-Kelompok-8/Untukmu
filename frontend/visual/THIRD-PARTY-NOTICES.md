@@ -36,3 +36,11 @@ SOFTWARE.
 ```
 
 See https://github.com/mrdoob/three.js for the full source and details.
+
+## Tekstur galaksi latar
+
+Tiga tekstur berikut dipertahankan dari aset proyek sebelumnya untuk menjaga bentuk galaksi bawaan. Nama/kartu astronomi tidak ditampilkan dalam aplikasi.
+
+- `images/background-1.png` ? ESO ? CC BY 4.0 ? cropped, rotated, graded, edge-feathered ? [source](https://commons.wikimedia.org/wiki/File:Centaurus_A.jpg)
+- `images/background-2.png` ? Zden?k Bardon/ESO ? CC BY 4.0 ? cropped, pastel-graded, edge-feathered ? [source](https://commons.wikimedia.org/wiki/File:Large_Magellanic_Cloud_(magellan-ch17-bardon-cc).jpg)
+- `images/background-3.png` ? NOIRLab/NSF/AURA/P. Hor?lek (Institute of Physics in Opava) ? CC BY 4.0 ? cropped, pastel-graded, edge-feathered ? [source](https://commons.wikimedia.org/wiki/File:The_Small_Magellanic_Cloud_from_Cerro_Pach%C3%B3n_(iotw2615a).jpg)

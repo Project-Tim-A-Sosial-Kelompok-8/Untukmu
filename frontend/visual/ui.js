@@ -184,7 +184,8 @@ UM.ui = (function () {
 
   function renderSkyCtl() {
     if (!skyCtlEl) return;
-    skyCtlEl.innerHTML = '<div class="um-h3">Peta Kenangan</div><div class="um-hint">Arahkan kursor ke bintang berwarna untuk melihat nama, jumlah pesan, dan doa. Klik untuk mengunjungi kenangan; geser untuk melihat bintang lainnya.</div>';
+    skyCtlEl.innerHTML = '<div class="um-chips"><button class="um-chip on" data-mode="kenangan">' + teks(T('skyKenangan')) + '</button></div>' +
+      '<div class="um-hint">Bintang berwarna menandai galaksi kenanganmu. Klik bintangnya untuk mengunjungi galaksi. Geser untuk melihat langit.</div>';
   }
 
   /* ── masuk ke ladang galaksi / Peta ──────────────────────────────────────── */

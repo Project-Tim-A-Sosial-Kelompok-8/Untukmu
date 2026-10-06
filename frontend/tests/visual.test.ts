@@ -12,7 +12,7 @@ it("katalog asli JS dan backend menyediakan tujuh pilihan yang sama", async () =
 });
 
 it("visual produksi tidak memuat katalog astronomi atau doa manual", async () => {
-  for (const name of ["index.html", "scene.js", "map.js", "galaxy.js", "ui.js", "runtime.js"]) {
+  for (const name of ["index.html", "scene.js", "background.js", "map.js", "galaxy.js", "ui.js", "runtime.js"]) {
     const content = await readFile(resolve("public/visual", name), "utf8");
     expect(content).not.toMatch(/SKY_CONS|SKY_GAL|enterSolar|setGalaksiBawaan|write-prayer|um-written-prayer|images\/solar-system/);
   }

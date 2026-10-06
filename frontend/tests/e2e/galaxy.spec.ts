@@ -60,7 +60,7 @@ test("simpan membuka galaksi dari Peta; galaksi dan bintang lama tetap tampil se
 
   await frame.locator(".um-dock [data-act=rumah]").click();
   await expect.poll(async () => (await scene(page)).flying).toBe(false);
-  expect((await scene(page)).galaxies.every(item => item.inFrame)).toBe(true);
+  expect((await scene(page)).target).toEqual([0, 0, 0]);
   expect((await scene(page)).active).toBeNull();
   await expect(frame.locator("#return-home")).not.toBeVisible();
 
@@ -92,7 +92,7 @@ test("simpan membuka galaksi dari Peta; galaksi dan bintang lama tetap tampil se
   expect(saved.galaxies.find(item => item.id === first.id)?.messages).toHaveLength(2);
   expect(saved.galaxies.find(item => item.id === secondId)?.messages).toHaveLength(1);
 
-  // Reload starts at the overview. Saved galaxies remain rendered and can
+  // Reload starts at Milky Way. Saved galaxies remain rendered and can
   // still be visited on desktop and narrow screens while the key is locked.
   for (const viewport of [{ width: 1280, height: 800 }, { width: 390, height: 844 }]) {
     await page.setViewportSize(viewport);
@@ -147,11 +147,11 @@ test("Home membatalkan perjalanan doa dan galaksi dibuka dengan transisi utuh", 
   })()`);
   expect(result).toEqual({ unchanged: true, flight: true, centered: true, particles: 8500 });
   await expect.poll(async () => (await scene(page)).flying).toBe(false);
-  await expect(frame.locator("#return-home")).toHaveText("← Semua kenangan");
+  await expect(frame.locator("#return-home")).toHaveText("← Kembali ke Milky Way");
   await engine.evaluate(`UM.galaksi.kirimPerjalanan(UM.galaksi.state.daftar[0], 'doa')`);
   await frame.locator(".um-dock [data-act=rumah]").click();
   await expect.poll(async () => (await scene(page)).flying).toBe(false);
-  expect((await scene(page)).galaxies.every(item => item.inFrame)).toBe(true);
+  expect((await scene(page)).target).toEqual([0, 0, 0]);
   expect(await engine.evaluate(`UM.galaksi.state.perjalanan.length`)).toBe(0);
   expect((await scene(page)).active).toBeNull();
 });

@@ -20,7 +20,7 @@ MinIO dibangun dari sumber resmi dengan versi dan checksum yang dikunci di `infr
 - Setiap masuk atau memuat ulang aplikasi, pengguna memilih Masuk atau Daftar akun. Kata sandi dan kunci pesan asli tidak dikirim ke server.
 - Tulis pesan untuk satu atau beberapa orang/kenangan, pilih bentuk dan warna visual, lalu tentukan privasi. Foto dan lampiran pengguna tetap terenkripsi.
 - Rumah menampilkan kenangan pengguna dan galaksi publik. Galaksi publik memuat 100 pesan terbaru yang disetujui; Jelajah menyediakan halaman berikutnya dan filter. Pesan privat, tulisan yang belum disetujui, dan pengirim yang diblokir tidak masuk tampilan publik.
-- Peta Kenangan hanya menampilkan bintang berwarna dari data aplikasi. Arahkan kursor untuk nama dan jumlah pesan/doa; klik untuk mengunjungi kenangan.
+- Tampilan awal mempertahankan Milky Way dan tujuh galaksi bawaan tanpa label astronomi. Peta Kenangan mempertahankan latar dan kontrol sebelumnya, dengan bintang berwarna dari data aplikasi. Arahkan kursor untuk nama dan jumlah pesan/doa; klik untuk mengunjungi kenangan.
 - Doa memakai pilihan Islam, Kristen, Katolik, Hindu, Buddha, Konghucu, dan Umum. Pilih pesan publik, tradisi, dan jenis doa. Dukungan tercatat setelah audio atau sesi hening selesai, satu kali per orang per pesan.
 - Ruang Pribadi menampilkan pesan, kenangan, dan dukungan doa yang diterima/diberikan. Doa tertulis lama tetap disimpan sebagai pesan; formulir doa manual telah dilepas.
 - Pengaturan menyediakan Ganti akun tanpa menghapus akun lama, pengelolaan sesi, ekspor, pemulihan, dan Hapus akun dengan pilihan mempertahankan atau menghapus tulisan. Tulisan publik yang dipertahankan tetap anonim; tulisan privat tetap terenkripsi dan tidak menjadi publik.
@@ -43,7 +43,7 @@ Audio agama asli belum disertakan dalam checkout ini. Tiga rekaman internet tamb
 | `scripts` | Konfigurasi lokal dan pemeriksaan browser |
 | `docs` | PRD, panduan pengembangan, doa, tes, dan atribusi |
 
-`frontend/public/visual` dihasilkan otomatis. `.next`, `node_modules`, `.venv`, `test-results`, dan laporan browser adalah berkas lokal yang diabaikan Git. Katalog astronomi, tata surya, foto bawaan, galaksi pusat, serta laporan/arsip lama yang tidak digunakan telah dilepas.
+`frontend/public/visual` dihasilkan otomatis. `.next`, `node_modules`, `.venv`, `test-results`, dan laporan browser adalah berkas lokal yang diabaikan Git. Nama/katalog astronomi, mode Astronomi, tata surya, foto kartu objek, serta laporan/arsip lama yang tidak digunakan telah dilepas. Milky Way, galaksi latar, tiga tekstur yang diperlukan untuk bentuk galaksi, dan tema panel tetap digunakan.
 
 ## Pengembangan dan pengujian
 
