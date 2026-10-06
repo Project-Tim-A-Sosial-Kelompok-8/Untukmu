@@ -3,6 +3,7 @@ import { register } from './helpers';
 
 test('Jelajah menerapkan filter, mengurutkan, dan menavigasi lebih dari 30 pesan', async ({ page }) => {
   const requests: URL[] = [];
+  let pendingReset: Promise<void> | null = null;
   const rows = Array.from({ length: 64 }, (_, i) => ({
     id: `public-${i}`, constellation_ids: ['public-galaxy'], visibility: 'public_anon',
     moderation_status: 'approved', public_body: `Ucapan nomor ${i}`, is_mine: false,
@@ -12,6 +13,7 @@ test('Jelajah menerapkan filter, mengurutkan, dan menavigasi lebih dari 30 pesan
   await page.route('**/api/v1/explore?*', async route => {
     const url = new URL(route.request().url()); requests.push(url);
     const q = url.searchParams;
+    if (pendingReset && q.get('limit') === '31' && q.get('offset') === '0' && !q.get('mood') && !q.get('tag')) await pendingReset;
     const filtered = rows.filter(row => (!q.get('mood') || row.mood === q.get('mood')) && (!q.get('tag') || row.tags.includes(q.get('tag')!)));
     filtered.sort((a, b) => (q.get('sort') === 'prayers' ? b.prayer_count - a.prayer_count : 0) || b.created_at.localeCompare(a.created_at));
     const offset = Number(q.get('offset'));
@@ -40,7 +42,17 @@ test('Jelajah menerapkan filter, mengurutkan, dan menavigasi lebih dari 30 pesan
   await expect(frame.locator('#um-exp')).toContainText('jumlah pendoa terbanyak');
   await frame.locator('#um-exp [data-act=next-page]').click();
   await expect(frame.locator('#um-exp .um-item')).toHaveCount(2);
+  let finishReset!: () => void;
+  pendingReset = new Promise<void>(resolve => { finishReset = resolve; });
   await frame.locator('#um-exp [data-act=reset-filter]').click();
+  // A late reset response must not overwrite a new filter being entered.
+  await expect(frame.locator('#um-filter-tag')).toBeDisabled();
+  await expect(frame.locator('#um-filter-mood')).toBeDisabled();
+  await expect(frame.locator('#um-exp [data-act=filter]')).toBeDisabled();
+  await expect(frame.locator('#um-exp [data-act=sort]').first()).toBeDisabled();
+  finishReset();
+  pendingReset = null;
+  await expect(frame.locator('#um-filter-tag')).toBeEnabled();
   await expect(frame.locator('#um-exp [data-filter-summary]')).toContainText('Semua tag');
   await expect(frame.locator('#um-filter-mood')).toHaveValue('');
   expect(requests.some(url => url.searchParams.get('mood') === 'rindu' && url.searchParams.get('tag') === 'keluarga' && url.searchParams.get('sort') === 'prayers')).toBe(true);
@@ -48,8 +60,9 @@ test('Jelajah menerapkan filter, mengurutkan, dan menavigasi lebih dari 30 pesan
   expect(requests.filter(url => url.searchParams.has('offset')).every(url => url.searchParams.get('limit') === '31')).toBe(true);
   await frame.locator('#um-filter-tag').fill('tidak-ada');
   await frame.locator('#um-exp [data-act=filter]').click();
-  await expect(frame.locator('#um-exp .um-item')).toHaveCount(0);
   await expect(frame.locator('#um-exp-page-status')).toHaveText('Tidak ada ucapan untuk ditampilkan.');
+  await expect(frame.locator('#um-exp .um-item')).toHaveCount(0);
+  expect(requests.some(url => url.searchParams.get('tag') === 'tidak-ada')).toBe(true);
   await expect(frame.locator('#um-exp [data-act=prev-page]')).toBeDisabled();
   await expect(frame.locator('#um-exp [data-act=next-page]')).toBeDisabled();
   await expect(frame.locator('#um-exp')).toContainText('halaman pertama');
