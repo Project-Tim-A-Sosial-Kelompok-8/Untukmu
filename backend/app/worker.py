@@ -1,35 +1,20 @@
-"""Durable public-only moderation scan. Heuristics flag; only humans approve."""
+"""Durable public-only initial checks and storage cleanup."""
 import asyncio
 import logging
-import re
 from redis.asyncio import Redis
 from sqlalchemy import select
 from .config import settings
 from .db import SessionFactory
-from .models import Message, StorageDeletion, now
+from .models import StorageDeletion
 from .uploads import storage
 from starlette.concurrency import run_in_threadpool
-from .public_content import open_public
-
-
-def spam_flags(text):
-    flags = []
-    if len(re.findall(r"https?://", text, re.I)) >= 3:
-        flags.append("banyak_tautan")
-    if re.search(r"(.)\1{30,}", text):
-        flags.append("pengulangan_berlebihan")
-    if re.search(r"<\s*(script|iframe)\b", text, re.I):
-        flags.append("markup_mencurigakan")
-    return flags
+from .public_moderation import automatic_backlog, check_public
 
 
 async def scan_pending(db):
-    rows = (await db.scalars(select(Message).where(Message.visibility == "public_anon",
-        Message.moderation_status == "pending", Message.moderation_checked_at.is_(None)
-    ).order_by(Message.created_at).limit(50).with_for_update(skip_locked=True))).all()
+    rows = (await db.scalars(automatic_backlog())).all()
     for row in rows:
-        row.moderation_flags = spam_flags(open_public(row.id, row.public_body or row.ciphertext))
-        row.moderation_checked_at = now()
+        await check_public(row, db)
     await db.commit()
     return len(rows)
 
@@ -56,6 +41,8 @@ async def run():
             try:
                 async with SessionFactory() as db:
                     count = await scan_pending(db)
+                if count:
+                    await cache.incr("feed:version")
                 if count < 50:
                     await cache.blpop("moderation:notify", timeout=5)
             except Exception:

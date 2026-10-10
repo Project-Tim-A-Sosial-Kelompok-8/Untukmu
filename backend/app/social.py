@@ -30,7 +30,7 @@ def visible_filter(user):
 async def readable_public(db, identifier, user):
     row = await db.scalar(select(Message).where(Message.id == str(identifier), visible_filter(user)))
     if row is None:
-        raise HTTPException(404, "Ucapan belum tersedia untuk dukungan publik. Pilih pesan publik yang sudah disetujui moderator dan sudah dibuka.")
+        raise HTTPException(404, "Ucapan belum tersedia untuk dukungan publik. Pilih pesan publik yang lolos moderasi dan sudah dibuka.")
     return row
 
 

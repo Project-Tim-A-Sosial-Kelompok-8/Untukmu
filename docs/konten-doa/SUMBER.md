@@ -27,6 +27,6 @@ Berkas berada pada `backend/data/prayer-audio/`. `manifest.json` mencatat sumber
 
 Rekaman disajikan lewat API pada origin aplikasi; pengguna tidak perlu menghubungi situs sumber untuk memutarnya. Pemutar menampilkan bahasa, atribusi, dan tautan lisensi. Mendengarkan pratinjau tidak menambah hitungan. Menutup dialog atau berpindah pilihan menghentikan pratinjau; pemutar pratinjau disembunyikan selama sesi aktif.
 
-Tombol **Berikutnya: pilih ucapan** melanjutkan pilihan tradisi dan jenis doa ke ucapan tujuan. Tombol **Ucapan berikutnya** berpindah halaman daftar ucapan; tombol itu nonaktif saat hasil habis, dengan alasan yang terlihat. Pilihan doa tetap tersimpan saat berpindah halaman. Jika belum ada ucapan publik yang disetujui, aplikasi menjelaskan keadaan tersebut tanpa membuat ucapan palsu.
+Halaman Doa terlebih dahulu menampilkan pesan publik tujuan sesuai PRD bagian 8.2. Klik **Doakan ucapan ini**, pilih agama/tradisi dan jenis doa, lalu tekan **Dengarkan dan kirim doa** atau **Mulai hening dan kirim dukungan**. Dukungan tercatat setelah sesi selesai. **Ucapan berikutnya** hanya mengganti halaman daftar tujuan dan hanya tampil bersama pagination ketika ada lebih dari satu halaman. Tidak ada navigasi Jelajah tambahan dalam alur ini. Pratinjau audio pada pilihan doa tidak menambah jumlah pendoa.
 
 Untuk pemasangan komersial, rekaman AudioDharma harus diganti dengan rekaman yang izinnya sesuai. Peninjauan oleh perwakilan tradisi tetap bagian persiapan produksi; paket referensi ini tidak dinyatakan sebagai persetujuan institusi agama.

@@ -1,6 +1,6 @@
 from uuid import uuid4
 from sqlalchemy import select
-from app.models import Message, User
+from app.models import Message, ModerationDecision, Report, User
 from app.worker import scan_pending
 from .conftest import account, galaxy, message_input
 
@@ -14,9 +14,10 @@ async def admin_account(client, database):
     return headers
 
 
-async def public_message(client, owner, gid):
+async def public_message(client, owner, gid, text=None):
     body = {"id": str(uuid4()), "constellation_ids": [gid], "visibility": "public_anon",
-            "public_body": "Pesan publik yang sengaja dibagikan.", "tags": ["kenangan", "syukur"]}
+            "public_body": text or "Pesan perlu ditinjau: https://example.com/1 https://example.com/2 https://example.com/3",
+            "tags": ["kenangan", "syukur"]}
     result = await client.post("/api/v1/messages", headers=owner, json=body)
     assert result.status_code == 201, result.text
     return body
@@ -24,6 +25,8 @@ async def public_message(client, owner, gid):
 
 async def approve(client, admin, identifier):
     queue = (await client.get("/api/v1/admin/moderation/queue", headers=admin)).json()
+    if not any(item["id"] == identifier for item in queue):
+        return
     token = next(item["review_token"] for item in queue if item["id"] == identifier)
     response = await client.post(f"/api/v1/admin/moderation/{identifier}/decision", headers=admin,
         json={"decision": "approve", "review_token": token})
@@ -57,8 +60,7 @@ async def test_explore_filters_match_normalized_and_legacy_labels(client, databa
     assert result.status_code == 201, result.text
     assert result.json()["tags"] == ["kenangan", "keluarga"]
     assert result.json()["mood"] == "rindu"
-    admin = await admin_account(client, database)
-    await approve(client, admin, body["id"])
+    assert result.json()["moderation_status"] == "approved"
     matched = await client.get("/api/v1/explore", params={"mood": " LONGING ", "tag": " #KENANGAN "})
     assert [row["id"] for row in matched.json()] == [body["id"]]
     assert (await client.get("/api/v1/explore", params={"mood": "syukur", "tag": "kenangan"})).json() == []
@@ -82,6 +84,9 @@ async def test_moderation_worker_cannot_read_private_messages(client, database):
     public = await public_message(client, owner, gid)
     admin = await admin_account(client, database)
     async with database() as db:
+        row = await db.get(Message, public["id"])
+        row.moderation_flags, row.moderation_checked_at = [], None
+        await db.commit()
         assert await scan_pending(db) == 1
         assert (await db.get(Message, private["id"])).moderation_checked_at is None
     queue = await client.get("/api/v1/admin/moderation/queue", headers=admin)
@@ -90,6 +95,56 @@ async def test_moderation_worker_cannot_read_private_messages(client, database):
     response = await client.post(f"/api/v1/admin/moderation/{private['id']}/decision", headers=admin,
         json={"decision": "approve", "review_token": "a" * 64})
     assert response.status_code == 404
+
+
+async def test_initial_checks_publish_safe_text_and_recover_legacy_pending(client, database):
+    owner = await account(client)
+    gid = await galaxy(client, owner)
+    safe = await public_message(client, owner, gid, "Terima kasih sudah hadir untukku.")
+    assert [row["id"] for row in (await client.get("/api/v1/explore?tag=KENANGAN")).json()] == [safe["id"]]
+    async with database() as db:
+        row = await db.get(Message, safe["id"])
+        assert row.moderation_checked_at is not None and row.moderation_status == "approved"
+        row.moderation_status = "pending"
+        await db.commit()
+        assert await scan_pending(db) == 1
+        assert row.moderation_status == "approved"
+        assert await scan_pending(db) == 0
+
+
+async def test_backlog_never_overrides_reports_or_human_decisions(client, database):
+    owner = await account(client)
+    gid = await galaxy(client, owner)
+    reported = await public_message(client, owner, gid, "Pesan yang sudah dilaporkan.")
+    reviewed = await public_message(client, owner, gid, "Pesan yang memerlukan tinjauan ulang.")
+    flagged = await public_message(client, owner, gid)
+    async with database() as db:
+        for message in [reported, reviewed]:
+            (await db.get(Message, message["id"])).moderation_status = "pending"
+        db.add(Report(message_id=reported["id"], reason="Periksa konteks", status="open"))
+        db.add(ModerationDecision(message_id=reviewed["id"], decision="remove", reason="Keputusan admin"))
+        await db.commit()
+        assert await scan_pending(db) == 0
+        for message in [reported, reviewed, flagged]:
+            assert (await db.get(Message, message["id"])).moderation_status == "pending"
+
+
+async def test_changing_privacy_cannot_bypass_a_moderator_removal(client, database):
+    owner = await account(client)
+    gid = await galaxy(client, owner)
+    body = await public_message(client, owner, gid, "Pesan yang membutuhkan peninjauan kembali.")
+    async with database() as db:
+        (await db.get(Message, body["id"])).moderation_status = "removed"
+        db.add(ModerationDecision(message_id=body["id"], decision="remove", reason="Keputusan admin"))
+        await db.commit()
+    private = {**message_input(gid), "id": body["id"]}
+    private["payload"]["aad"] = f"untukmu:message:v2:{body['id']}:private"
+    assert (await client.patch(f"/api/v1/messages/{body['id']}", headers=owner, json=private)).status_code == 200
+    changed = await client.patch(f"/api/v1/messages/{body['id']}", headers=owner, json=body)
+    assert changed.status_code == 200 and changed.json()["moderation_status"] == "pending"
+    assert (await client.get("/api/v1/explore")).json() == []
+    async with database() as db:
+        assert await scan_pending(db) == 0
 
 
 async def test_empathy_is_idempotent_and_private_actions_denied(client, database):

@@ -430,7 +430,7 @@ UM.ui = function () {
     var opts = [['privat', 'privPrivat', 'privPrivatD'], ['publik', 'privPublik', 'privPublikD'], ['unlisted', 'privUnlisted', 'privUnlistedD']];
     return '<div class="um-h2">' + teks(T('c4Title')) + '</div>' + '<div class="um-priv">' + opts.map(function (o) {
       return '<button class="um-priv-opt' + (comp.privasi === o[0] ? ' on' : '') + '" data-act="priv" data-id="' + o[0] + '">' + '<span class="mark"></span><span><span class="t">' + teks(T(o[1])) + '</span><span class="d">' + teks(T(o[2])) + '</span></span></button>';
-    }).join('') + '</div>' + '<div class="um-note">' + teks(T('c4Note')) + '</div>' + '<div class="um-field"><label class="um-label" for="um-release-at">Buka pada waktu tertentu (opsional)</label><input id="um-release-at" class="um-input" type="datetime-local" data-field="release-at" value="' + escAttr(comp.releaseAt || '') + '"><p class="um-hint">Waktu mengikuti perangkatmu. Pesan publik terjadwal terbit setelah waktu ini dan persetujuan moderator. Pesan privat menjadi kapsul waktu; pemilik tetap dapat mengelolanya.</p></div>' + (comp.privasi === 'publik' ? '<div class="um-note">Pesan publik anonim dapat dibaca moderator dan terbit setelah disetujui. Foto serta lampiran tetap privat milik akun.</div>' : comp.privasi === 'unlisted' ? '<div class="um-note">Isi tautan terbatas dienkripsi di perangkat. Hanya penerima dengan tautan lengkap dapat membukanya. Buat tautan melalui Kelola pesan setelah menyimpan.</div>' : '') + '<div class="um-error">' + escAttr(comp.err) + '</div>' + '<div class="um-btn-row between">' + '<button class="um-btn ghost" data-act="back">← ' + teks(T('btnBack')) + '</button>' + '<button class="um-btn primary" data-act="save">✦ ' + teks(T('btnSave')) + '</button>' + '</div>';
+    }).join('') + '</div>' + '<div class="um-note">' + teks(T('c4Note')) + '</div>' + '<div class="um-field"><label class="um-label" for="um-release-at">Buka pada waktu tertentu (opsional)</label><input id="um-release-at" class="um-input" type="datetime-local" data-field="release-at" value="' + escAttr(comp.releaseAt || '') + '"><p class="um-hint">Waktu mengikuti perangkatmu. Pesan publik terjadwal terbit setelah waktu ini jika lolos pemeriksaan awal. Pesan privat menjadi kapsul waktu; pemilik tetap dapat mengelolanya.</p></div>' + (comp.privasi === 'publik' ? '<div class="um-note">Pesan publik anonim tampil setelah lolos pemeriksaan awal. Jika ditandai, pesan menunggu tinjauan moderator. Foto serta lampiran tetap privat milik akun.</div>' : comp.privasi === 'unlisted' ? '<div class="um-note">Isi tautan terbatas dienkripsi di perangkat. Hanya penerima dengan tautan lengkap dapat membukanya. Buat tautan melalui Kelola pesan setelah menyimpan.</div>' : '') + '<div class="um-error">' + escAttr(comp.err) + '</div>' + '<div class="um-btn-row between">' + '<button class="um-btn ghost" data-act="back">← ' + teks(T('btnBack')) + '</button>' + '<button class="um-btn primary" data-act="save">✦ ' + teks(T('btnSave')) + '</button>' + '</div>';
   }
   function serapInput() {
     var w = compEl.querySelector('.um-wrap');
@@ -951,9 +951,9 @@ UM.ui = function () {
     var filters = (expMood ? 'Suasana: ' + UM.i18n.mood(expMood) : 'Semua suasana') + (expTag ? ' · Tag: #' + expTag : ' · Semua tag');
     UM.renderScreen(expEl.querySelector('.um-wrap'), '<div class="um-head"><div><div class="um-h1">Jelajah ucapan</div><p class="um-muted">Ruang untuk membaca ucapan publik anonim dan saling mendukung. Sampaikan empati atau pilih Doakan ucapan ini untuk membuka pilihan agama atau tradisi. Pesan pribadi Anda ada di Ruang Pribadi.</p></div><button class="um-close" data-act="close" aria-label="Tutup Jelajah">×</button></div>' + '<div class="um-card"><div class="um-grid2"><div class="um-field"><label class="um-label" for="um-filter-mood">Suasana hati</label><select id="um-filter-mood" class="um-select"' + busy + '><option value="">Semua</option>' + UM.i18n.moodIds().map(function (m) {
       return '<option value="' + escAttr(m) + '"' + (expMood === m ? ' selected' : '') + '>' + teks(UM.i18n.mood(m)) + '</option>';
-    }).join('') + '</select></div><div class="um-field"><label class="um-label" for="um-filter-tag">Tag</label><input id="um-filter-tag" class="um-input" value="' + escAttr(expTag) + '" maxlength="50" placeholder="Contoh: kenangan"' + busy + '><p class="um-hint">Cari satu tag. Huruf besar, spasi tepi, dan tanda # tidak membedakan hasil. Pilih suasana dan/atau tag, lalu tekan Terapkan filter.</p></div></div>' + '<div class="um-btn-row"><button class="um-btn" data-act="filter"' + busy + '>Terapkan filter</button><button class="um-btn ghost" data-act="reset-filter"' + busy + '>Hapus filter</button><button class="um-btn" data-act="my-messages">Cari di pesan saya</button></div>' + '<p class="um-hint">Jelajah menampilkan ucapan publik yang disetujui dan sudah dibuka. Pesan privat, tautan terbatas, dan pesan yang menunggu moderasi bisa kamu cari di Ruang Pribadi.</p>' + '<div class="um-chips" role="group" aria-label="Urutan ucapan" style="margin-top:16px">' + '<button class="um-chip' + (expSort === 'baru' ? ' on' : '') + '" aria-pressed="' + (expSort === 'baru') + '" data-act="sort" data-id="baru"' + busy + '>Terbaru</button>' + '</div>' + '<p class="um-muted">Urutan waktu pesan dibuat, dari yang terbaru ke yang lebih lama.</p>' + '<p class="um-hint" data-filter-summary>' + teks(filters) + '</p></div>' + '<div aria-live="polite" aria-busy="' + expBusy + '">' + (expBusy ? '<p class="um-note" role="status">Memuat ucapan…</p>' : expError ? '<p class="um-note warn" role="alert">' + teks(expError) + '</p><button class="um-btn" data-act="retry">Coba lagi</button>' : expRows.length ? '<ul class="um-list um-card" style="margin-top:14px">' + expRows.map(function (p) {
+    }).join('') + '</select></div><div class="um-field"><label class="um-label" for="um-filter-tag">Tag</label><input id="um-filter-tag" class="um-input" value="' + escAttr(expTag) + '" maxlength="50" placeholder="Contoh: kenangan"' + busy + '><p class="um-hint">Cari satu tag. Huruf besar, spasi tepi, dan tanda # tidak membedakan hasil. Pilih suasana dan/atau tag, lalu tekan Terapkan filter.</p></div></div>' + '<div class="um-btn-row"><button class="um-btn" data-act="filter"' + busy + '>Terapkan filter</button><button class="um-btn ghost" data-act="reset-filter"' + busy + '>Hapus filter</button></div>' + '<p class="um-hint">Pesan publik yang lolos pemeriksaan awal dan sudah dibuka tampil di sini. Pilih tag dan/atau suasana hati untuk melihat pesan yang sesuai.</p>' + '<div class="um-chips" role="group" aria-label="Urutan ucapan" style="margin-top:16px">' + '<button class="um-chip' + (expSort === 'baru' ? ' on' : '') + '" aria-pressed="' + (expSort === 'baru') + '" data-act="sort" data-id="baru"' + busy + '>Terbaru</button>' + '</div>' + '<p class="um-muted">Urutan waktu pesan dibuat, dari yang terbaru ke yang lebih lama.</p>' + '<p class="um-hint" data-filter-summary>' + teks(filters) + '</p></div>' + '<div aria-live="polite" aria-busy="' + expBusy + '">' + (expBusy ? '<p class="um-note" role="status">Memuat ucapan…</p>' : expError ? '<p class="um-note warn" role="alert">' + teks(expError) + '</p><button class="um-btn" data-act="retry">Coba lagi</button>' : expRows.length ? '<ul class="um-list um-card" style="margin-top:14px">' + expRows.map(function (p) {
       return '<li class="um-item"><div class="um-item-top"><span class="who">' + teks(p.sendiri ? T('expMine') : T('expAnon')) + '</span><span class="um-badge publik">' + (p.pendoa && p.pendoa.total || 0) + ' pendoa</span><span class="when">' + teks(ntah(p.dibuat)) + '</span></div>' + (p.authorDeleted ? '<div class="um-muted">Tulisan dipertahankan secara anonim; akun penulis sudah dihapus.</div>' : '') + metadataPesan(p, true) + '<div class="txt" data-isi="' + escAttr(p.id) + '">' + teks(p.publicBody || '') + '</div><div class="um-item-acts">' + '<button class="um-btn small primary" data-act="doa" data-id="' + escAttr(p.id) + '" data-g="' + escAttr(p.galaksiId) + '">Doakan ucapan ini</button>' + '<button class="um-btn small" data-act="empati" data-id="' + escAttr(p.id) + '">Aku merasakan ini</button>' + '<button class="um-btn small ghost" data-act="lapor" data-id="' + escAttr(p.id) + '">Laporkan</button>' + (p.sendiri || p.authorDeleted ? '' : '<button class="um-btn small ghost" data-act="block" data-id="' + escAttr(p.id) + '">Blokir pengirim</button>') + '</div></li>';
-    }).join('') + '</ul>' : '<p class="um-empty">Belum ada ucapan publik yang sesuai. Coba hapus filter. Pesan privat atau yang menunggu moderasi tidak tampil di sini.</p>') + '</div>' + '<p id="um-exp-page-status" class="um-hint" role="status">' + (expBusy ? 'Memuat halaman...' : expError ? 'Gagal memuat halaman. Tekan Coba lagi.' : expRows.length ? 'Menampilkan ucapan ' + (expOffset + 1) + ' sampai ' + (expOffset + expRows.length) + '. Maksimal 30 ucapan per halaman.' : 'Tidak ada ucapan untuk ditampilkan.') + '</p>' + '<nav aria-describedby="um-exp-page-status" class="um-btn-row between" aria-label="Halaman ucapan"><button class="um-btn" data-act="prev-page"' + (!expOffset || expBusy ? ' disabled' : '') + '>Sebelumnya</button><span class="um-muted">Halaman ' + (Math.floor(expOffset / 30) + 1) + '</span><button class="um-btn" data-act="next-page"' + (!expMore || expBusy || expError ? ' disabled' : '') + '>Berikutnya</button></nav>' + (!expBusy && !expError && !expOffset ? '<p class="um-hint">Anda berada di halaman pertama, sehingga Sebelumnya belum tersedia.</p>' : '') + (!expBusy && !expError && !expMore ? '<p class="um-hint">Anda sudah mencapai akhir hasil. Tidak ada halaman berikutnya. Berikutnya aktif jika masih ada ucapan setelah halaman ini.</p>' : ''));
+    }).join('') + '</ul>' : '<p class="um-empty">Belum ada pesan publik dengan tag atau suasana hati yang dipilih. Coba pilihan lain atau hapus filter.</p>') + '</div>' + '<p id="um-exp-page-status" class="um-hint" role="status">' + (expBusy ? 'Memuat halaman...' : expError ? 'Gagal memuat halaman. Tekan Coba lagi.' : expRows.length ? 'Menampilkan ucapan ' + (expOffset + 1) + ' sampai ' + (expOffset + expRows.length) + '. Maksimal 30 ucapan per halaman.' : 'Tidak ada ucapan untuk ditampilkan.') + '</p>' + '<nav aria-describedby="um-exp-page-status" class="um-btn-row between" aria-label="Halaman ucapan"><button class="um-btn" data-act="prev-page"' + (!expOffset || expBusy ? ' disabled' : '') + '>Sebelumnya</button><span class="um-muted">Halaman ' + (Math.floor(expOffset / 30) + 1) + '</span><button class="um-btn" data-act="next-page"' + (!expMore || expBusy || expError ? ' disabled' : '') + '>Berikutnya</button></nav>' + (!expBusy && !expError && !expOffset ? '<p class="um-hint">Anda berada di halaman pertama, sehingga Sebelumnya belum tersedia.</p>' : '') + (!expBusy && !expError && !expMore ? '<p class="um-hint">Anda sudah mencapai akhir hasil. Tidak ada halaman berikutnya. Berikutnya aktif jika masih ada ucapan setelah halaman ini.</p>' : ''));
   }
   function renderJelajah() {
     var request = ++expRequest;
@@ -985,8 +985,6 @@ UM.ui = function () {
       if (act === 'close') {
         ++expRequest;
         close(expEl);
-      } else if (act === 'my-messages') {
-        dashMood = expMood; dashTag = expTag; bukaDash();
       } else if (act === 'tag-filter') {
         expTag = UM.store.normalisasiTag(id); expOffset = 0; renderJelajah();
       } else if (act === 'retry') renderJelajah();else if (act === 'sort') {
@@ -1046,22 +1044,6 @@ UM.ui = function () {
       renderDoa();
     });
   }
-  function katalogAwalDoa(current) {
-    var L = UM.i18n.getLang();
-    var selected = current.tradisi && UM.doaData.byId(current.tradisi);
-    var preview = selected ? '<section class="um-card" aria-label="Jenis doa"><h3 class="um-h3">Pilihan doa ' + teks(selected.label[L] || selected.label.id) + '</h3>' + selected.entri.map(function (entry) {
-      var available = entry.reviewed && (selected.id === 'umum' || entry.audio);
-      return '<div class="um-item"><button class="um-chip' + (current.entriId === entry.id ? ' on' : '') + '" data-act="hub-entri" data-id="' + escAttr(entry.id) + '" aria-pressed="' + (current.entriId === entry.id) + '">' + teks(entry.nama[L] || entry.nama.id) + '</button><p class="um-hint">' + (available ? (entry.audio ? 'Audio doa tersedia' : 'Sesi hening tersedia') + ' · ' + (entry.detik || 30) + ' detik' : entry.audio ? 'Pratinjau rekaman tersedia · Menunggu peninjauan kurator' : entry.reviewed ? 'Teks sudah ditinjau. Audio belum tersedia.' : 'Materi sedang menunggu kurasi.') + '</p>' + (current.entriId === entry.id ? isiDoa(entry, L) : '') + '</div>';
-    }).join('') + '<p class="um-note">Pilih ucapan tujuan di bawah untuk memulai. Doa yang selesai akan dicatat pada ucapan tersebut.</p></section>' : '';
-    return '<div class="um-h3">Doa lintas agama dan tradisi</div><p class="um-muted">Untuk memberi doa, pilih ucapan publik, agama atau tradisi, lalu jenis doa. Tekan Dengarkan dan kirim doa; dukungan dikirim setelah rekaman selesai. Sesi hening tersedia melalui Doa umum.</p><button class="um-btn" data-act="browse-explore">Pilih ucapan dari Jelajah</button><div class="um-trad" aria-label="Pilihan agama atau tradisi">' + UM.doaData.tradisi.map(function (tr) {
-      var ready = tr.entri.filter(function (entry) {
-        return entry.reviewed && (tr.id === 'umum' || entry.audio);
-      });
-      return '<button class="um-chip' + (current.tradisi === tr.id ? ' on' : '') + '" data-act="hub-trad" data-id="' + escAttr(tr.id) + '" aria-pressed="' + (current.tradisi === tr.id) + '">' + teks(tr.label[L] || tr.label.id) + '<span class="um-hint">' + (ready.length ? ready.some(function (e) {
-        return e.audio;
-      }) ? 'Audio tersedia' : 'Baca / hening tersedia' : 'Menunggu kurasi / audio') + '</span></button>';
-    }).join('') + '</div>' + preview + '<p class="um-hint">Doa dicatat untuk ucapan yang kamu pilih, setelah audio atau sesi hening selesai. Setiap orang dihitung satu kali per ucapan.</p>';
-  }
   function isiDoa(entry, L, showAudio) {
     var preview = showAudio !== false && /^\/api\/v1\/prayers\/audio\/[a-z-]+$/.test(entry.audio_preview_url || '')
       ? '<div class="um-audio-reference"><p class="um-hint">' + (entry.reviewed ? 'Dengarkan rekaman · ' : 'Pratinjau rekaman · ') + teks(entry.audio_language || '') + ' · ' + (entry.detik || 30) + ' detik</p><audio data-prayer-preview controls preload="none" src="' + escAttr(entry.audio_preview_url) + '" aria-label="Pratinjau rekaman doa"></audio><p class="um-hint">' + teks(entry.audio_attribution || '') + '</p><p class="um-hint">Lisensi: ' + teks(entry.audio_license || '') + (/^https:\/\//.test(entry.audio_license_url || '') ? ' · <a href="' + escAttr(entry.audio_license_url) + '" target="_blank" rel="noopener noreferrer">Ketentuan penggunaan</a>' : '') + '</p>' + (/^https:\/\//.test(entry.audio_source_url || '') ? '<a class="um-muted" href="' + escAttr(entry.audio_source_url) + '" target="_blank" rel="noopener noreferrer">Sumber rekaman asli</a>' : '') + '<p class="um-hint">Mendengarkan pratinjau tidak menambah jumlah doa.</p></div>' : '';
@@ -1108,7 +1090,6 @@ UM.ui = function () {
     renderDoa();
     if (!galaksiId && !pesanId) {
       current.hub = true;
-      current.hubStep = 'catalog';
       current.offset = 0;
       muatDaftarDoa(current);
       return;
@@ -1140,17 +1121,7 @@ UM.ui = function () {
     var current = doaState,
       L = UM.i18n.getLang();
     var busy = ['loading', 'audio-ready', 'hening', 'saving'].indexOf(current.fase) >= 0;
-    var choosing = ['preparing', 'prepare-error', 'empty', 'target'].indexOf(current.fase) >= 0;
-    var browsingCatalog = choosing && current.hub && current.hubStep === 'catalog';
     var isi = '';
-    if (browsingCatalog) {
-      isi += katalogAwalDoa(current);
-      var selectedEntry = current.tradisi && current.entriId && UM.doaData.entri(current.tradisi, current.entriId);
-      if (current.fase === 'preparing') isi += '<p class="um-note" role="status">Memuat pilihan doa dan ucapan…</p>';
-      else if (current.fase === 'prepare-error') isi += '<p class="um-note warn" role="alert">' + teks(current.error) + '</p><button class="um-btn" data-act="reload">Coba muat kembali</button>';
-      else isi += '<div class="um-btn-row end"><button class="um-btn primary" data-act="choose-target"' + (selectedEntry ? '' : ' disabled') + '>Berikutnya: pilih ucapan</button></div><p class="um-hint">' + (selectedEntry ? 'Pilihan doamu disimpan saat memilih ucapan tujuan.' : 'Pilih agama atau tradisi, lalu klik jenis doa untuk melanjutkan.') + '</p>';
-    } else {
-    if (choosing && current.hub) isi += '<button class="um-btn small" data-act="change-catalog">Kembali ke pilihan doa</button>';
     isi += '<div class="um-h3" style="margin-top:20px">1. Ucapan yang didoakan</div>';
     if (current.galaksiId) isi += '<p class="um-muted">Tujuan: ' + teks(namaTujuanDoa(current)) + '</p>';
     if (current.fase === 'preparing') {
@@ -1158,9 +1129,9 @@ UM.ui = function () {
     } else if (current.fase === 'prepare-error') {
       isi += '<p class="um-note warn" role="alert">' + teks(current.error) + '</p>' + '<button class="um-btn" data-act="reload">Coba muat kembali</button>';
     } else if (current.fase === 'empty') {
-      isi += '<p class="um-note">' + (current.hub ? 'Belum ada ucapan publik untuk didoakan pada halaman ini.' : 'Kenangan ini belum memiliki ucapan publik yang disetujui.') + ' Pesan privat dan pesan yang menunggu moderasi tidak bisa didoakan oleh pengunjung.</p><div class="um-btn-row"><button class="um-btn" data-act="my-messages">Lihat status pesan saya</button><button class="um-btn" data-act="browse-explore">Buka Jelajah</button></div>' + (current.hub ? '' : '<p class="um-muted">Pilih ucapan publik dari galaksi lain melalui daftar Doa.</p><button class="um-btn" data-act="all-targets">Pilih ucapan publik lain</button>');
+      isi += '<p class="um-note">' + (current.hub ? 'Belum ada pesan publik yang tersedia untuk didoakan.' : 'Kenangan ini belum memiliki pesan publik yang tersedia untuk didoakan.') + ' Penulis perlu membagikan pesan sebagai Publik anonim. Pesan yang lolos pemeriksaan awal dan sudah dibuka akan menjadi pilihan di sini.</p><button class="um-btn" data-act="reload">Muat ulang pesan tujuan</button>' + (current.hub ? '' : '<button class="um-btn" data-act="all-targets">Pilih pesan publik lain</button>');
     } else if (current.fase === 'target') {
-      isi += '<p class="um-muted">Pilih ucapan berikut sebagai tujuan doamu. Identitas penulis tetap anonim.</p>' + '<div class="um-list">' + current.candidates.map(function (p) {
+      isi += '<p class="um-muted">Pilih pesan milik seseorang yang ingin kamu doakan. Berikutnya kamu memilih agama atau tradisi dan jenis doa. Identitas penulis tetap anonim.</p>' + '<div class="um-list">' + current.candidates.map(function (p) {
         return '<div class="um-item"><p class="txt">' + teks((p.publicBody || 'Ucapan publik').slice(0, 240)) + '</p>' + '<button class="um-btn" data-act="target" data-id="' + escAttr(p.id) + '">Doakan ucapan ini</button></div>';
       }).join('') + '</div>';
     } else {
@@ -1206,7 +1177,7 @@ UM.ui = function () {
         isi += '<p class="um-note warn" role="alert">' + teks(current.error) + '</p><div class="um-btn-row">' + '<button class="um-btn primary" data-act="retry-finish">Coba catat doa kembali</button><button class="um-btn" data-act="cancel">Mulai sesi baru</button></div>';
       } else {
         if (current.error) isi += '<p class="um-note warn" role="alert">' + teks(current.error) + '</p>';
-        if (!current.tradisi) isi += '<p class="um-hint">Pilih agama atau tradisi di atas untuk melihat pilihan doa.</p>';else if (!entry) isi += '<p class="um-hint">Pilih salah satu doa di atas.</p>';
+        if (!current.tradisi) isi += '<p class="um-hint">Pilih agama atau tradisi di atas, lalu klik jenis doa yang ingin kamu berikan.</p>';else if (!entry) isi += '<p class="um-hint">Pilih salah satu doa di atas.</p>';
         if ((!entry || !entry.reviewed || tr.id !== 'umum' && !entry.audio) && UM.doaData.entri('umum', 'hening') && UM.doaData.entri('umum', 'hening').reviewed) {
           isi += '<div class="um-btn-row"><button class="um-btn" data-act="silence">Pilih hening sejenak (untuk semua)</button></div>';
         }
@@ -1214,9 +1185,8 @@ UM.ui = function () {
       }
       if (current.fase === 'loading' || current.fase === 'hening' || current.fase === 'audio-ready') isi += '<div class="um-btn-row"><button class="um-btn" data-act="cancel">Batalkan sesi</button></div>';
     }
-    if (choosing && current.hub && current.fase !== 'preparing') isi += '<nav class="um-btn-row between" aria-label="Halaman tujuan doa"><button class="um-btn" data-act="targets-prev"' + (current.offset ? '' : ' disabled') + '>Ucapan sebelumnya</button><span class="um-muted">Halaman ' + (Math.floor((current.offset || 0) / 30) + 1) + '</span><button class="um-btn" data-act="targets-next"' + (current.more ? '' : ' disabled') + '>Ucapan berikutnya</button></nav>' + (!current.more && current.fase !== 'prepare-error' ? '<p class="um-hint">Tidak ada halaman ucapan berikutnya. Ucapan tersedia setelah publikasinya disetujui moderator.</p>' : '');
-    }
-    UM.renderScreen(doaEl.querySelector('.um-wrap'), '<div class="um-head"><div><div class="um-h1">Doa untuk seseorang</div>' + '<p class="um-muted">Luangkan waktu untuk seseorang melalui doa atau hening.</p></div><button class="um-close" data-act="close" aria-label="Tutup doa">×</button></div>' + '<div class="um-card">' + isi + '</div>');
+    if (current.hub && ['target', 'empty'].indexOf(current.fase) >= 0 && (current.offset || current.more)) isi += '<nav class="um-btn-row between" aria-label="Halaman tujuan doa"><button class="um-btn" data-act="targets-prev"' + (current.offset ? '' : ' disabled') + '>Ucapan sebelumnya</button><span class="um-muted">Halaman ' + (Math.floor((current.offset || 0) / 30) + 1) + '</span><button class="um-btn" data-act="targets-next"' + (current.more ? '' : ' disabled') + '>Ucapan berikutnya</button></nav><p class="um-hint">Tombol ini mengganti halaman daftar pesan. Untuk melanjutkan doa, tekan Doakan ucapan ini pada pesan pilihanmu.</p>';
+    UM.renderScreen(doaEl.querySelector('.um-wrap'), '<div class="um-head"><div><div class="um-h1">Doa untuk seseorang</div>' + '<p class="um-muted">Pilih pesan tujuan, pilih agama dan jenis doa, lalu dengarkan sampai selesai. Dukungan tercatat pada pesan dan galaksi tujuan.</p></div><button class="um-close" data-act="close" aria-label="Tutup doa">×</button></div>' + '<div class="um-card">' + isi + '</div>');
     var player = doaEl.querySelector('[data-prayer-audio]');
     if (player && current.audio) player.appendChild(current.audio);
   }
@@ -1341,38 +1311,12 @@ UM.ui = function () {
         close(doaEl);
         return;
       }
-      if (act === 'browse-explore') { bukaJelajah(); return; }
-      if (act === 'my-messages') { bukaDash(); return; }
       if (act === 'reload') {
         if (doaState.hub) muatDaftarDoa(doaState);else bukaDoa(doaState.galaksiId, doaState.pesanId);
         return;
       }
       if (act === 'all-targets') {
         bukaDoa();
-        return;
-      }
-      if (act === 'hub-trad') {
-        doaState.tradisi = id;
-        doaState.entriId = null;
-        renderDoa();
-        return;
-      }
-      if (act === 'hub-entri') {
-        doaState.entriId = id;
-        renderDoa();
-        return;
-      }
-      if (act === 'choose-target') {
-        if (!doaState.tradisi || !doaState.entriId) return;
-        doaState.hubStep = 'target';
-        renderDoa();
-        doaEl.scrollTop = 0;
-        return;
-      }
-      if (act === 'change-catalog') {
-        doaState.hubStep = 'catalog';
-        renderDoa();
-        doaEl.scrollTop = 0;
         return;
       }
       if (act === 'targets-prev' || act === 'targets-next') {

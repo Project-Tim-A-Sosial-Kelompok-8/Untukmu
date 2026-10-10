@@ -10,6 +10,7 @@ from .schemas import GalaxyInput, AnyMessageInput
 from .security import CurrentUser, DB, OptionalUser, get_redis, throttle, verify_turnstile
 
 from .public_content import open_public, seal_public
+from .public_moderation import check_public
 
 router = APIRouter(tags=["Galaksi dan pesan privat"])
 
@@ -167,6 +168,7 @@ async def create_message(body: AnyMessageInput, user: CurrentUser, db: DB, reque
         await verify_turnstile(request, body.turnstile_token, "publish")
     row = Message(id=str(body.id), author_id=user.id, entry_type=body.entry_type)
     apply_message(row, body, user)
+    await check_public(row, db)
     db.add(row)
     try:
         await db.flush()
@@ -200,7 +202,9 @@ async def edit_message(message_id: UUID, body: AnyMessageInput, user: CurrentUse
     await validate_targets(body, user, db)
     if body.visibility == "public_anon":
         await verify_turnstile(request, body.turnstile_token, "publish")
+    previous_status = row.moderation_status
     apply_message(row, body, user)
+    await check_public(row, db, previous_status=previous_status)
     await db.execute(delete(MessageConstellation).where(MessageConstellation.message_id == row.id))
     await db.execute(delete(MessageAttachment).where(MessageAttachment.message_id == row.id))
     db.add_all([MessageConstellation(message_id=row.id, constellation_id=str(g)) for g in body.constellation_ids])

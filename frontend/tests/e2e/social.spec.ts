@@ -1,17 +1,14 @@
 import { test, expect } from "@playwright/test";
-import { execFileSync } from "node:child_process";
-import { resolve } from "node:path";
-import { register, login } from "./helpers";
+import { register } from "./helpers";
 
-test("publikasi → moderasi → jelajah anonim → empati dan laporan", async ({ page, browser }, testInfo) => {
+test("pesan publik muncul pada filter Jelajah, empati, dan alur Doa dengan tujuan terlebih dahulu", async ({ page, browser }, testInfo) => {
   // Includes registration/key derivation, two browser contexts, and a real
   // 30-second prayer. Leave time for browser teardown on software WebGL hosts.
   test.setTimeout(180000);
-  test.skip(process.env.UNTUKMU_BROWSER_TEST !== "1", "Uses a test-only admin fixture; never promotes a production account.");
   const errors: string[] = [];
   page.on("pageerror", error => errors.push(error.message));
   page.on("console", message => { if (message.type() === "error") errors.push(message.text() + " " + message.location().url); });
-  const { frame, email, password, registrationConsoleError } = await register(page, "social");
+  const { frame, registrationConsoleError } = await register(page, "social");
   await frame.locator("#um-nama").fill("Untuk sahabat");
   await frame.locator("#um-comp [data-act=next]").click();
   await frame.locator("#um-comp [data-act=next]").click();
@@ -25,29 +22,16 @@ test("publikasi → moderasi → jelajah anonim → empati dan laporan", async (
   await expect(frame.locator("#um-comp")).not.toHaveClass(/on/);
   await frame.locator('.um-dock [data-act=jelajah]').click();
   await expect(frame.locator("#um-exp")).toHaveClass(/on/);
-  await expect(frame.locator("#um-exp .um-item")).toHaveCount(0);
+  await expect(frame.locator("#um-exp .txt").filter({hasText:text})).toBeVisible();
+  await expect(frame.locator('#um-exp [data-act=my-messages]')).toHaveCount(0);
   await frame.locator('#um-filter-mood').selectOption('rindu');
   await frame.locator('#um-filter-tag').fill(' #KENANGAN ');
   await frame.locator('#um-exp [data-act=filter]').click();
-  await expect(frame.locator('#um-exp [data-act=filter]')).toBeEnabled();
-  await frame.locator('#um-exp [data-act=my-messages]').click();
-  await expect(frame.locator('#um-dash .txt').filter({hasText:text})).toBeVisible();
-  await expect(frame.locator('#um-own-mood')).toHaveValue('rindu');
-  await expect(frame.locator('#um-own-tag')).toHaveValue('kenangan');
-  await expect(frame.locator('#um-dash')).toContainText('Menunggu peninjauan');
-  await frame.locator('#um-dash [data-act=close]').click();
-  await expect.poll(() => page.frames()[1].evaluate('UM.galaksi.state.pembentukan === null && !flyState')).toBe(true);
-  await frame.locator('#um-gk-list [data-bintang]').first().click();
-  await expect(frame.locator('#um-b-empati')).toHaveCount(0);
-  await expect(frame.locator('#um-b-doakan')).toHaveCount(0);
-  await expect(frame.locator('#bp-body')).toContainText('menunggu persetujuan moderator');
-  execFileSync(process.env.UNTUKMU_TEST_PYTHON || "python", [resolve("../backend/tests/promote_browser_admin.py"), email], { env: process.env });
-  await page.goto("/admin");
-  await login(page, email, password);
-  await expect(frame.getByText("Peninjauan konten", { exact: true })).toBeVisible();
-  await expect(frame.getByText(text, { exact: true })).toBeVisible();
-  await frame.getByRole("button", { name: "Setujui", exact: true }).click();
-  await expect(frame.getByText("Tidak ada pesan yang menunggu peninjauan.")).toBeVisible();
+  await expect(frame.locator('#um-exp .txt').filter({hasText:text})).toBeVisible();
+  await frame.locator('#um-filter-tag').fill('tidak-ada-tag-ini');
+  await frame.locator('#um-exp [data-act=filter]').click();
+  await expect(frame.locator('#um-exp .um-item')).toHaveCount(0);
+  await expect(frame.locator('#um-exp .um-empty')).toContainText('Belum ada pesan publik');
   const context = await browser.newContext();
   const visitor = await context.newPage();
   visitor.on("pageerror", error => errors.push(error.message));
@@ -68,7 +52,10 @@ test("publikasi → moderasi → jelajah anonim → empati dan laporan", async (
   await guest.locator("#um-report-reason").fill("Mohon diperiksa kembali konteksnya.");
   await guest.getByRole("button", { name: "Kirim laporan", exact: true }).click();
   await expect(guest.locator("#um-report-reason")).toHaveCount(0);
-  await guest.locator('#um-exp [data-act=doa]').first().click();
+  await guest.locator('#um-exp [data-act=close]').click();
+  await guest.locator('.um-dock [data-act=doa]').click();
+  await expect(guest.locator('#um-doa [data-act=targets-next]')).toHaveCount(0);
+  await guest.locator('#um-doa .um-item').filter({hasText:text}).locator('[data-act=target]').click();
   await expect(guest.locator('#um-exp')).not.toHaveClass(/on/);
   await expect(guest.locator('#um-doa')).toHaveClass(/on/);
   await expect(guest.locator('#um-doa [data-act=trad]')).toHaveCount(7);

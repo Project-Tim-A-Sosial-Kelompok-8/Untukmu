@@ -5,27 +5,33 @@ test('halaman Doa dapat dibuka langsung tanpa melewati layar pembuka', async ({ 
   const { frame } = await register(page, 'prayer-direct', { path: '/doa', startComposer: false });
   await expect(frame.locator('#um-doa')).toHaveClass(/on/);
   await expect(frame.locator('#um-entry')).not.toHaveClass(/on/);
-  await expect(frame.locator('#um-doa [data-act=hub-trad]')).toHaveCount(7);
+  await expect(frame.locator('#um-doa')).toContainText('1. Ucapan yang didoakan');
+  await expect(frame.locator('#um-doa [data-act=choose-target]')).toHaveCount(0);
 });
 
-test('Berikutnya melanjutkan pilihan doa; audio asli dapat diputar tanpa mencatat pratinjau', async ({ page }, testInfo) => {
+test('pilih pesan tujuan lalu doa Islam; audio asli dapat dipratinjau tanpa mengirim dukungan', async ({ page }, testInfo) => {
   await page.setViewportSize({width:390,height:844});
   const {frame} = await register(page, 'prayer-next-audio', {path:'/doa',startComposer:false});
   const engine = page.frames()[1];
+  await engine.evaluate(async () => {
+    const galaxy = await window.UM.store.saveGalaksi({nama:'Tujuan doa',kategori:'sahabat'});
+    await window.UM.store.simpanPesan({galaksiId:galaxy.id,teks:'Pesan tujuan doa dan pratinjau Islam.',privasi:'publik'});
+    window.UM.ui.bukaDoa();
+  });
   const prayerWrites: string[] = [];
   page.on('request', request => {
     if (request.method()==='POST' && /\/prayers(?:\/start)?$/.test(new URL(request.url()).pathname)) prayerWrites.push(request.url());
   });
-  const next = frame.locator('#um-doa [data-act=choose-target]');
-  await expect(next).toBeDisabled();
-  await frame.locator('#um-doa [data-act=hub-trad][data-id=islam]').click();
-  await frame.locator('#um-doa [data-act=hub-entri][data-id=al-fatihah-audio]').click();
-  await expect(next).toBeEnabled();
+  await expect(frame.locator('#um-doa [data-act=targets-next]')).toHaveCount(0);
+  await frame.locator('#um-doa .um-item').filter({hasText:'Pesan tujuan doa dan pratinjau Islam.'}).locator('[data-act=target]').click();
+  await expect(frame.locator('#um-doa [data-act=trad]')).toHaveCount(7);
+  await frame.locator('#um-doa [data-act=trad][data-id=islam]').click();
+  await frame.locator('#um-doa [data-act=entri][data-id=al-fatihah-audio]').click();
+  await expect(frame.locator('#um-doa [data-act=start]')).toBeEnabled();
   const audio = frame.locator('audio[data-prayer-preview]');
   await expect(audio).toHaveAttribute('src','/api/v1/prayers/audio/al-fatihah');
   const playback = await audio.evaluate(async (node: HTMLAudioElement) => {
-    node.muted=true;
-    await node.play();
+    node.muted=true; await node.play();
     await new Promise(resolve => setTimeout(resolve,350));
     const result={duration:node.duration,time:node.currentTime,ready:node.readyState};
     node.pause(); return result;
@@ -35,13 +41,7 @@ test('Berikutnya melanjutkan pilihan doa; audio asli dapat diputar tanpa mencata
   expect(playback.ready).toBeGreaterThanOrEqual(2);
   await expect(frame.locator('#um-doa')).toContainText('CC0-1.0');
   await page.screenshot({path:testInfo.outputPath('audio-doa-asli-390.png')});
-  await next.click();
-  await expect(frame.locator('#um-doa')).toContainText('Belum ada ucapan publik');
-  await expect(frame.locator('#um-doa [data-act=targets-next]')).toBeDisabled();
-  await frame.locator('#um-doa [data-act=change-catalog]').click();
-  await expect(frame.locator('#um-doa [data-act=hub-entri][data-id=al-fatihah-audio]')).toHaveAttribute('aria-pressed','true');
   expect(prayerWrites).toEqual([]);
-  expect(await engine.evaluate('document.querySelectorAll("#um-doa audio:not([data-prayer-preview])").length')).toBe(0);
 });
 
 test('halaman ucapan doa berikutnya aktif hanya ketika masih ada hasil dan mempertahankan pilihan', async ({page}) => {
@@ -55,9 +55,10 @@ test('halaman ucapan doa berikutnya aktif hanya ketika masih ada hasil dan mempe
     UM.store.getPesan=async id=>rows.find(row=>row.id===id);
     UM.ui.bukaDoa();
   })()`);
-  await frame.locator('#um-doa [data-act=hub-trad][data-id=umum]').click();
-  await frame.locator('#um-doa [data-act=hub-entri][data-id=hening]').click();
-  await frame.locator('#um-doa [data-act=choose-target]').click();
+  await frame.locator('#um-doa [data-act=target]').first().click();
+  await frame.locator('#um-doa [data-act=trad][data-id=umum]').click();
+  await frame.locator('#um-doa [data-act=entri][data-id=hening]').click();
+  await frame.locator('#um-doa [data-act=change-target]').click();
   await expect(frame.locator('#um-doa [data-act=target]')).toHaveCount(30);
   await frame.locator('#um-doa [data-act=targets-next]').click();
   await expect(frame.locator('#um-doa [data-act=target]').first()).toHaveAttribute('data-id','target-30');
@@ -82,10 +83,9 @@ for (const width of [320, 390, 1280]) {
     await expect(frame.locator('#um-entry .acts button').nth(1)).toHaveAttribute('data-act', 'doa');
     await frame.locator('#um-entry [data-act=doa]').click();
     await expect(frame.locator('#um-doa')).toHaveClass(/on/);
-    await expect(frame.locator('#um-doa [data-act=hub-trad]')).toHaveCount(7);
+    await expect(frame.locator('#um-doa')).toContainText('1. Ucapan yang didoakan');
+    await expect(frame.locator('#um-doa [data-act=choose-target]')).toHaveCount(0);
     await expect(frame.locator('#um-exp')).not.toHaveClass(/on/);
-    await frame.locator('#um-doa [data-act=hub-trad][data-id=umum]').click();
-    await expect(frame.locator('#um-doa [aria-label="Jenis doa"]')).toContainText('Sesi hening tersedia');
     await frame.locator('#um-doa [data-act=close]').click();
     await frame.locator('.um-dock [data-act=doa]').click();
     await expect(frame.locator('#um-doa')).toHaveClass(/on/);
