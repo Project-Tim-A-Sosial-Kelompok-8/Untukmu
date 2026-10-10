@@ -8,6 +8,7 @@ from uuid import UUID, uuid4
 
 from botocore.exceptions import BotoCoreError, ClientError
 from fastapi import APIRouter, HTTPException, Request
+from fastapi.responses import FileResponse
 from sqlalchemy import select, update
 from sqlalchemy.exc import IntegrityError
 from starlette.concurrency import run_in_threadpool
@@ -16,9 +17,10 @@ from .config import settings
 from .content import invalidate
 from .models import Message, Prayer, PrayerContent, now
 from .prayer_catalog import CATALOG
+from .prayer_recordings import ROOT, PREFIX, audio_url, recording
 from .schemas import PrayerAudioInput, PrayerContentInput, PrayerFinish, PrayerStart
 from .security import AdminUser, DB, OptionalUser, get_redis, throttle, verify_turnstile, visitor_identity
-from .social import readable_public
+from .social import readable_public, visible_filter
 from .uploads import storage
 
 router = APIRouter(tags=["Doa dan kurasi"])
@@ -45,17 +47,45 @@ async def entry(db, identifier, lock=False):
 @router.get("/prayers/traditions")
 async def catalog(db: DB):
     rows = {row.id: row for row in await db.scalars(select(PrayerContent))}
-    return [{**tradition, "entri": [{**rows[f"{tradition['id']}/{e['id']}"].content,
+    return [{**tradition, "entri": [{**e, **rows[f"{tradition['id']}/{e['id']}"].content,
         "reviewed": rows[f"{tradition['id']}/{e['id']}"].reviewed,
         "audio": bool(rows[f"{tradition['id']}/{e['id']}"].audio_key),
+        "audio_preview_url": audio_url(rows[f"{tradition['id']}/{e['id']}"].audio_key),
+        "audio_attribution": rows[f"{tradition['id']}/{e['id']}"].audio_meta.get("attribution"),
+        "audio_license": rows[f"{tradition['id']}/{e['id']}"].audio_meta.get("license"),
+        "audio_license_url": rows[f"{tradition['id']}/{e['id']}"].audio_meta.get("license_url"),
+        "audio_source_url": rows[f"{tradition['id']}/{e['id']}"].audio_meta.get("page"),
+        "audio_language": rows[f"{tradition['id']}/{e['id']}"].audio_meta.get("language"),
         "detik": duration_seconds(rows[f"{tradition['id']}/{e['id']}"])}
         for e in tradition["entri"] if f"{tradition['id']}/{e['id']}" in rows]} for tradition in CATALOG]
+
+
+@router.get("/prayers/audio/{identifier}")
+async def original_recording(identifier: str):
+    metadata = recording(identifier)
+    if not metadata:
+        raise HTTPException(404, "Rekaman doa tidak ditemukan.")
+    path = ROOT / metadata["file"]
+    if not path.is_file():
+        raise HTTPException(503, "Berkas rekaman belum tersedia.")
+    return FileResponse(path, media_type="audio/ogg" if path.suffix == ".ogg" else "audio/mpeg")
+
+
+@router.get("/prayers/public-markers")
+async def public_markers(db: DB, user: OptionalUser):
+    recent = select(Message.id).where(visible_filter(user)).order_by(Message.created_at.desc(), Message.id).limit(100)
+    rows = await db.scalars(select(Prayer).where(Prayer.message_id.in_(recent))
+                           .order_by(Prayer.created_at.desc(), Prayer.id).limit(1000))
+    return [{"id": row.id, "message_id": row.message_id, "tradition": row.tradition,
+             "prayer_type": row.prayer_type, "source_attribution": row.source_attribution, "created_at": row.created_at}
+            for row in rows]
 
 
 @router.get("/admin/prayers")
 async def admin_catalog(admin: AdminUser, db: DB):
     return [{"id": row.id, "content": row.content, "reviewed": row.reviewed,
              "audio_meta": row.audio_meta, "has_audio": bool(row.audio_key),
+             "audio_preview_url": audio_url(row.audio_key),
              "reviewed_at": row.reviewed_at}
             for row in await db.scalars(select(PrayerContent).order_by(PrayerContent.id))]
 
@@ -121,7 +151,7 @@ async def start(message_id: UUID, body: PrayerStart, user: OptionalUser, db: DB,
     message = await readable_public(db, message_id, user)
     row = await entry(db, body.catalog_id)
     if not row.reviewed:
-        raise HTTPException(409, "Entri ini menunggu kurasi manusia.")
+        raise HTTPException(409, "Entri ini menunggu kurasi.")
     if row.tradition != "umum" and not row.audio_key:
         raise HTTPException(409, "Audio doa belum tersedia. Pilih hening sejenak pada tradisi Umum.")
     token = secrets.token_urlsafe(32)
@@ -130,8 +160,15 @@ async def start(message_id: UUID, body: PrayerStart, user: OptionalUser, db: DB,
     if row.audio_key:
         if row.audio_key.startswith("bundled:"):
             raise HTTPException(409, "Rekaman lama telah dilepas. Audio asli perlu dipasang dan ditinjau kurator.")
-        audio_url = await run_in_threadpool(storage(public=True).generate_presigned_url, "get_object",
-            Params={"Bucket": settings().s3_bucket, "Key": row.audio_key}, ExpiresIn=1200)
+        if row.audio_key.startswith(PREFIX):
+            identifier = row.audio_key[len(PREFIX):]
+            metadata = recording(identifier)
+            if not metadata or not (ROOT / metadata["file"]).is_file():
+                raise HTTPException(503, "Rekaman doa belum tersedia. Coba lagi nanti.")
+            audio_url = f"/api/v1/prayers/audio/{identifier}"
+        else:
+            audio_url = await run_in_threadpool(storage(public=True).generate_presigned_url, "get_object",
+                Params={"Bucket": settings().s3_bucket, "Key": row.audio_key}, ExpiresIn=1200)
     state = {"message_id": message.id, "identity": identity, "catalog_id": row.id,
              "started": time.time(), "seconds": seconds, "revision": revision(row)}
     await get_redis(request).set(token_key(token), json.dumps(state), ex=int(seconds) + 300)

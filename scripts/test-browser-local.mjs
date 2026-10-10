@@ -1,5 +1,6 @@
 /** Run real web+API processes in one local test environment (SQLite/fakeredis only). */
 import { spawn } from "node:child_process";
+import { existsSync } from "node:fs";
 import { cp, readFile, writeFile, mkdtemp } from "node:fs/promises";
 import { createServer } from "node:net";
 import { tmpdir } from "node:os";
@@ -21,7 +22,10 @@ let webPort = await freePort();
 while (webPort === apiPort) webPort = await freePort();
 const baseURL = `http://127.0.0.1:${webPort}`;
 const databaseDirectory = await mkdtemp(resolve(tmpdir(), "untukmu-browser-"));
+const localPython = resolve(root, process.platform === "win32" ? "backend/.venv/Scripts/python.exe" : "backend/.venv/bin/python");
+const python = process.env.UNTUKMU_TEST_PYTHON || (existsSync(localPython) ? localPython : "python");
 const environment = { ...process.env, UNTUKMU_BROWSER_TEST: "1", UNTUKMU_TEST_BASE_URL: baseURL,
+  UNTUKMU_TEST_PYTHON: python,
   UNTUKMU_BROWSER_DATABASE: resolve(databaseDirectory, "browser-test.db") };
 await cp(resolve(web, "public"), resolve(standalone, "public"), { recursive: true });
 await cp(resolve(web, ".next/static"), resolve(standalone, ".next/static"), { recursive: true });
@@ -37,6 +41,7 @@ await writeFile(manifestPath, JSON.stringify(manifest));
 const children = [];
 let logs = "";
 let serviceError = null;
+function showServiceLogs() { process.stderr.write(logs.split(/\r?\n/).slice(-80).join("\n") + "\n"); }
 function service(command, args, options) {
   const child = spawn(command, args, { ...options, stdio: ["ignore", "pipe", "pipe"] });
   for (const stream of [child.stdout, child.stderr]) stream.on("data", bytes => { logs += bytes.toString(); });
@@ -45,10 +50,10 @@ function service(command, args, options) {
   children.push(child);
   return child;
 }
-service(process.env.UNTUKMU_TEST_PYTHON || "python", ["-m", "uvicorn", "tests.browser_server:app", "--host", "127.0.0.1", "--port", String(apiPort)], { cwd: resolve(root, "backend"), env: environment });
+service(python, ["-m", "uvicorn", "tests.browser_server:app", "--host", "127.0.0.1", "--port", String(apiPort)], { cwd: resolve(root, "backend"), env: environment });
 service(process.execPath, [resolve(standalone, "server.js")], { cwd: standalone, env: { ...environment, PORT: String(webPort), HOSTNAME: "127.0.0.1" } });
 try {
-  for (const url of [`${baseURL}/api/v1/capabilities`, baseURL]) {
+  for (const url of [`http://127.0.0.1:${apiPort}/api/v1/capabilities`, `${baseURL}/api/v1/capabilities`, baseURL]) {
     const deadline = Date.now() + 60000;
     while (true) {
       if (serviceError) throw serviceError;
@@ -62,8 +67,13 @@ try {
   console.log(`Browser test terisolasi: ${baseURL}`);
   const command = spawn(process.execPath, [resolve(root, "node_modules/@playwright/test/cli.js"), "test", ...process.argv.slice(2)], { cwd: web, env: environment, stdio: "inherit" });
   process.exitCode = await new Promise((done, reject) => { command.on("error", reject); command.on("exit", code => done(code ?? 1)); });
-  if (process.exitCode) process.stderr.write(logs);
+  if (process.exitCode) {
+    // Keep earlier API exceptions available when later tests generate enough
+    // access logs to push them beyond the console's last 80 lines.
+    await writeFile(resolve(web, 'test-results/browser-service.log'), logs);
+    showServiceLogs();
+  }
 } catch (error) {
-  process.stderr.write(logs);
+  showServiceLogs();
   throw error;
 } finally { children.forEach(child => child.kill("SIGTERM")); await writeFile(manifestPath, originalManifest); }

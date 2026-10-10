@@ -1,8 +1,10 @@
 import base64
-from datetime import date
+from datetime import date, datetime, timezone
 from typing import Annotated, Literal
 from uuid import UUID
 from pydantic import BaseModel, ConfigDict, EmailStr, Field, field_validator, model_validator
+
+from .message_metadata import normalize_mood, normalize_tags
 
 
 class Strict(BaseModel):
@@ -127,14 +129,30 @@ class MessageBase(Strict):
     mood: str | None = Field(default=None, max_length=40)
     tags: list[str] = Field(default_factory=list, max_length=5)
     date_label: date | None = None
+    release_at: datetime | None = None
+
+    @field_validator("release_at")
+    @classmethod
+    def scheduled_time(cls, value):
+        if value is not None:
+            if value.tzinfo is None:
+                raise ValueError("Waktu pembukaan wajib menyertakan zona waktu")
+            return value.astimezone(timezone.utc)
+        return value
     attachment_ids: list[UUID] = Field(default_factory=list, max_length=5)
 
     @field_validator("tags")
     @classmethod
     def valid_tags(cls, value):
-        if any(not v.strip() or len(v) > 50 for v in value):
+        value = normalize_tags(value)
+        if any(not v or len(v) > 50 for v in value):
             raise ValueError("Tag wajib 1–50 karakter")
         return value
+
+    @field_validator("mood")
+    @classmethod
+    def valid_mood(cls, value):
+        return normalize_mood(value)
 
 
 class MessageInput(MessageBase):
@@ -143,7 +161,7 @@ class MessageInput(MessageBase):
 
     @model_validator(mode="after")
     def valid_context(self):
-        if self.payload.aad != f"untukmu:message:v2:{self.id}:private":
+        if self.payload.aad != f"untukmu:message:v2:{self.id}:{self.visibility}":
             raise ValueError("AAD tidak cocok dengan identitas pesan")
         return self
 
@@ -161,8 +179,12 @@ class PublicMessageInput(MessageBase):
         return value
 
 
-class UnlistedMessageInput(PublicMessageInput):
+class UnlistedMessageInput(MessageInput):
     visibility: Literal["unlisted"]
+
+
+class ShareInput(Strict):
+    payload: Cipher
 
 
 AnyMessageInput = Annotated[MessageInput | PublicMessageInput | UnlistedMessageInput, Field(discriminator="visibility")]

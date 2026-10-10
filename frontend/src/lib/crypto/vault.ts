@@ -97,9 +97,9 @@ export async function authCredential(password: string, email: string) {
 }
 
 export async function encryptPesan(text: string, privacy = "privat", id = crypto.randomUUID()): Promise<Cipher> {
-  if (privacy !== "privat") throw new Error("Enkripsi dengan kunci pribadi hanya untuk pesan privat.");
+  if (!["privat", "unlisted"].includes(privacy)) throw new Error("Enkripsi pribadi tersedia untuk pesan privat dan tautan terbatas.");
   if (!master || !available()) throw new Error("locked");
-  const iv = random(12), aad = `untukmu:message:v2:${id}:private`;
+  const iv = random(12), aad = `untukmu:message:v2:${id}:${privacy === "unlisted" ? "unlisted" : "private"}`;
   const ct = await crypto.subtle.encrypt({ name: "AES-GCM", iv, additionalData: utf8.encode(aad) }, master, utf8.encode(text));
   return { v: 2, alg: "A256GCM", mode: "private", iv: b64(iv), ct: b64(ct), aad };
 }
@@ -109,6 +109,24 @@ export async function decryptPesan(payload: Cipher): Promise<string | null> {
   if (payload.v !== 2 || payload.alg !== "A256GCM" || payload.mode !== "private") throw new Error("Format pesan tidak didukung.");
   const result = await crypto.subtle.decrypt({ name: "AES-GCM", iv: unb64(payload.iv), additionalData: utf8.encode(payload.aad) }, master, unb64(payload.ct));
   return generation === epoch ? new TextDecoder().decode(result) : null;
+}
+
+/** A distinct key travels only in the URL fragment, never to the API. */
+export async function encryptShare(text: string, id: string) {
+  const raw = random(32), iv = random(12), aad = `untukmu:share:v1:${id}`;
+  try {
+    const ct = await crypto.subtle.encrypt({name: "AES-GCM", iv, additionalData: utf8.encode(aad)}, await keyFrom(raw), utf8.encode(text));
+    return {key: b64(raw).replaceAll("+", "-").replaceAll("/", "_").replaceAll("=", ""),
+      payload: {v: 2, alg: "A256GCM", mode: "private", iv: b64(iv), ct: b64(ct), aad} satisfies Cipher};
+  } finally {raw.fill(0);}
+}
+export async function decryptShare(payload: Cipher, secret: string, id: string) {
+  if (!/^[A-Za-z0-9_-]{43}$/.test(secret) || payload.aad !== `untukmu:share:v1:${id}` || payload.alg !== "A256GCM") throw new Error("Kunci tautan tidak valid.");
+  const raw = unb64(secret.replaceAll("-", "+").replaceAll("_", "/") + "=");
+  try {
+    const result = await crypto.subtle.decrypt({name: "AES-GCM", iv: unb64(payload.iv), additionalData: utf8.encode(payload.aad)}, await keyFrom(raw), unb64(payload.ct));
+    return new TextDecoder().decode(result);
+  } finally {raw.fill(0);}
 }
 
 export async function encryptFile(file: File, id: string) {

@@ -3,7 +3,7 @@ import { execFileSync } from "node:child_process";
 import { resolve } from "node:path";
 import { register, login } from "./helpers";
 
-test("publikasi → moderasi → jelajah anonim → empati dan laporan", async ({ page, browser }) => {
+test("publikasi → moderasi → jelajah anonim → empati dan laporan", async ({ page, browser }, testInfo) => {
   // Includes registration/key derivation, two browser contexts, and a real
   // 30-second prayer. Leave time for browser teardown on software WebGL hosts.
   test.setTimeout(180000);
@@ -17,6 +17,8 @@ test("publikasi → moderasi → jelajah anonim → empati dan laporan", async (
   await frame.locator("#um-comp [data-act=next]").click();
   const text = "Terima kasih sudah hadir sebagai sahabat yang baik.";
   await frame.locator("#um-isi").fill(text);
+  await frame.locator("#um-tag").fill("#KeNaNgAn, keluarga");
+  await frame.locator('#um-comp [data-act=mood][data-id=rindu]').click();
   await frame.locator("#um-comp [data-act=next]").click();
   await frame.locator('#um-comp [data-act=priv][data-id=publik]').click();
   await frame.locator("#um-comp [data-act=save]").click();
@@ -24,6 +26,21 @@ test("publikasi → moderasi → jelajah anonim → empati dan laporan", async (
   await frame.locator('.um-dock [data-act=jelajah]').click();
   await expect(frame.locator("#um-exp")).toHaveClass(/on/);
   await expect(frame.locator("#um-exp .um-item")).toHaveCount(0);
+  await frame.locator('#um-filter-mood').selectOption('rindu');
+  await frame.locator('#um-filter-tag').fill(' #KENANGAN ');
+  await frame.locator('#um-exp [data-act=filter]').click();
+  await expect(frame.locator('#um-exp [data-act=filter]')).toBeEnabled();
+  await frame.locator('#um-exp [data-act=my-messages]').click();
+  await expect(frame.locator('#um-dash .txt').filter({hasText:text})).toBeVisible();
+  await expect(frame.locator('#um-own-mood')).toHaveValue('rindu');
+  await expect(frame.locator('#um-own-tag')).toHaveValue('kenangan');
+  await expect(frame.locator('#um-dash')).toContainText('Menunggu peninjauan');
+  await frame.locator('#um-dash [data-act=close]').click();
+  await expect.poll(() => page.frames()[1].evaluate('UM.galaksi.state.pembentukan === null && !flyState')).toBe(true);
+  await frame.locator('#um-gk-list [data-bintang]').first().click();
+  await expect(frame.locator('#um-b-empati')).toHaveCount(0);
+  await expect(frame.locator('#um-b-doakan')).toHaveCount(0);
+  await expect(frame.locator('#bp-body')).toContainText('menunggu persetujuan moderator');
   execFileSync(process.env.UNTUKMU_TEST_PYTHON || "python", [resolve("../backend/tests/promote_browser_admin.py"), email], { env: process.env });
   await page.goto("/admin");
   await login(page, email, password);
@@ -38,25 +55,38 @@ test("publikasi → moderasi → jelajah anonim → empati dan laporan", async (
   await guest.locator("#um-entry [data-act=skip]").click();
   await guest.locator('.um-dock [data-act=jelajah]').click();
   await expect(guest.locator("#um-exp .txt").filter({ hasText: text })).toBeVisible();
+  await guest.locator('#um-filter-mood').selectOption('rindu');
+  await guest.locator('#um-filter-tag').fill(' #KENANGAN ');
+  await guest.locator('#um-exp [data-act=filter]').click();
+  await expect(guest.locator('#um-exp .um-item')).toHaveCount(1);
+  await expect(guest.locator('#um-exp .um-item')).toContainText('#kenangan');
+  await expect(guest.locator('#um-exp .um-item')).toContainText('Rindu');
   await guest.locator('#um-exp [data-act=empati]').first().click();
   await expect(guest.locator('#um-exp [data-act=empati]').first()).toBeDisabled();
+  await visitor.screenshot({path:testInfo.outputPath('jelajah-filter-dan-empati.png')});
   await guest.locator('#um-exp [data-act=lapor]').first().click();
   await guest.locator("#um-report-reason").fill("Mohon diperiksa kembali konteksnya.");
   await guest.getByRole("button", { name: "Kirim laporan", exact: true }).click();
   await expect(guest.locator("#um-report-reason")).toHaveCount(0);
-  await guest.locator('#um-exp [data-act=close]').click();
-  await guest.locator('.um-dock [data-act=doa]').click();
+  await guest.locator('#um-exp [data-act=doa]').first().click();
   await expect(guest.locator('#um-exp')).not.toHaveClass(/on/);
-  await expect(guest.locator('#um-doa [data-act=hub-trad]')).toHaveCount(7);
-  await guest.locator('#um-doa [data-act=target]').first().click();
   await expect(guest.locator('#um-doa')).toHaveClass(/on/);
   await expect(guest.locator('#um-doa [data-act=trad]')).toHaveCount(7);
-  await guest.locator('#um-doa [data-act=trad][data-id=umum]').click();
-  await guest.locator('#um-doa [data-act=entri][data-id=hening]').click();
+  await guest.locator('#um-doa [data-act=trad][data-id=katolik]').click();
+  await guest.locator('#um-doa [data-act=entri][data-id=bapa-kami-latin]').click();
   await guest.locator('#um-doa [data-act=start]').click();
+  const audio = guest.locator('#um-doa [data-prayer-audio] audio');
+  await expect(audio).toHaveAttribute('src', '/api/v1/prayers/audio/pater-noster');
+  await audio.evaluate(async (node: HTMLAudioElement) => { node.muted = true; await node.play(); });
   await expect(guest.locator('#um-doa [data-act=again]')).toBeVisible({timeout:65000});
+  await visitor.screenshot({path:testInfo.outputPath('doa-rekaman-tercatat.png')});
   await page.frames()[1].evaluate('UM.galaksi.refresh()');
-  expect(await page.frames()[1].evaluate('UM.galaksi.state.daftar.reduce((n, item) => n + item.batuTotal, 0)')).toBe(1);
+  expect(await page.frames()[1].evaluate('UM.galaksi.state.daftar.filter(item => item.g.sendiri !== false).reduce((n, item) => n + item.batuTotal, 0)')).toBe(1);
+  expect(await page.frames()[1].evaluate('UM.galaksi.state.peta["publik-bersama"].batuTotal')).toBe(1);
+  await guest.getByRole('button',{name:'Selesai',exact:true}).click();
+  await visitor.frames()[1].evaluate("UM.ui.bukaDoa('publik-bersama')");
+  await expect(guest.locator('#um-doa [data-act=trad]')).toHaveCount(7);
+  await expect(guest.locator('#um-doa')).toContainText(text);
   await context.close();
   expect(errors.filter(error => error !== registrationConsoleError)).toEqual([]);
 });

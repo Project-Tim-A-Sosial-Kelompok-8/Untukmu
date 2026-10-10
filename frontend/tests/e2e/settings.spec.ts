@@ -59,7 +59,13 @@ test('pengaturan tersimpan; hapus dapat dibatalkan dan dicoba ulang; keluar menu
   await frame.locator('.um-dock [data-act=set]').click();
   await frame.locator('#um-set [data-act=account]').click();
   await expect(frame.locator('#um-profile')).toHaveValue('public');
-  await frame.getByRole('button', { name: 'Keluar', exact: true }).click();
+  await Promise.all([
+    page.waitForEvent('framenavigated', { predicate: frame => frame.parentFrame() !== null }),
+    frame.getByRole('button', { name: 'Keluar', exact: true }).click(),
+  ]);
+  await expect(frame.locator('#um-entry')).toHaveClass(/on/);
+  await expect(frame.locator('html')).toHaveAttribute('data-renderer', 'react-three-fiber');
+  await page.frames()[1].evaluate(() => window.UM.account.open());
   await expect(frame.locator('#um-account-title')).toHaveText('Masuk ke Untukmu', { timeout: 20000 });
   await expect(frame.getByRole('button', { name: 'Daftar akun', exact: true })).toBeVisible();
   expect(await page.frames()[1].evaluate(() => window.UM.account.isLogged())).toBe(false);

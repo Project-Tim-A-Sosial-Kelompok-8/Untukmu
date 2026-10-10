@@ -11,4 +11,5 @@ __pycache__/
 frontend/public/visual/
 playwright-report/
 test-results/
+.local-backups/
 *.log

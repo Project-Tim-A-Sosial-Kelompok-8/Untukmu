@@ -1,4 +1,5 @@
 import { PrayerAdmin } from "../prayers/PrayerAdmin";
+import { ProductMetrics } from "./ProductMetrics";
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { create } from "zustand";
@@ -37,6 +38,7 @@ export function SocialScreens() {
     </form>}
     {mode === "admin" && <>
       <PrayerAdmin />
+      <ProductMetrics />
       <p className="um-muted">Antrean pesan publik anonim dan laporan pengguna.</p>
       <div className="um-field"><label className="um-label" htmlFor="um-review-note">Catatan keputusan</label><input id="um-review-note" className="um-input" value={reason} maxLength={1000} onChange={event => setReason(event.target.value)} /></div>
       {queue.isPending && <p className="um-muted">Memuat antrean…</p>}

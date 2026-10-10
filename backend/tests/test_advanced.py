@@ -68,21 +68,21 @@ async def test_recovery_rotates_code_revokes_sessions_and_preserves_ciphertext(c
     assert (await client.post('/api/v1/auth/login',json={'email':'recover@example.com','password':'new-client-verifier'})).status_code == 200
 
 
-async def test_unlisted_requires_token_review_and_can_be_revoked(client, database):
-    from uuid import uuid4
-    from .test_social import admin_account, approve
+async def test_unlisted_is_client_encrypted_and_requires_revocable_token(client, database):
     owner = await account(client)
-    body = {'id':str(uuid4()),'constellation_ids':[await galaxy(client,owner)],'visibility':'unlisted','public_body':'Pesan lewat tautan terbatas'}
+    body = message_input(await galaxy(client,owner))
+    body['visibility'] = 'unlisted'
+    body['payload']['aad'] = f"untukmu:message:v2:{body['id']}:unlisted"
     created = await client.post('/api/v1/messages',headers=owner,json=body)
     assert created.status_code == 201, created.text
-    link = (await client.post(f"/api/v1/messages/{body['id']}/share",headers=owner)).json()
+    shared = {**body['payload'], 'aad': f"untukmu:share:v1:{body['id']}"}
+    link = (await client.post(f"/api/v1/messages/{body['id']}/share",headers=owner,json={'payload':shared})).json()
     token = {'X-Share-Token':link['token']}
     url = f"/api/v1/shared/{body['id']}"
-    assert (await client.get(url,headers=token)).status_code == 404
-    admin = await admin_account(client,database)
-    await approve(client,admin,body['id'])
     assert (await client.get(url)).status_code == 404
-    assert (await client.get(url,headers=token)).json()['public_body'] == body['public_body']
+    assert (await client.get(url,headers=token)).json()['payload'] == shared
+    assert 'public_body' not in (await client.get(url,headers=token)).json()
+    assert (await client.get('/api/v1/admin/moderation/queue',headers=owner)).status_code == 403
     assert (await client.get('/api/v1/explore')).json() == []
     await client.delete(f"/api/v1/messages/{body['id']}/share",headers=owner)
     assert (await client.get(url,headers=token)).status_code == 404

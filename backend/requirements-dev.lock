@@ -151,3 +151,5 @@ websockets==17.1
 
 # Public/unlisted encryption; same resolver pin as requirements.lock.
 cryptography==46.0.7
+prometheus-client==0.26.0
+sentry-sdk==2.71.0

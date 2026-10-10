@@ -50,6 +50,8 @@ UM.galaksi = (function () {
     aktif: null,         // id galaksi tujuan; null berarti titik awal / seluruh ladang
     perjalanan: [],
     kilatan: [],
+    pembentukan: null,
+    efekTerakhir: null,
     sekarang: 0,
     /* Titik yang sedang diikuti kamera. Titik di lengan galaksi ikut berputar
        bersama galaksinya, jadi tanpa mengikuti, kamera akan ditinggal dalam
@@ -474,10 +476,10 @@ UM.galaksi = (function () {
            Pemisahan ini yang menjamin setiap partikel punya isi yang bisa dibaca. */
         var semua = pesanPer[g.id] || [];
         var punyaku = semua.filter(function (p) { return p.sendiri !== false || p.piringan === true; });
-        var orangLain = semua.filter(function (p) { return p.sabuk === true; });
+        var orangLain = (doaPer[g.id] || []).map(function(d) { var p = semua.find(function(p) { return p.id === d.pesanId; }); return p ? Object.assign({}, p, { id: 'prayer-' + d.id, originMessageId: p.id, sabuk: true, piringan: false, sendiri: false }) : null; }).filter(Boolean);
         var doaPesan = {};
         (doaPer[g.id] || []).forEach(function (d) {
-          if (d.pesanId && !doaPesan[d.pesanId]) doaPesan[d.pesanId] = d; // satu doa per butir
+          if (d.pesanId) doaPesan['prayer-' + d.id] = d; // satu doa per butir
         });
 
         tandaiTitikPesan(item, punyaku);
@@ -883,6 +885,11 @@ UM.galaksi = (function () {
     batalkanPerjalanan();
     bersihkanPilihan();
     state.aktif = itemTujuan.g.id;
+    state.efekTerakhir = { jenis: 'bintang-jatuh', galaksiId: itemTujuan.g.id };
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      if (onTiba) onTiba();
+      return Promise.resolve(true);
+    }
     var T = three();
 
     // berangkat dari tepi piringan titik awal, bukan dari intinya
@@ -1035,6 +1042,116 @@ UM.galaksi = (function () {
   function batalkanPerjalanan() {
     state.perjalanan.forEach(bersihkanBendaPerjalanan);
     state.perjalanan = [];
+    if (state.pembentukan) {
+      bersihkanPembentukan(state.pembentukan);
+      state.pembentukan = null;
+    }
+    if (typeof controls !== 'undefined') controls.enabled = true;
+  }
+
+  function bersihkanPembentukan(effect) {
+    effect.objek.forEach(function (entry) { entry.objek.scale.copy(entry.skala); });
+    if (!effect.cahaya) return;
+    scene.remove(effect.cahaya);
+    effect.cahaya.children.forEach(function (objek) {
+      if (objek.isPoints && objek.geometry) objek.geometry.dispose();
+      if (objek.material) objek.material.dispose();
+    });
+  }
+
+  /* Debu bercahaya berpilin menuju inti, lalu melebur menjadi galaksi asli.
+     Posisi partikel dihitung GPU; hanya uniform yang berubah setiap frame. */
+  function cahayaPembentukan(item) {
+    var T = three(), group = new T.Group(), jumlah = 900;
+    group.position.copy(item.pos);
+    group.userData.umEfek = 'pembentukan-galaksi';
+    var rng = rngDariSeed(seedFromId('lahir:' + item.g.id));
+    var posisi = new Float32Array(jumlah * 3), orbit = new Float32Array(jumlah * 3);
+    for (var i = 0; i < jumlah; i++) {
+      orbit[i * 3] = 0.15 + Math.sqrt(rng()) * 1.6;
+      orbit[i * 3 + 1] = rng() * Math.PI * 2;
+      orbit[i * 3 + 2] = rng();
+    }
+    var geometry = new T.BufferGeometry();
+    geometry.setAttribute('position', new T.BufferAttribute(posisi, 3));
+    geometry.setAttribute('aOrbit', new T.BufferAttribute(orbit, 3));
+    var material = new T.ShaderMaterial({
+      uniforms: {
+        uProgress: { value: 0 }, uRadius: { value: galaksiRadius(item.g) },
+        uPixelRatio: { value: renderer.getPixelRatio() },
+        uColor: { value: new T.Color(warnaAman(item.g.warna)) }
+      },
+      vertexShader: 'attribute vec3 aOrbit; uniform float uProgress; uniform float uRadius; uniform float uPixelRatio; varying float vLight;' +
+        'void main(){float gather=smoothstep(0.0,0.62,uProgress); float r=aOrbit.x*uRadius*mix(1.0,0.035,gather);' +
+        'float angle=aOrbit.y+uProgress*7.0+aOrbit.x*2.5; vec3 p=vec3(cos(angle)*r,(aOrbit.z-0.5)*r*0.24,sin(angle)*r);' +
+        'vec4 mv=modelViewMatrix*vec4(p,1.0);gl_Position=projectionMatrix*mv;' +
+        'gl_PointSize=clamp((3.0+aOrbit.z*5.0)*uPixelRatio*300.0/max(80.0,-mv.z),1.0,20.0);' +
+        'vLight=(0.35+aOrbit.z*0.65)*smoothstep(0.0,0.12,uProgress)*(1.0-smoothstep(0.56,0.9,uProgress));}',
+      fragmentShader: 'uniform vec3 uColor; varying float vLight; void main(){float r=length(gl_PointCoord-vec2(0.5))*2.0;' +
+        'float glow=pow(max(0.0,1.0-r),2.0);gl_FragColor=vec4(mix(uColor,vec3(1.0,0.96,0.86),glow*0.8),glow*vLight);}',
+      transparent: true, depthWrite: false, depthTest: false, blending: T.AdditiveBlending
+    });
+    var debu = new T.Points(geometry, material);
+    debu.frustumCulled = false;
+    debu.quaternion.copy(item.lod.pts.quaternion);
+    group.add(debu);
+    function glow(color) {
+      var sprite = new T.Sprite(new T.SpriteMaterial({
+        map: typeof GLOW_TEX !== 'undefined' ? GLOW_TEX : null,
+        color: color, transparent: true, opacity: 0, depthWrite: false,
+        depthTest: false, blending: T.AdditiveBlending, fog: false
+      }));
+      group.add(sprite);
+      return sprite;
+    }
+    var halo = glow(warnaAman(item.g.warna)), inti = glow('#fff4e2');
+    scene.add(group);
+    return { group: group, debu: debu, halo: halo, inti: inti };
+  }
+
+  function bentukGalaksi(item, onTiba) {
+    if (!three() || !item || !item.lod) { if (onTiba) onTiba(); return Promise.resolve(false); }
+    masukLadang(); batalkanPerjalanan(); bersihkanPilihan();
+    state.aktif = item.g.id;
+    state.efekTerakhir = { jenis: 'pembentukan-galaksi', galaksiId: item.g.id };
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      if (onTiba) onTiba(); return Promise.resolve(true);
+    }
+    var objek = (item.objek || [item.lod.pts]).map(function (objek) {
+      return { objek: objek, skala: objek.scale.clone() };
+    });
+    objek.forEach(function (entry) { entry.objek.scale.copy(entry.skala).multiplyScalar(0.02); });
+    var light = cahayaPembentukan(item);
+    state.pembentukan = { item: item, objek: objek, cahaya: light.group, debu: light.debu,
+      halo: light.halo, inti: light.inti,
+      t0: (typeof videoNow === 'function' ? videoNow() : performance.now()) + 650,
+      dur: 4200, onTiba: onTiba };
+    bingkaiGalaksi(item, 1200);
+    return Promise.resolve(true);
+  }
+
+  function perbaruiPembentukan(now) {
+    var effect = state.pembentukan;
+    if (!effect) return;
+    var progress = Math.max(0, Math.min(1, (now - effect.t0) / effect.dur));
+    var reveal = Math.max(0, Math.min(1, (progress - 0.32) / 0.68));
+    var scale = 0.02 + 0.98 * (1 - Math.pow(1 - reveal, 3));
+    effect.objek.forEach(function (entry) { entry.objek.scale.copy(entry.skala).multiplyScalar(scale); });
+    effect.debu.material.uniforms.uProgress.value = progress;
+    var radius = galaksiRadius(effect.item.g);
+    var rise = Math.min(1, progress / 0.3);
+    var fade = 1 - Math.max(0, (progress - 0.5) / 0.5);
+    var haloSize = radius * (1.1 + rise * 1.7 - reveal * 1.5);
+    effect.halo.scale.set(haloSize, haloSize, 1);
+    effect.halo.material.opacity = 0.5 * rise * fade;
+    var coreSize = radius * (0.12 + rise * 0.8 - reveal * 0.65);
+    effect.inti.scale.set(coreSize, coreSize, 1);
+    effect.inti.material.opacity = Math.min(0.92, rise * 0.92) * fade;
+    if (progress >= 1) {
+      bersihkanPembentukan(effect);
+      state.pembentukan = null;
+      if (effect.onTiba) effect.onTiba();
+    }
   }
 
   function jalankanKedatangan(jalan) {
@@ -1291,7 +1408,7 @@ UM.galaksi = (function () {
           e.stopPropagation();
           if (sudahAda) { terbangKeTitik(item, idx, sudahAda); return; }
           UM.store.pesanTitik(item.g.id, idx).then(function (pesan) {
-            UM.galaksi.terbangKeTitik(item, idx, pesan);
+            if (pesan) UM.galaksi.terbangKeTitik(item, idx, pesan);
           });
           return;
         }
@@ -1447,6 +1564,7 @@ UM.galaksi = (function () {
     state.sekarang = nowMs;
     perbaruiPerjalanan(nowMs);
     perbaruiKilatan(nowMs);
+    perbaruiPembentukan(nowMs);
     
     // Update orbit camera jika aktif
     perbaruiOrbitCamera();
@@ -1536,7 +1654,7 @@ UM.galaksi = (function () {
     posisiTitikDari: posisiTitikDari, jarakTiba: jarakTiba,
     tandaiTerpilih: tandaiTerpilih, hapusTandaTerpilih: hapusTandaTerpilih,
     kembaliKeRumah: kembaliKeRumah, bersihkanPilihan: bersihkanPilihan,
-    kirimPerjalanan: kirimPerjalanan, kilat: kilat,
+    kirimPerjalanan: kirimPerjalanan, bentukGalaksi: bentukGalaksi, kilat: kilat,
     segarkanTeks: segarkanTeks, perbaruiLabel: perbaruiLabel,
     hitungCatatan: hitungCatatan,
     generatorAda: generatorAda,

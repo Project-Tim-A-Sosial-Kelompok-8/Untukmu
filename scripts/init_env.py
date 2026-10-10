@@ -17,6 +17,8 @@ values = {
     "PUBLIC_CONTENT_KEY": base64.urlsafe_b64encode(secrets.token_bytes(32)).decode(),
     "S3_ACCESS_KEY": "um" + secrets.token_hex(9),
     "S3_SECRET_KEY": secrets.token_hex(32),
+    "METRICS_TOKEN": secrets.token_hex(32),
+    "GRAFANA_ADMIN_PASSWORD": secrets.token_urlsafe(32),
 }
 lines = []
 for line in text.splitlines():

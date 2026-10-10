@@ -1,7 +1,7 @@
 import { expect, test } from '@playwright/test';
 import { login, register } from './helpers';
 
-test('login awal wajib; ganti akun dapat mendaftar dan kembali ke data akun lama', async ({ page }) => {
+test('pengunjung dapat membuka beranda; ganti akun menjaga data akun lama', async ({ page }) => {
   test.setTimeout(240000);
   const errors: string[] = [];
   page.on('pageerror', error => errors.push(error.message));
@@ -14,22 +14,28 @@ test('login awal wajib; ganti akun dapat mendaftar dan kembali ke data akun lama
     await window.UM.store.simpanPesan({ galaksiId: g.id, teks: 'Doa privat akun pertama' });
   }, secret);
   await page.reload();
-  await expect(frame.locator('#um-account-title')).toHaveText('Masuk ke Untukmu', { timeout: 20000 });
-  await expect(frame.locator('#um-react-account .um-close')).toHaveCount(0);
-  await page.keyboard.press('Escape');
-  await expect(frame.locator('#um-account-title')).toBeVisible();
+  await expect(frame.locator('#um-entry')).toHaveClass(/on/);
+  await expect(frame.locator('#um-account-title')).toHaveCount(0);
   expect(await page.frames()[1].evaluate(() => window.UM.account.isLogged())).toBe(false);
   await login(page, email, password);
   await frame.locator('#um-entry [data-act=skip]').click();
   await frame.locator('.um-dock [data-act=set]').click();
-  await frame.locator('#um-set [data-act=switch-account]').click();
+  await Promise.all([
+    page.waitForEvent('framenavigated', { predicate: frame => frame.parentFrame() !== null }),
+    frame.locator('#um-set [data-act=switch-account]').click(),
+  ]);
+  await expect(frame.locator('#um-entry')).toHaveClass(/on/);
+  await page.frames()[1].evaluate(() => window.UM.account.open());
   await expect(frame.locator('#um-account-title')).toHaveText('Masuk ke Untukmu', { timeout: 20000 });
   await expect(frame.getByRole('button', { name: 'Daftar akun', exact: true })).toBeVisible();
   const other = await register(page, 'account-other', { startComposer: false });
   expect(await page.frames()[1].evaluate(async () => (await window.UM.store.listPesan()).length)).toBe(0);
   await other.frame.locator('#um-entry [data-act=skip]').click();
   await other.frame.locator('.um-dock [data-act=set]').click();
-  await other.frame.locator('#um-set [data-act=switch-account]').click();
+  await Promise.all([
+    page.waitForEvent('framenavigated', { predicate: frame => frame.parentFrame() !== null }),
+    other.frame.locator('#um-set [data-act=switch-account]').click(),
+  ]);
   await login(page, email, password);
   const restored = await page.frames()[1].evaluate(async () => {
     const rows = await window.UM.store.listPesan();
@@ -61,7 +67,12 @@ for (const action of ['keep', 'delete'] as const) {
     await frame.getByRole('button', { name: 'Hapus akun permanen', exact: true }).click();
     await expect(frame.getByRole('alert')).toContainText('Kata sandi tidak cocok', { timeout: 60000 });
     await frame.locator('#delete-account-password').fill(password);
-    await frame.getByRole('button', { name: 'Hapus akun permanen', exact: true }).click();
+    await Promise.all([
+      page.waitForEvent('framenavigated', { predicate: frame => frame.parentFrame() !== null }),
+      frame.getByRole('button', { name: 'Hapus akun permanen', exact: true }).click(),
+    ]);
+    await expect(frame.locator('html')).toHaveAttribute('data-renderer', 'react-three-fiber');
+    await page.frames()[1].evaluate(() => window.UM.account.open());
     await expect(frame.locator('#um-account-title')).toHaveText('Masuk ke Untukmu', { timeout: 60000 });
     await frame.locator('#um-email').fill(email);
     await frame.locator('#um-account-password').fill(password);
@@ -106,7 +117,7 @@ test('refresh pada tab lama tidak menerima identitas akun lain dari cookie bersa
     await register(other, 'tab-second', { startComposer: false });
     await page.route('**/api/v1/dashboard/summary', route => route.fulfill({ status: 401, json: { detail: 'Sesi uji telah berakhir.' } }));
     await page.frames()[1].evaluate(() => { void window.UM.store.stats().catch(() => undefined); });
-    await expect(first.frame.locator('#um-account-title')).toHaveText('Masuk ke Untukmu', { timeout: 30000 });
+    await expect(first.frame.locator('#um-entry')).toHaveClass(/on/, { timeout: 30000 });
     expect(await page.frames()[1].evaluate(() => window.UM.account.isLogged())).toBe(false);
     expect(await page.frames()[1].evaluate(() => window.UM.crypto.unlocked())).toBe(false);
     expect(await other.frames()[1].evaluate(() => window.UM.account.isLogged())).toBe(true);

@@ -19,6 +19,6 @@ export function installAccessibility() {
   window.addEventListener('keydown',event=>{
     if(!top) return;
     if(event.key==='Tab') {const nodes=focusables(top);const first=nodes[0],last=nodes.at(-1);if(!nodes.length){event.preventDefault();return;}if(!top.contains(document.activeElement)||event.shiftKey&&document.activeElement===first){event.preventDefault();(event.shiftKey?last:first)?.focus();}else if(!event.shiftKey&&document.activeElement===last){event.preventDefault();first?.focus();}}
-    if(event.key==='Escape'){const close=top.querySelector<HTMLButtonElement>('.um-close:not(:disabled),[data-act="close"]:not(:disabled)');event.stopImmediatePropagation();if(close){event.preventDefault();close.click();}}
+    if(event.key==='Escape'){const close=top.querySelector<HTMLButtonElement>('.um-close:not(:disabled),[data-act="close"]:not(:disabled)');if(close){event.stopImmediatePropagation();event.preventDefault();close.click();}}
   },true);
 }

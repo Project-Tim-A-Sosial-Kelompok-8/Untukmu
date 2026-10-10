@@ -43,7 +43,7 @@ for (const viewport of [{ width: 1280, height: 800 }, { width: 390, height: 844 
       await expect(frame.locator(`#${screen}`)).not.toHaveClass(/on/);
     }
     await frame.locator('.um-dock [data-act=jelajah]').click();
-    await frame.locator('#um-exp [data-act=sort][data-id=doa]').click();
+    await expect(frame.locator('#um-exp [data-act=sort][data-id=doa]')).toHaveCount(0);
     await frame.locator('#um-exp [data-act=filter]').click();
     await frame.locator('#um-exp [data-act=close]').click();
     await frame.locator('.um-dock [data-act=doa]').click();

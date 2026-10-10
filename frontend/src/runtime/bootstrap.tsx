@@ -11,7 +11,7 @@ import { api, currentUser, queryClient } from "../lib/api/client";
 import { store, clearPrivateMedia } from "../lib/api/store";
 import * as vault from "../lib/crypto/vault";
 import { AccountScreen, openAccount, signOut } from "../features/account/AccountScreen";
-import { requireLogin, requireEntryLogin } from "../features/account/state";
+import { requireLogin } from "../features/account/state";
 
 window.UM.renderScreen = renderPreservedScreen;
 window.UM.trackScreen = trackScreen;
@@ -26,7 +26,6 @@ const host = document.createElement("div");
 host.id = "um-react-account";
 document.body.append(host);
 const initialScreen = new URLSearchParams(location.search).get("screen");
-if (initialScreen !== "shared") requireEntryLogin();
 createRoot(host).render(<QueryClientProvider client={queryClient}><AccountScreen /><SocialScreens /><ManageMessage /><Challenge />{initialScreen === "shared" && <SharedMessage />}</QueryClientProvider>);
 
 if (new URLSearchParams(location.search).get("screen") === "admin") void store.ready().then(() => setTimeout(() => void openSocial("admin"), 100));

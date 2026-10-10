@@ -7,6 +7,7 @@ node_modules
 **/.ruff_cache
 **/*.db
 **/test-results
+.local-backups
 **/playwright-report
 **/public/visual
 .env

@@ -364,6 +364,7 @@ body[data-view-mode="galaxy"] #um-petalabels { display: none !important; }
 .um-delete-options .um-priv-opt { margin: 12px 0; }
 .um-trad .um-hint { display: block; }
 [data-prayer-audio] audio { display: block; width: 100%; max-width: 100%; margin-top: 12px; }
+[data-prayer-preview] { display: block; width: 100%; max-width: 100%; margin-top: 12px; }
 .um-head > div { min-width: 0; }
 .um-screen .um-btn, .um-screen .um-chip, .um-mini-btn { min-height: 44px; }
 .um-prayer .src { overflow-wrap: anywhere; }

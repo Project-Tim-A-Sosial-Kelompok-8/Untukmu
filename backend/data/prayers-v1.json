@@ -8,6 +8,23 @@
     "simbol": "☪",
     "entri": [
       {
+        "id": "al-fatihah-audio",
+        "nama": {
+          "id": "Al-Fatihah (Arab)",
+          "en": "Al-Fatihah (Arab)"
+        },
+        "teks": {
+          "id": "بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ\nالْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ\nالرَّحْمَٰنِ الرَّحِيمِ\nمَالِكِ يَوْمِ الدِّينِ\nإِيَّاكَ نَعْبُدُ وَإِيَّاكَ نَسْتَعِينُ\nاهْدِنَا الصِّرَاطَ الْمُسْتَقِيمَ\nصِرَاطَ الَّذِينَ أَنْعَمْتَ عَلَيْهِمْ غَيْرِ الْمَغْضُوبِ عَلَيْهِمْ وَلَا الضَّالِّينَ"
+        },
+        "sumber": "QS Al-Fatihah 1:1–7",
+        "source_url": "https://quran.kemenag.go.id/",
+        "reviewed": true,
+        "audio": true,
+        "recording_id": "al-fatihah",
+        "detik": 93,
+        "review_note": "Rekaman referensi dipilih berdasarkan sumber, atribusi dan bahasa. Durasi berkas, lisensi serta checksum diperiksa; tidak dibuat dengan AI."
+      },
+      {
         "id": "rabbana-atina",
         "nama": {
           "id": "Doa kebaikan dunia dan akhirat",
@@ -24,7 +41,8 @@
         "sumber": "QS Al-Baqarah 2:201",
         "reviewed": false,
         "audio": null,
-        "detik": 20
+        "detik": 20,
+        "source_url": "https://quran.kemenag.go.id/"
       },
       {
         "id": "inna-lillahi",
@@ -43,7 +61,8 @@
         "sumber": "QS Al-Baqarah 2:156 dan doa jenazah yang masyhur",
         "reviewed": false,
         "audio": null,
-        "detik": 25
+        "detik": 25,
+        "source_url": "https://quran.kemenag.go.id/"
       }
     ]
   },
@@ -55,6 +74,23 @@
     },
     "simbol": "✝",
     "entri": [
+      {
+        "id": "bapa-kami-latin",
+        "nama": {
+          "id": "Bapa Kami (Latin)",
+          "en": "Bapa Kami (Latin)"
+        },
+        "teks": {
+          "id": "Pater noster, qui es in caelis, sanctificetur nomen tuum. Adveniat regnum tuum. Fiat voluntas tua, sicut in caelo et in terra. Panem nostrum quotidianum da nobis hodie. Et dimitte nobis debita nostra, sicut et nos dimittimus debitoribus nostris. Et ne nos inducas in tentationem, sed libera nos a malo. Amen."
+        },
+        "sumber": "Matius 6:9–13; Pater Noster dalam bahasa Latin",
+        "source_url": "https://commons.wikimedia.org/wiki/File:Pater-Noster.ogg",
+        "reviewed": true,
+        "audio": true,
+        "recording_id": "pater-noster",
+        "detik": 29,
+        "review_note": "Rekaman referensi dipilih berdasarkan sumber, atribusi dan bahasa. Durasi berkas, lisensi serta checksum diperiksa; tidak dibuat dengan AI."
+      },
       {
         "id": "bapa-kami",
         "nama": {
@@ -68,7 +104,8 @@
         "sumber": "Matius 6:9–13",
         "reviewed": false,
         "audio": null,
-        "detik": 35
+        "detik": 35,
+        "source_url": "https://www.alkitab.or.id/"
       },
       {
         "id": "mazmur-23",
@@ -83,7 +120,8 @@
         "sumber": "Mazmur 23:1–4",
         "reviewed": false,
         "audio": null,
-        "detik": 30
+        "detik": 30,
+        "source_url": "https://www.alkitab.or.id/"
       }
     ]
   },
@@ -95,6 +133,23 @@
     },
     "simbol": "✞",
     "entri": [
+      {
+        "id": "bapa-kami-latin",
+        "nama": {
+          "id": "Bapa Kami (Latin)",
+          "en": "Bapa Kami (Latin)"
+        },
+        "teks": {
+          "id": "Pater noster, qui es in caelis, sanctificetur nomen tuum. Adveniat regnum tuum. Fiat voluntas tua, sicut in caelo et in terra. Panem nostrum quotidianum da nobis hodie. Et dimitte nobis debita nostra, sicut et nos dimittimus debitoribus nostris. Et ne nos inducas in tentationem, sed libera nos a malo. Amen."
+        },
+        "sumber": "Matius 6:9–13; Pater Noster dalam bahasa Latin",
+        "source_url": "https://commons.wikimedia.org/wiki/File:Pater-Noster.ogg",
+        "reviewed": true,
+        "audio": true,
+        "recording_id": "pater-noster",
+        "detik": 29,
+        "review_note": "Rekaman referensi dipilih berdasarkan sumber, atribusi dan bahasa. Durasi berkas, lisensi serta checksum diperiksa; tidak dibuat dengan AI."
+      },
       {
         "id": "bapa-kami-katolik",
         "nama": {
@@ -108,7 +163,8 @@
         "sumber": "Matius 6:9–13 (rumusan liturgi Katolik)",
         "reviewed": false,
         "audio": null,
-        "detik": 35
+        "detik": 35,
+        "source_url": "https://www.vatican.va/archive/compendium_ccc/documents/archive_2005_compendium-ccc_en.html"
       },
       {
         "id": "salam-maria",
@@ -123,7 +179,8 @@
         "sumber": "Doa devosional Katolik (berbasis Lukas 1:28, 1:42)",
         "reviewed": false,
         "audio": null,
-        "detik": 25
+        "detik": 25,
+        "source_url": "https://www.vatican.va/archive/compendium_ccc/documents/archive_2005_compendium-ccc_en.html"
       }
     ]
   },
@@ -135,6 +192,23 @@
     },
     "simbol": "🕉",
     "entri": [
+      {
+        "id": "gayatri-audio",
+        "nama": {
+          "id": "Mantram Gayatri (Sanskerta)",
+          "en": "Mantram Gayatri (Sanskerta)"
+        },
+        "teks": {
+          "id": "Om Bhur Bhuvah Svah\nTat Savitur Varenyam\nBhargo Devasya Dhimahi\nDhiyo Yo Nah Pracodayat\nOm Santih Santih Santih Om."
+        },
+        "sumber": "Rgveda 3.62.10; Gayatri mantra",
+        "source_url": "https://commons.wikimedia.org/wiki/File:Gayatri_mantra.ogg",
+        "reviewed": true,
+        "audio": true,
+        "recording_id": "gayatri",
+        "detik": 21,
+        "review_note": "Rekaman referensi dipilih berdasarkan sumber, atribusi dan bahasa. Durasi berkas, lisensi serta checksum diperiksa; tidak dibuat dengan AI."
+      },
       {
         "id": "gayatri",
         "nama": {
@@ -152,7 +226,8 @@
         "sumber": "Rgveda 3.62.10",
         "reviewed": false,
         "audio": null,
-        "detik": 25
+        "detik": 25,
+        "source_url": "https://www.wisdomlib.org/hinduism/book/rig-veda-english-translation/d/doc831961.html"
       },
       {
         "id": "santih",
@@ -171,7 +246,8 @@
         "sumber": "Mantram penutup upacara Hindu",
         "reviewed": false,
         "audio": null,
-        "detik": 15
+        "detik": 15,
+        "source_url": "https://www.wisdomlib.org/hinduism/book/rig-veda-english-translation/d/doc831961.html"
       }
     ]
   },
@@ -183,6 +259,23 @@
     },
     "simbol": "☸",
     "entri": [
+      {
+        "id": "karaniya-metta-en",
+        "nama": {
+          "id": "Karaniya Metta Sutta (Inggris)",
+          "en": "Karaniya Metta Sutta (Inggris)"
+        },
+        "teks": {
+          "id": "Karaniya Metta Sutta (Khp 9). Rekaman pembacaan versi bahasa Inggris terjemahan Amaravati oleh Dawn Neal, Insight Meditation Center. Teks dan panduan bacaan tersedia pada sumber rekaman."
+        },
+        "sumber": "Karaniya Metta Sutta; AudioDharma / Insight Meditation Center, 21 Agustus 2013",
+        "source_url": "https://irc.audiodharma.org/talks/4293",
+        "reviewed": true,
+        "audio": true,
+        "recording_id": "karaniya-metta",
+        "detik": 287,
+        "review_note": "Rekaman referensi dipilih berdasarkan sumber, atribusi dan bahasa. Durasi berkas, lisensi serta checksum diperiksa; tidak dibuat dengan AI."
+      },
       {
         "id": "namo-tassa",
         "nama": {
@@ -200,7 +293,8 @@
         "sumber": "Rumusan penghormatan (Pali) yang lazim",
         "reviewed": false,
         "audio": null,
-        "detik": 20
+        "detik": 20,
+        "source_url": "https://suttacentral.net/snp1.8"
       },
       {
         "id": "metta",
@@ -215,7 +309,8 @@
         "sumber": "Rumusan metta (Karaniya Metta Sutta, Khuddaka Nikaya)",
         "reviewed": false,
         "audio": null,
-        "detik": 25
+        "detik": 25,
+        "source_url": "https://suttacentral.net/snp1.8"
       }
     ]
   },
@@ -244,20 +339,23 @@
         "sumber": "Lunyu (Analects) XV:24",
         "reviewed": false,
         "audio": null,
-        "detik": 20
+        "detik": 20,
+        "source_url": "https://ctext.org/analects/wei-ling-gong"
       },
       {
         "id": "sembahyang-tian",
         "nama": {
-          "id": "Sembahyang kepada Tian",
-          "en": "Reverence to Tian"
+          "id": "Doa sebelum belajar (kutipan pembuka)"
         },
-        "teks": null,
+        "teks": {
+          "id": "Ke hadirat Tian, Tuhan Yang Maha Besar, di tempat Yang Maha Tinggi. Dengan bimbingan Nabi Kongzi. Dipermuliakanlah."
+        },
         "arti": null,
-        "sumber": "PERLU DIISI — rujuk kitab Si Shu / sumber majelis Konghucu",
+        "sumber": "Pendidikan Agama Khonghucu dan Budi Pekerti, Buku Siswa Kelas V SD, Kementerian Pendidikan dan Kebudayaan. Kutipan pembuka; doa lengkap tersedia pada sumber.",
         "reviewed": false,
         "audio": null,
-        "detik": 20
+        "detik": 20,
+        "source_url": "https://repositori.kemendikdasmen.go.id/7066/1/buku%20siswa%20khonghucu.pdf"
       }
     ]
   },
@@ -282,7 +380,8 @@
         "sumber": "Tidak terikat tradisi — untuk siapa pun",
         "reviewed": true,
         "audio": null,
-        "detik": 30
+        "detik": 30,
+        "source_url": ""
       }
     ]
   }

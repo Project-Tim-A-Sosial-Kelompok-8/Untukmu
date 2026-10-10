@@ -10,6 +10,7 @@ COPY package.json package-lock.json ./
 COPY frontend/package.json ./frontend/package.json
 RUN npm ci --no-audit --no-fund
 COPY frontend ./frontend
+COPY backend/data/prayers-v1.json ./backend/data/prayers-v1.json
 RUN npm run build
 
 FROM node:22-alpine AS runner

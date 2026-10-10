@@ -90,6 +90,8 @@ class Message(Base):
     encryption_meta: Mapped[dict | None] = mapped_column(Json, nullable=True)
     public_body: Mapped[str | None] = mapped_column(Text, nullable=True)
     share_token_hash: Mapped[str | None] = mapped_column(String(64), nullable=True)
+    share_payload: Mapped[dict | None] = mapped_column(Json, nullable=True)
+    release_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True, index=True)
     visibility: Mapped[str] = mapped_column(String(20), default="private")
     moderation_status: Mapped[str] = mapped_column(String(20), default="not_applicable")
     moderation_flags: Mapped[list] = mapped_column(Json, default=list)

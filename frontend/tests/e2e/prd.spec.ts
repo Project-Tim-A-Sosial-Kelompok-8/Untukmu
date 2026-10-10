@@ -1,10 +1,16 @@
 import { expect, test } from '@playwright/test';
 import { register } from './helpers';
 
-test('login awal wajib dan doa tersedia sebagai tujuh pilihan tanpa formulir manual', async ({ page }) => {
+test('doa tersedia untuk pengunjung dengan tujuh tradisi dan isi yang bisa dipilih', async ({ page }) => {
   await page.goto('/doa');
   const frame = page.frameLocator('iframe');
-  await expect(frame.locator('#um-account-title')).toHaveText('Masuk ke Untukmu');
+  await expect(frame.locator('#um-doa')).toHaveClass(/on/);
+  await expect(frame.locator('#um-account-title')).toHaveCount(0);
+  for (const tradition of ['islam', 'kristen', 'katolik', 'hindu', 'buddha', 'konghucu', 'umum']) {
+    await frame.locator(`[data-act=hub-trad][data-id=${tradition}]`).click();
+    await frame.locator('[data-act=hub-entri]').first().click();
+    await expect(frame.locator('[data-prayer-content] .tx').first()).not.toBeEmpty();
+  }
   const initial = await page.frames()[1].evaluate<{ camera: number[] }>(`(() => ({
     camera:camera.position.toArray(), fov:camera.fov, milkyWay:DUST.count, radius:DUST.radius,
     galaxies:defaultBackground.length, backgroundVisible:galaxyLODs.slice(0,7).every(lod => lod.pts.visible && lod.pts.parent === scene),
@@ -28,7 +34,7 @@ test('login awal wajib dan doa tersedia sebagai tujuh pilihan tanpa formulir man
   })()`);
   expect(background[Math.floor(background.length/2)]).toBeLessThanOrEqual(5);
   await page.keyboard.press('Escape');
-  await expect(frame.locator('#um-account-title')).toBeVisible();
+  await expect(frame.locator('#um-doa')).not.toHaveClass(/on/);
   await register(page, 'prd');
   await frame.locator('#um-comp .um-close').click();
   await frame.locator('.um-dock [data-act=doa]').click();

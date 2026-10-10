@@ -75,6 +75,7 @@ test("tamu tidak mendapat data contoh atau akses komposer tanpa akun", async ({ 
   expect(state.messages).toEqual([]);
   expect(state.databases).toEqual([]);
   await page.keyboard.press("Escape");
+  await frame.locator('.um-dock [data-act=tulis]').click();
   await expect(frame.locator("#um-account-title")).toHaveText("Masuk ke Untukmu");
   await expect(frame.getByRole("dialog")).toBeVisible();
   await expect(frame.locator("#um-comp")).not.toHaveClass(/on/);

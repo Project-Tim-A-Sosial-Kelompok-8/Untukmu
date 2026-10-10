@@ -1,0 +1,176 @@
+[
+  {
+    "id": "islam/al-fatihah-audio",
+    "tradition": "islam",
+    "content": {
+      "id": "al-fatihah-audio",
+      "nama": {
+        "id": "Al-Fatihah (Arab)",
+        "en": "Al-Fatihah (Arab)"
+      },
+      "teks": {
+        "id": "بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ\nالْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ\nالرَّحْمَٰنِ الرَّحِيمِ\nمَالِكِ يَوْمِ الدِّينِ\nإِيَّاكَ نَعْبُدُ وَإِيَّاكَ نَسْتَعِينُ\nاهْدِنَا الصِّرَاطَ الْمُسْتَقِيمَ\nصِرَاطَ الَّذِينَ أَنْعَمْتَ عَلَيْهِمْ غَيْرِ الْمَغْضُوبِ عَلَيْهِمْ وَلَا الضَّالِّينَ"
+      },
+      "sumber": "QS Al-Fatihah 1:1–7",
+      "source_url": "https://quran.kemenag.go.id/",
+      "reviewed": true,
+      "audio": true,
+      "recording_id": "al-fatihah",
+      "detik": 93,
+      "review_note": "Rekaman referensi dipilih berdasarkan sumber, atribusi dan bahasa. Durasi berkas, lisensi serta checksum diperiksa; tidak dibuat dengan AI."
+    },
+    "reviewed": true,
+    "audio_key": "recording-v1:al-fatihah",
+    "audio_meta": {
+      "page": "https://commons.wikimedia.org/wiki/File:AlF%C4%81tihatulKit%C4%81b.ogg",
+      "file": "al-fatihah.ogg",
+      "sha1": "671b6e324988d3752318d2e8be1fb9cc7db30e58",
+      "duration_seconds": 93,
+      "license": "CC0-1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "attribution": "Ibrahimmusa4 — AlFātihatulKitāb, Wikimedia Commons (rekaman asli, 2024)",
+      "language": "Arab",
+      "sha256": "59a4eef339d3e42aeaf9b77a6423297a0f830e4872783fc0718a64862b02df32",
+      "bytes": 809597
+    }
+  },
+  {
+    "id": "kristen/bapa-kami-latin",
+    "tradition": "kristen",
+    "content": {
+      "id": "bapa-kami-latin",
+      "nama": {
+        "id": "Bapa Kami (Latin)",
+        "en": "Bapa Kami (Latin)"
+      },
+      "teks": {
+        "id": "Pater noster, qui es in caelis, sanctificetur nomen tuum. Adveniat regnum tuum. Fiat voluntas tua, sicut in caelo et in terra. Panem nostrum quotidianum da nobis hodie. Et dimitte nobis debita nostra, sicut et nos dimittimus debitoribus nostris. Et ne nos inducas in tentationem, sed libera nos a malo. Amen."
+      },
+      "sumber": "Matius 6:9–13; Pater Noster dalam bahasa Latin",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Pater-Noster.ogg",
+      "reviewed": true,
+      "audio": true,
+      "recording_id": "pater-noster",
+      "detik": 29,
+      "review_note": "Rekaman referensi dipilih berdasarkan sumber, atribusi dan bahasa. Durasi berkas, lisensi serta checksum diperiksa; tidak dibuat dengan AI."
+    },
+    "reviewed": true,
+    "audio_key": "recording-v1:pater-noster",
+    "audio_meta": {
+      "page": "https://commons.wikimedia.org/wiki/File:Pater-Noster.ogg",
+      "file": "pater-noster.ogg",
+      "sha1": "b7550f7b09edd8dbc6e70b54332e127a0d3763f8",
+      "duration_seconds": 29,
+      "license": "CC0-1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "attribution": "Dan Palraz — Pater Noster dalam bahasa Latin, Wikimedia Commons (2024)",
+      "language": "Latin",
+      "sha256": "32e8c41c0a88aa4d5bec2a51e73d3db1e526f09528fc57a40c9ea33ddda711ce",
+      "bytes": 256327
+    }
+  },
+  {
+    "id": "katolik/bapa-kami-latin",
+    "tradition": "katolik",
+    "content": {
+      "id": "bapa-kami-latin",
+      "nama": {
+        "id": "Bapa Kami (Latin)",
+        "en": "Bapa Kami (Latin)"
+      },
+      "teks": {
+        "id": "Pater noster, qui es in caelis, sanctificetur nomen tuum. Adveniat regnum tuum. Fiat voluntas tua, sicut in caelo et in terra. Panem nostrum quotidianum da nobis hodie. Et dimitte nobis debita nostra, sicut et nos dimittimus debitoribus nostris. Et ne nos inducas in tentationem, sed libera nos a malo. Amen."
+      },
+      "sumber": "Matius 6:9–13; Pater Noster dalam bahasa Latin",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Pater-Noster.ogg",
+      "reviewed": true,
+      "audio": true,
+      "recording_id": "pater-noster",
+      "detik": 29,
+      "review_note": "Rekaman referensi dipilih berdasarkan sumber, atribusi dan bahasa. Durasi berkas, lisensi serta checksum diperiksa; tidak dibuat dengan AI."
+    },
+    "reviewed": true,
+    "audio_key": "recording-v1:pater-noster",
+    "audio_meta": {
+      "page": "https://commons.wikimedia.org/wiki/File:Pater-Noster.ogg",
+      "file": "pater-noster.ogg",
+      "sha1": "b7550f7b09edd8dbc6e70b54332e127a0d3763f8",
+      "duration_seconds": 29,
+      "license": "CC0-1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "attribution": "Dan Palraz — Pater Noster dalam bahasa Latin, Wikimedia Commons (2024)",
+      "language": "Latin",
+      "sha256": "32e8c41c0a88aa4d5bec2a51e73d3db1e526f09528fc57a40c9ea33ddda711ce",
+      "bytes": 256327
+    }
+  },
+  {
+    "id": "hindu/gayatri-audio",
+    "tradition": "hindu",
+    "content": {
+      "id": "gayatri-audio",
+      "nama": {
+        "id": "Mantram Gayatri (Sanskerta)",
+        "en": "Mantram Gayatri (Sanskerta)"
+      },
+      "teks": {
+        "id": "Om Bhur Bhuvah Svah\nTat Savitur Varenyam\nBhargo Devasya Dhimahi\nDhiyo Yo Nah Pracodayat\nOm Santih Santih Santih Om."
+      },
+      "sumber": "Rgveda 3.62.10; Gayatri mantra",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Gayatri_mantra.ogg",
+      "reviewed": true,
+      "audio": true,
+      "recording_id": "gayatri",
+      "detik": 21,
+      "review_note": "Rekaman referensi dipilih berdasarkan sumber, atribusi dan bahasa. Durasi berkas, lisensi serta checksum diperiksa; tidak dibuat dengan AI."
+    },
+    "reviewed": true,
+    "audio_key": "recording-v1:gayatri",
+    "audio_meta": {
+      "page": "https://commons.wikimedia.org/wiki/File:Gayatri_mantra.ogg",
+      "file": "gayatri.ogg",
+      "sha1": "76843c1d09b7c69e6c364e0f9efe0574579f9d0a",
+      "duration_seconds": 21,
+      "license": "CC0-1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "attribution": "Wilfredor — Gayatri mantra, Wikimedia Commons (rekaman asli, 2013)",
+      "language": "Sanskerta",
+      "sha256": "5ee305bed7630cc4a98803f3d00ecb3b913d643dde929209e4bc1af2efa258c3",
+      "bytes": 988195
+    }
+  },
+  {
+    "id": "buddha/karaniya-metta-en",
+    "tradition": "buddha",
+    "content": {
+      "id": "karaniya-metta-en",
+      "nama": {
+        "id": "Karaniya Metta Sutta (Inggris)",
+        "en": "Karaniya Metta Sutta (Inggris)"
+      },
+      "teks": {
+        "id": "Karaniya Metta Sutta (Khp 9). Rekaman pembacaan versi bahasa Inggris terjemahan Amaravati oleh Dawn Neal, Insight Meditation Center. Teks dan panduan bacaan tersedia pada sumber rekaman."
+      },
+      "sumber": "Karaniya Metta Sutta; AudioDharma / Insight Meditation Center, 21 Agustus 2013",
+      "source_url": "https://irc.audiodharma.org/talks/4293",
+      "reviewed": true,
+      "audio": true,
+      "recording_id": "karaniya-metta",
+      "detik": 287,
+      "review_note": "Rekaman referensi dipilih berdasarkan sumber, atribusi dan bahasa. Durasi berkas, lisensi serta checksum diperiksa; tidak dibuat dengan AI."
+    },
+    "reviewed": true,
+    "audio_key": "recording-v1:karaniya-metta",
+    "audio_meta": {
+      "page": "https://irc.audiodharma.org/talks/4293",
+      "file": "karaniya-metta.mp3",
+      "duration_seconds": 287,
+      "license": "CC-BY-NC-ND-4.0",
+      "license_url": "https://creativecommons.org/licenses/by-nc-nd/4.0/",
+      "attribution": "Dawn Neal — Karaniya Metta Sutta, Insight Meditation Center / AudioDharma (2013); terjemahan Amaravati",
+      "language": "Inggris",
+      "sha256": "11fb5484130a48e198642c75f816115459da24814e589d96bf3daf3578290247",
+      "bytes": 2298787
+    }
+  }
+]

@@ -1,0 +1,156 @@
+{
+  "islam/rabbana-atina": {
+    "nama": {
+      "id": "Doa kebaikan dunia dan akhirat",
+      "en": "Prayer for good in both worlds"
+    },
+    "teks": {
+      "id": "Rabbana atina fid-dunya hasanah wa fil-akhirati hasanah wa qina ‘adzaban-nar.",
+      "en": "Rabbana atina fid-dunya hasanah wa fil-akhirati hasanah wa qina ‘adzaban-nar."
+    },
+    "sumber": "QS Al-Baqarah 2:201",
+    "source_url": "https://quran.kemenag.go.id/"
+  },
+  "islam/inna-lillahi": {
+    "nama": {
+      "id": "Doa untuk yang ditinggalkan",
+      "en": "Prayer for the bereaved"
+    },
+    "teks": {
+      "id": "Inna lillahi wa inna ilaihi raji‘un. Allahummaghfir lahu warhamhu.",
+      "en": "Inna lillahi wa inna ilaihi raji‘un. Allahummaghfir lahu warhamhu."
+    },
+    "sumber": "QS Al-Baqarah 2:156 dan doa jenazah yang masyhur",
+    "source_url": "https://quran.kemenag.go.id/"
+  },
+  "kristen/bapa-kami": {
+    "nama": {
+      "id": "Doa Bapa Kami",
+      "en": "The Lord’s Prayer"
+    },
+    "teks": {
+      "id": "Bapa kami yang di sorga, dikuduskanlah nama-Mu. Datanglah Kerajaan-Mu, jadilah kehendak-Mu di bumi seperti di sorga. Berikanlah kami pada hari ini makanan kami yang secukupnya, dan ampunilah kami akan kesalahan kami, seperti kami juga mengampuni orang yang bersalah kepada kami. Dan janganlah membawa kami ke dalam pencobaan, tetapi lepaskanlah kami daripada yang jahat. Amin.",
+      "en": "Our Father in heaven, hallowed be your name. Your kingdom come, your will be done, on earth as it is in heaven. Give us today our daily bread. Forgive us our debts, as we also have forgiven our debtors. And lead us not into temptation, but deliver us from evil. Amen."
+    },
+    "sumber": "Matius 6:9–13",
+    "source_url": "https://www.alkitab.or.id/"
+  },
+  "kristen/mazmur-23": {
+    "nama": {
+      "id": "Mazmur 23",
+      "en": "Psalm 23"
+    },
+    "teks": {
+      "id": "Tuhan adalah gembalaku, takkan kekurangan aku. Ia membaringkan aku di padang yang berumput hijau, Ia membimbing aku ke air yang tenang; Ia menyegarkan jiwaku. Sekalipun aku berjalan dalam lembah kekelaman, aku tidak takut bahaya, sebab Engkau besertaku.",
+      "en": "The Lord is my shepherd, I lack nothing. He makes me lie down in green pastures, he leads me beside quiet waters, he refreshes my soul. Even though I walk through the darkest valley, I will fear no evil, for you are with me."
+    },
+    "sumber": "Mazmur 23:1–4",
+    "source_url": "https://www.alkitab.or.id/"
+  },
+  "katolik/bapa-kami-katolik": {
+    "nama": {
+      "id": "Doa Bapa Kami",
+      "en": "The Lord’s Prayer"
+    },
+    "teks": {
+      "id": "Bapa kami yang ada di surga, dimuliakanlah nama-Mu. Datanglah kerajaan-Mu, jadilah kehendak-Mu di atas bumi seperti di dalam surga. Berilah kami rezeki pada hari ini, dan ampunilah kesalahan kami, seperti kami pun mengampuni yang bersalah kepada kami. Dan janganlah masukkan kami ke dalam pencobaan, tetapi bebaskanlah kami dari yang jahat. Amin.",
+      "en": "Our Father, who art in heaven, hallowed be thy name. Thy kingdom come, thy will be done, on earth as it is in heaven. Give us this day our daily bread, and forgive us our trespasses, as we forgive those who trespass against us. And lead us not into temptation, but deliver us from evil. Amen."
+    },
+    "sumber": "Matius 6:9–13 (rumusan liturgi Katolik)",
+    "source_url": "https://www.vatican.va/archive/compendium_ccc/documents/archive_2005_compendium-ccc_en.html"
+  },
+  "katolik/salam-maria": {
+    "nama": {
+      "id": "Salam Maria",
+      "en": "Hail Mary"
+    },
+    "teks": {
+      "id": "Salam Maria, penuh rahmat, Tuhan sertamu. Terpujilah engkau di antara wanita, dan terpujilah buah tubuhmu, Yesus. Santa Maria, bunda Allah, doakanlah kami yang berdosa ini, sekarang dan pada waktu kami mati. Amin.",
+      "en": "Hail Mary, full of grace, the Lord is with thee. Blessed art thou among women, and blessed is the fruit of thy womb, Jesus. Holy Mary, Mother of God, pray for us sinners, now and at the hour of our death. Amen."
+    },
+    "sumber": "Doa devosional Katolik (berbasis Lukas 1:28, 1:42)",
+    "source_url": "https://www.vatican.va/archive/compendium_ccc/documents/archive_2005_compendium-ccc_en.html"
+  },
+  "hindu/gayatri": {
+    "nama": {
+      "id": "Mantram Gayatri",
+      "en": "Gayatri Mantra"
+    },
+    "teks": {
+      "id": "Om Bhur Bhuvah Svah\nTat Savitur Varenyam\nBhargo Devasya Dhimahi\nDhiyo Yo Nah Pracodayat\nOm Santih Santih Santih Om.",
+      "en": "Om Bhur Bhuvah Svah\nTat Savitur Varenyam\nBhargo Devasya Dhimahi\nDhiyo Yo Nah Pracodayat\nOm Santih Santih Santih Om."
+    },
+    "sumber": "Rgveda 3.62.10",
+    "source_url": "https://www.wisdomlib.org/hinduism/book/rig-veda-english-translation/d/doc831961.html"
+  },
+  "hindu/santih": {
+    "nama": {
+      "id": "Doa damai",
+      "en": "Prayer of peace"
+    },
+    "teks": {
+      "id": "Om Santih Santih Santih Om.",
+      "en": "Om Santih Santih Santih Om."
+    },
+    "sumber": "Mantram penutup upacara Hindu",
+    "source_url": "https://www.wisdomlib.org/hinduism/book/rig-veda-english-translation/d/doc831961.html"
+  },
+  "buddha/namo-tassa": {
+    "nama": {
+      "id": "Penghormatan kepada Buddha",
+      "en": "Homage to the Buddha"
+    },
+    "teks": {
+      "id": "Namo Tassa Bhagavato Arahato Samma Sambuddhassa. (tiga kali)",
+      "en": "Namo Tassa Bhagavato Arahato Samma Sambuddhassa. (three times)"
+    },
+    "sumber": "Rumusan penghormatan (Pali) yang lazim",
+    "source_url": "https://suttacentral.net/snp1.8"
+  },
+  "buddha/metta": {
+    "nama": {
+      "id": "Pemancaran cinta kasih",
+      "en": "Loving-kindness"
+    },
+    "teks": {
+      "id": "Semoga semua makhluk berbahagia.\nSemoga semua makhluk bebas dari penderitaan.\nSemoga semua makhluk hidup dalam damai.",
+      "en": "May all beings be happy.\nMay all beings be free from suffering.\nMay all beings live in peace."
+    },
+    "sumber": "Rumusan metta (Karaniya Metta Sutta, Khuddaka Nikaya)",
+    "source_url": "https://suttacentral.net/snp1.8"
+  },
+  "konghucu/ren": {
+    "nama": {
+      "id": "Renungan kebaikan",
+      "en": "Reflection on goodness"
+    },
+    "teks": {
+      "id": "己所不欲，勿施於人。\n(Jǐ suǒ bù yù, wù shī yú rén.)",
+      "en": "己所不欲，勿施於人。\n(Jǐ suǒ bù yù, wù shī yú rén.)"
+    },
+    "sumber": "Lunyu (Analects) XV:24",
+    "source_url": "https://ctext.org/analects/wei-ling-gong"
+  },
+  "konghucu/sembahyang-tian": {
+    "nama": {
+      "id": "Doa sebelum belajar (kutipan pembuka)"
+    },
+    "teks": {
+      "id": "Ke hadirat Tian, Tuhan Yang Maha Besar, di tempat Yang Maha Tinggi. Dengan bimbingan Nabi Kongzi. Dipermuliakanlah."
+    },
+    "sumber": "Pendidikan Agama Khonghucu dan Budi Pekerti, Buku Siswa Kelas V SD, Kementerian Pendidikan dan Kebudayaan. Kutipan pembuka; doa lengkap tersedia pada sumber.",
+    "source_url": "https://repositori.kemendikdasmen.go.id/7066/1/buku%20siswa%20khonghucu.pdf"
+  },
+  "umum/hening": {
+    "nama": {
+      "id": "Hening sejenak",
+      "en": "A moment of silence"
+    },
+    "teks": {
+      "id": "Tidak ada kata yang perlu diucapkan. Duduklah tenang, dan arahkan pikiranmu kepada orang yang kau tuju.",
+      "en": "No words are needed. Sit quietly, and turn your thoughts to the person this is for."
+    },
+    "sumber": "Tidak terikat tradisi — untuk siapa pun",
+    "source_url": ""
+  }
+}

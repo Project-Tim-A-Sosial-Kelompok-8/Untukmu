@@ -2,6 +2,8 @@ import { expect, type Page } from "@playwright/test";
 export async function register(page: Page, prefix: string, options: { path?: string; startComposer?: boolean } = {}) {
   await page.goto(options.path || "/");
   const frame = page.frameLocator("iframe");
+  await expect(frame.locator("html")).toHaveAttribute("data-renderer", "react-three-fiber");
+  await page.frames()[1].evaluate(() => window.UM.account.open());
   await expect(frame.locator("#um-account-title")).toHaveText("Masuk ke Untukmu", { timeout: 20000 });
   await expect(frame.locator("html")).toHaveAttribute("data-renderer", "react-three-fiber");
   await frame.getByRole("button", { name: "Daftar akun", exact: true }).click();
@@ -35,6 +37,8 @@ export async function register(page: Page, prefix: string, options: { path?: str
 }
 export async function login(page: Page, email: string, password: string) {
   const frame = page.frameLocator("iframe");
+  await expect(frame.locator("html")).toHaveAttribute("data-renderer", "react-three-fiber");
+  await page.frames()[1].evaluate(() => window.UM.account.open());
   await expect(frame.locator("#um-account-title")).toHaveText("Masuk ke Untukmu", { timeout: 20000 });
   await frame.locator("#um-email").fill(email);
   await frame.locator("#um-account-password").fill(password);

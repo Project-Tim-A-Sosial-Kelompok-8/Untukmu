@@ -19,8 +19,8 @@ UM.i18n = (function () {
       entryLead: 'Tulis apa yang belum sempat kau ucapkan — kepada ibu, sahabat, seseorang yang telah pergi, atau kepada dirimu sendiri. Setiap orang punya satu galaksi, dan setiap pesan menjadi bintang di dalamnya.',
       entryActsTulis: 'Mulai Menulis',
       entryActsLangit: 'Jelajahi Langit',
-      entryFine: 'Isi pesan dienkripsi di perangkatmu sebelum disimpan. Kami tidak bisa membacanya.',
-      entryFineWarn: 'Enkripsi tidak tersedia di halaman ini (butuh https atau localhost). Pesan akan disimpan tanpa sandi.',
+      entryFine: 'Pesan privat dan tautan terbatas dienkripsi di perangkatmu. Pesan publik anonim ditinjau sebelum terbit. Baca kebijakan privasi.',
+      entryFineWarn: 'Enkripsi membutuhkan HTTPS atau localhost. Penulisan pesan terenkripsi belum tersedia pada koneksi ini.',
       entrySkip: 'Lihat galaksi saja →',
 
       /* dock */

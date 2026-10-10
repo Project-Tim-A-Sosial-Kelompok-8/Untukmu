@@ -47,6 +47,33 @@ async def test_public_requires_review_and_encrypted_at_rest(client, database):
     assert feed[0]["attachment_ids"] == []
 
 
+async def test_explore_filters_match_normalized_and_legacy_labels(client, database):
+    owner = await account(client)
+    gid = await galaxy(client, owner)
+    body = {"id": str(uuid4()), "constellation_ids": [gid], "visibility": "public_anon",
+            "public_body": "Ucapan dengan suasana dan tag.", "mood": " Rindu ",
+            "tags": ["#KeNaNgAn", " kenangan ", "#Keluarga"]}
+    result = await client.post("/api/v1/messages", headers=owner, json=body)
+    assert result.status_code == 201, result.text
+    assert result.json()["tags"] == ["kenangan", "keluarga"]
+    assert result.json()["mood"] == "rindu"
+    admin = await admin_account(client, database)
+    await approve(client, admin, body["id"])
+    matched = await client.get("/api/v1/explore", params={"mood": " LONGING ", "tag": " #KENANGAN "})
+    assert [row["id"] for row in matched.json()] == [body["id"]]
+    assert (await client.get("/api/v1/explore", params={"mood": "syukur", "tag": "kenangan"})).json() == []
+    async with database() as db:
+        legacy = await db.get(Message, body["id"])
+        legacy.tags = [" #KeluArGa "]
+        legacy.mood = " Longing "
+        await db.commit()
+    matched = await client.get("/api/v1/explore", params={"mood": "rindu", "tag": "keluarga"})
+    assert matched.json()[0]["tags"] == ["keluarga"]
+    assert matched.json()[0]["mood"] == "rindu"
+    pending = await public_message(client, owner, gid)
+    assert pending["id"] not in {row["id"] for row in (await client.get("/api/v1/explore?tag=syukur")).json()}
+
+
 async def test_moderation_worker_cannot_read_private_messages(client, database):
     owner = await account(client)
     gid = await galaxy(client, owner)

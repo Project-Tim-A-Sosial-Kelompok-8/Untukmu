@@ -1,0 +1,49 @@
+{
+  "al-fatihah": {
+    "page": "https://commons.wikimedia.org/wiki/File:AlF%C4%81tihatulKit%C4%81b.ogg",
+    "file": "al-fatihah.ogg",
+    "sha1": "671b6e324988d3752318d2e8be1fb9cc7db30e58",
+    "duration_seconds": 93,
+    "license": "CC0-1.0",
+    "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+    "attribution": "Ibrahimmusa4 — AlFātihatulKitāb, Wikimedia Commons (rekaman asli, 2024)",
+    "language": "Arab",
+    "sha256": "59a4eef339d3e42aeaf9b77a6423297a0f830e4872783fc0718a64862b02df32",
+    "bytes": 809597
+  },
+  "pater-noster": {
+    "page": "https://commons.wikimedia.org/wiki/File:Pater-Noster.ogg",
+    "file": "pater-noster.ogg",
+    "sha1": "b7550f7b09edd8dbc6e70b54332e127a0d3763f8",
+    "duration_seconds": 29,
+    "license": "CC0-1.0",
+    "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+    "attribution": "Dan Palraz — Pater Noster dalam bahasa Latin, Wikimedia Commons (2024)",
+    "language": "Latin",
+    "sha256": "32e8c41c0a88aa4d5bec2a51e73d3db1e526f09528fc57a40c9ea33ddda711ce",
+    "bytes": 256327
+  },
+  "gayatri": {
+    "page": "https://commons.wikimedia.org/wiki/File:Gayatri_mantra.ogg",
+    "file": "gayatri.ogg",
+    "sha1": "76843c1d09b7c69e6c364e0f9efe0574579f9d0a",
+    "duration_seconds": 21,
+    "license": "CC0-1.0",
+    "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+    "attribution": "Wilfredor — Gayatri mantra, Wikimedia Commons (rekaman asli, 2013)",
+    "language": "Sanskerta",
+    "sha256": "5ee305bed7630cc4a98803f3d00ecb3b913d643dde929209e4bc1af2efa258c3",
+    "bytes": 988195
+  },
+  "karaniya-metta": {
+    "page": "https://irc.audiodharma.org/talks/4293",
+    "file": "karaniya-metta.mp3",
+    "duration_seconds": 287,
+    "license": "CC-BY-NC-ND-4.0",
+    "license_url": "https://creativecommons.org/licenses/by-nc-nd/4.0/",
+    "attribution": "Dawn Neal — Karaniya Metta Sutta, Insight Meditation Center / AudioDharma (2013); terjemahan Amaravati",
+    "language": "Inggris",
+    "sha256": "11fb5484130a48e198642c75f816115459da24814e589d96bf3daf3578290247",
+    "bytes": 2298787
+  }
+}

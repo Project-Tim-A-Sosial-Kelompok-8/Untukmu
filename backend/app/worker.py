@@ -24,7 +24,7 @@ def spam_flags(text):
 
 
 async def scan_pending(db):
-    rows = (await db.scalars(select(Message).where(Message.visibility.in_(["public_anon", "unlisted"]),
+    rows = (await db.scalars(select(Message).where(Message.visibility == "public_anon",
         Message.moderation_status == "pending", Message.moderation_checked_at.is_(None)
     ).order_by(Message.created_at).limit(50).with_for_update(skip_locked=True))).all()
     for row in rows:

@@ -11,7 +11,6 @@ export function resolveLogin(value: boolean) {
   waiting.forEach(fn => fn(value)); waiting = [];
   useAccount.setState({ open: false, required: false });
 }
-export function requireEntryLogin() { useAccount.setState({ open: true, required: true, mode: "login" }); }
 export function requireLogin() {
   if (currentUser()) return Promise.resolve(true);
   useAccount.getState().show("login");

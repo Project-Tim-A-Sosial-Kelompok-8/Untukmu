@@ -6,7 +6,7 @@ import { expect, it } from "vitest";
 it("katalog asli JS dan backend menyediakan tujuh pilihan yang sama", async () => {
   const UM = {};
   const context = vm.createContext({ window: { UM }, UM });
-  vm.runInContext(await readFile(resolve("visual/prayers.js"), "utf8"), context);
+  vm.runInContext(await readFile(resolve("public/visual/prayers.js"), "utf8"), context);
   const original = vm.runInContext("JSON.stringify(window.UM.doaData.tradisi)", context);
   expect(JSON.parse(original)).toEqual(JSON.parse(await readFile(resolve("../backend/data/prayers-v1.json"), "utf8")));
 });

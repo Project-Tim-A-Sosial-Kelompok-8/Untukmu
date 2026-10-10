@@ -11,8 +11,9 @@ async def test_catalog_and_curation_permissions(client, database):
     catalog = (await client.get('/api/v1/prayers/traditions')).json()
     assert len(catalog) == 7
     assert all('references' not in t for t in catalog)
-    # Discovering a credible reference must not bypass curation of its content.
-    assert sum(e['reviewed'] for t in catalog for e in t['entri']) == 1
+    # Source-checked original recordings are selected explicitly; other references remain drafts.
+    assert sum(e['reviewed'] for t in catalog for e in t['entri']) == 6
+    assert next(t for t in catalog if t['id'] == 'islam')['entri'][1]['reviewed'] is False
     owner = await account(client)
     assert (await client.get('/api/v1/admin/prayers', headers=owner)).status_code == 403
     admin = await admin_account(client, database)
@@ -85,9 +86,7 @@ async def test_unreviewed_and_private_prayers_refused(client, database):
     body = await public_message(client, owner, gid)
     admin = await admin_account(client, database)
     await approve(client, admin, body['id'])
-    catalog = (await client.get('/api/v1/prayers/traditions')).json()
-    tradition = next(t for t in catalog if t['id']!='umum')
-    identifier = tradition['id']+'/'+tradition['entri'][0]['id']
+    identifier = 'islam/rabbana-atina'
     assert (await client.post(f"/api/v1/messages/{body['id']}/prayers/start",json={'catalog_id':identifier})).status_code == 409
     # Reviewed text alone must not silently become a religious audio session.
     async with database() as db:

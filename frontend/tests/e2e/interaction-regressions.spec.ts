@@ -37,9 +37,8 @@ test('Jelajah menerapkan filter, mengurutkan, dan menavigasi lebih dari 30 pesan
   await frame.locator('#um-exp [data-act=filter]').click();
   await expect(frame.locator('#um-exp [data-filter-summary]')).toContainText('#keluarga');
   await expect(frame.locator('#um-exp [data-act=prev-page]')).toBeDisabled();
-  await frame.locator('#um-exp [data-act=sort][data-id=doa]').click();
-  await expect(frame.locator('#um-exp .txt').first()).toHaveText('Ucapan nomor 53');
-  await expect(frame.locator('#um-exp')).toContainText('jumlah pendoa terbanyak');
+  await expect(frame.locator('#um-exp [data-act=sort][data-id=doa]')).toHaveCount(0);
+  await expect(frame.locator('#um-exp .txt').first()).toHaveText('Ucapan nomor 63');
   await frame.locator('#um-exp [data-act=next-page]').click();
   await expect(frame.locator('#um-exp .um-item')).toHaveCount(2);
   let finishReset!: () => void;
@@ -55,7 +54,7 @@ test('Jelajah menerapkan filter, mengurutkan, dan menavigasi lebih dari 30 pesan
   await expect(frame.locator('#um-filter-tag')).toBeEnabled();
   await expect(frame.locator('#um-exp [data-filter-summary]')).toContainText('Semua tag');
   await expect(frame.locator('#um-filter-mood')).toHaveValue('');
-  expect(requests.some(url => url.searchParams.get('mood') === 'rindu' && url.searchParams.get('tag') === 'keluarga' && url.searchParams.get('sort') === 'prayers')).toBe(true);
+  expect(requests.some(url => url.searchParams.get('mood') === 'rindu' && url.searchParams.get('tag') === 'keluarga' && url.searchParams.get('sort') === 'new')).toBe(true);
   expect(requests.some(url => url.searchParams.get('offset') === '60')).toBe(true);
   expect(requests.filter(url => url.searchParams.has('offset')).every(url => url.searchParams.get('limit') === '31')).toBe(true);
   await frame.locator('#um-filter-tag').fill('tidak-ada');

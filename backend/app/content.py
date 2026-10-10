@@ -1,3 +1,4 @@
+from datetime import timezone
 from uuid import UUID
 
 from fastapi import APIRouter, HTTPException, Query, Request
@@ -130,10 +131,14 @@ async def message_views(rows, db):
             "entry_type": row.entry_type,
             "constellation_ids": [g for m, g in links if m == row.id],
             "visibility": row.visibility,
-            "public_body": open_public(row.id, row.public_body if row.visibility == "public_anon" else row.ciphertext) if row.visibility != "private" else None,
+            "public_body": open_public(row.id, row.public_body) if row.visibility == "public_anon" else (
+                open_public(row.id, row.ciphertext) if (row.encryption_meta or {}).get("alg") == "server-A256GCM" else None),
+            "needs_client_encryption": (row.encryption_meta or {}).get("alg") == "server-A256GCM",
             "is_mine": True, "empathy_count": row.empathy_count,
             "payload": {**(row.encryption_meta or {}), "ct": row.ciphertext, "iv": row.iv},
             "date_label": row.date_label,
+            "release_at": (row.release_at.astimezone(timezone.utc) if row.release_at.tzinfo else
+                           row.release_at.replace(tzinfo=timezone.utc)) if row.release_at else None,
             "mood": row.mood,
             "tags": row.tags,
             "prayer_count": row.prayer_count,
@@ -158,7 +163,7 @@ async def validate_targets(body, user, db):
 async def create_message(body: AnyMessageInput, user: CurrentUser, db: DB, request: Request):
     await throttle(request, "messages", 15, user.id)
     await validate_targets(body, user, db)
-    if body.visibility in ("public_anon", "unlisted"):
+    if body.visibility == "public_anon":
         await verify_turnstile(request, body.turnstile_token, "publish")
     row = Message(id=str(body.id), author_id=user.id, entry_type=body.entry_type)
     apply_message(row, body, user)
@@ -193,7 +198,7 @@ async def edit_message(message_id: UUID, body: AnyMessageInput, user: CurrentUse
     if message_id != body.id:
         raise HTTPException(422, "Identitas pesan tidak cocok.")
     await validate_targets(body, user, db)
-    if body.visibility in ("public_anon", "unlisted"):
+    if body.visibility == "public_anon":
         await verify_turnstile(request, body.turnstile_token, "publish")
     apply_message(row, body, user)
     await db.execute(delete(MessageConstellation).where(MessageConstellation.message_id == row.id))
@@ -238,16 +243,14 @@ async def galaxy_messages(
 def apply_message(row, body, user):
     payload = getattr(body, "payload", None)
     row.share_token_hash = None
+    row.share_payload = None
     row.visibility = body.visibility
     row.ciphertext = payload.ct if payload else None
     row.iv = payload.iv if payload else None
     row.kdf_salt = user.encryption_record["salt"] if payload else None
     row.encryption_meta = payload.model_dump(exclude={"ct", "iv"}) if payload else None
-    if body.visibility == "unlisted":
-        row.ciphertext = seal_public(row.id, body.public_body)
-        row.iv = "server-managed"
-        row.encryption_meta = {"mode": "unlisted", "alg": "server-A256GCM"}
     row.public_body = seal_public(row.id, body.public_body) if body.visibility == "public_anon" else None
-    row.moderation_status = "pending" if body.visibility != "private" else "not_applicable"
+    row.moderation_status = "pending" if body.visibility == "public_anon" else "not_applicable"
     row.moderation_flags, row.moderation_checked_at = [], None
     row.mood, row.tags, row.date_label = body.mood, body.tags, body.date_label
+    row.release_at = body.release_at

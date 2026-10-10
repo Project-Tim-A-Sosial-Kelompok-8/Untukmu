@@ -1,0 +1,54 @@
+name: Release images
+"on":
+  workflow_dispatch:
+permissions:
+  contents: read
+  packages: write
+concurrency:
+  group: release-images
+  cancel-in-progress: false
+jobs:
+  release:
+    environment:
+      name: production
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+          cache-dependency-path: backend/requirements-dev.lock
+      - name: Verify frontend
+        run: npm ci && npm run prepare:visual --workspace frontend && npm run lint && npm test
+      - name: Install backend dependencies
+        run: pip install -r backend/requirements-dev.lock
+      - name: Verify backend
+        run: ruff check app tests alembic && pytest -q
+        working-directory: backend
+      - name: Build images
+        env:
+          STORAGE_ORIGIN: ${{ vars['S3_PUBLIC_ENDPOINT'] || 'http://localhost:9000' }}
+          TURNSTILE_SITE_KEY: ${{ vars['NEXT_PUBLIC_TURNSTILE_SITE_KEY'] }}
+        run: |
+          set -euo pipefail
+          image_root="ghcr.io/${GITHUB_REPOSITORY,,}"
+          docker build -f backend/Dockerfile -t "${image_root}-api:${GITHUB_SHA}" .
+          docker build -f frontend/Dockerfile --build-arg "S3_PUBLIC_ENDPOINT=${STORAGE_ORIGIN}" --build-arg "NEXT_PUBLIC_TURNSTILE_SITE_KEY=${TURNSTILE_SITE_KEY}" -t "${image_root}-web:${GITHUB_SHA}" .
+      - name: Publish versioned images
+        env:
+          REGISTRY_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          printf '%s' "$REGISTRY_TOKEN" | docker login ghcr.io -u "$GITHUB_ACTOR" --password-stdin
+          image_root="ghcr.io/${GITHUB_REPOSITORY,,}"
+          docker push "${image_root}-api:${GITHUB_SHA}"
+          docker push "${image_root}-web:${GITHUB_SHA}"
+          docker logout ghcr.io

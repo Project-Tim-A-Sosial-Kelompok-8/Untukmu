@@ -11,3 +11,5 @@ email-validator>=2.2,<3
 boto3>=1.36,<2
 httpx>=0.28,<1
 cryptography>=44,<47
+sentry-sdk[fastapi]>=2.64,<3
+prometheus-client>=0.22,<1

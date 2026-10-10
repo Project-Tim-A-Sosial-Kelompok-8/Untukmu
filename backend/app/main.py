@@ -7,7 +7,7 @@ from redis.asyncio import Redis
 from redis.exceptions import RedisError
 from sqlalchemy import text
 
-from . import auth, content, dashboard, uploads, social, prayers, recovery, export, sharing
+from . import auth, content, dashboard, uploads, social, prayers, recovery, export, sharing, metrics, monitoring
 from .config import settings
 from .db import SessionFactory, engine
 
@@ -29,7 +29,10 @@ app = FastAPI(
     lifespan=lifespan,
     description="Untukmu Fase 1–5: akun, pesan terenkripsi, sosial, doa, kurasi, pemulihan dan ekspor.",
 )
-for router in (auth.router, content.router, dashboard.router, uploads.router, social.router, prayers.router, recovery.router, export.router, sharing.router):
+monitoring.configure_sentry()
+app.middleware("http")(monitoring.observe)
+app.include_router(monitoring.router)
+for router in (auth.router, content.router, dashboard.router, uploads.router, social.router, prayers.router, recovery.router, export.router, sharing.router, metrics.router):
     app.include_router(router, prefix="/api/v1")
 
 
@@ -82,4 +85,7 @@ async def capabilities():
         "prayers": True,
         "moderation": True,
         "multi_target": True,
+        "scheduled_messages": True,
+        "encrypted_sharing": True,
+        "product_metrics": True,
     }

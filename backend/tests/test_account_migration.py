@@ -3,8 +3,10 @@ import os
 from pathlib import Path
 import subprocess
 import sys
+from uuid import uuid4
+from types import SimpleNamespace
 
-from sqlalchemy import delete, event, select
+from sqlalchemy import delete, event, select, text
 from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
 
 from app.models import Constellation, Message, MessageConstellation, ModerationDecision, User
@@ -37,11 +39,10 @@ async def test_upgrade_existing_content_survives_detaching_deleted_owner(tmp_pat
         gid = Constellation(owner_id=user.id, target_kind='sahabat', target_label='Galaksi lama')
         db.add(gid)
         await db.flush()
-        message = Message(author_id=user.id, public_body='temporary', visibility='public_anon',
-                          moderation_status='approved', entry_type='prayer')
-        db.add(message)
-        await db.flush()
-        message.public_body = seal_public(message.id, 'Doa dari database lama')
+        # Use the original schema, rather than today's ORM with future columns.
+        message = SimpleNamespace(id=str(uuid4()))
+        await db.execute(text("INSERT INTO messages (id, author_id, public_body, visibility, moderation_status, entry_type, moderation_flags, tags, prayer_count, empathy_count, created_at) VALUES (:id, :owner, :body, 'public_anon', 'approved', 'prayer', '[]', '[]', 0, 0, CURRENT_TIMESTAMP)"),
+                         {'id': message.id, 'owner': user.id, 'body': seal_public(message.id, 'Doa dari database lama')})
         db.add_all([MessageConstellation(message_id=message.id, constellation_id=gid.id),
                     ModerationDecision(message_id=message.id, reviewer_id=user.id, decision='approve')])
         await db.commit()

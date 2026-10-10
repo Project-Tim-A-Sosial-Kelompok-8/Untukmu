@@ -228,7 +228,9 @@ UM.sky = (function () {
     }
     state.daftar.forEach(function(item) { candidate(project(item.dir, SKY_R * 0.96), { galaxy: item.g.id }); });
     if (!best) return;
-    e.stopPropagation();
+    // Switching to galaxy mode must not let the same click select a galaxy
+    // particle in the next listener and replace the map's arrival callback.
+    e.stopImmediatePropagation();
     terbangKeGalaksi(best.galaxy);
   }
 

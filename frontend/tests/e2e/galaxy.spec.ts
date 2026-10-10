@@ -48,12 +48,26 @@ async function saveNewGalaxy(frame: FrameLocator, name: string) {
 }
 
 test("simpan membuka galaksi dari Peta; galaksi dan bintang lama tetap tampil setelah muat ulang", async ({ page }, testInfo) => {
+  // Three writes, real animations, and two login/key derivations need a larger
+  // total budget on software WebGL hosts; each state assertion keeps its limit.
+  test.setTimeout(240000);
   const errors: string[] = [];
   page.on("pageerror", error => errors.push(error.message));
   const { frame, email, password } = await register(page, "galaxy-render");
   await saveNewGalaxy(frame, "Kenangan pertama");
+  await expect.poll(() => page.frames()[1].evaluate(`(() => {
+    const effect=UM.galaksi.state.pembentukan;
+    return effect ? effect.inti.material.opacity : 0;
+  })()`)).toBeGreaterThan(0.4);
+  await page.screenshot({path:testInfo.outputPath('cahaya-melebur-galaksi.png')});
+  await expect.poll(() => page.frames()[1].evaluate(`(() => {
+    const effect = UM.galaksi.state.pembentukan;
+    return effect ? effect.objek[0].objek.scale.x / effect.objek[0].skala.x : null;
+  })()`)).toBeGreaterThan(0.75);
+  await page.screenshot({ path: testInfo.outputPath('pembentukan-galaksi.png') });
   await expect.poll(async () => (await scene(page)).selected, { timeout: 20000 }).not.toBeNull();
   const first = (await scene(page)).galaxies[0];
+  expect(await page.frames()[1].evaluate('UM.galaksi.state.efekTerakhir.jenis')).toBe('pembentukan-galaksi');
   expect(first.visible && first.inFrame).toBe(true);
   expect(first.messages).toHaveLength(1);
   expect(first.particles).toBeGreaterThanOrEqual(4000);
@@ -79,6 +93,7 @@ test("simpan membuka galaksi dari Peta; galaksi dan bintang lama tetap tampil se
   // Writing from an active galaxy preselects it, and choosing another galaxy
   // must attach the new message to that explicit destination alone.
   const secondId = saved.selected!;
+  await page.frames()[1].evaluate(`window.previousGalaxyPoints = UM.galaksi.state.peta['${first.id}'].lod.pts`);
   await frame.locator(".um-dock [data-act=tulis]").click();
   await expect(frame.locator(`#um-comp [data-act=pick-galaksi][data-id="${secondId}"]`)).toHaveClass(/on/);
   await frame.locator(`#um-comp [data-act=pick-galaksi][data-id="${first.id}"]`).click();
@@ -87,7 +102,14 @@ test("simpan membuka galaksi dari Peta; galaksi dan bintang lama tetap tampil se
   await frame.locator("#um-comp [data-act=next]").click();
   await frame.locator("#um-comp [data-act=save]").click();
   await expect(frame.locator("#um-comp")).not.toHaveClass(/on/);
+  await expect.poll(() => page.frames()[1].evaluate(`(() => {
+    const jalan = UM.galaksi.state.perjalanan.find(jalan => jalan.fase === 'terbang');
+    return jalan ? (UM.galaksi.state.sekarang - jalan.t0) / jalan.dur : null;
+  })()`)).toBeGreaterThan(0.35);
+  await page.screenshot({ path: testInfo.outputPath('bintang-jatuh.png') });
   await expect.poll(async () => (await scene(page)).selected, { timeout: 20000 }).toBe(first.id);
+  expect(await page.frames()[1].evaluate('UM.galaksi.state.efekTerakhir.jenis')).toBe('bintang-jatuh');
+  expect(await page.frames()[1].evaluate(`window.previousGalaxyPoints === UM.galaksi.state.peta['${first.id}'].lod.pts`)).toBe(true);
   saved = await scene(page);
   expect(saved.galaxies.find(item => item.id === first.id)?.messages).toHaveLength(2);
   expect(saved.galaxies.find(item => item.id === secondId)?.messages).toHaveLength(1);
@@ -154,6 +176,21 @@ test("Home membatalkan perjalanan doa dan galaksi dibuka dengan transisi utuh", 
   expect((await scene(page)).target).toEqual([0, 0, 0]);
   expect(await engine.evaluate(`UM.galaksi.state.perjalanan.length`)).toBe(0);
   expect((await scene(page)).active).toBeNull();
+  const cancelled = await engine.evaluate(`(async () => {
+    const item=UM.galaksi.state.daftar[0], original=item.lod.pts.scale.clone();
+    await UM.galaksi.bentukGalaksi(item);
+    const effect=UM.galaksi.state.pembentukan;
+    let disposed=false;
+    effect.debu.geometry.addEventListener('dispose',()=>{disposed=true;});
+    UM.galaksi.kembaliKeRumah();
+    return {removed:effect.cahaya.parent===null, disposed, restored:item.lod.pts.scale.equals(original), pending:UM.galaksi.state.pembentukan};
+  })()`);
+  expect(cancelled).toEqual({removed:true,disposed:true,restored:true,pending:null});
+  await page.emulateMedia({reducedMotion:'reduce'});
+  expect(await engine.evaluate(`(async () => {
+    await UM.galaksi.bentukGalaksi(UM.galaksi.state.daftar[0]);
+    return UM.galaksi.state.pembentukan===null && !scene.children.some(obj=>obj.userData.umEfek==='pembentukan-galaksi');
+  })()`)).toBe(true);
 });
 
 test("bintang lama tidak tertimpa oleh pesan baru atau hasil refresh yang terlambat", async ({ page }) => {

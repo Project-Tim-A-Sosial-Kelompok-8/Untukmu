@@ -25,9 +25,13 @@ class Settings(BaseSettings):
     s3_access_key: str = ""
     s3_secret_key: str = ""
     max_upload_bytes: int = 10 * 1024 * 1024
+    sentry_dsn: str = ""
+    metrics_token: str = ""
 
     @model_validator(mode="after")
     def secure_configuration(self):
+        if self.metrics_token and len(self.metrics_token) < 32:
+            raise ValueError("METRICS_TOKEN wajib minimal 32 karakter")
         if len(self.jwt_secret) < 32:
             raise ValueError("JWT_SECRET wajib acak dan minimal 32 karakter")
         if self.environment != "test" and not self.database_url.startswith("postgresql+asyncpg://"):

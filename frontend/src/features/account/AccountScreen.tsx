@@ -3,14 +3,18 @@ import { AnimatePresence, motion, useIsPresent, useReducedMotion } from "framer-
 import { useQuery } from "@tanstack/react-query";
 import { api, authenticate, currentUser, logout, queryClient, updateUser } from "../../lib/api/client";
 import * as vault from "../../lib/crypto/vault";
-import { clearPrivateMedia } from "../../lib/api/store";
+import { clearPrivateMedia, migrateUnlisted } from "../../lib/api/store";
 import { requireLogin, resolveLogin, useAccount } from "./state";
 import { RecoveryScreen } from "./RecoveryScreen";
 import { ExportScreen } from "./ExportScreen";
 import { Turnstile } from "./Turnstile";
 import { DeleteAccountScreen } from "./DeleteAccountScreen";
 
-async function refreshScene() { await window.UM.galaksi.refresh(); await window.UM.sky.refresh(); window.UM.ui.renderSemua(); }
+async function refreshScene() {
+  try { await migrateUnlisted(); }
+  catch { window.UM.ui.toast("Pembaruan enkripsi sebagian tautan lama tertunda. Pesan tetap tersedia bagi pemilik; coba masuk kembali untuk melanjutkan."); }
+  await window.UM.galaksi.refresh(); await window.UM.sky.refresh(); window.UM.ui.renderSemua();
+}
 export async function signOut() {
   await logout(); vault.lock(); clearPrivateMedia(); resolveLogin(false);
   // Reload removes every decrypted DOM node and WebGL texture from the previous session.

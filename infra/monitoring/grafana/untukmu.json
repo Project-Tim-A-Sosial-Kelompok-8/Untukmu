@@ -1,0 +1,10 @@
+{
+  "uid": "untukmu-operations", "title": "Untukmu Operasional", "schemaVersion": 40,
+  "version": 1, "refresh": "15s", "time": {"from": "now-1h", "to": "now"},
+  "panels": [
+    {"id": 1, "title": "Permintaan per detik", "type": "timeseries", "gridPos": {"x": 0, "y": 0, "w": 12, "h": 8}, "datasource": {"type": "prometheus", "uid": "untukmu-prometheus"}, "targets": [{"refId": "A", "expr": "sum(rate(untukmu_http_requests_total[5m]))"}]},
+    {"id": 2, "title": "Waktu respons p95 (detik)", "type": "timeseries", "gridPos": {"x": 12, "y": 0, "w": 12, "h": 8}, "datasource": {"type": "prometheus", "uid": "untukmu-prometheus"}, "targets": [{"refId": "A", "expr": "histogram_quantile(0.95, sum by (le) (rate(untukmu_http_duration_seconds_bucket[5m])))"}]},
+    {"id": 3, "title": "Kesalahan server per detik", "type": "timeseries", "gridPos": {"x": 0, "y": 8, "w": 12, "h": 8}, "datasource": {"type": "prometheus", "uid": "untukmu-prometheus"}, "targets": [{"refId": "A", "expr": "sum(rate(untukmu_http_requests_total{status=~\"5..\"}[5m]))"}]},
+    {"id": 4, "title": "API tersedia", "type": "stat", "gridPos": {"x": 12, "y": 8, "w": 12, "h": 8}, "datasource": {"type": "prometheus", "uid": "untukmu-prometheus"}, "targets": [{"refId": "A", "expr": "up{job=\"untukmu-api\"}"}]}
+  ]
+}

@@ -8,6 +8,71 @@ test('halaman Doa dapat dibuka langsung tanpa melewati layar pembuka', async ({ 
   await expect(frame.locator('#um-doa [data-act=hub-trad]')).toHaveCount(7);
 });
 
+test('Berikutnya melanjutkan pilihan doa; audio asli dapat diputar tanpa mencatat pratinjau', async ({ page }, testInfo) => {
+  await page.setViewportSize({width:390,height:844});
+  const {frame} = await register(page, 'prayer-next-audio', {path:'/doa',startComposer:false});
+  const engine = page.frames()[1];
+  const prayerWrites: string[] = [];
+  page.on('request', request => {
+    if (request.method()==='POST' && /\/prayers(?:\/start)?$/.test(new URL(request.url()).pathname)) prayerWrites.push(request.url());
+  });
+  const next = frame.locator('#um-doa [data-act=choose-target]');
+  await expect(next).toBeDisabled();
+  await frame.locator('#um-doa [data-act=hub-trad][data-id=islam]').click();
+  await frame.locator('#um-doa [data-act=hub-entri][data-id=al-fatihah-audio]').click();
+  await expect(next).toBeEnabled();
+  const audio = frame.locator('audio[data-prayer-preview]');
+  await expect(audio).toHaveAttribute('src','/api/v1/prayers/audio/al-fatihah');
+  const playback = await audio.evaluate(async (node: HTMLAudioElement) => {
+    node.muted=true;
+    await node.play();
+    await new Promise(resolve => setTimeout(resolve,350));
+    const result={duration:node.duration,time:node.currentTime,ready:node.readyState};
+    node.pause(); return result;
+  });
+  expect(playback.duration).toBeCloseTo(92.72,1);
+  expect(playback.time).toBeGreaterThan(0);
+  expect(playback.ready).toBeGreaterThanOrEqual(2);
+  await expect(frame.locator('#um-doa')).toContainText('CC0-1.0');
+  await page.screenshot({path:testInfo.outputPath('audio-doa-asli-390.png')});
+  await next.click();
+  await expect(frame.locator('#um-doa')).toContainText('Belum ada ucapan publik');
+  await expect(frame.locator('#um-doa [data-act=targets-next]')).toBeDisabled();
+  await frame.locator('#um-doa [data-act=change-catalog]').click();
+  await expect(frame.locator('#um-doa [data-act=hub-entri][data-id=al-fatihah-audio]')).toHaveAttribute('aria-pressed','true');
+  expect(prayerWrites).toEqual([]);
+  expect(await engine.evaluate('document.querySelectorAll("#um-doa audio:not([data-prayer-preview])").length')).toBe(0);
+});
+
+test('halaman ucapan doa berikutnya aktif hanya ketika masih ada hasil dan mempertahankan pilihan', async ({page}) => {
+  const {frame} = await register(page,'prayer-pages',{path:'/doa',startComposer:false});
+  const engine=page.frames()[1];
+  await engine.evaluate(`(() => {
+    const rows=Array.from({length:61},(_,i)=>({id:'target-'+i,galaksiId:'test-galaxy',privasi:'publik',moderationStatus:'approved',publicBody:'Ucapan '+i}));
+    window.prayerOffsets=[];
+    UM.store.explore=async (_,offset=0)=>{window.prayerOffsets.push(offset);return rows.slice(offset,offset+31);};
+    UM.store.preparePrayer=async (_,id)=>id;
+    UM.store.getPesan=async id=>rows.find(row=>row.id===id);
+    UM.ui.bukaDoa();
+  })()`);
+  await frame.locator('#um-doa [data-act=hub-trad][data-id=umum]').click();
+  await frame.locator('#um-doa [data-act=hub-entri][data-id=hening]').click();
+  await frame.locator('#um-doa [data-act=choose-target]').click();
+  await expect(frame.locator('#um-doa [data-act=target]')).toHaveCount(30);
+  await frame.locator('#um-doa [data-act=targets-next]').click();
+  await expect(frame.locator('#um-doa [data-act=target]').first()).toHaveAttribute('data-id','target-30');
+  await frame.locator('#um-doa [data-act=targets-next]').click();
+  await expect(frame.locator('#um-doa [data-act=target]')).toHaveCount(1);
+  await expect(frame.locator('#um-doa [data-act=targets-next]')).toBeDisabled();
+  await frame.locator('#um-doa [data-act=targets-prev]').click();
+  await expect(frame.locator('#um-doa [data-act=target]')).toHaveCount(30);
+  await frame.locator('#um-doa [data-act=target]').first().click();
+  await expect(frame.locator('#um-doa [data-act=trad][data-id=umum]')).toHaveAttribute('aria-pressed','true');
+  await expect(frame.locator('#um-doa [data-act=entri][data-id=hening]')).toHaveAttribute('aria-pressed','true');
+  await expect(frame.locator('#um-doa [data-act=start]')).toBeEnabled();
+  expect(await engine.evaluate('window.prayerOffsets')).toEqual([0,30,60,30]);
+});
+
 for (const width of [320, 390, 1280]) {
   test(`doa: tujuan, pilihan agama, batal, dan retry tetap sinkron (${width}px)`, async ({ page }) => {
     const errors: string[] = [];
@@ -33,6 +98,7 @@ for (const width of [320, 390, 1280]) {
         privasi: 'publik', moderationStatus: 'approved', publicBody: 'Ucapan ' + name
       }));
       UM.store.listPesan = async () => candidates;
+      UM.store.listPesanLadang = (...args) => UM.store.listPesan(...args);
       UM.store.preparePrayer = async (gid, id) => id;
       UM.store.getPesan = async id => candidates.find(p => p.id === id);
       UM.galaksi.refresh = async () => {};
@@ -54,15 +120,16 @@ for (const width of [320, 390, 1280]) {
     await expect(frame.locator('#um-doa blockquote')).toHaveText('Ucapan Kedua');
     await expect(frame.locator('#um-doa [data-act=trad]')).toHaveCount(7);
     await frame.locator('#um-doa [data-act=trad][data-id=islam]').click();
-    await frame.locator('#um-doa [data-act=entri]').first().click();
-    await expect(frame.locator('#um-doa .um-prayer')).toContainText('menunggu tinjauan kurator');
+    await frame.locator('#um-doa [data-act=entri][data-id=rabbana-atina]').click();
+    await expect(frame.locator('#um-doa .um-prayer').first()).toContainText('menunggu tinjauan kurator');
+    await expect(frame.locator('[data-prayer-content=rabbana-atina] .tx').first()).toContainText('Rabbana atina');
     await expect(frame.locator('#um-doa [data-act=start]')).toHaveCount(0);
     await engine.evaluate(`(() => {
-      const entry = UM.doaData.byId('islam').entri[0];
+      const entry = UM.doaData.entri('islam','rabbana-atina');
       entry.reviewed = true; entry.audio = false;
     })()`);
-    await frame.locator('#um-doa [data-act=entri]').first().click();
-    await expect(frame.locator('#um-doa .um-prayer')).toContainText('Audio belum tersedia');
+    await frame.locator('#um-doa [data-act=entri][data-id=rabbana-atina]').click();
+    await expect(frame.locator('#um-doa .um-prayer').first()).toContainText('Audio belum tersedia');
     await expect(frame.locator('#um-doa [data-act=start]')).toHaveCount(0);
     await expect(frame.locator('#um-doa [data-act=silence]')).toBeVisible();
 
