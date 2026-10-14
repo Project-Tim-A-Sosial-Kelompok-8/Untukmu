@@ -82,7 +82,9 @@ class Constellation(Base):
 class Message(Base):
     __tablename__ = "messages"
     id: Mapped[str] = mapped_column(String(36), primary_key=True, default=uid)
-    author_id: Mapped[str | None] = mapped_column(ForeignKey("users.id", ondelete="SET NULL"), index=True, nullable=True)
+    author_id: Mapped[str | None] = mapped_column(
+        ForeignKey("users.id", ondelete="SET NULL"), index=True, nullable=True
+    )
     entry_type: Mapped[str] = mapped_column(String(20), default="message", server_default="message")
     ciphertext: Mapped[str | None] = mapped_column(Text, nullable=True)
     iv: Mapped[str | None] = mapped_column(String(24), nullable=True)

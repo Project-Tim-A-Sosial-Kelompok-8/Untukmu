@@ -5,11 +5,18 @@ import { fileURLToPath } from "node:url";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const web = resolve(root, "frontend");
-const env = { ...process.env, UNTUKMU_BROWSER_REPORT: process.env.UNTUKMU_BROWSER_REPORT || "test-results/button-audit-results.json" };
+const env = {
+  ...process.env,
+  UNTUKMU_BROWSER_REPORT:
+    process.env.UNTUKMU_BROWSER_REPORT || "test-results/button-audit-results.json",
+};
 
 async function run(args, cwd) {
   const child = spawn(process.execPath, args, { cwd, env, stdio: "inherit" });
-  const code = await new Promise((done, reject) => { child.on("error", reject); child.on("exit", value => done(value ?? 1)); });
+  const code = await new Promise((done, reject) => {
+    child.on("error", reject);
+    child.on("exit", (value) => done(value ?? 1));
+  });
   if (code) process.exit(code);
 }
 

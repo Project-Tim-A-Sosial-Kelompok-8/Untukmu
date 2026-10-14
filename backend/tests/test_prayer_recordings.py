@@ -3,9 +3,10 @@ import json
 
 from app.main import app
 from app.prayer_recordings import RECORDINGS, ROOT
-from app.prayers import token_key
+from app.routers.prayers import token_key
+
 from .conftest import account, galaxy
-from .test_social import admin_account, public_message, approve
+from .test_social import admin_account, approve, public_message
 
 
 async def test_original_recordings_integrity_and_range_requests(client):

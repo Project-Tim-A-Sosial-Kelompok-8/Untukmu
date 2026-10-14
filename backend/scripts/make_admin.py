@@ -1,7 +1,10 @@
 """Explicit operator command: python -m scripts.make_admin EMAIL."""
+
 import asyncio
 import sys
+
 from sqlalchemy import select
+
 from app.db import SessionFactory
 from app.models import User
 

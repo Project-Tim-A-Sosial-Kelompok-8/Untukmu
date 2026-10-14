@@ -6,17 +6,40 @@ interface LegacyUM {
   doaData: { tradisi: unknown[] };
   openSocial: (mode: "report" | "block" | "admin" | "blocks", id?: string) => Promise<void>;
   renderScreen: (host: HTMLElement, value: unknown) => void;
-  trackScreen: (host: HTMLElement | undefined, opened: boolean) => void;
   store: typeof store;
-  crypto: typeof vault & { reason: () => string | null; kdfId: () => string; iterations: () => number };
-  account: { require: () => Promise<boolean>; open: () => void; logout: () => Promise<void>; isLogged: () => boolean };
+  crypto: typeof vault & {
+    reason: () => string | null;
+    kdfId: () => string;
+    iterations: () => number;
+  };
+  account: {
+    require: () => Promise<boolean>;
+    open: () => void;
+    logout: () => Promise<void>;
+    isLogged: () => boolean;
+  };
   ui: {
-    toast: (text: string) => void; bukaKomposer: (id?: string) => void; bukaDash: () => void;
-    bukaSetup: () => void; bukaSet: () => void; renderSemua: () => void;
-    closeAllScreens: () => void; bukaJelajah: () => void;
+    toast: (text: string) => void;
+    bukaKomposer: (id?: string) => void;
+    bukaDash: () => void;
+    bukaSetup: () => void;
+    bukaSet: () => void;
+    renderSemua: () => void;
+    closeAllScreens: () => void;
+    bukaJelajah: () => void;
     bukaDoa: (galaxyId?: string, messageId?: string) => void;
   };
-  galaksi: { refresh: () => Promise<unknown>; bersihkanPilihan: () => void; state: { daftar: unknown[] } };
+  galaksi: {
+    refresh: () => Promise<unknown>;
+    bersihkanPilihan: () => void;
+    state: { daftar: unknown[] };
+  };
   sky: { refresh: () => Promise<unknown> };
 }
-declare global { interface Window { UM: LegacyUM; UM_ENGINE?: OriginalEngine; __UM_TESTING__?: boolean } }
+declare global {
+  interface Window {
+    UM: LegacyUM;
+    UM_ENGINE?: OriginalEngine;
+    __UM_TESTING__?: boolean;
+  }
+}

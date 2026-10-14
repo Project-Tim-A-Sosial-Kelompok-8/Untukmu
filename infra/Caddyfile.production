@@ -1,0 +1,22 @@
+# Production gateway loaded by docker-compose.production.yml.
+# Set SITE_DOMAIN, STORAGE_DOMAIN, APP_ORIGIN and configure Turnstile.
+{$SITE_DOMAIN} {
+	header Strict-Transport-Security "max-age=31536000"
+	request_body {
+		max_size 200KB
+	}
+	handle /api/* {
+		reverse_proxy api:8000
+	}
+	handle {
+		reverse_proxy web:3000
+	}
+}
+
+{$STORAGE_DOMAIN} {
+	header Strict-Transport-Security "max-age=31536000"
+	request_body {
+		max_size 32MB
+	}
+	reverse_proxy minio:9000
+}

@@ -1,14 +1,17 @@
 """Durable public-only initial checks and storage cleanup."""
+
 import asyncio
 import logging
+
 from redis.asyncio import Redis
 from sqlalchemy import select
+from starlette.concurrency import run_in_threadpool
+
 from .config import settings
 from .db import SessionFactory
 from .models import StorageDeletion
-from .uploads import storage
-from starlette.concurrency import run_in_threadpool
 from .public_moderation import automatic_backlog, check_public
+from .routers.uploads import storage
 
 
 async def scan_pending(db):
@@ -20,8 +23,11 @@ async def scan_pending(db):
 
 
 async def clean_deleted_uploads(db):
-    rows = (await db.scalars(select(StorageDeletion).order_by(StorageDeletion.created_at)
-                            .limit(50).with_for_update(skip_locked=True))).all()
+    rows = (
+        await db.scalars(
+            select(StorageDeletion).order_by(StorageDeletion.created_at).limit(50).with_for_update(skip_locked=True)
+        )
+    ).all()
     for row in rows:
         await run_in_threadpool(storage().delete_object, Bucket=settings().s3_bucket, Key=row.storage_key)
         await db.delete(row)

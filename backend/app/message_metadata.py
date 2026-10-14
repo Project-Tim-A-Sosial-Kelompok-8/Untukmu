@@ -1,9 +1,16 @@
 """Canonical labels shared by message validation and public filters."""
+
 from unicodedata import normalize
 
 MOOD_ALIASES = {
-    "longing": "rindu", "gratitude": "syukur", "regret": "sesal", "anger": "marah",
-    "calm": "tenang", "tender": "haru", "proud": "bangga", "grief": "kehilangan",
+    "longing": "rindu",
+    "gratitude": "syukur",
+    "regret": "sesal",
+    "anger": "marah",
+    "calm": "tenang",
+    "tender": "haru",
+    "proud": "bangga",
+    "grief": "kehilangan",
 }
 
 

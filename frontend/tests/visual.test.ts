@@ -8,13 +8,25 @@ it("katalog asli JS dan backend menyediakan tujuh pilihan yang sama", async () =
   const context = vm.createContext({ window: { UM }, UM });
   vm.runInContext(await readFile(resolve("public/visual/prayers.js"), "utf8"), context);
   const original = vm.runInContext("JSON.stringify(window.UM.doaData.tradisi)", context);
-  expect(JSON.parse(original)).toEqual(JSON.parse(await readFile(resolve("../backend/data/prayers-v1.json"), "utf8")));
+  expect(JSON.parse(original)).toEqual(
+    JSON.parse(await readFile(resolve("../backend/data/prayers-v1.json"), "utf8")),
+  );
 });
 
 it("visual produksi tidak memuat katalog astronomi atau doa manual", async () => {
-  for (const name of ["index.html", "scene.js", "background.js", "map.js", "galaxy.js", "ui.js", "runtime.js"]) {
+  for (const name of [
+    "index.html",
+    "scene.js",
+    "background.js",
+    "map.js",
+    "galaxy.js",
+    "ui.js",
+    "runtime.js",
+  ]) {
     const content = await readFile(resolve("public/visual", name), "utf8");
-    expect(content).not.toMatch(/SKY_CONS|SKY_GAL|enterSolar|setGalaksiBawaan|write-prayer|um-written-prayer|images\/solar-system/);
+    expect(content).not.toMatch(
+      /SKY_CONS|SKY_GAL|enterSolar|setGalaksiBawaan|write-prayer|um-written-prayer|images\/solar-system/,
+    );
   }
 });
 

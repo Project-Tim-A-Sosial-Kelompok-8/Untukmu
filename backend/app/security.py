@@ -183,8 +183,10 @@ async def current_user(db: DB, auth: Annotated[HTTPAuthorizationCredentials | No
     payload = decode(auth.credentials, "access")
     session = await db.scalar(
         select(Session).where(
-            Session.id == payload["sid"], Session.user_id == payload["sub"],
-            Session.revoked_at.is_(None), Session.expires_at > now()
+            Session.id == payload["sid"],
+            Session.user_id == payload["sub"],
+            Session.revoked_at.is_(None),
+            Session.expires_at > now(),
         )
     )
     if session is None:

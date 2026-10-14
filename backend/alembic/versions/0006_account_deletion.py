@@ -1,14 +1,20 @@
 """Detach retained content from deleted accounts and queue object cleanup."""
-from alembic import op
+
 import sqlalchemy as sa
+
+from alembic import op
 
 revision = "0006_account_deletion"
 down_revision = "0005_written_prayers"
 branch_labels = None
 depends_on = None
 
-REFERENCES = [("messages", "author_id"), ("constellations", "owner_id"),
-              ("uploads", "owner_id"), ("moderation_decisions", "reviewer_id")]
+REFERENCES = [
+    ("messages", "author_id"),
+    ("constellations", "owner_id"),
+    ("uploads", "owner_id"),
+    ("moderation_decisions", "reviewer_id"),
+]
 NAMING = {"fk": "fk_%(table_name)s_%(column_0_name)s_%(referred_table_name)s"}
 
 
@@ -23,10 +29,12 @@ def upgrade():
             batch.drop_constraint(name, type_="foreignkey")
             batch.alter_column(column, existing_type=sa.String(36), nullable=True)
             batch.create_foreign_key(f"{table}_{column}_fkey", "users", [column], ["id"], ondelete="SET NULL")
-    op.create_table("storage_deletions",
-                    sa.Column("id", sa.String(36), primary_key=True),
-                    sa.Column("storage_key", sa.String(200), nullable=False, unique=True),
-                    sa.Column("created_at", sa.DateTime(timezone=True), nullable=False))
+    op.create_table(
+        "storage_deletions",
+        sa.Column("id", sa.String(36), primary_key=True),
+        sa.Column("storage_key", sa.String(200), nullable=False, unique=True),
+        sa.Column("created_at", sa.DateTime(timezone=True), nullable=False),
+    )
 
 
 def downgrade():
@@ -43,6 +51,11 @@ def downgrade():
         with op.batch_alter_table(table, naming_convention=NAMING) as batch:
             batch.drop_constraint(f"{table}_{column}_fkey", type_="foreignkey")
             batch.alter_column(column, existing_type=sa.String(36), nullable=False)
-            batch.create_foreign_key(f"{table}_{column}_fkey", "users", [column], ["id"],
-                                     ondelete="RESTRICT" if table == "moderation_decisions" else "CASCADE")
+            batch.create_foreign_key(
+                f"{table}_{column}_fkey",
+                "users",
+                [column],
+                ["id"],
+                ondelete="RESTRICT" if table == "moderation_decisions" else "CASCADE",
+            )
     op.drop_table("storage_deletions")

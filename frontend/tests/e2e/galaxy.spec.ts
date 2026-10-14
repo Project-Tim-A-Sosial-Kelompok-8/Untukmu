@@ -7,7 +7,13 @@ interface GalaxySnapshot {
   active: string | null;
   target: number[];
   flying: boolean;
-  galaxies: { id: string; messages: string[]; visible: boolean; inFrame: boolean; particles: number }[];
+  galaxies: {
+    id: string;
+    messages: string[];
+    visible: boolean;
+    inFrame: boolean;
+    particles: number;
+  }[];
 }
 
 // Read the classic-script engine as well as the API: saved data alone does not
@@ -47,27 +53,39 @@ async function saveNewGalaxy(frame: FrameLocator, name: string) {
   await expect(frame.locator("#um-comp")).not.toHaveClass(/on/);
 }
 
-test("simpan membuka galaksi dari Peta; galaksi dan bintang lama tetap tampil setelah muat ulang", async ({ page }, testInfo) => {
+test("simpan membuka galaksi dari Peta; galaksi dan bintang lama tetap tampil setelah muat ulang", async ({
+  page,
+}, testInfo) => {
   // Three writes, real animations, and two login/key derivations need a larger
   // total budget on software WebGL hosts; each state assertion keeps its limit.
   test.setTimeout(240000);
   const errors: string[] = [];
-  page.on("pageerror", error => errors.push(error.message));
+  page.on("pageerror", (error) => errors.push(error.message));
   const { frame, email, password } = await register(page, "galaxy-render");
   await saveNewGalaxy(frame, "Kenangan pertama");
-  await expect.poll(() => page.frames()[1].evaluate(`(() => {
+  await expect
+    .poll(() =>
+      page.frames()[1].evaluate(`(() => {
     const effect=UM.galaksi.state.pembentukan;
     return effect ? effect.inti.material.opacity : 0;
-  })()`)).toBeGreaterThan(0.4);
-  await page.screenshot({path:testInfo.outputPath('cahaya-melebur-galaksi.png')});
-  await expect.poll(() => page.frames()[1].evaluate(`(() => {
+  })()`),
+    )
+    .toBeGreaterThan(0.4);
+  await page.screenshot({ path: testInfo.outputPath("cahaya-melebur-galaksi.png") });
+  await expect
+    .poll(() =>
+      page.frames()[1].evaluate(`(() => {
     const effect = UM.galaksi.state.pembentukan;
     return effect ? effect.objek[0].objek.scale.x / effect.objek[0].skala.x : null;
-  })()`)).toBeGreaterThan(0.75);
-  await page.screenshot({ path: testInfo.outputPath('pembentukan-galaksi.png') });
+  })()`),
+    )
+    .toBeGreaterThan(0.75);
+  await page.screenshot({ path: testInfo.outputPath("pembentukan-galaksi.png") });
   await expect.poll(async () => (await scene(page)).selected, { timeout: 20000 }).not.toBeNull();
   const first = (await scene(page)).galaxies[0];
-  expect(await page.frames()[1].evaluate('UM.galaksi.state.efekTerakhir.jenis')).toBe('pembentukan-galaksi');
+  expect(await page.frames()[1].evaluate("UM.galaksi.state.efekTerakhir.jenis")).toBe(
+    "pembentukan-galaksi",
+  );
   expect(first.visible && first.inFrame).toBe(true);
   expect(first.messages).toHaveLength(1);
   expect(first.particles).toBeGreaterThanOrEqual(4000);
@@ -83,40 +101,59 @@ test("simpan membuka galaksi dari Peta; galaksi dan bintang lama tetap tampil se
   await frame.locator(".um-dock [data-act=tulis]").click();
   await saveNewGalaxy(frame, "Kenangan kedua");
   await expect.poll(async () => (await scene(page)).mode).toBe("galaxy");
-  await expect.poll(async () => (await scene(page)).selected, { timeout: 20000 }).not.toBe(first.id);
+  await expect
+    .poll(async () => (await scene(page)).selected, { timeout: 20000 })
+    .not.toBe(first.id);
   await expect.poll(async () => (await scene(page)).selected, { timeout: 20000 }).not.toBeNull();
   let saved = await scene(page);
   expect(saved.galaxies).toHaveLength(2);
-  expect(saved.galaxies.find(item => item.id === first.id)?.messages).toEqual(first.messages);
-  expect(saved.galaxies.find(item => item.id === saved.selected)?.inFrame).toBe(true);
+  expect(saved.galaxies.find((item) => item.id === first.id)?.messages).toEqual(first.messages);
+  expect(saved.galaxies.find((item) => item.id === saved.selected)?.inFrame).toBe(true);
 
   // Writing from an active galaxy preselects it, and choosing another galaxy
   // must attach the new message to that explicit destination alone.
   const secondId = saved.selected!;
-  await page.frames()[1].evaluate(`window.previousGalaxyPoints = UM.galaksi.state.peta['${first.id}'].lod.pts`);
+  await page
+    .frames()[1]
+    .evaluate(`window.previousGalaxyPoints = UM.galaksi.state.peta['${first.id}'].lod.pts`);
   await frame.locator(".um-dock [data-act=tulis]").click();
-  await expect(frame.locator(`#um-comp [data-act=pick-galaksi][data-id="${secondId}"]`)).toHaveClass(/on/);
+  await expect(
+    frame.locator(`#um-comp [data-act=pick-galaksi][data-id="${secondId}"]`),
+  ).toHaveClass(/on/);
   await frame.locator(`#um-comp [data-act=pick-galaksi][data-id="${first.id}"]`).click();
   await frame.locator("#um-comp [data-act=next]").click();
   await frame.locator("#um-isi").fill("Ucapan tambahan khusus untuk galaksi pertama");
   await frame.locator("#um-comp [data-act=next]").click();
   await frame.locator("#um-comp [data-act=save]").click();
   await expect(frame.locator("#um-comp")).not.toHaveClass(/on/);
-  await expect.poll(() => page.frames()[1].evaluate(`(() => {
+  await expect
+    .poll(() =>
+      page.frames()[1].evaluate(`(() => {
     const jalan = UM.galaksi.state.perjalanan.find(jalan => jalan.fase === 'terbang');
     return jalan ? (UM.galaksi.state.sekarang - jalan.t0) / jalan.dur : null;
-  })()`)).toBeGreaterThan(0.35);
-  await page.screenshot({ path: testInfo.outputPath('bintang-jatuh.png') });
+  })()`),
+    )
+    .toBeGreaterThan(0.35);
+  await page.screenshot({ path: testInfo.outputPath("bintang-jatuh.png") });
   await expect.poll(async () => (await scene(page)).selected, { timeout: 20000 }).toBe(first.id);
-  expect(await page.frames()[1].evaluate('UM.galaksi.state.efekTerakhir.jenis')).toBe('bintang-jatuh');
-  expect(await page.frames()[1].evaluate(`window.previousGalaxyPoints === UM.galaksi.state.peta['${first.id}'].lod.pts`)).toBe(true);
+  expect(await page.frames()[1].evaluate("UM.galaksi.state.efekTerakhir.jenis")).toBe(
+    "bintang-jatuh",
+  );
+  expect(
+    await page
+      .frames()[1]
+      .evaluate(`window.previousGalaxyPoints === UM.galaksi.state.peta['${first.id}'].lod.pts`),
+  ).toBe(true);
   saved = await scene(page);
-  expect(saved.galaxies.find(item => item.id === first.id)?.messages).toHaveLength(2);
-  expect(saved.galaxies.find(item => item.id === secondId)?.messages).toHaveLength(1);
+  expect(saved.galaxies.find((item) => item.id === first.id)?.messages).toHaveLength(2);
+  expect(saved.galaxies.find((item) => item.id === secondId)?.messages).toHaveLength(1);
 
   // Reload starts at Milky Way. Saved galaxies remain rendered and can
   // still be visited on desktop and narrow screens while the key is locked.
-  for (const viewport of [{ width: 1280, height: 800 }, { width: 390, height: 844 }]) {
+  for (const viewport of [
+    { width: 1280, height: 800 },
+    { width: 390, height: 844 },
+  ]) {
     await page.setViewportSize(viewport);
     await page.reload();
     await login(page, email, password);
@@ -127,8 +164,11 @@ test("simpan membuka galaksi dari Peta; galaksi dan bintang lama tetap tampil se
     expect(loaded.active).toBeNull();
     expect(loaded.galaxies).toHaveLength(2);
     for (const galaxy of saved.galaxies) {
-      expect(loaded.galaxies.find(item => item.id === galaxy.id)).toMatchObject({
-        id: galaxy.id, messages: galaxy.messages, visible: true, particles: galaxy.particles
+      expect(loaded.galaxies.find((item) => item.id === galaxy.id)).toMatchObject({
+        id: galaxy.id,
+        messages: galaxy.messages,
+        visible: true,
+        particles: galaxy.particles,
       });
     }
     expect(await page.frames()[1].evaluate(() => window.UM.crypto.unlocked())).toBe(false);
@@ -138,17 +178,24 @@ test("simpan membuka galaksi dari Peta; galaksi dan bintang lama tetap tampil se
     })()`);
     await expect.poll(async () => (await scene(page)).flying).toBe(false);
     expect((await scene(page)).galaxies[0].inFrame).toBe(true);
-    await expect(frame.locator('#beacon-panel')).toHaveCSS('opacity', '1');
+    await expect(frame.locator("#beacon-panel")).toHaveCSS("opacity", "1");
     await page.screenshot({ path: testInfo.outputPath(`galaksi-${viewport.width}.png`) });
   }
   expect(errors).toEqual([]);
 });
 
-test("Home membatalkan perjalanan doa dan galaksi dibuka dengan transisi utuh", async ({ page }) => {
+test("Home membatalkan perjalanan doa dan galaksi dibuka dengan transisi utuh", async ({
+  page,
+}) => {
   const { frame } = await register(page, "smooth-navigation", { startComposer: false });
   await frame.locator("#um-entry.on").waitFor();
   const engine = page.frames()[1];
-  const result = await engine.evaluate<{ unchanged: boolean; flight: boolean; centered: boolean; particles: number }>(`(async () => {
+  const result = await engine.evaluate<{
+    unchanged: boolean;
+    flight: boolean;
+    centered: boolean;
+    particles: number;
+  }>(`(async () => {
     UM.ui.closeAllScreens();
     const g = {id:'smooth-navigation',nama:'Galaksi tujuan',radius:140,count:8500,kind:'spiral',warna:'#ffd9a0'};
     UM.store.listGalaksi = async () => [g];
@@ -185,19 +232,27 @@ test("Home membatalkan perjalanan doa dan galaksi dibuka dengan transisi utuh", 
     UM.galaksi.kembaliKeRumah();
     return {removed:effect.cahaya.parent===null, disposed, restored:item.lod.pts.scale.equals(original), pending:UM.galaksi.state.pembentukan};
   })()`);
-  expect(cancelled).toEqual({removed:true,disposed:true,restored:true,pending:null});
-  await page.emulateMedia({reducedMotion:'reduce'});
-  expect(await engine.evaluate(`(async () => {
+  expect(cancelled).toEqual({ removed: true, disposed: true, restored: true, pending: null });
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  expect(
+    await engine.evaluate(`(async () => {
     await UM.galaksi.bentukGalaksi(UM.galaksi.state.daftar[0]);
     return UM.galaksi.state.pembentukan===null && !scene.children.some(obj=>obj.userData.umEfek==='pembentukan-galaksi');
-  })()`)).toBe(true);
+  })()`),
+  ).toBe(true);
 });
 
-test("bintang lama tidak tertimpa oleh pesan baru atau hasil refresh yang terlambat", async ({ page }) => {
+test("bintang lama tidak tertimpa oleh pesan baru atau hasil refresh yang terlambat", async ({
+  page,
+}) => {
   await register(page, "stars-regression", { startComposer: false });
   await page.frameLocator("iframe").locator("#um-entry.on").waitFor();
   const result = await page.frames()[1].evaluate<{
-    before: number; after: number; stable: boolean; galaxies: number; drawn: boolean;
+    before: number;
+    after: number;
+    stable: boolean;
+    galaxies: number;
+    drawn: boolean;
   }>(`(async () => {
     UM.ui.closeAllScreens();
     const galaxies = [{id:'galaxy-regression',nama:'Bintang tersimpan',radius:140,count:8000,kind:'spiral',warna:'#ffd9a0'}];

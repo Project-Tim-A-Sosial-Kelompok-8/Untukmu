@@ -1,5 +1,6 @@
 import json
 from pathlib import Path
+
 from .models import PrayerContent
 from .prayer_recordings import PREFIX, RECORDINGS
 
@@ -12,9 +13,16 @@ def initial_rows():
         for entry in tradition["entri"]:
             asset = entry.get("recording_id")
             metadata = RECORDINGS.get(asset, {})
-            rows.append({"id": f"{tradition['id']}/{entry['id']}", "tradition": tradition["id"],
-                         "content": entry, "reviewed": entry["reviewed"],
-                         "audio_key": PREFIX + asset if metadata else None, "audio_meta": metadata})
+            rows.append(
+                {
+                    "id": f"{tradition['id']}/{entry['id']}",
+                    "tradition": tradition["id"],
+                    "content": entry,
+                    "reviewed": entry["reviewed"],
+                    "audio_key": PREFIX + asset if metadata else None,
+                    "audio_meta": metadata,
+                }
+            )
     return rows
 
 

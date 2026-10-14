@@ -2,6 +2,7 @@ import base64
 from datetime import date, datetime, timezone
 from typing import Annotated, Literal
 from uuid import UUID
+
 from pydantic import BaseModel, ConfigDict, EmailStr, Field, field_validator, model_validator
 
 from .message_metadata import normalize_mood, normalize_tags
@@ -126,6 +127,7 @@ class MessageBase(Strict):
         if len(value) != len(set(value)):
             raise ValueError("Tujuan tidak boleh berulang")
         return value
+
     mood: str | None = Field(default=None, max_length=40)
     tags: list[str] = Field(default_factory=list, max_length=5)
     date_label: date | None = None
@@ -139,6 +141,7 @@ class MessageBase(Strict):
                 raise ValueError("Waktu pembukaan wajib menyertakan zona waktu")
             return value.astimezone(timezone.utc)
         return value
+
     attachment_ids: list[UUID] = Field(default_factory=list, max_length=5)
 
     @field_validator("tags")
@@ -155,15 +158,18 @@ class MessageBase(Strict):
         return normalize_mood(value)
 
 
-class MessageInput(MessageBase):
-    visibility: Literal["private"] = "private"
+class EncryptedMessageBase(MessageBase):
     payload: Cipher
 
     @model_validator(mode="after")
     def valid_context(self):
-        if self.payload.aad != f"untukmu:message:v2:{self.id}:{self.visibility}":
+        if self.payload.aad != f"untukmu:message:v2:{self.id}:{getattr(self, 'visibility')}":
             raise ValueError("AAD tidak cocok dengan identitas pesan")
         return self
+
+
+class MessageInput(EncryptedMessageBase):
+    visibility: Literal["private"] = "private"
 
 
 class PublicMessageInput(MessageBase):
@@ -179,7 +185,7 @@ class PublicMessageInput(MessageBase):
         return value
 
 
-class UnlistedMessageInput(MessageInput):
+class UnlistedMessageInput(EncryptedMessageBase):
     visibility: Literal["unlisted"]
 
 

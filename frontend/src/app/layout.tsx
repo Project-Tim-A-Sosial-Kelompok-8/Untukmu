@@ -9,5 +9,12 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-  return <html lang="id"><body>{children}<RegisterPWA /></body></html>;
+  return (
+    <html lang="id">
+      <body>
+        {children}
+        <RegisterPWA />
+      </body>
+    </html>
+  );
 }

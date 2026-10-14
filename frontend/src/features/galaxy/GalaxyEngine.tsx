@@ -5,5 +5,12 @@
  * React screens and the R3F scheduler run inside that document.
  */
 export function GalaxyEngine({ initialScreen }: { initialScreen?: "admin" | "doa" }) {
-  return <iframe className="galaxy-frame" src={`/visual/index.html${initialScreen ? `?screen=${initialScreen}` : ""}`} title="Galaksi Untukmu" allow="fullscreen" />;
+  return (
+    <iframe
+      className="galaxy-frame"
+      src={`/visual/index.html${initialScreen ? `?screen=${initialScreen}` : ""}`}
+      title="Galaksi Untukmu"
+      allow="fullscreen"
+    />
+  );
 }

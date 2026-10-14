@@ -1,6 +1,8 @@
 """Schedule messages and store independently encrypted share envelopes."""
-from alembic import op
+
 import sqlalchemy as sa
+
+from alembic import op
 
 revision = "0008_schedule_and_sharing"
 down_revision = "0007_prd"

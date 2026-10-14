@@ -1,9 +1,12 @@
 """Server-only encryption for intentionally public text. Never handles private payloads."""
+
 import base64
 import hashlib
 import hmac
 import os
+
 from cryptography.hazmat.primitives.ciphers.aead import AESGCM
+
 from .config import settings
 
 

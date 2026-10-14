@@ -362,26 +362,24 @@
   {
     "id": "umum",
     "label": {
-      "id": "Doa umum",
-      "en": "General"
+      "id": "Doa umum non-denominasi",
+      "en": "Non-denominational prayer"
     },
     "simbol": "✦",
     "entri": [
       {
-        "id": "hening",
+        "id": "doa-umum",
         "nama": {
-          "id": "Hening sejenak",
-          "en": "A moment of silence"
+          "id": "Doa umum non-denominasi",
+          "en": "Non-denominational prayer"
         },
-        "teks": {
-          "id": "Tidak ada kata yang perlu diucapkan. Duduklah tenang, dan arahkan pikiranmu kepada orang yang kau tuju.",
-          "en": "No words are needed. Sit quietly, and turn your thoughts to the person this is for."
-        },
-        "sumber": "Tidak terikat tradisi — untuk siapa pun",
-        "reviewed": true,
+        "teks": null,
+        "arti": null,
+        "sumber": "",
+        "source_url": "",
+        "reviewed": false,
         "audio": null,
-        "detik": 30,
-        "source_url": ""
+        "detik": 30
       }
     ]
   }

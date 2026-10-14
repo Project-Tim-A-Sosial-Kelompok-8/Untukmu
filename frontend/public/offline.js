@@ -1,1 +1,1 @@
-document.getElementById("retry").addEventListener("click",()=>location.reload());
+document.getElementById("retry").addEventListener("click", () => location.reload());

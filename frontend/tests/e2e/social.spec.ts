@@ -1,13 +1,18 @@
 import { test, expect } from "@playwright/test";
 import { register } from "./helpers";
 
-test("pesan publik muncul pada filter Jelajah, empati, dan alur Doa dengan tujuan terlebih dahulu", async ({ page, browser }, testInfo) => {
+test("pesan publik muncul pada filter Jelajah, empati, dan alur Doa dengan tujuan terlebih dahulu", async ({
+  page,
+  browser,
+}, testInfo) => {
   // Includes registration/key derivation, two browser contexts, and a real
   // 30-second prayer. Leave time for browser teardown on software WebGL hosts.
   test.setTimeout(180000);
   const errors: string[] = [];
-  page.on("pageerror", error => errors.push(error.message));
-  page.on("console", message => { if (message.type() === "error") errors.push(message.text() + " " + message.location().url); });
+  page.on("pageerror", (error) => errors.push(error.message));
+  page.on("console", (message) => {
+    if (message.type() === "error") errors.push(message.text() + " " + message.location().url);
+  });
   const { frame, registrationConsoleError } = await register(page, "social");
   await frame.locator("#um-nama").fill("Untuk sahabat");
   await frame.locator("#um-comp [data-act=next]").click();
@@ -15,65 +20,88 @@ test("pesan publik muncul pada filter Jelajah, empati, dan alur Doa dengan tujua
   const text = "Terima kasih sudah hadir sebagai sahabat yang baik.";
   await frame.locator("#um-isi").fill(text);
   await frame.locator("#um-tag").fill("#KeNaNgAn, keluarga");
-  await frame.locator('#um-comp [data-act=mood][data-id=rindu]').click();
+  await frame.locator("#um-comp [data-act=mood][data-id=rindu]").click();
   await frame.locator("#um-comp [data-act=next]").click();
-  await frame.locator('#um-comp [data-act=priv][data-id=publik]').click();
+  await frame.locator("#um-comp [data-act=priv][data-id=publik]").click();
   await frame.locator("#um-comp [data-act=save]").click();
   await expect(frame.locator("#um-comp")).not.toHaveClass(/on/);
-  await frame.locator('.um-dock [data-act=jelajah]').click();
+  await frame.locator(".um-dock [data-act=jelajah]").click();
   await expect(frame.locator("#um-exp")).toHaveClass(/on/);
-  await expect(frame.locator("#um-exp .txt").filter({hasText:text})).toBeVisible();
-  await expect(frame.locator('#um-exp [data-act=my-messages]')).toHaveCount(0);
-  await frame.locator('#um-filter-mood').selectOption('rindu');
-  await frame.locator('#um-filter-tag').fill(' #KENANGAN ');
-  await frame.locator('#um-exp [data-act=filter]').click();
-  await expect(frame.locator('#um-exp .txt').filter({hasText:text})).toBeVisible();
-  await frame.locator('#um-filter-tag').fill('tidak-ada-tag-ini');
-  await frame.locator('#um-exp [data-act=filter]').click();
-  await expect(frame.locator('#um-exp .um-item')).toHaveCount(0);
-  await expect(frame.locator('#um-exp .um-empty')).toContainText('Belum ada pesan publik');
+  await expect(frame.locator("#um-exp .txt").filter({ hasText: text })).toBeVisible();
+  await expect(frame.locator("#um-exp [data-act=my-messages]")).toHaveCount(0);
+  await frame.locator("#um-filter-mood").selectOption("rindu");
+  await frame.locator("#um-filter-tag").fill(" #KENANGAN ");
+  await frame.locator("#um-exp [data-act=filter]").click();
+  await expect(frame.locator("#um-exp .txt").filter({ hasText: text })).toBeVisible();
+  await frame.locator("#um-filter-tag").fill("tidak-ada-tag-ini");
+  await frame.locator("#um-exp [data-act=filter]").click();
+  await expect(frame.locator("#um-exp .um-item")).toHaveCount(0);
+  await expect(frame.locator("#um-exp .um-empty")).toContainText("Belum ada pesan publik");
   const context = await browser.newContext();
   const visitor = await context.newPage();
-  visitor.on("pageerror", error => errors.push(error.message));
-  const { frame: guest } = await register(visitor, 'social-viewer', { startComposer: false });
+  visitor.on("pageerror", (error) => errors.push(error.message));
+  const { frame: guest } = await register(visitor, "social-viewer", { startComposer: false });
   await guest.locator("#um-entry [data-act=skip]").click();
-  await guest.locator('.um-dock [data-act=jelajah]').click();
+  await guest.locator(".um-dock [data-act=jelajah]").click();
   await expect(guest.locator("#um-exp .txt").filter({ hasText: text })).toBeVisible();
-  await guest.locator('#um-filter-mood').selectOption('rindu');
-  await guest.locator('#um-filter-tag').fill(' #KENANGAN ');
-  await guest.locator('#um-exp [data-act=filter]').click();
-  await expect(guest.locator('#um-exp .um-item')).toHaveCount(1);
-  await expect(guest.locator('#um-exp .um-item')).toContainText('#kenangan');
-  await expect(guest.locator('#um-exp .um-item')).toContainText('Rindu');
-  await guest.locator('#um-exp [data-act=empati]').first().click();
-  await expect(guest.locator('#um-exp [data-act=empati]').first()).toBeDisabled();
-  await visitor.screenshot({path:testInfo.outputPath('jelajah-filter-dan-empati.png')});
-  await guest.locator('#um-exp [data-act=lapor]').first().click();
+  await guest.locator("#um-filter-mood").selectOption("rindu");
+  await guest.locator("#um-filter-tag").fill(" #KENANGAN ");
+  await guest.locator("#um-exp [data-act=filter]").click();
+  await expect(guest.locator("#um-exp .um-item")).toHaveCount(1);
+  await expect(guest.locator("#um-exp .um-item")).toContainText("#kenangan");
+  await expect(guest.locator("#um-exp .um-item")).toContainText("Rindu");
+  await guest.locator("#um-exp [data-act=empati]").first().click();
+  await expect(guest.locator("#um-exp [data-act=empati]").first()).toBeDisabled();
+  await visitor.screenshot({ path: testInfo.outputPath("jelajah-filter-dan-empati.png") });
+  await guest.locator("#um-exp [data-act=lapor]").first().click();
   await guest.locator("#um-report-reason").fill("Mohon diperiksa kembali konteksnya.");
   await guest.getByRole("button", { name: "Kirim laporan", exact: true }).click();
   await expect(guest.locator("#um-report-reason")).toHaveCount(0);
-  await guest.locator('#um-exp [data-act=close]').click();
-  await guest.locator('.um-dock [data-act=doa]').click();
-  await expect(guest.locator('#um-doa [data-act=targets-next]')).toHaveCount(0);
-  await guest.locator('#um-doa .um-item').filter({hasText:text}).locator('[data-act=target]').click();
-  await expect(guest.locator('#um-exp')).not.toHaveClass(/on/);
-  await expect(guest.locator('#um-doa')).toHaveClass(/on/);
-  await expect(guest.locator('#um-doa [data-act=trad]')).toHaveCount(7);
-  await guest.locator('#um-doa [data-act=trad][data-id=katolik]').click();
-  await guest.locator('#um-doa [data-act=entri][data-id=bapa-kami-latin]').click();
-  await guest.locator('#um-doa [data-act=start]').click();
-  const audio = guest.locator('#um-doa [data-prayer-audio] audio');
-  await expect(audio).toHaveAttribute('src', '/api/v1/prayers/audio/pater-noster');
-  await audio.evaluate(async (node: HTMLAudioElement) => { node.muted = true; await node.play(); });
-  await expect(guest.locator('#um-doa [data-act=again]')).toBeVisible({timeout:65000});
-  await visitor.screenshot({path:testInfo.outputPath('doa-rekaman-tercatat.png')});
-  await page.frames()[1].evaluate('UM.galaksi.refresh()');
-  expect(await page.frames()[1].evaluate('UM.galaksi.state.daftar.filter(item => item.g.sendiri !== false).reduce((n, item) => n + item.batuTotal, 0)')).toBe(1);
-  expect(await page.frames()[1].evaluate('UM.galaksi.state.peta["publik-bersama"].batuTotal')).toBe(1);
-  await guest.getByRole('button',{name:'Selesai',exact:true}).click();
-  await visitor.frames()[1].evaluate("UM.ui.bukaDoa('publik-bersama')");
-  await expect(guest.locator('#um-doa [data-act=trad]')).toHaveCount(7);
-  await expect(guest.locator('#um-doa')).toContainText(text);
+  await guest.locator("#um-exp [data-act=close]").click();
+  await guest.locator(".um-dock [data-act=doa]").click();
+  await expect(guest.locator("#um-doa [data-act=targets-next]")).toHaveCount(0);
+  await guest
+    .locator("#um-doa .um-item")
+    .filter({ hasText: text })
+    .locator("[data-act=target]")
+    .click();
+  await expect(guest.locator("#um-exp")).not.toHaveClass(/on/);
+  await expect(guest.locator("#um-doa")).toHaveClass(/on/);
+  await expect(guest.locator("#um-doa [data-act=trad]")).toHaveCount(7);
+  await guest.locator("#um-doa [data-act=trad][data-id=katolik]").click();
+  await guest.locator("#um-doa [data-act=entri][data-id=bapa-kami-latin]").click();
+  await guest.locator("#um-doa [data-act=start]").click();
+  const audio = guest.locator("#um-doa [data-prayer-audio] audio");
+  await expect(audio).toHaveAttribute("src", "/api/v1/prayers/audio/pater-noster");
+  await audio.evaluate(async (node: HTMLAudioElement) => {
+    node.muted = true;
+    await node.play();
+  });
+  await expect(guest.locator("#um-doa [data-act=again]")).toBeVisible({ timeout: 65000 });
+  await expect(guest.locator("#um-doa")).toContainText("Jumlah pendoa: 1");
+  await expect(guest.locator("#um-doa")).toContainText("constellation terkait milik penulis pesan");
+  await visitor.screenshot({ path: testInfo.outputPath("doa-rekaman-tercatat.png") });
+  await page.frames()[1].evaluate("UM.galaksi.refresh()");
+  expect(
+    await page
+      .frames()[1]
+      .evaluate(
+        "UM.galaksi.state.daftar.filter(item => item.g.sendiri !== false).reduce((n, item) => n + item.batuTotal, 0)",
+      ),
+  ).toBe(1);
+  expect(
+    await page.frames()[1].evaluate('UM.galaksi.state.peta["publik-bersama"]'),
+  ).toBeUndefined();
+  expect(await visitor.frames()[1].evaluate("UM.galaksi.state.daftar.length")).toBe(0);
+  expect(await visitor.frames()[1].evaluate("UM.store.listDoa()")).toEqual([]);
+  await guest.getByRole("button", { name: "Selesai", exact: true }).click();
+  await visitor.frames()[1].evaluate("UM.ui.bukaDoa()");
+  await expect(guest.locator("#um-doa")).toContainText(text);
+  await guest.locator("#um-doa [data-act=close]").click();
+  await guest.locator(".um-dock [data-act=jelajah]").click();
+  await expect(guest.locator("#um-exp .um-item").filter({ hasText: text })).toContainText(
+    "1 pendoa",
+  );
   await context.close();
-  expect(errors.filter(error => error !== registrationConsoleError)).toEqual([]);
+  expect(errors.filter((error) => error !== registrationConsoleError)).toEqual([]);
 });

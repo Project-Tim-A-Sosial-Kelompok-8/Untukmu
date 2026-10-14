@@ -58,7 +58,13 @@ services:
       init-storage: { condition: service_completed_successfully }
       redis: { condition: service_healthy }
     healthcheck:
-      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/api/v1/health')"]
+      test:
+        [
+          "CMD",
+          "python",
+          "-c",
+          "import urllib.request; urllib.request.urlopen('http://localhost:8000/api/v1/health')",
+        ]
       interval: 10s
       timeout: 5s
       retries: 12
@@ -90,7 +96,12 @@ services:
     profiles: [monitoring]
     environment:
       METRICS_TOKEN: ${METRICS_TOKEN:-}
-    command: ["sh", "-ec", "test $${#METRICS_TOKEN} -ge 32; umask 022; printf '%s' \"$$METRICS_TOKEN\" > /tokens/token"]
+    command:
+      [
+        "sh",
+        "-ec",
+        'test $${#METRICS_TOKEN} -ge 32; umask 022; printf ''%s'' "$$METRICS_TOKEN" > /tokens/token',
+      ]
     volumes: ["monitoring_token:/tokens"]
   prometheus:
     image: prom/prometheus:v3.15.0

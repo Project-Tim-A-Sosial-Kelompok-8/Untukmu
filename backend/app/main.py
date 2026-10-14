@@ -7,9 +7,10 @@ from redis.asyncio import Redis
 from redis.exceptions import RedisError
 from sqlalchemy import text
 
-from . import auth, content, dashboard, uploads, social, prayers, recovery, export, sharing, metrics, monitoring
+from . import monitoring
 from .config import settings
 from .db import SessionFactory, engine
+from .routers import auth, content, dashboard, export, metrics, prayers, recovery, sharing, social, uploads
 
 
 @asynccontextmanager
@@ -32,7 +33,18 @@ app = FastAPI(
 monitoring.configure_sentry()
 app.middleware("http")(monitoring.observe)
 app.include_router(monitoring.router)
-for router in (auth.router, content.router, dashboard.router, uploads.router, social.router, prayers.router, recovery.router, export.router, sharing.router, metrics.router):
+for router in (
+    auth.router,
+    content.router,
+    dashboard.router,
+    uploads.router,
+    social.router,
+    prayers.router,
+    recovery.router,
+    export.router,
+    sharing.router,
+    metrics.router,
+):
     app.include_router(router, prefix="/api/v1")
 
 

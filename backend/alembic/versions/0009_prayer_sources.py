@@ -1,9 +1,11 @@
 """Fill reference metadata and a sourced preview, preserving curated material."""
+
 import json
 from pathlib import Path
 
-from alembic import op
 import sqlalchemy as sa
+
+from alembic import op
 
 revision = "0009_prayer_sources"
 down_revision = "0008_schedule_and_sharing"
@@ -16,7 +18,9 @@ def upgrade():
         # Reference metadata is nonessential to schema. Offline SQL preserves
         # stored content; the API also merges default reference metadata.
         return
-    content = sa.table("prayer_contents", sa.column("id", sa.String), sa.column("content", sa.JSON), sa.column("reviewed", sa.Boolean))
+    content = sa.table(
+        "prayer_contents", sa.column("id", sa.String), sa.column("content", sa.JSON), sa.column("reviewed", sa.Boolean)
+    )
     updates = json.loads((Path(__file__).resolve().parents[1] / "catalog-sources-v2.json").read_text(encoding="utf-8"))
     connection = op.get_bind()
     for row in connection.execute(sa.select(content)).mappings():

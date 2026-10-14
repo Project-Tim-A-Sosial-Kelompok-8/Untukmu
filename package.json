@@ -11,6 +11,8 @@
     "build": "npm run build --workspace frontend",
     "test:e2e": "npm run test:e2e --workspace frontend",
     "check:buttons": "node scripts/check-buttons.mjs",
-    "check:buttons:repeat": "node scripts/check-buttons.mjs --repeat-each=2"
+    "check:buttons:repeat": "node scripts/check-buttons.mjs --repeat-each=2",
+    "format": "prettier --write \"frontend/**/*.{ts,tsx,js,mjs,css,html,json}\" \"scripts/*.mjs\" \".github/workflows/*.yml\" \"infra/**/*.{json,yml}\" \"docker-compose*.yml\" \"docs/**/*.md\" README.md package.json",
+    "format:check": "prettier --check \"frontend/**/*.{ts,tsx,js,mjs,css,html,json}\" \"scripts/*.mjs\" \".github/workflows/*.yml\" \"infra/**/*.{json,yml}\" \"docker-compose*.yml\" \"docs/**/*.md\" README.md package.json"
   }
 }

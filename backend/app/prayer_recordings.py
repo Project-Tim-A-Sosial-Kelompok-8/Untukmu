@@ -1,4 +1,5 @@
 """Pinned, original recordings with explicit source and license metadata."""
+
 import json
 from pathlib import Path
 
@@ -13,7 +14,7 @@ def recording(identifier):
 
 def audio_url(key):
     if key and key.startswith(PREFIX):
-        identifier = key[len(PREFIX):]
+        identifier = key[len(PREFIX) :]
         if recording(identifier):
             return f"/api/v1/prayers/audio/{identifier}"
     return None

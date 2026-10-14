@@ -1,9 +1,12 @@
 """Provision the private bucket; run as a one-shot infrastructure task."""
+
 import sys
 import time
+
 from botocore.exceptions import ClientError, EndpointConnectionError
+
 from app.config import settings
-from app.uploads import storage
+from app.routers.uploads import storage
 
 client = storage()
 for attempt in range(30):

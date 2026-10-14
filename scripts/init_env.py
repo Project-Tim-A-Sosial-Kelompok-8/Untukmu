@@ -1,7 +1,8 @@
 """Create local secrets without overwriting an existing environment file."""
+
+import base64
 import os
 import secrets
-import base64
 from pathlib import Path
 
 root = Path(__file__).resolve().parents[1]
