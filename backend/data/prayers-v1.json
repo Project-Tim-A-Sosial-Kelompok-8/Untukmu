@@ -225,8 +225,10 @@
         },
         "sumber": "Rgveda 3.62.10",
         "reviewed": false,
-        "audio": null,
-        "detik": 25,
+        "audio": true,
+        "recording_id": "gayatri",
+        "detik": 21,
+        "review_note": "Berkas referensi CC0 yang sama dengan entri Mantram Gayatri (Sanskerta), karena naskah identik. Draf ini tetap memerlukan persetujuan kurator sebelum ditayangkan.",
         "source_url": "https://www.wisdomlib.org/hinduism/book/rig-veda-english-translation/d/doc831961.html"
       },
       {
@@ -292,8 +294,10 @@
         },
         "sumber": "Rumusan penghormatan (Pali) yang lazim",
         "reviewed": false,
-        "audio": null,
-        "detik": 20,
+        "audio": true,
+        "recording_id": "namo-tassa",
+        "detik": 43,
+        "review_note": "Rekaman asli utuh dari Amaravati Publications, yang menyediakan publikasinya untuk distribusi gratis. Durasi berkas 42,083 detik dibulatkan ke atas menjadi 43 detik; naskah, pengucapan, dan izin tetap perlu diperiksa serta disetujui kurator sebelum ditayangkan.",
         "source_url": "https://suttacentral.net/snp1.8"
       },
       {

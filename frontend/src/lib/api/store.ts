@@ -20,6 +20,7 @@ export interface Galaxy {
 }
 interface GalaxyRecord {
   id: string;
+  is_mine?: boolean;
   target_label: string;
   target_kind: string;
   custom_category: string | null;
@@ -41,14 +42,14 @@ interface MessageRecord {
   empathy_count: number;
   id: string;
   constellation_ids: string[];
-  payload: Cipher;
+  payload?: Cipher;
   date_label: string | null;
   mood: string | null;
   tags: string[];
   created_at: string;
   prayer_count: number;
   attachment_ids: string[];
-  release_at: string | null;
+  release_at?: string | null;
 }
 export interface Message {
   authorDeleted: boolean;
@@ -60,7 +61,7 @@ export interface Message {
   galaksiId: string;
   galaksiIds: string[];
   privasi: "privat" | "publik" | "unlisted";
-  isi: Cipher;
+  isi: Cipher | null;
   tanggal: string | null;
   mood: string | null;
   tag: string[];
@@ -152,14 +153,16 @@ async function galaxy(row: GalaxyRecord): Promise<Galaxy> {
   return {
     id: row.id,
     nama: row.target_label,
-    kategori: row.custom_category || row.target_kind.replaceAll("_", "-"),
+    kategori:
+      row.custom_category ||
+      (row.target_kind === "custom" ? "seseorang" : row.target_kind.replaceAll("_", "-")),
     kind: row.kind,
     warna: row.color,
     radius: row.radius,
     count: row.particle_count,
-    foto: row.visual_ref ? await photoURL(row.visual_ref) : null,
+    foto: row.is_mine !== false && row.visual_ref ? await photoURL(row.visual_ref) : null,
     dibuat: Date.parse(row.created_at),
-    sendiri: true,
+    sendiri: row.is_mine !== false,
     seed: false,
   };
 }
@@ -176,9 +179,9 @@ function message(row: MessageRecord): Message {
         : row.visibility === "unlisted"
           ? "unlisted"
           : "privat",
-    isi: row.payload,
+    isi: row.payload || null,
     tanggal: row.date_label,
-    releaseAt: row.release_at,
+    releaseAt: row.release_at || null,
     mood: normalizeMood(row.mood),
     tag: normalizeTags(row.tags || []),
     dibuat: Date.parse(row.created_at),
@@ -229,14 +232,48 @@ async function saveGalaksi(input: Partial<Galaxy> & { nama: string; kategori?: s
   await invalidate();
   return galaxy(row);
 }
-async function listPesan(galaksiId?: string) {
+async function listPesan(galaksiId?: string, fresh = false) {
   await ready();
   if (!currentUser()) return [];
   return (
     await allPages<MessageRecord>(
       galaksiId ? `/constellations/${galaksiId}/messages` : "/dashboard/messages",
+      fresh,
     )
   ).map(message);
+}
+
+// The composer/dashboard keep using the owner-only lists. The scene combines
+// those records with the anonymous public view, preferring complete owner data.
+function mergeOwned<T extends { id: string }>(publicRows: T[], ownedRows: T[]): T[] {
+  const rows = new Map(ownedRows.map((row) => [row.id, row]));
+  publicRows.forEach((row) => {
+    if (!rows.has(row.id)) rows.set(row.id, row);
+  });
+  return [...rows.values()];
+}
+async function listGalaksiLadang() {
+  await ready();
+  const [owned, publicRows] = await Promise.all([
+    listGalaksi(),
+    allPages<GalaxyRecord>("/explore/constellations"),
+  ]);
+  return mergeOwned(await Promise.all(publicRows.map(galaxy)), owned);
+}
+async function listPesanLadang(galaksiId?: string) {
+  await ready();
+  if (galaksiId) {
+    const owned = await listGalaksi();
+    if (owned.some((row) => row.id === galaksiId)) return listPesan(galaksiId);
+    return (await allPages<MessageRecord>(`/explore/constellations/${galaksiId}/messages`)).map(
+      message,
+    );
+  }
+  const [owned, publicRows] = await Promise.all([
+    listPesan(),
+    allPages<MessageRecord>("/explore/messages"),
+  ]);
+  return mergeOwned(publicRows.map(message), owned);
 }
 
 export async function migrateUnlisted() {
@@ -351,7 +388,7 @@ async function stats() {
     prayers_received: number;
     prayers_given: number;
     by_visibility: Record<string, number>;
-  }>("/dashboard/summary");
+  }>("/dashboard/summary", true);
   return {
     galaksi: result.constellations,
     pesan: result.messages,
@@ -386,7 +423,7 @@ export const store = {
     return catalog;
   },
   empathy: async (id: string) => {
-    const result = await api(`/messages/${id}/empathy`, {
+    const result = await api<{ added: boolean; empathy_count: number }>(`/messages/${id}/empathy`, {
       method: "POST",
       body: JSON.stringify({
         turnstile_token: currentUser() ? undefined : await requestChallenge("empathy"),
@@ -412,8 +449,8 @@ export const store = {
   ready,
   identitas: async () => currentUser(),
   listGalaksi,
-  listGalaksiLadang: listGalaksi,
-  listPesanLadang: listPesan,
+  listGalaksiLadang,
+  listPesanLadang,
   getGalaksi,
   saveGalaksi,
   saveGalaksiBaru: saveGalaksi,
@@ -427,7 +464,9 @@ export const store = {
         )
       : item.privasi === "publik" || item.publicBody
         ? Promise.resolve(item.publicBody)
-        : vault.decryptPesan(item.isi),
+        : item.isi
+          ? vault.decryptPesan(item.isi)
+          : Promise.resolve(null),
   getMeta,
   stats,
   listDoa,
@@ -450,7 +489,7 @@ export const store = {
       if (!support.available) throw new Error(support.reason);
       return id;
     }
-    const candidates = await listPesan(gid);
+    const candidates = await listPesanLadang(gid);
     const p = candidates.find((p) => supportStatus(p).available);
     if (!p) throw new Error("Galaksi ini belum memiliki pesan publik yang disetujui.");
     return p.id;

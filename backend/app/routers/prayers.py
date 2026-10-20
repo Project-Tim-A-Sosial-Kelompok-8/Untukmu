@@ -25,7 +25,8 @@ from .social import readable_public
 from .uploads import storage
 
 router = APIRouter(tags=["Doa dan kurasi"])
-CATALOG_IDS = {f"{tr['id']}/{e['id']}" for tr in CATALOG for e in tr["entri"]}
+CATALOG_ENTRIES = {f"{tr['id']}/{e['id']}": (tr, e) for tr in CATALOG for e in tr["entri"]}
+CATALOG_IDS = set(CATALOG_ENTRIES)
 
 
 def revision(row):
@@ -137,18 +138,24 @@ async def admin_preview(tradition: str, prayer_id: str, admin: AdminUser, db: DB
 
 @router.get("/admin/prayers")
 async def admin_catalog(admin: AdminUser, db: DB):
+    rows = {row.id: row for row in await db.scalars(select(PrayerContent))}
     return [
         {
-            "id": row.id,
-            "content": row.content,
-            "reviewed": row.reviewed,
-            "audio_meta": row.audio_meta,
-            "has_audio": bool(row.audio_key),
-            "audio_preview_url": audio_url(row.audio_key),
-            "reviewed_at": row.reviewed_at,
+            "id": identifier,
+            "tradition": tradition["id"],
+            "tradition_label": tradition["label"]["id"],
+            "catalog_title": original["nama"]["id"],
+            # Curator edits, including intentional null text, take precedence over defaults.
+            "content": {**original, **rows[identifier].content, "detik": duration_seconds(rows[identifier])},
+            "reviewed": rows[identifier].reviewed,
+            "audio_meta": rows[identifier].audio_meta,
+            "has_audio": bool(rows[identifier].audio_key),
+            "publicly_available": rows[identifier].reviewed and bool(rows[identifier].audio_key),
+            "audio_preview_url": audio_url(rows[identifier].audio_key),
+            "reviewed_at": rows[identifier].reviewed_at,
         }
-        for row in await db.scalars(select(PrayerContent).order_by(PrayerContent.id))
-        if row.id in CATALOG_IDS
+        for identifier, (tradition, original) in CATALOG_ENTRIES.items()
+        if identifier in rows
     ]
 
 
@@ -179,7 +186,7 @@ async def curate(tradition: str, prayer_id: str, body: PrayerContentInput, admin
 async def audio_presign(
     tradition: str, prayer_id: str, body: PrayerAudioInput, admin: AdminUser, db: DB, request: Request
 ):
-    await throttle(request, "curation-audio", 10, admin.id)
+    await throttle(request, "curation-audio-presign", 10, admin.id)
     row = await entry(db, f"{tradition}/{prayer_id}", True)
     key = f"curated/{row.id}/{uuid4()}"
     signed = await run_in_threadpool(
@@ -197,7 +204,7 @@ async def audio_presign(
 
 @router.post("/admin/prayers/{tradition}/{prayer_id}/audio/complete")
 async def audio_complete(tradition: str, prayer_id: str, admin: AdminUser, db: DB, request: Request):
-    await throttle(request, "curation-audio", 10, admin.id)
+    await throttle(request, "curation-audio-complete", 10, admin.id)
     row = await entry(db, f"{tradition}/{prayer_id}", True)
     pending = row.audio_meta.get("pending")
     if not pending:

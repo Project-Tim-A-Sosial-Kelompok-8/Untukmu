@@ -10,11 +10,11 @@ from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.exc import IntegrityError
 
 from ..message_metadata import mood_values, normalize_mood, normalize_tag, normalize_tags
-from ..models import Block, Empathy, Message, ModerationDecision, Report, now
+from ..models import Block, Constellation, Empathy, Message, MessageConstellation, ModerationDecision, Report, now
 from ..public_content import open_public
 from ..schemas import BlockInput, DecisionInput, PublicAction, ReportInput
 from ..security import DB, AdminUser, CurrentUser, OptionalUser, get_redis, throttle, verify_turnstile, visitor_identity
-from .content import invalidate
+from .content import galaxy_view, invalidate
 
 router = APIRouter(tags=["Sosial dan moderasi"])
 
@@ -65,6 +65,103 @@ def public_view(row, user=None):
         "attachment_ids": [],
         "moderation_status": "approved",
     }
+
+
+def public_galaxy_view(row, count, user):
+    # Publishing a message does not publish the recipient's name, a custom
+    # category, or the owner's encrypted photo associated with its galaxy.
+    return {
+        **galaxy_view(row),
+        "target_label": "Galaksi anonim",
+        "custom_category": None,
+        "visual_type": "light_symbol",
+        "visual_ref": None,
+        "is_mine": bool(user and user.id == row.owner_id),
+        "public_message_count": count,
+    }
+
+
+def public_galaxies(user):
+    return (
+        select(Constellation, func.count(Message.id).label("public_message_count"))
+        .join(MessageConstellation, MessageConstellation.constellation_id == Constellation.id)
+        .join(Message, Message.id == MessageConstellation.message_id)
+        .where(visible_filter(user))
+        .group_by(Constellation.id)
+    )
+
+
+async def public_message_views(rows, db, user):
+    if not rows:
+        return []
+    links = (
+        await db.execute(
+            select(MessageConstellation.message_id, MessageConstellation.constellation_id)
+            .where(MessageConstellation.message_id.in_([row.id for row in rows]))
+            .order_by(MessageConstellation.constellation_id)
+        )
+    ).all()
+    constellations = {}
+    for message_id, constellation_id in links:
+        constellations.setdefault(message_id, []).append(constellation_id)
+    return [{**public_view(row, user), "constellation_ids": constellations.get(row.id, [])} for row in rows]
+
+
+@router.get("/explore/constellations")
+async def explore_galaxies(
+    db: DB,
+    user: OptionalUser,
+    offset: int = Query(0, ge=0, le=100000),
+    limit: int = Query(100, ge=1, le=200),
+):
+    rows = await db.execute(
+        public_galaxies(user)
+        .order_by(func.max(Message.created_at).desc(), Constellation.id)
+        .offset(offset)
+        .limit(limit)
+    )
+    return [public_galaxy_view(row, count, user) for row, count in rows]
+
+
+@router.get("/explore/messages")
+async def explore_messages(
+    db: DB,
+    user: OptionalUser,
+    offset: int = Query(0, ge=0, le=100000),
+    limit: int = Query(100, ge=1, le=200),
+):
+    rows = (
+        await db.scalars(
+            select(Message)
+            .where(visible_filter(user))
+            .order_by(Message.created_at.desc(), Message.id)
+            .offset(offset)
+            .limit(limit)
+        )
+    ).all()
+    return await public_message_views(rows, db, user)
+
+
+@router.get("/explore/constellations/{galaxy_id}/messages")
+async def explore_galaxy_messages(
+    galaxy_id: UUID,
+    db: DB,
+    user: OptionalUser,
+    offset: int = Query(0, ge=0, le=100000),
+    limit: int = Query(100, ge=1, le=200),
+):
+    available = await db.scalar(public_galaxies(user).where(Constellation.id == str(galaxy_id)))
+    if available is None:
+        raise HTTPException(404, "Galaksi publik tidak ditemukan.")
+    rows = await db.scalars(
+        select(Message)
+        .join(MessageConstellation)
+        .where(MessageConstellation.constellation_id == str(galaxy_id), visible_filter(user))
+        .order_by(Message.created_at, Message.id)
+        .offset(offset)
+        .limit(limit)
+    )
+    return [{**public_view(row, user), "constellation_ids": [str(galaxy_id)]} for row in rows]
 
 
 @router.get("/explore")

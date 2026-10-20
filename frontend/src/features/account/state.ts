@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { currentUser } from "../../lib/api/client";
+import { currentUser, restore } from "../../lib/api/client";
 
 type Mode = "login" | "register" | "settings" | "delete";
 export const useAccount = create<{
@@ -22,8 +22,18 @@ export function resolveLogin(value: boolean) {
   waiting = [];
   useAccount.setState({ open: false, required: false });
 }
-export function requireLogin() {
-  if (currentUser()) return Promise.resolve(true);
+export async function requireLogin() {
+  if (!currentUser()) {
+    try {
+      await restore();
+    } catch (error) {
+      window.UM.ui.toast(
+        error instanceof Error ? error.message : "Sesi belum berhasil dipulihkan.",
+      );
+      return false;
+    }
+  }
+  if (currentUser()) return true;
   useAccount.getState().show("login");
   return new Promise<boolean>((resolve) => waiting.push(resolve));
 }

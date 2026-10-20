@@ -70,10 +70,14 @@ test("doa tersedia untuk pengunjung dengan tujuh tradisi dan isi yang bisa dipil
   await frame.locator(".um-dock [data-act=peta]").click();
   await expect(frame.locator(".um-skyctl [data-mode=kenangan]")).toHaveClass(/on/);
   await expect(frame.locator(".um-skyctl")).toContainText(
-    "Bintang berwarna menandai galaksi kenanganmu.",
+    "Bintang berwarna menandai galaksi kenanganmu dan galaksi pesan publik.",
   );
   await expect(frame.locator("[data-mode=astronomi], #galaxystrip, #solarstrip")).toHaveCount(0);
   await frame.locator(".um-dock [data-act=rumah]").click();
   await expect.poll(() => engine.evaluate(() => window.UM_ENGINE!.metrics().mode)).toBe("galaxy");
-  expect(await engine.evaluate("UM.galaksi.state.daftar.length")).toBe(0);
+  expect(
+    await engine.evaluate(
+      "UM.galaksi.state.daftar.filter(item => item.g.sendiri !== false).length",
+    ),
+  ).toBe(0);
 });

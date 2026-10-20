@@ -39,11 +39,23 @@
     "page": "https://irc.audiodharma.org/talks/4293",
     "file": "karaniya-metta.mp3",
     "duration_seconds": 287,
+    "sha256": "11fb5484130a48e198642c75f816115459da24814e589d96bf3daf3578290247",
     "license": "CC-BY-NC-ND-4.0",
     "license_url": "https://creativecommons.org/licenses/by-nc-nd/4.0/",
     "attribution": "Dawn Neal — Karaniya Metta Sutta, Insight Meditation Center / AudioDharma (2013); terjemahan Amaravati",
     "language": "Inggris",
-    "sha256": "11fb5484130a48e198642c75f816115459da24814e589d96bf3daf3578290247",
     "bytes": 2298787
+  },
+  "namo-tassa": {
+    "page": "https://amaravati.org/audio/parittas-namo-tassa-page-27/",
+    "url": "https://cdn.amaravati.org/wp-content/uploads/2014/10/11/02-Parittas-Namo-Tassa-page-27.mp3",
+    "file": "namo-tassa.mp3",
+    "duration_seconds": 43,
+    "sha256": "63a29521ac0c84b247239aadb04f769c7c7bfab790635a7868feb8f98c069784",
+    "license": "Amaravati Publications — free distribution (rekaman utuh tanpa perubahan)",
+    "license_url": "https://amaravati.org/support/amaravati-publications/",
+    "attribution": "Amaravati Publications — Parittas: Namo Tassa (halaman 27), Amaravati Buddhist Monastery (2014). Rekaman asli utuh; distribusi gratis.",
+    "language": "Pali",
+    "bytes": 882373
   }
 }

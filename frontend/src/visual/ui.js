@@ -356,7 +356,7 @@ UM.ui = (function () {
       '<div class="um-chips"><button class="um-chip on" data-mode="kenangan">' +
         teks(T("skyKenangan")) +
         "</button></div>" +
-        '<div class="um-hint">Bintang berwarna menandai galaksi kenanganmu. Klik bintangnya untuk mengunjungi galaksi. Geser untuk melihat langit.</div>',
+        '<div class="um-hint">Bintang berwarna menandai galaksi kenanganmu dan galaksi pesan publik. Klik bintangnya untuk mengunjungi galaksi. Geser untuk melihat langit.</div>',
     );
   }
 
@@ -404,6 +404,8 @@ UM.ui = (function () {
     }
     if (comp.saving) return;
     galaksiId = galaksiId || UM.galaksi.state.aktif || null;
+    var tujuan = UM.galaksi.state.peta[galaksiId];
+    if (tujuan && tujuan.g.sendiri === false) galaksiId = null;
     comp.step = 0;
     comp.err = "";
     comp.isi = "";
@@ -862,7 +864,7 @@ UM.ui = (function () {
       escAttr(comp.releaseAt || "") +
       '"><p class="um-hint">Waktu mengikuti perangkatmu. Pesan publik terjadwal terbit setelah waktu ini jika lolos pemeriksaan awal. Pesan privat menjadi kapsul waktu; pemilik tetap dapat mengelolanya.</p></div>' +
       (comp.privasi === "publik"
-        ? '<div class="um-note">Pesan publik anonim tampil setelah lolos pemeriksaan awal. Jika ditandai, pesan menunggu tinjauan moderator. Foto serta lampiran tetap privat milik akun.</div>'
+        ? '<div class="um-note">Pesan publik anonim tampil di Jelajah dan sebagai bintang dalam galaksi yang dapat dikunjungi akun lain maupun pengunjung. Pesan terbit setelah lolos pemeriksaan awal dan waktu pembukaan. Jika ditandai, pesan menunggu tinjauan moderator. Nama tujuan, foto, dan lampiran tetap privat milik akun.</div>'
         : comp.privasi === "unlisted"
           ? '<div class="um-note">Isi tautan terbatas dienkripsi di perangkat. Hanya penerima dengan tautan lengkap dapat membukanya. Buat tautan melalui Kelola pesan setelah menyimpan.</div>'
           : "") +
@@ -1160,148 +1162,179 @@ UM.ui = (function () {
     var g = item.g;
     var requestId = ++kartuRequest;
     var panelBefore = bpBody.firstChild;
-    Promise.all([
-      (UM.store.listPesanLadang || UM.store.listPesan)(g.id),
-      UM.store.listDoa(g.id),
-    ]).then(function (r) {
-      if (requestId !== kartuRequest || bpBody.firstChild !== panelBefore) return;
-      var semua = r[0],
-        doa = r[1];
-      /* Sama seperti pelapis di um-galaksi.js: piringan = bintang, sabuk = debu.
+    Promise.all([(UM.store.listPesanLadang || UM.store.listPesan)(g.id), UM.store.listDoa(g.id)])
+      .then(function (r) {
+        if (requestId !== kartuRequest || bpBody.firstChild !== panelBefore) return;
+        var semua = r[0],
+          doa = r[1];
+        /* Sama seperti pelapis di um-galaksi.js: piringan = bintang, sabuk = debu.
          Kalau penyaringnya berbeda, angka di kartu tidak akan sama dengan yang
          benar-benar tergambar di galaksinya. */
-      var punyaku = semua.filter(function (p) {
-        return p.sendiri !== false || p.piringan === true;
-      });
-      var orangLain = item.batuList || [];
-      var jumlah = UM.galaksi.hitungCatatan(punyaku);
-      UM.renderScreen(
-        bpBody,
-        '<div id="bp-name" style="color:' +
-          warnaAman(g.warna) +
-          '">' +
-          escAttr(g.nama) +
-          "</div>" +
-          '<span id="bp-type">' +
-          escAttr(UM.i18n.kategori(g.kategori)) +
-          " · " +
-          escAttr(
-            T(
-              "jenis" +
-                (g.kind === "spiral"
-                  ? "Spiral"
-                  : g.kind === "ellipsoid"
-                    ? "Ellipsoid"
-                    : "Irregular"),
-            ),
-          ) +
-          "</span>" +
-          (g.foto
-            ? '<img id="bp-img" src="' +
-              escAttr(g.foto) +
-              '" alt="' +
-              escAttr(g.nama) +
-              '" loading="lazy">'
-            : "") +
-          '<div class="bp-row" data-galaxy-count="pesan"><span class="k">' +
-          escAttr(T("gkBintang")) +
-          '</span><span class="v">' +
-          jumlah.pesan +
-          "</span></div>" +
-          '<div class="bp-row"><span class="k">' +
-          escAttr(T("gkBatu")) +
-          '</span><span class="v">' +
-          orangLain.length +
-          "</span></div>" +
-          '<div class="bp-row" data-galaxy-count="doa-diterima"><span class="k">' +
-          escAttr(T("gkDoa")) +
-          '</span><span class="v">' +
-          jumlah.doaDiterima +
-          "</span></div>" +
-          '<div id="bp-desc"><div class="um-muted">' +
-          teks(T("gkHint")) +
-          "</div></div>" +
-          '<div class="um-muted" style="margin-top:8px">' +
-          teks(T("legenda")) +
-          "</div>" +
-          '<div id="um-gk-list" style="margin-top:10px"></div>' +
-          '<button class="um-btn primary" id="um-gk-tulis" type="button" style="width:100%;margin-top:10px">' +
-          teks(T("gkKirim")) +
-          "</button>" +
-          '<button class="um-btn" id="um-gk-doa" type="button" style="width:100%;margin-top:8px">' +
-          teks(T("gkDoakan")) +
-          "</button>",
-      );
-      bpEl.classList.add("open");
-
-      // daftar ringkas berisi pesan MILIKMU saja — pesan dari orang lain sudah
-      // bisa dibaca satu per satu dengan mengklik butir debunya di sabuk
-      var lb = document.getElementById("um-gk-list");
-      if (lb) {
-        var tampil = punyaku.slice().reverse().slice(0, 6);
+        var punyaku = semua.filter(function (p) {
+          return p.sendiri !== false || p.piringan === true;
+        });
+        var orangLain = item.batuList || [];
+        var jumlah = UM.galaksi.hitungCatatan(punyaku);
         UM.renderScreen(
-          lb,
-          tampil.length
-            ? '<ul class="um-mini">' +
-                tampil
-                  .map(function (p) {
-                    var idx = -1;
-                    if (item.pesanDiTitik) {
-                      var kunci = Object.keys(item.pesanDiTitik);
-                      for (var ki = 0; ki < kunci.length; ki++) {
-                        if (item.pesanDiTitik[kunci[ki]].id === p.id) {
-                          idx = parseInt(kunci[ki], 10);
-                          break;
+          bpBody,
+          '<div id="bp-name" style="color:' +
+            warnaAman(g.warna) +
+            '">' +
+            escAttr(g.nama) +
+            "</div>" +
+            '<span id="bp-type">' +
+            escAttr(UM.i18n.kategori(g.kategori)) +
+            " · " +
+            escAttr(
+              T(
+                "jenis" +
+                  (g.kind === "spiral"
+                    ? "Spiral"
+                    : g.kind === "ellipsoid"
+                      ? "Ellipsoid"
+                      : "Irregular"),
+              ),
+            ) +
+            "</span>" +
+            (g.foto
+              ? '<img id="bp-img" src="' +
+                escAttr(g.foto) +
+                '" alt="' +
+                escAttr(g.nama) +
+                '" loading="lazy">'
+              : "") +
+            '<div class="bp-row" data-galaxy-count="pesan"><span class="k">' +
+            escAttr(T("gkBintang")) +
+            '</span><span class="v">' +
+            jumlah.pesan +
+            "</span></div>" +
+            '<div class="bp-row"><span class="k">' +
+            escAttr(T("gkBatu")) +
+            '</span><span class="v">' +
+            orangLain.length +
+            "</span></div>" +
+            '<div class="bp-row" data-galaxy-count="doa-diterima"><span class="k">' +
+            escAttr(T("gkDoa")) +
+            '</span><span class="v">' +
+            jumlah.doaDiterima +
+            "</span></div>" +
+            '<div id="bp-desc"><div class="um-muted">' +
+            teks(T("gkHint")) +
+            "</div></div>" +
+            '<div class="um-muted" style="margin-top:8px">' +
+            teks(T("legenda")) +
+            "</div>" +
+            '<div id="um-gk-list" style="margin-top:10px"></div>' +
+            (g.sendiri !== false
+              ? '<button class="um-btn primary" id="um-gk-tulis" type="button" style="width:100%;margin-top:10px">' +
+                teks(T("gkKirim")) +
+                "</button>"
+              : '<p class="um-note">Galaksi anonim ini menampilkan pesan publik yang sudah tersedia. Pilih bintang untuk membaca pesannya.</p>') +
+            '<button class="um-btn" id="um-gk-doa" type="button" style="width:100%;margin-top:8px">' +
+            teks(T("gkDoakan")) +
+            "</button>",
+        );
+        bpEl.classList.add("open");
+
+        // Show the same readable message stars as the scene, including public
+        // stars when visiting another account's anonymous galaxy.
+        var lb = document.getElementById("um-gk-list");
+        if (lb) {
+          var tampil = punyaku.slice().reverse().slice(0, 6);
+          UM.renderScreen(
+            lb,
+            tampil.length
+              ? '<ul class="um-mini">' +
+                  tampil
+                    .map(function (p) {
+                      var idx = -1;
+                      if (item.pesanDiTitik) {
+                        var kunci = Object.keys(item.pesanDiTitik);
+                        for (var ki = 0; ki < kunci.length; ki++) {
+                          if (item.pesanDiTitik[kunci[ki]].id === p.id) {
+                            idx = parseInt(kunci[ki], 10);
+                            break;
+                          }
                         }
                       }
-                    }
-                    return (
-                      '<li><span class="t" data-isi="' +
-                      escAttr(p.id) +
-                      '">…</span>' +
-                      (idx >= 0
-                        ? '<button class="um-mini-btn" data-bintang="' +
-                          idx +
-                          '">' +
-                          teks(T("gkLihat")) +
-                          "</button>"
-                        : "") +
-                      "</li>"
-                    );
-                  })
-                  .join("") +
-                "</ul>"
-            : '<div class="um-dim" style="font-size:12px">' + teks(T("pcEmpty")) + "</div>",
-        );
-        tampil.forEach(function (p) {
-          UM.store.bacaIsi(p).then(function (txt) {
-            var node = lb.querySelector('[data-isi="' + p.id + '"]');
-            if (!node) return;
-            if (txt == null) {
-              node.classList.add("locked");
-              node.textContent = "🔒 " + T("lockedShort");
-            } else node.textContent = txt.length > 70 ? txt.slice(0, 70) + "…" : txt;
+                      return (
+                        '<li><span class="t" data-isi="' +
+                        escAttr(p.id) +
+                        '">…</span>' +
+                        (idx >= 0
+                          ? '<button class="um-mini-btn" data-bintang="' +
+                            idx +
+                            '">' +
+                            teks(T("gkLihat")) +
+                            "</button>"
+                          : "") +
+                        "</li>"
+                      );
+                    })
+                    .join("") +
+                  "</ul>"
+              : '<div class="um-dim" style="font-size:12px">' + teks(T("pcEmpty")) + "</div>",
+          );
+          tampil.forEach(function (p) {
+            UM.store.bacaIsi(p).then(function (txt) {
+              var node = lb.querySelector('[data-isi="' + p.id + '"]');
+              if (!node) return;
+              if (txt == null) {
+                node.classList.add("locked");
+                node.textContent = "🔒 " + T("lockedShort");
+              } else node.textContent = txt.length > 70 ? txt.slice(0, 70) + "…" : txt;
+            });
           });
-        });
-        lb.onclick = function (e) {
-          var b = e.target.closest ? e.target.closest("[data-bintang]") : null;
-          if (!b) return;
-          var iTitik = parseInt(b.getAttribute("data-bintang"), 10);
-          var pesanTitik = item.pesanDiTitik ? item.pesanDiTitik[iTitik] : null;
-          UM.galaksi.terbangKeTitik(item, iTitik, pesanTitik);
-        };
-      }
-      var tb = document.getElementById("um-gk-tulis");
-      if (tb)
-        tb.onclick = function () {
-          bukaKomposer(g.id);
-        };
-      var db = document.getElementById("um-gk-doa");
-      if (db)
-        db.onclick = function () {
-          bukaDoa(g.id, null);
-        };
-    });
+          lb.onclick = function (e) {
+            var b = e.target.closest ? e.target.closest("[data-bintang]") : null;
+            if (!b) return;
+            var iTitik = parseInt(b.getAttribute("data-bintang"), 10);
+            var pesanTitik = item.pesanDiTitik ? item.pesanDiTitik[iTitik] : null;
+            UM.galaksi.terbangKeTitik(item, iTitik, pesanTitik);
+          };
+        }
+        var tb = document.getElementById("um-gk-tulis");
+        if (tb)
+          tb.onclick = function () {
+            bukaKomposer(g.id);
+          };
+        var db = document.getElementById("um-gk-doa");
+        if (db)
+          db.onclick = function () {
+            bukaDoa(g.id, null);
+          };
+      })
+      .catch(function (error) {
+        if (requestId !== kartuRequest || bpBody.firstChild !== panelBefore) return;
+        UM.galaksi.bersihkanPilihan();
+        toast(
+          error.message || "Galaksi belum tersedia. Muat ulang halaman untuk memperbarui daftar.",
+        );
+      });
+  }
+
+  function empatiDiterima(p) {
+    return p.sendiri !== false && p.empathyCount > 0
+      ? '<div class="um-muted" data-empathy-received style="margin-top:8px">' +
+          p.empathyCount +
+          " " +
+          teks(T("pcEmpatiReceived")) +
+          "</div>"
+      : "";
+  }
+
+  function kirimEmpati(button, id) {
+    button.disabled = true;
+    UM.store
+      .empathy(id)
+      .then(function (result) {
+        if (button.isConnected) button.textContent = T("pcEmpatiSent");
+        toast(T(result.added ? "empathiToast" : "empathiAlready"));
+      })
+      .catch(function (error) {
+        button.disabled = false;
+        toast(error.message);
+      });
   }
 
   /* Kartu untuk satu titik di lengan spiral. SEMUA titik bisa diklik: yang
@@ -1360,6 +1393,7 @@ UM.ui = (function () {
             escAttr(T("pcPendoa")) +
             "</div>"
           : "") +
+        empatiDiterima(p) +
         '<div class="um-muted" style="margin-top:10px">' +
         teks(T(milikSendiri ? "titikSendiri" : "titikOrangLain")) +
         "</div>" +
@@ -1367,9 +1401,11 @@ UM.ui = (function () {
           ? '<button class="um-btn primary" id="um-b-doakan" type="button" style="width:100%;margin-top:10px">' +
             "Doakan ucapan ini" +
             "</button>" +
-            '<button class="um-btn" id="um-b-empati" type="button" style="width:100%;margin-top:8px">' +
+            '<button class="um-btn" id="um-b-empati" type="button" aria-describedby="um-empathy-hint" style="width:100%;margin-top:8px">' +
             teks(T("pcEmpati")) +
-            "</button>"
+            '</button><p class="um-note" id="um-empathy-hint">' +
+            teks(T("pcEmpatiHint")) +
+            "</p>"
           : '<p class="um-note" role="status">' + teks(support.reason) + "</p>"),
     );
     bpEl.classList.add("open");
@@ -1393,16 +1429,7 @@ UM.ui = (function () {
     var em = document.getElementById("um-b-empati");
     if (em)
       em.onclick = function () {
-        em.disabled = true;
-        UM.store
-          .empathy(p.id)
-          .then(function () {
-            toast(T("empathiToast"));
-          })
-          .catch(function (err) {
-            em.disabled = false;
-            toast(err.message);
-          });
+        kirimEmpati(em, p.id);
       };
   }
 
@@ -1629,7 +1656,7 @@ UM.ui = (function () {
   }
   function renderDashPesan() {
     var request = ++dashRequest;
-    Promise.all([UM.store.listPesan(), UM.store.listGalaksi()])
+    Promise.all([UM.store.listPesan(undefined, true), UM.store.listGalaksi()])
       .then(function (r) {
         if (request !== dashRequest || !dashEl.classList.contains("on")) return;
         // hanya pesan milikmu: pesan dari orang lain jumlahnya ratusan dan sudah
@@ -1708,6 +1735,7 @@ UM.ui = (function () {
               escAttr(p.id) +
               '">…</div>' +
               lampiran(p) +
+              empatiDiterima(p) +
               (p.pendoa && p.pendoa.total
                 ? '<div class="um-muted" style="margin-top:6px">✦ ' +
                   p.pendoa.total +
@@ -1793,7 +1821,9 @@ UM.ui = (function () {
       (expTag ? " · Tag: #" + expTag : " · Semua tag");
     UM.renderScreen(
       expEl.querySelector(".um-wrap"),
-      '<div class="um-head"><div><div class="um-h1">Jelajah ucapan</div><p class="um-muted">Ruang untuk membaca ucapan publik anonim dan saling mendukung. Sampaikan empati atau pilih Doakan ucapan ini untuk membuka pilihan agama atau tradisi. Pesan pribadi Anda ada di Ruang Pribadi.</p></div><button class="um-close" data-act="close" aria-label="Tutup Jelajah">×</button></div>' +
+      '<div class="um-head"><div><div class="um-h1">Jelajah ucapan</div><p class="um-muted">Ruang untuk membaca ucapan publik anonim dan saling mendukung. Pesan pribadi Anda ada di Ruang Pribadi.</p><p class="um-note" id="um-explore-empathy-hint">' +
+        teks(T("pcEmpatiHint")) +
+        '</p></div><button class="um-close" data-act="close" aria-label="Tutup Jelajah">×</button></div>' +
         '<div class="um-card"><div class="um-grid2"><div class="um-field"><label class="um-label" for="um-filter-mood">Suasana hati</label><select id="um-filter-mood" class="um-select"' +
         busy +
         '><option value="">Semua</option>' +
@@ -1870,9 +1900,11 @@ UM.ui = (function () {
                       '" data-g="' +
                       escAttr(p.galaksiId) +
                       '">Doakan ucapan ini</button>' +
-                      '<button class="um-btn small" data-act="empati" data-id="' +
+                      '<button class="um-btn small" data-act="empati" aria-describedby="um-explore-empathy-hint" data-id="' +
                       escAttr(p.id) +
-                      '">Aku merasakan ini</button>' +
+                      '">' +
+                      teks(T("pcEmpati")) +
+                      "</button>" +
                       '<button class="um-btn small ghost" data-act="lapor" data-id="' +
                       escAttr(p.id) +
                       '">Laporkan</button>' +
@@ -1973,17 +2005,7 @@ UM.ui = (function () {
         expEl.scrollTop = 0;
       } else if (act === "doa") bukaDoa(btn.getAttribute("data-g"), id);
       else if (act === "empati") {
-        btn.disabled = true;
-        UM.store
-          .empathy(id)
-          .then(function () {
-            if (btn.isConnected) btn.textContent = "Empati terkirim";
-            toast(T("empathiToast"));
-          })
-          .catch(function (error) {
-            btn.disabled = false;
-            toast(error.message);
-          });
+        kirimEmpati(btn, id);
       } else if (act === "lapor" || act === "block")
         UM.openSocial(act === "lapor" ? "report" : "block", id);
     });

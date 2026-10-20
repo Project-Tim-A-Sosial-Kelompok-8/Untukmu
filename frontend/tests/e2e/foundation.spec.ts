@@ -1,5 +1,5 @@
 import { test, expect } from "@playwright/test";
-import { login, register } from "./helpers";
+import { register } from "./helpers";
 
 test("akun → kunci → pesan privat → muat ulang → buka lagi", async ({ page }) => {
   test.setTimeout(180000);
@@ -13,10 +13,7 @@ test("akun → kunci → pesan privat → muat ulang → buka lagi", async ({ pa
     if (request.url().includes("/api/v1/") && request.postData())
       requests.push({ url: request.url(), body: request.postData()! });
   });
-  const { frame, email, password, recovery, registrationConsoleError } = await register(
-    page,
-    "browser",
-  );
+  const { frame, password, recovery, registrationConsoleError } = await register(page, "browser");
   expect(recovery.length).toBe(43);
   await frame.locator("#um-nama").fill("Galaksi sahabat");
   await frame.locator("#um-comp [data-act=cat]").first().click();
@@ -37,10 +34,11 @@ test("akun → kunci → pesan privat → muat ulang → buka lagi", async ({ pa
   expect(data.payload.alg).toBe("A256GCM");
   expect(data.payload.ct).toBeTruthy();
   await page.reload();
-  await login(page, email, password);
   await frame.locator("#um-entry.on").waitFor();
+  expect(await page.frames()[1].evaluate(() => window.UM.account.isLogged())).toBe(true);
+  expect(await page.frames()[1].evaluate(() => window.UM.crypto.unlocked())).toBe(false);
+  await expect(frame.locator("#um-account-title")).toHaveCount(0);
   await frame.locator("#um-entry [data-act=skip]").click();
-  await page.frames()[1].evaluate(() => window.UM.crypto.lock());
   await frame.locator(".um-dock [data-act=setup]").click();
   await frame.locator("#um-pw").fill(password);
   await frame.locator("#um-setup [data-act=unlock]").click();
@@ -52,6 +50,7 @@ test("akun → kunci → pesan privat → muat ulang → buka lagi", async ({ pa
   expect(content).toBe(secret);
   const tampering = await page.frames()[1].evaluate(async () => {
     const [item] = await window.UM.store.listPesan();
+    if (!item.isi) throw new Error("Pesan privat harus memiliki payload terenkripsi.");
     item.isi.aad += ":changed";
     try {
       await window.UM.crypto.decryptPesan(item.isi);

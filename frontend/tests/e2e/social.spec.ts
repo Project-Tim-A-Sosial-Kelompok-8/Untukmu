@@ -50,8 +50,22 @@ test("pesan publik muncul pada filter Jelajah, empati, dan alur Doa dengan tujua
   await expect(guest.locator("#um-exp .um-item")).toHaveCount(1);
   await expect(guest.locator("#um-exp .um-item")).toContainText("#kenangan");
   await expect(guest.locator("#um-exp .um-item")).toContainText("Rindu");
+  await expect(guest.locator("#um-explore-empathy-hint")).toContainText("dukungan anonim");
+  await expect(guest.locator("#um-exp [data-act=empati]").first()).toHaveText("Berikan empati");
   await guest.locator("#um-exp [data-act=empati]").first().click();
   await expect(guest.locator("#um-exp [data-act=empati]").first()).toBeDisabled();
+  await expect(guest.locator("#um-exp [data-act=empati]").first()).toHaveText("Empati terkirim");
+  await expect(guest.locator("#um-exp .um-item")).toContainText("0 pendoa");
+  await expect(guest.locator("[data-empathy-received]")).toHaveCount(0);
+  await guest.locator("#um-exp [data-act=filter]").click();
+  await guest.locator("#um-exp [data-act=empati]").first().click();
+  await expect(guest.locator(".um-toast")).toContainText("sudah tercatat");
+  await frame.locator("#um-exp [data-act=close]").click();
+  await frame.locator(".um-dock [data-act=dash]").click();
+  await expect(frame.locator("#um-dash [data-empathy-received]")).toHaveText(
+    "1 dukungan empati diterima",
+  );
+  await frame.locator("#um-dash [data-act=close]").click();
   await visitor.screenshot({ path: testInfo.outputPath("jelajah-filter-dan-empati.png") });
   await guest.locator("#um-exp [data-act=lapor]").first().click();
   await guest.locator("#um-report-reason").fill("Mohon diperiksa kembali konteksnya.");
@@ -92,7 +106,12 @@ test("pesan publik muncul pada filter Jelajah, empati, dan alur Doa dengan tujua
   expect(
     await page.frames()[1].evaluate('UM.galaksi.state.peta["publik-bersama"]'),
   ).toBeUndefined();
-  expect(await visitor.frames()[1].evaluate("UM.galaksi.state.daftar.length")).toBe(0);
+  expect(
+    await visitor
+      .frames()[1]
+      .evaluate("UM.galaksi.state.daftar.filter(item => item.g.sendiri !== false).length"),
+  ).toBe(0);
+  expect(await visitor.frames()[1].evaluate("UM.galaksi.state.daftar.length")).toBeGreaterThan(0);
   expect(await visitor.frames()[1].evaluate("UM.store.listDoa()")).toEqual([]);
   await guest.getByRole("button", { name: "Selesai", exact: true }).click();
   await visitor.frames()[1].evaluate("UM.ui.bukaDoa()");

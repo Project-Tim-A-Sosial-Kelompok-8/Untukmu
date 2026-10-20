@@ -4,9 +4,14 @@ export async function register(
   prefix: string,
   options: { path?: string; startComposer?: boolean } = {},
 ) {
+  // Registration always creates a new account, including in a second tab that
+  // shares a context with an existing account. Leave that tab's access token
+  // alive so cross-tab identity checks still exercise a real session switch.
+  await page.context().clearCookies({ name: "um_refresh" });
   await page.goto(options.path || "/");
   const frame = page.frameLocator("iframe");
   await expect(frame.locator("html")).toHaveAttribute("data-renderer", "react-three-fiber");
+  await page.frames()[1].evaluate(() => window.UM.store.ready());
   await page.frames()[1].evaluate(() => window.UM.account.open());
   await expect(frame.locator("#um-account-title")).toHaveText("Masuk ke Untukmu", {
     timeout: 20000,
@@ -53,6 +58,19 @@ export async function register(
 export async function login(page: Page, email: string, password: string) {
   const frame = page.frameLocator("iframe");
   await expect(frame.locator("html")).toHaveAttribute("data-renderer", "react-three-fiber");
+  await page.frames()[1].evaluate(() => window.UM.store.ready());
+  if (await page.frames()[1].evaluate(() => window.UM.account.isLogged())) {
+    // An explicit helper login selects fresh credentials. Session persistence
+    // tests instead assert the restored identity without calling this helper.
+    await Promise.all([
+      page.waitForEvent("framenavigated", { predicate: (frame) => frame.parentFrame() !== null }),
+      page.frames()[1].evaluate(() => {
+        void window.UM.account.logout();
+      }),
+    ]);
+    await expect(frame.locator("html")).toHaveAttribute("data-renderer", "react-three-fiber");
+    await page.frames()[1].evaluate(() => window.UM.store.ready());
+  }
   await page.frames()[1].evaluate(() => window.UM.account.open());
   await expect(frame.locator("#um-account-title")).toHaveText("Masuk ke Untukmu", {
     timeout: 20000,

@@ -15,6 +15,11 @@ const EXTENSIONS: Record<string, string> = {
   wav: "audio/wav",
   m4a: "audio/mp4",
 };
+export interface RecordingMetadata {
+  contentType: string;
+  durationSeconds: number;
+}
+const inspectedFiles = new WeakMap<File, Promise<RecordingMetadata>>();
 
 export function recordingType(file: File) {
   if (file.size < 100 || file.size > MAX_AUDIO_BYTES) {
@@ -27,7 +32,18 @@ export function recordingType(file: File) {
   return contentType;
 }
 
-export async function inspectRecording(file: File) {
+export function inspectRecording(file: File): Promise<RecordingMetadata> {
+  const existing = inspectedFiles.get(file);
+  if (existing) return existing;
+  const inspection = readRecording(file).catch((error) => {
+    inspectedFiles.delete(file);
+    throw error;
+  });
+  inspectedFiles.set(file, inspection);
+  return inspection;
+}
+
+async function readRecording(file: File): Promise<RecordingMetadata> {
   const contentType = recordingType(file);
   const url = URL.createObjectURL(file);
   const audio = document.createElement("audio");

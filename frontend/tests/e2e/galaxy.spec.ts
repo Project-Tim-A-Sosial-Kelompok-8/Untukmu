@@ -1,5 +1,5 @@
 import { expect, test, type FrameLocator, type Page } from "@playwright/test";
-import { register, login } from "./helpers";
+import { register } from "./helpers";
 
 interface GalaxySnapshot {
   mode: string;
@@ -61,7 +61,7 @@ test("simpan membuka galaksi dari Peta; galaksi dan bintang lama tetap tampil se
   test.setTimeout(240000);
   const errors: string[] = [];
   page.on("pageerror", (error) => errors.push(error.message));
-  const { frame, email, password } = await register(page, "galaxy-render");
+  const { frame } = await register(page, "galaxy-render");
   await saveNewGalaxy(frame, "Kenangan pertama");
   await expect
     .poll(() =>
@@ -156,9 +156,8 @@ test("simpan membuka galaksi dari Peta; galaksi dan bintang lama tetap tampil se
   ]) {
     await page.setViewportSize(viewport);
     await page.reload();
-    await login(page, email, password);
-    await page.frames()[1].evaluate(() => window.UM.crypto.lock());
     await frame.locator("#um-entry.on").waitFor();
+    expect(await page.frames()[1].evaluate(() => window.UM.account.isLogged())).toBe(true);
     const loaded = await scene(page);
     expect(loaded.target).toEqual([0, 0, 0]);
     expect(loaded.active).toBeNull();

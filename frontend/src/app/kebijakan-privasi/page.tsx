@@ -14,12 +14,15 @@ export default function Privacy() {
       <h2>Pesan publik dan tautan terbatas</h2>
       <p>
         Pesan publik anonim dapat dibaca layanan dan moderator, disandikan di penyimpanan dengan
-        kunci layanan, dan ditinjau sebelum terbit. Pesan tautan terbatas dienkripsi di perangkat
-        pemilik, tidak masuk jelajah, dan dibuka di perangkat penerima menggunakan kunci pada
-        fragmen tautan. Kunci tersebut tidak dikirim ke API. Tautan dapat dibuat ulang atau dicabut;
-        salinan yang telah dibaca penerima tidak dapat ditarik kembali. Pesan tautan terbatas dari
-        versi lama dipindahkan ke enkripsi perangkat saat pemilik masuk; tautan lama perlu dibuat
-        ulang.
+        kunci layanan, dan ditinjau sebelum terbit. Pesan yang disetujui dan sudah dibuka terlihat
+        di Jelajah, Doa, serta sebagai bintang pada galaksi anonim bagi akun lain dan pengunjung.
+        Tampilan galaksi publik menyertakan kategori, bentuk, warna, dan pesan publik; nama tujuan,
+        kategori khusus, foto, lampiran, dan pesan privat tetap hanya tersedia bagi pemilik akun.
+        Pesan tautan terbatas dienkripsi di perangkat pemilik, tidak masuk jelajah, dan dibuka di
+        perangkat penerima menggunakan kunci pada fragmen tautan. Kunci tersebut tidak dikirim ke
+        API. Tautan dapat dibuat ulang atau dicabut; salinan yang telah dibaca penerima tidak dapat
+        ditarik kembali. Pesan tautan terbatas dari versi lama dipindahkan ke enkripsi perangkat
+        saat pemilik masuk; tautan lama perlu dibuat ulang.
       </p>
       <h2>Penjadwalan dan kapsul waktu</h2>
       <p>

@@ -1,5 +1,5 @@
 import { expect, test } from "@playwright/test";
-import { register, login } from "./helpers";
+import { register } from "./helpers";
 
 test("pengaturan tersimpan; hapus dapat dibatalkan dan dicoba ulang; keluar menutup sesi", async ({
   page,
@@ -7,7 +7,7 @@ test("pengaturan tersimpan; hapus dapat dibatalkan dan dicoba ulang; keluar menu
   test.setTimeout(180000);
   const errors: string[] = [];
   page.on("pageerror", (error) => errors.push(error.message));
-  const { frame, email, password } = await register(page, "settings");
+  const { frame, password } = await register(page, "settings");
   await frame.locator("#um-comp [data-act=cancel]").first().click();
   await page.frames()[1].evaluate(async () => {
     const galaxy = await window.UM.store.saveGalaksi({
@@ -18,7 +18,8 @@ test("pengaturan tersimpan; hapus dapat dibatalkan dan dicoba ulang; keluar menu
   });
   await frame.locator(".um-dock [data-act=set]").click();
   await page.reload();
-  await login(page, email, password);
+  await frame.locator("#um-entry.on").waitFor();
+  expect(await page.frames()[1].evaluate(() => window.UM.account.isLogged())).toBe(true);
   await frame.locator("#um-entry [data-act=skip]").click();
   await frame.locator(".um-dock [data-act=set]").click();
   await expect(frame.locator("#um-set [data-act=gb]")).toHaveCount(0);
@@ -65,7 +66,7 @@ test("pengaturan tersimpan; hapus dapat dibatalkan dan dicoba ulang; keluar menu
   await expect(frame.locator("#um-set .um-close")).toBeDisabled();
   await expect(frame.locator("#um-set")).toHaveClass(/on/);
   await frame.locator("#um-entry.on").waitFor({ timeout: 60000 });
-  await login(page, email, password);
+  expect(await page.frames()[1].evaluate(() => window.UM.account.isLogged())).toBe(true);
   expect(
     await page.frames()[1].evaluate(async () => ({
       messages: (await window.UM.store.listPesan()).length,

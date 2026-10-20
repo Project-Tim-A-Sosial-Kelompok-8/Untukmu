@@ -2,6 +2,7 @@ import hashlib
 import json
 
 from app.main import app
+from app.prayer_catalog import CATALOG
 from app.prayer_recordings import RECORDINGS, ROOT
 from app.routers.prayers import token_key
 
@@ -53,3 +54,40 @@ async def test_catalog_keeps_recording_languages_and_unavailable_choices_honest(
     assert all(entry["audio_attribution"] and entry["review_note"] for entry in recorded)
     konghucu = next(tradition for tradition in catalog if tradition["id"] == "konghucu")
     assert not any(entry["audio"] for entry in konghucu["entri"])
+
+
+async def test_identical_gayatri_draft_has_reference_audio_without_auto_approval(client, database):
+    admin = await admin_account(client, database)
+    rows = (await client.get("/api/v1/admin/prayers", headers=admin)).json()
+    draft = next(row for row in rows if row["id"] == "hindu/gayatri")
+    reference = next(row for row in rows if row["id"] == "hindu/gayatri-audio")
+    assert draft["content"]["teks"]["id"] == reference["content"]["teks"]["id"]
+    assert draft["has_audio"] is True
+    assert draft["reviewed"] is False
+    assert draft["publicly_available"] is False
+    response = await client.get("/api/v1/admin/prayers/hindu/gayatri/audio/preview", headers=admin)
+    assert response.status_code == 200
+    assert response.json()["audio_url"] == "/api/v1/prayers/audio/gayatri"
+    catalog = (await client.get("/api/v1/prayers/traditions")).json()
+    hindu = next(tradition for tradition in catalog if tradition["id"] == "hindu")
+    assert not any(entry["id"] == "gayatri" for entry in hindu["entri"])
+    assert sum(bool(entry.get("recording_id")) for tr in CATALOG for entry in tr["entri"]) == 7
+
+
+async def test_original_namo_tassa_is_available_for_curation_but_not_published(client, database):
+    admin = await admin_account(client, database)
+    rows = (await client.get("/api/v1/admin/prayers", headers=admin)).json()
+    draft = next(row for row in rows if row["id"] == "buddha/namo-tassa")
+    assert draft["has_audio"] is True
+    assert draft["reviewed"] is False
+    assert draft["publicly_available"] is False
+    assert draft["content"]["detik"] == 43
+    assert draft["audio_meta"]["language"] == "Pali"
+    assert draft["audio_meta"]["license_url"] == "https://amaravati.org/support/amaravati-publications/"
+    assert "free distribution" in draft["audio_meta"]["license"]
+    response = await client.get("/api/v1/admin/prayers/buddha/namo-tassa/audio/preview", headers=admin)
+    assert response.status_code == 200
+    assert response.json()["audio_url"] == "/api/v1/prayers/audio/namo-tassa"
+    public = (await client.get("/api/v1/prayers/traditions")).json()
+    buddha = next(tradition for tradition in public if tradition["id"] == "buddha")
+    assert not any(entry["id"] == "namo-tassa" for entry in buddha["entri"])

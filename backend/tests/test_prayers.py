@@ -250,6 +250,52 @@ async def test_uploaded_audio_preview_is_admin_only_until_curated(client, databa
     assert not await app.state.redis.keys("prayer-session:*")
 
 
+async def test_audio_upload_and_completion_have_separate_bounded_admin_limits(client, database, monkeypatch):
+    from app.routers import prayers
+
+    owner = await account(client)
+    admin = await admin_account(client, database)
+    target = "/api/v1/admin/prayers/katolik/bapa-kami-katolik/audio"
+
+    class Bucket:
+        presigns = 0
+        completions = 0
+
+        def generate_presigned_post(self, *args, **kwargs):
+            self.presigns += 1
+            return {"url": "https://storage.example.invalid/upload", "fields": {}}
+
+        def head_object(self, **kwargs):
+            self.completions += 1
+            return {"ContentLength": 256, "ContentType": "audio/mpeg"}
+
+    bucket = Bucket()
+    monkeypatch.setattr(prayers, "storage", lambda **kwargs: bucket)
+    upload = {
+        "byte_size": 256,
+        "content_type": "audio/mpeg",
+        "license": "Fixture tim",
+        "attribution": "Rekaman tim pengujian",
+        "duration_seconds": 12,
+    }
+    assert (await client.post(target + "/presign", json=upload)).status_code == 401
+    assert (await client.post(target + "/presign", headers=owner, json=upload)).status_code == 403
+    assert (await client.post(target + "/complete", headers=owner)).status_code == 403
+    # Each recording needs two requests; completing one must not consume the
+    # presign allowance for the next recording in the curation queue.
+    for _ in range(10):
+        signed = await client.post(target + "/presign", headers=admin, json=upload)
+        assert signed.status_code == 200, signed.text
+        completed = await client.post(target + "/complete", headers=admin)
+        assert completed.status_code == 200, completed.text
+        assert completed.json()["reviewed"] is False
+    for endpoint in ("/presign", "/complete"):
+        response = await client.post(target + endpoint, headers=admin, json=upload if endpoint == "/presign" else None)
+        assert response.status_code == 429, response.text
+        assert response.headers["Retry-After"] == "60"
+    assert bucket.presigns == bucket.completions == 10
+
+
 async def test_audio_preview_rejects_missing_and_retired_catalogue_entries(client, database):
     admin = await admin_account(client, database)
     assert (await client.get("/api/v1/admin/prayers/umum/doa-umum/audio/preview", headers=admin)).status_code == 409

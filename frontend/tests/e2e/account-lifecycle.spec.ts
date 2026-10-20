@@ -1,12 +1,16 @@
 import { expect, test } from "@playwright/test";
 import { login, register } from "./helpers";
 
-test("pengunjung dapat membuka beranda; ganti akun menjaga data akun lama", async ({ page }) => {
+test("muat ulang mempertahankan akun dengan kunci terkunci; ganti akun menjaga data akun lama", async ({
+  page,
+}) => {
   test.setTimeout(240000);
   const errors: string[] = [];
   page.on("pageerror", (error) => errors.push(error.message));
   const { frame, email, password } = await register(page, "account-original");
   await frame.locator("#um-comp .um-close").click();
+  const original = await page.frames()[1].evaluate(() => window.UM.store.identitas());
+  expect(original?.email).toBe(email);
   const secret = "Kenangan privat milik akun pertama";
   await page.frames()[1].evaluate(async (secret) => {
     const g = await window.UM.store.saveGalaksi({
@@ -19,8 +23,17 @@ test("pengunjung dapat membuka beranda; ganti akun menjaga data akun lama", asyn
   await page.reload();
   await expect(frame.locator("#um-entry")).toHaveClass(/on/);
   await expect(frame.locator("#um-account-title")).toHaveCount(0);
-  expect(await page.frames()[1].evaluate(() => window.UM.account.isLogged())).toBe(false);
-  await login(page, email, password);
+  expect(await page.frames()[1].evaluate(() => window.UM.account.isLogged())).toBe(true);
+  expect(await page.frames()[1].evaluate(() => window.UM.store.identitas())).toMatchObject({
+    id: original!.id,
+    email,
+  });
+  expect(await page.frames()[1].evaluate(() => window.UM.crypto.unlocked())).toBe(false);
+  const locked = await page.frames()[1].evaluate(async () => {
+    const rows = await window.UM.store.listPesan();
+    return Promise.all(rows.map((row) => window.UM.store.bacaIsi(row)));
+  });
+  expect(locked).toEqual([null, null]);
   await frame.locator("#um-entry [data-act=skip]").click();
   await frame.locator(".um-dock [data-act=set]").click();
   await Promise.all([
@@ -28,6 +41,11 @@ test("pengunjung dapat membuka beranda; ganti akun menjaga data akun lama", asyn
     frame.locator("#um-set [data-act=switch-account]").click(),
   ]);
   await expect(frame.locator("#um-entry")).toHaveClass(/on/);
+  expect(await page.frames()[1].evaluate(() => window.UM.account.isLogged())).toBe(false);
+  expect(await page.frames()[1].evaluate(() => window.UM.crypto.unlocked())).toBe(false);
+  await page.reload();
+  await expect(frame.locator("#um-entry")).toHaveClass(/on/);
+  expect(await page.frames()[1].evaluate(() => window.UM.account.isLogged())).toBe(false);
   await page.frames()[1].evaluate(() => window.UM.account.open());
   await expect(frame.locator("#um-account-title")).toHaveText("Masuk ke Untukmu", {
     timeout: 20000,
@@ -113,7 +131,7 @@ for (const action of ["keep", "delete"] as const) {
   });
 }
 
-test("akun berbeda melihat pesan publik yang sama tanpa galaksi publik atau data privat tercampur", async ({
+test("pesan publik tanpa tujuan tetap dapat dibaca lintas akun melalui Jelajah", async ({
   page,
   browser,
 }) => {
@@ -138,6 +156,12 @@ test("akun berbeda melihat pesan publik yang sama tanpa galaksi publik atau data
   try {
     for (const [index, accountPage] of [page, second].entries()) {
       await accountPage.route("**/api/v1/explore?*", (route) => route.fulfill({ json: [shared] }));
+      await accountPage.route("**/api/v1/explore/constellations?*", (route) =>
+        route.fulfill({ json: [] }),
+      );
+      await accountPage.route("**/api/v1/explore/messages?*", (route) =>
+        route.fulfill({ json: [shared] }),
+      );
       const { frame } = await register(accountPage, `shared-${index}`, { startComposer: false });
       await frame.locator("#um-entry [data-act=skip]").click();
       const data = await accountPage.frames()[1].evaluate(async () => ({
@@ -151,7 +175,7 @@ test("akun berbeda melihat pesan publik yang sama tanpa galaksi publik atau data
         { jenis: "pesan", publicBody: shared.public_body, authorDeleted: true, sendiri: false },
       ]);
       expect(data.galaxies).toEqual([]);
-      expect(data.sceneMessages).toEqual([]);
+      expect(data.sceneMessages).toMatchObject([{ id: shared.id, galaksiIds: [], sendiri: false }]);
       await frame.locator(".um-dock [data-act=jelajah]").click();
       await expect(frame.locator("#um-exp .txt")).toHaveText(shared.public_body);
     }
@@ -169,7 +193,11 @@ test("refresh pada tab lama tidak menerima identitas akun lain dari cookie bersa
   await first.frame.locator("#um-entry [data-act=skip]").click();
   const other = await context.newPage();
   try {
-    await register(other, "tab-second", { startComposer: false });
+    const second = await register(other, "tab-second", { startComposer: false });
+    let navigations = 0;
+    page.on("framenavigated", (frame) => {
+      if (frame.parentFrame()) navigations++;
+    });
     await page.route("**/api/v1/dashboard/summary", (route) =>
       route.fulfill({ status: 401, json: { detail: "Sesi uji telah berakhir." } }),
     );
@@ -179,8 +207,64 @@ test("refresh pada tab lama tidak menerima identitas akun lain dari cookie bersa
     await expect(first.frame.locator("#um-entry")).toHaveClass(/on/, { timeout: 30000 });
     expect(await page.frames()[1].evaluate(() => window.UM.account.isLogged())).toBe(false);
     expect(await page.frames()[1].evaluate(() => window.UM.crypto.unlocked())).toBe(false);
+    expect(await page.frames()[1].evaluate(() => window.UM.store.identitas())).toBeNull();
+    expect(navigations).toBeLessThanOrEqual(1);
+    await page.reload();
+    await expect(first.frame.locator("#um-entry")).toHaveClass(/on/);
+    expect(await page.frames()[1].evaluate(() => window.UM.store.identitas())).toBeNull();
+    expect(await other.frames()[1].evaluate(() => window.UM.store.identitas())).toMatchObject({
+      email: second.email,
+    });
     expect(await other.frames()[1].evaluate(() => window.UM.account.isLogged())).toBe(true);
   } finally {
     await other.close();
   }
 });
+
+for (const expiresDuringRestore of [false, true]) {
+  test(`sesi ${expiresDuringRestore ? "kedaluwarsa saat dipulihkan" : "dicabut"} membuka tamu tanpa perulangan refresh`, async ({
+    page,
+  }) => {
+    let statuses = 0;
+    let refreshes = 0;
+    let navigations = 0;
+    const errors: string[] = [];
+    page.on("pageerror", (error) => errors.push(error.message));
+    page.on("framenavigated", (frame) => {
+      if (frame.parentFrame()) navigations++;
+    });
+    await page.route("**/api/v1/auth/status", (route) => {
+      statuses++;
+      return route.fulfill({ json: { authenticated: expiresDuringRestore } });
+    });
+    await page.route("**/api/v1/auth/refresh", (route) => {
+      refreshes++;
+      return route.fulfill({ status: 401, json: { detail: "Sesi telah berakhir." } });
+    });
+    await page.goto("/");
+    const frame = page.frameLocator("iframe");
+    for (let load = 1; load <= 2; load++) {
+      await expect(frame.locator("#um-entry")).toHaveClass(/on/);
+      const state = await page.frames()[1].evaluate(async () => {
+        await Promise.all([
+          window.UM.store.ready(),
+          window.UM.store.ready(),
+          window.UM.store.listGalaksi(),
+          window.UM.store.listPesan(),
+        ]);
+        return {
+          logged: window.UM.account.isLogged(),
+          identity: await window.UM.store.identitas(),
+          unlocked: window.UM.crypto.unlocked(),
+        };
+      });
+      expect(state).toEqual({ logged: false, identity: null, unlocked: false });
+      await expect(frame.locator("#um-account-title")).toHaveCount(0);
+      expect(statuses).toBe(load);
+      expect(refreshes).toBe(expiresDuringRestore ? load : 0);
+      expect(navigations).toBe(load);
+      if (load === 1) await page.reload();
+    }
+    expect(errors).toEqual([]);
+  });
+}

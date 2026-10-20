@@ -127,7 +127,7 @@ UM.i18n = (function () {
         "Hanya dirimu. Dienkripsi penuh — server tidak bisa membaca isinya, dan tidak ikut moderasi.",
       privPublik: "Publik anonim",
       privPublikD:
-        "Muncul di halaman jelajah tanpa namamu. Untuk bisa dibaca orang lain, pesan ini tidak dienkripsi penuh.",
+        "Muncul di Jelajah dan galaksi publik tanpa namamu. Untuk bisa dibaca orang lain, pesan ini tidak dienkripsi penuh.",
       privUnlisted: "Tidak terdaftar",
       privUnlistedD: "Tidak muncul di halaman jelajah. Hanya bisa dibuka lewat tautan langsung.",
 
@@ -161,7 +161,11 @@ UM.i18n = (function () {
       pcMood: "Suasana hati",
       pcTag: "Tag",
       pcDoakan: "Doakan",
-      pcEmpati: "Aku merasakan ini",
+      pcEmpati: "Berikan empati",
+      pcEmpatiHint:
+        "Kirim dukungan anonim bahwa Anda memahami perasaan penulis. Penulis melihat jumlah dukungan di Ruang Pribadi. Untuk mendengarkan doa dan menambah pendoa, pilih Doakan ucapan ini.",
+      pcEmpatiSent: "Empati terkirim",
+      pcEmpatiReceived: "dukungan empati diterima",
       pcPendoa: "pendoa",
       pcEmpty: "Belum ada pesan di kenangan ini.",
 
@@ -201,7 +205,8 @@ UM.i18n = (function () {
       expAnon: "Anonim",
       expMine: "Milikmu",
       expReportToast: "Laporan tercatat. Pesan disembunyikan dari jelajahmu.",
-      empathiToast: "Empati terkirim.",
+      empathiToast: "Dukungan empati Anda telah dicatat secara anonim.",
+      empathiAlready: "Empati Anda untuk pesan ini sudah tercatat. Hitungan tidak bertambah lagi.",
       lockedShort: "Terkunci — buka kuncimu untuk membaca.",
       compTooBig: "Gambar terlalu besar (maksimal 4 MB).",
       expRead: "Baca",
@@ -380,7 +385,7 @@ UM.i18n = (function () {
         "You only. Fully encrypted — the server cannot read it, and it is excluded from moderation.",
       privPublik: "Public, anonymous",
       privPublikD:
-        "Appears in Explore without your name. To be readable by others, it is not fully encrypted.",
+        "Appears in Explore and public galaxies without your name. To be readable by others, it is not fully encrypted.",
       privUnlisted: "Unlisted",
       privUnlistedD: "Hidden from Explore. Reachable only through a direct link.",
 
@@ -409,7 +414,11 @@ UM.i18n = (function () {
       pcMood: "Mood",
       pcTag: "Tags",
       pcDoakan: "Pray",
-      pcEmpati: "I feel this",
+      pcEmpati: "Send empathy",
+      pcEmpatiHint:
+        "Send anonymous support to show you understand the writer's feelings. The writer sees the support count in their Private Space. To listen to a prayer and add to the prayer count, choose Pray for this message.",
+      pcEmpatiSent: "Empathy sent",
+      pcEmpatiReceived: "messages of empathy received",
       pcPendoa: "praying",
       pcEmpty: "No messages in this memory yet.",
 
@@ -444,7 +453,9 @@ UM.i18n = (function () {
       expAnon: "Anonymous",
       expMine: "Yours",
       expReportToast: "Report recorded. Hidden from your Explore.",
-      empathiToast: "Empathy sent.",
+      empathiToast: "Your anonymous support has been recorded.",
+      empathiAlready:
+        "Your empathy for this message is already recorded. The count stays the same.",
       lockedShort: "Locked — unlock to read.",
       compTooBig: "Image is too large (4 MB max).",
       expRead: "Read",

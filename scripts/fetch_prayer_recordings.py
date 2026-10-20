@@ -52,6 +52,17 @@ SOURCES = {
         "attribution": "Dawn Neal — Karaniya Metta Sutta, Insight Meditation Center / AudioDharma (2013); terjemahan Amaravati",
         "language": "Inggris",
     },
+    "namo-tassa": {
+        "page": "https://amaravati.org/audio/parittas-namo-tassa-page-27/",
+        "url": "https://cdn.amaravati.org/wp-content/uploads/2014/10/11/02-Parittas-Namo-Tassa-page-27.mp3",
+        "file": "namo-tassa.mp3",
+        "duration_seconds": 43,
+        "sha256": "63a29521ac0c84b247239aadb04f769c7c7bfab790635a7868feb8f98c069784",
+        "license": "Amaravati Publications — free distribution (rekaman utuh tanpa perubahan)",
+        "license_url": "https://amaravati.org/support/amaravati-publications/",
+        "attribution": "Amaravati Publications — Parittas: Namo Tassa (halaman 27), Amaravati Buddhist Monastery (2014). Rekaman asli utuh; distribusi gratis.",
+        "language": "Pali",
+    },
 }
 
 
@@ -79,7 +90,9 @@ def main():
         if destination.exists():
             data = destination.read_bytes()
         else:
-            if source["file"].endswith(".ogg"):
+            if source.get("url"):
+                url = source["url"]
+            elif source["file"].endswith(".ogg"):
                 filename = unquote(source["page"].split("File:", 1)[1])
                 location = hashlib.md5(filename.encode()).hexdigest()
                 url = f"https://upload.wikimedia.org/wikipedia/commons/{location[0]}/{location[:2]}/{quote(filename)}"
@@ -97,14 +110,8 @@ def main():
                     )
                 url = urljoin(source["page"], candidates[0].replace("&amp;", "&"))
             data = fetch(url)
-            if not data.startswith((b"OggS", b"ID3", b"\xff")):
-                raise RuntimeError(f"Expected an audio file for {identifier}")
-            if source.get("sha1") and hashlib.sha1(data).hexdigest() != source["sha1"]:
-                raise RuntimeError(
-                    f"Source recording checksum changed: {identifier}; {url}; "
-                    f"bytes={len(data)}, sha1={hashlib.sha1(data).hexdigest()}"
-                )
-            destination.write_bytes(data)
+        if not data.startswith((b"OggS", b"ID3", b"\xff")):
+            raise RuntimeError(f"Expected an audio file for {identifier}")
         if source.get("sha1") and hashlib.sha1(data).hexdigest() != source["sha1"]:
             raise RuntimeError(f"Cached recording checksum mismatch: {identifier}")
         if (
@@ -112,15 +119,25 @@ def main():
             and hashlib.sha256(data).hexdigest() != source["sha256"]
         ):
             raise RuntimeError(f"Recording checksum mismatch: {identifier}")
+        # Check every pinned digest before writing a downloaded file. A bad
+        # response must not become a cached recording for the next run.
+        if not destination.exists():
+            temporary = destination.with_suffix(destination.suffix + ".tmp")
+            temporary.write_bytes(data)
+            temporary.replace(destination)
         manifest[identifier] = {
             **source,
             "sha256": hashlib.sha256(data).hexdigest(),
             "bytes": len(data),
         }
-        (TARGET / "manifest.json").write_text(
-            json.dumps(manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
-        )
         print(f"{identifier}: original recording, {len(data)} bytes")
+    # Publish once after every source passes, preserving a complete manifest
+    # if a later download or checksum validation fails.
+    temporary_manifest = TARGET / "manifest.json.tmp"
+    temporary_manifest.write_text(
+        json.dumps(manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
+    )
+    temporary_manifest.replace(TARGET / "manifest.json")
 
 
 if __name__ == "__main__":

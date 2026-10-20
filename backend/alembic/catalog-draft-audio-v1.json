@@ -1,0 +1,60 @@
+[
+  {
+    "id": "hindu/gayatri",
+    "before": {
+      "id": "gayatri",
+      "nama": {
+        "id": "Mantram Gayatri",
+        "en": "Gayatri Mantra"
+      },
+      "teks": {
+        "id": "Om Bhur Bhuvah Svah\nTat Savitur Varenyam\nBhargo Devasya Dhimahi\nDhiyo Yo Nah Pracodayat\nOm Santih Santih Santih Om.",
+        "en": "Om Bhur Bhuvah Svah\nTat Savitur Varenyam\nBhargo Devasya Dhimahi\nDhiyo Yo Nah Pracodayat\nOm Santih Santih Santih Om."
+      },
+      "arti": {
+        "id": "Semoga cahaya Ilahi menerangi budi kami, dan semoga damai menyertai semua.",
+        "en": "May the divine light illumine our understanding, and may peace attend all beings."
+      },
+      "sumber": "Rgveda 3.62.10",
+      "reviewed": false,
+      "audio": null,
+      "detik": 25,
+      "source_url": "https://www.wisdomlib.org/hinduism/book/rig-veda-english-translation/d/doc831961.html"
+    },
+    "content": {
+      "id": "gayatri",
+      "nama": {
+        "id": "Mantram Gayatri",
+        "en": "Gayatri Mantra"
+      },
+      "teks": {
+        "id": "Om Bhur Bhuvah Svah\nTat Savitur Varenyam\nBhargo Devasya Dhimahi\nDhiyo Yo Nah Pracodayat\nOm Santih Santih Santih Om.",
+        "en": "Om Bhur Bhuvah Svah\nTat Savitur Varenyam\nBhargo Devasya Dhimahi\nDhiyo Yo Nah Pracodayat\nOm Santih Santih Santih Om."
+      },
+      "arti": {
+        "id": "Semoga cahaya Ilahi menerangi budi kami, dan semoga damai menyertai semua.",
+        "en": "May the divine light illumine our understanding, and may peace attend all beings."
+      },
+      "sumber": "Rgveda 3.62.10",
+      "reviewed": false,
+      "audio": true,
+      "recording_id": "gayatri",
+      "detik": 21,
+      "review_note": "Berkas referensi CC0 yang sama dengan entri Mantram Gayatri (Sanskerta), karena naskah identik. Draf ini tetap memerlukan persetujuan kurator sebelum ditayangkan.",
+      "source_url": "https://www.wisdomlib.org/hinduism/book/rig-veda-english-translation/d/doc831961.html"
+    },
+    "audio_key": "recording-v1:gayatri",
+    "audio_meta": {
+      "page": "https://commons.wikimedia.org/wiki/File:Gayatri_mantra.ogg",
+      "file": "gayatri.ogg",
+      "sha1": "76843c1d09b7c69e6c364e0f9efe0574579f9d0a",
+      "duration_seconds": 21,
+      "license": "CC0-1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "attribution": "Wilfredor — Gayatri mantra, Wikimedia Commons (rekaman asli, 2013)",
+      "language": "Sanskerta",
+      "sha256": "5ee305bed7630cc4a98803f3d00ecb3b913d643dde929209e4bc1af2efa258c3",
+      "bytes": 988195
+    }
+  }
+]
