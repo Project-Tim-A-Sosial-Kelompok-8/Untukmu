@@ -10,6 +10,11 @@ Repositori ini memakai satu project Vercel dengan dua service:
 `vercel.json` di akar repo mengatur keduanya. Saat mengimpor project, biarkan
 **Root Directory** kosong (akar repo), bukan `frontend/`.
 
+Backend yang ada di repo ini adalah **Go** (`go.mod`, `cmd/untukmu`). Contoh
+awal yang memakai `framework: "fastapi"` berasal dari backend Python lama; file
+itu sudah tidak dipakai. Kalau backend FastAPI ingin dikembalikan, konfigurasi
+dan kode backend harus diubah bersama, bukan hanya `vercel.json`.
+
 ## Routing
 
 - Browser memanggil `/api/v1/...` (relatif). Rewrite teratas meneruskannya ke
@@ -29,23 +34,37 @@ frontend mem-proxy-nya lewat route handler runtime.
 
 ## Environment variable
 
+Nilai siap pakai ada di `vercel.env.local` (tidak di-commit; berisi koneksi
+database dan rahasia dari `.env` lokal). Format dan komentar ada di
+`vercel.env.example`.
+
 Backend (Production):
 
-- `ENVIRONMENT=production`
-- `APP_ORIGIN=https://<domain-produksi>` (harus sama persis dengan Origin
-  browser; preview deployment membutuhkan nilai sendiri)
-- `DATABASE_URL=postgresql://...` (Neon/Postgres; jangan memakai SQLite di Vercel)
-- `JWT_SECRET`, `PUBLIC_CONTENT_KEY`, `METRICS_TOKEN`
-- `TURNSTILE_SECRET`, `TURNSTILE_HOSTNAME`
-- `STORAGE_DIR=/tmp/untukmu-storage`
-- `SENTRY_DSN` (opsional)
+| Variabel | Nilai/format |
+| --- | --- |
+| `ENVIRONMENT` | `production` |
+| `APP_ORIGIN` | `https://<domain-produksi>` — harus sama persis dengan Origin browser, tanpa slash akhir |
+| `DATABASE_URL` | `postgresql://USER:PASSWORD@HOST/DB?sslmode=require` |
+| `STORAGE_DIR` | `/tmp/untukmu-storage` |
+| `JWT_SECRET` | 96 karakter hex acak |
+| `PUBLIC_CONTENT_KEY` | 32 byte base64url, akhiri `=`; jangan dirotasi jika database sudah berisi pesan publik |
+| `METRICS_TOKEN` | minimal 32 karakter acak |
+| `TURNSTILE_SECRET` | secret key dari widget Cloudflare Turnstile |
+| `TURNSTILE_HOSTNAME` | domain saja, mis. `untukmu.vercel.app` |
+| `SENTRY_DSN` | opsional |
+| `SITE_DOMAIN` | domain saja, opsional |
 
 Frontend (build-time):
 
-- `NEXT_PUBLIC_TURNSTILE_SITE_KEY`
+| Variabel | Nilai/format |
+| --- | --- |
+| `NEXT_PUBLIC_TURNSTILE_SITE_KEY` | site key Cloudflare Turnstile |
 
 Jangan set `LISTEN_ADDR` di Vercel; server Go memakai `PORT` yang disuntikkan
 Vercel. Jangan set `API_INTERNAL_URL` di Vercel; rewrite Next dimatikan di sana.
+
+`ENVIRONMENT=production` akan menolak start jika `APP_ORIGIN` bukan https atau
+`TURNSTILE_SECRET`/`TURNSTILE_HOSTNAME`/`PUBLIC_CONTENT_KEY` kosong.
 
 ## Catatan produksi
 
