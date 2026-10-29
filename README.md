@@ -69,7 +69,7 @@ Jangan unggah `.env` ke Git atau membagikannya dalam tangkapan layar. Peran seti
 | `LISTEN_ADDR`, `API_INTERNAL_URL`               | Alamat API Go (`127.0.0.1:8000`) dan tujuan proxy `/api/v1` dari Next.js.                                         |
 | `DATABASE_URL`                                  | PostgreSQL, mis. Neon (`postgresql://…?sslmode=require`). Kosong = SQLite lokal di `DATABASE_PATH`.               |
 | `DATABASE_PATH`, `STORAGE_DIR`                  | Lokasi berkas SQLite dan unggahan terenkripsi, relatif terhadap folder `backend`. Backup keduanya bersama `.env`. |
-| `JWT_SECRET`, `PUBLIC_CONTENT_KEY`              | Kunci sesi dan penyimpanan pesan publik; dibuat otomatis. Jangan diganti pada instalasi yang sudah berisi data.   |
+| `JWT_SECRET`, `CONTENT_ENCRYPTION_KEY`         | Kunci sesi dan penyimpanan pesan publik; dibuat otomatis. Jangan diganti pada instalasi yang sudah berisi data.   |
 | `TRUSTED_PROXIES`                               | Proxy yang boleh mengirim `X-Forwarded-For` (bawaan loopback: Next.js/Caddy di mesin yang sama).                  |
 | `TURNSTILE_*`, `NEXT_PUBLIC_TURNSTILE_SITE_KEY` | Boleh kosong untuk lokal dengan `ENVIRONMENT=development`; wajib pada produksi.                                   |
 | `SENTRY_DSN`, `METRICS_TOKEN`                   | Opsional: pelaporan kesalahan tanpa data pesan, dan token endpoint `/metrics` untuk Prometheus.                   |
@@ -311,7 +311,7 @@ flowchart LR
 
 API berada di `/api/v1`. Browser berbicara ke API pada origin aplikasi melalui rewrite Next.js atau gateway Caddy. Data akun dan daftar publik diperoleh dari API, tanpa data contoh atau katalog astronomi lokal. Cache feed/dashboard, pembatasan laju, sesi doa, dan tantangan pemulihan disimpan di memori proses API, sehingga satu database dilayani satu proses API. Unggahan dikirim ke `/api/v1/storage/upload` dengan formulir bertanda tangan HMAC yang berumur lima menit, dan diunduh lewat URL bertanda tangan berumur pendek; isinya tetap ciphertext dari perangkat. PWA hanya menyimpan aset statis serta halaman luring, tanpa menyimpan pesan atau respons akun.
 
-Kata sandi diproses Argon2id di worker browser. Derivasi autentikasi dipisahkan dari kunci enkripsi; server meng-hash verifier autentikasi lagi dengan Argon2id (format PHC, m=64 MiB, t=3, p=1). Kunci turunan membungkus kunci akun AES-256. Pesan privat/tautan terbatas, media, serta metadata berkas dienkripsi AES-256-GCM dengan IV acak dan AAD yang mengikat objek. Pesan publik dapat dibaca layanan dan disandikan saat tersimpan menggunakan `PUBLIC_CONTENT_KEY` instalasi.
+Kata sandi diproses Argon2id di worker browser. Derivasi autentikasi dipisahkan dari kunci enkripsi; server meng-hash verifier autentikasi lagi dengan Argon2id (format PHC, m=64 MiB, t=3, p=1). Kunci turunan membungkus kunci akun AES-256. Pesan privat/tautan terbatas, media, serta metadata berkas dienkripsi AES-256-GCM dengan IV acak dan AAD yang mengikat objek. Pesan publik dapat dibaca layanan dan disandikan saat tersimpan menggunakan `CONTENT_ENCRYPTION_KEY` instalasi (nama lama: `PUBLIC_CONTENT_KEY`).
 
 Tautan terbatas memakai ciphertext dan kunci berbagi terpisah dari kunci akun. Server menyimpan hash token; kunci setelah `#` tidak ikut dalam request HTTP. Rotasi, pencabutan, edit, atau perubahan privasi mencabut tautan lama. API menahan pesan publik/tautan terbatas sampai `release_at`. Kapsul privat adalah pengaturan tampilan untuk pemilik yang memiliki kunci; itu tidak mengunci pemilik secara kriptografis sampai tanggal pembukaan.
 

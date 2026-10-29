@@ -17,7 +17,7 @@ npm ci
 NEXT_PUBLIC_TURNSTILE_SITE_KEY=... npm run build
 ```
 
-Isi `.env` produksi: `ENVIRONMENT=production`, `SITE_DOMAIN` (hostname tanpa skema), `APP_ORIGIN=https://SITE_DOMAIN`, `TURNSTILE_SECRET`, `TURNSTILE_HOSTNAME`, `NEXT_PUBLIC_TURNSTILE_SITE_KEY`, serta `JWT_SECRET` dan `PUBLIC_CONTENT_KEY` acak dari `init-env`. API menolak mulai pada produksi tanpa HTTPS, Turnstile, atau `PUBLIC_CONTENT_KEY`. `DATABASE_PATH` dan `STORAGE_DIR` relatif terhadap folder `backend`; arahkan ke disk yang dibackup jika perlu.
+Isi `.env` produksi: `ENVIRONMENT=production`, `SITE_DOMAIN` (hostname tanpa skema), `APP_ORIGIN=https://SITE_DOMAIN`, `TURNSTILE_SECRET`, `TURNSTILE_HOSTNAME`, `NEXT_PUBLIC_TURNSTILE_SITE_KEY`, serta `JWT_SECRET` dan `CONTENT_ENCRYPTION_KEY` acak dari `init-env`. API menolak mulai pada produksi tanpa HTTPS, Turnstile, atau `CONTENT_ENCRYPTION_KEY`. `DATABASE_PATH` dan `STORAGE_DIR` relatif terhadap folder `backend`; arahkan ke disk yang dibackup jika perlu.
 
 Jalankan ketiga proses sebagai layanan sistem (systemd, NSSM di Windows, atau supervisor lain) dengan restart otomatis:
 
@@ -64,7 +64,7 @@ Untuk metrik, isi `METRICS_TOKEN` acak minimal 32 karakter (dibuat oleh `init-en
 
 Untuk Neon, gunakan fitur point-in-time restore/branch dari Neon dan, bila perlu, `pg_dump` berkala dengan URL koneksi langsung (tanpa `-pooler`). Panduan SQLite di bawah berlaku bila `DATABASE_URL` kosong.
 
-Backup harus mencakup tiga bagian dari instalasi yang sama: database (`DATABASE_URL` atau `DATABASE_PATH`), folder unggahan terenkripsi (`STORAGE_DIR`), dan `.env`. `PUBLIC_CONTENT_KEY` diperlukan untuk membaca pesan publik tersimpan. Backup server tidak menggantikan kata sandi/kode pemulihan yang dimiliki pengguna.
+Backup harus mencakup tiga bagian dari instalasi yang sama: database (`DATABASE_URL` atau `DATABASE_PATH`), folder unggahan terenkripsi (`STORAGE_DIR`), dan `.env`. `CONTENT_ENCRYPTION_KEY` diperlukan untuk membaca pesan publik tersimpan. Backup server tidak menggantikan kata sandi/kode pemulihan yang dimiliki pengguna.
 
 Database berjalan dalam mode WAL. Untuk salinan konsisten tanpa menghentikan API, gunakan perintah `VACUUM INTO` dari klien SQLite (misalnya `sqlite3`), lalu salin folder storage dan `.env`:
 
@@ -80,7 +80,7 @@ Alternatif paling sederhana: hentikan layanan API, salin `untukmu.db` (beserta `
 
 Uji di folder atau mesin terpisah, bukan dengan menimpa instalasi yang sedang digunakan:
 
-1. Siapkan kode versi backup dan salinan `.env` yang cocok; sesuaikan origin/port tanpa mengganti `JWT_SECRET` atau `PUBLIC_CONTENT_KEY`.
+1. Siapkan kode versi backup dan salinan `.env` yang cocok; sesuaikan origin/port tanpa mengganti `JWT_SECRET` atau `CONTENT_ENCRYPTION_KEY`.
 2. Letakkan berkas database di `DATABASE_PATH` dan ekstrak arsip storage ke `STORAGE_DIR`.
 3. Jalankan API; skema dinaikkan otomatis ke versi kode target. Jalankan frontend.
 4. Periksa `/api/v1/health`, jumlah akun/pesan/objek, login, pembukaan pesan privat dengan kunci pemilik, lampiran, pesan publik, dan pratinjau rekaman.

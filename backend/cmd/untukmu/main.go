@@ -141,9 +141,9 @@ func initEnv() error {
 	key := make([]byte, 32)
 	rand.Read(key)
 	values := map[string]string{
-		"JWT_SECRET":         randomHex(48),
-		"PUBLIC_CONTENT_KEY": base64.URLEncoding.EncodeToString(key),
-		"METRICS_TOKEN":      randomHex(32),
+		"JWT_SECRET":             randomHex(48),
+		"CONTENT_ENCRYPTION_KEY": base64.URLEncoding.EncodeToString(key),
+		"METRICS_TOKEN":          randomHex(32),
 	}
 	lines := strings.Split(strings.ReplaceAll(string(template), "\r\n", "\n"), "\n")
 	for i, line := range lines {

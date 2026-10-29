@@ -50,7 +50,7 @@ Backend (Production):
 | `DATABASE_URL` | `postgresql://USER:PASSWORD@HOST/DB?sslmode=require` |
 | `STORAGE_DIR` | `/tmp/untukmu-storage` |
 | `JWT_SECRET` | 96 karakter hex acak |
-| `PUBLIC_CONTENT_KEY` | 32 byte base64url, akhiri `=`; jangan dirotasi jika database sudah berisi pesan publik |
+| `CONTENT_ENCRYPTION_KEY` | 32 byte base64url, akhiri `=`; jangan dirotasi jika database sudah berisi pesan publik |
 | `METRICS_TOKEN` | minimal 32 karakter acak |
 | `TURNSTILE_SECRET` | secret key dari widget Cloudflare Turnstile |
 | `TURNSTILE_HOSTNAME` | domain saja, mis. `untukmu.vercel.app` |
@@ -67,7 +67,13 @@ Jangan set `LISTEN_ADDR` di Vercel; server Go memakai `PORT` yang disuntikkan
 Vercel. Jangan set `API_INTERNAL_URL` di Vercel; rewrite Next dimatikan di sana.
 
 `ENVIRONMENT=production` akan menolak start jika `APP_ORIGIN` bukan https atau
-`TURNSTILE_SECRET`/`TURNSTILE_HOSTNAME`/`PUBLIC_CONTENT_KEY` kosong.
+`TURNSTILE_SECRET`/`TURNSTILE_HOSTNAME`/`CONTENT_ENCRYPTION_KEY` kosong.
+
+Catatan nama: versi lama memakai `PUBLIC_CONTENT_KEY`. Vercel menolak menyimpan
+variabel berawalan `PUBLIC_` sebagai Secret karena dianggap variabel publik
+framework, jadi gunakan `CONTENT_ENCRYPTION_KEY` sebagai Secret. Backend masih
+membaca `PUBLIC_CONTENT_KEY` sebagai fallback untuk `.env` lama; nilainya sama,
+hanya nama variabelnya yang berubah.
 
 ## Catatan produksi
 

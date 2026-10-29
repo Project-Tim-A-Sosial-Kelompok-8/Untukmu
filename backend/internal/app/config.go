@@ -97,7 +97,7 @@ func LoadConfig() (*Config, error) {
 		Environment:       env("ENVIRONMENT", "development"),
 		AppOrigin:         env("APP_ORIGIN", "http://localhost:3000"),
 		JWTSecret:         env("JWT_SECRET", ""),
-		PublicContentKey:  env("PUBLIC_CONTENT_KEY", ""),
+		PublicContentKey:  env("CONTENT_ENCRYPTION_KEY", env("PUBLIC_CONTENT_KEY", "")),
 		TurnstileSecret:   env("TURNSTILE_SECRET", ""),
 		TurnstileHostname: env("TURNSTILE_HOSTNAME", ""),
 		SentryDSN:         env("SENTRY_DSN", ""),
@@ -160,7 +160,7 @@ func (conf *Config) validate() error {
 			return errors.New("Turnstile wajib dikonfigurasi pada produksi")
 		}
 		if conf.PublicContentKey == "" {
-			return errors.New("PUBLIC_CONTENT_KEY wajib disetel pada produksi")
+			return errors.New("CONTENT_ENCRYPTION_KEY wajib disetel pada produksi")
 		}
 	}
 	if conf.DatabaseURL != "" && !isPostgresURL(conf.DatabaseURL) {
@@ -169,7 +169,7 @@ func (conf *Config) validate() error {
 	if conf.PublicContentKey != "" {
 		raw, err := base64.URLEncoding.DecodeString(conf.PublicContentKey)
 		if err != nil || len(raw) != 32 {
-			return errors.New("PUBLIC_CONTENT_KEY wajib 32 byte base64url")
+			return errors.New("CONTENT_ENCRYPTION_KEY wajib 32 byte base64url")
 		}
 	}
 	return nil

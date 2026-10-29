@@ -191,7 +191,7 @@ try {
     DATABASE_PATH: resolve(fixtureDirectory, "browser-test.db"),
     STORAGE_DIR: resolve(fixtureDirectory, "storage"),
     JWT_SECRET: "browser-test-secret-not-for-production-0123456789",
-    PUBLIC_CONTENT_KEY: "",
+    CONTENT_ENCRYPTION_KEY: "",
     TURNSTILE_SECRET: "",
     METRICS_TOKEN: "",
   };
