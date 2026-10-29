@@ -281,6 +281,7 @@ frontend/
   tests/                # Unit test dan browser test
 backend/
   cmd/untukmu/          # Biner: serve, make-admin, init-env
+  cmd/api/              # Entrypoint server untuk Vercel (serve)
   internal/app/         # Endpoint, validasi, keamanan, SQLite, storage, worker, tes
     schema.sql          # Skema database (dibuat/dimigrasikan otomatis)
   data/                 # Katalog aktif serta rekaman asli dan manifest (ditanam ke biner)

@@ -10,10 +10,13 @@ Repositori ini memakai satu project Vercel dengan dua service:
 `vercel.json` di akar repo mengatur keduanya. Saat mengimpor project, biarkan
 **Root Directory** kosong (akar repo), bukan `frontend/`.
 
-Backend yang ada di repo ini adalah **Go** (`go.mod`, `cmd/untukmu`). Contoh
-awal yang memakai `framework: "fastapi"` berasal dari backend Python lama; file
-itu sudah tidak dipakai. Kalau backend FastAPI ingin dikembalikan, konfigurasi
-dan kode backend harus diubah bersama, bukan hanya `vercel.json`.
+Backend yang ada di repo ini adalah **Go** (`go.mod`). Entrypoint operator ada
+di `cmd/untukmu`; entrypoint yang dipakai Vercel ada di `cmd/api/main.go`
+karena preset Go Vercel mengharuskan `cmd/api/main.go`, `cmd/server/main.go`,
+atau `main.go`. Contoh awal yang memakai `framework: "fastapi"` berasal dari
+backend Python lama; file itu sudah tidak dipakai. Kalau backend FastAPI ingin
+dikembalikan, konfigurasi dan kode backend harus diubah bersama, bukan hanya
+`vercel.json`.
 
 ## Routing
 
