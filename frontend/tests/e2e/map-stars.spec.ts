@@ -70,15 +70,13 @@ test("bintang Kenangan menampilkan tooltip dan dapat diklik pada desktop dan pon
     await expect(frame.locator("#bp-name")).toHaveText(target.nama);
     await expect.poll(() => engine.evaluate("!!flyState"), { timeout: 20000 }).toBe(false);
     await expect(frame.locator("#beacon-panel")).toBeVisible();
-    await expect(frame.locator("#bp-name")).toHaveCSS("font-size", "18px");
+    await expect(frame.locator("#bp-name")).toHaveCSS("font-size", "24px");
     await expect(frame.locator("#beacon-panel")).toHaveCSS(
       "background-color",
-      "rgba(10, 14, 24, 0.92)",
+      "rgba(13, 14, 18, 0.95)",
     );
-    await expect(frame.locator("#beacon-panel")).toHaveCSS(
-      "border-top-left-radius",
-      width <= 640 ? "14px" : "12px",
-    );
+    // Sharp observatory-note panels on every width (design layer: --um-radius).
+    await expect(frame.locator("#beacon-panel")).toHaveCSS("border-top-left-radius", "4px");
     await page.screenshot({ path: testInfo.outputPath(`panel-kenangan-${width}.png`) });
     await frame.locator(".um-dock [data-act=rumah]").click();
   }

@@ -27,6 +27,8 @@ async function refreshScene() {
   }
   await window.UM.galaksi.refresh();
   await window.UM.sky.refresh();
+  // A fresh sign-in lands in the account's own workspace.
+  await window.UM.ruang?.mulai();
   window.UM.ui.renderSemua();
 }
 export async function signOut() {
@@ -283,7 +285,7 @@ export function AccountScreen() {
                   <p className="um-p">{currentUser()?.email}</p>
                   <div className="um-field">
                     <label className="um-label" htmlFor="um-profile">
-                      Visibilitas profil
+                      Ruangmu di Bima Sakti
                     </label>
                     <select
                       id="um-profile"
@@ -295,6 +297,7 @@ export function AccountScreen() {
                             default_message_visibility: currentUser()!.default_message_visibility,
                             profile_visibility: event.target.value as "private" | "public",
                           });
+                          await window.UM.ruang?.mulai();
                         } catch (failure) {
                           setError(
                             failure instanceof Error
@@ -304,9 +307,13 @@ export function AccountScreen() {
                         }
                       }}
                     >
-                      <option value="private">Privat</option>
-                      <option value="public">Publik</option>
+                      <option value="private">Privat — hanya kamu yang bisa masuk</option>
+                      <option value="public">Publik — siapa pun bisa berkunjung</option>
                     </select>
+                    <p className="um-hint">
+                      Ruang publik menampilkan nama galaksi dan pesan publikmu. Pesan privat dan
+                      foto tetap terkunci.
+                    </p>
                   </div>
                   <div className="um-field">
                     <label className="um-label" htmlFor="um-default-privacy">

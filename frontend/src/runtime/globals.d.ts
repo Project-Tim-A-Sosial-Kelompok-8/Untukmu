@@ -35,6 +35,18 @@ interface LegacyUM {
     state: { daftar: unknown[] };
   };
   sky: { refresh: () => Promise<unknown> };
+  ruang?: {
+    mulai: () => Promise<unknown>;
+    keHub: () => Promise<unknown>;
+    masuk: (id: string) => Promise<unknown>;
+    state: {
+      aktif: string | null;
+      daftar: unknown[];
+      pindah: boolean;
+      selam: unknown;
+      tiba: boolean;
+    };
+  };
 }
 declare global {
   interface Window {

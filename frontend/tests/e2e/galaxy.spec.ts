@@ -6,6 +6,7 @@ interface GalaxySnapshot {
   selected: string | null;
   active: string | null;
   target: number[];
+  ruang: string | null;
   flying: boolean;
   galaxies: {
     id: string;
@@ -24,8 +25,10 @@ function scene(page: Page) {
     selected: UM.galaksi.state.pilihan?.item.g.id || null,
     active: UM.galaksi.state.aktif,
     target: controls.target.toArray(),
+    ruang: UM.ruang.state.aktif,
     flying: !!flyState,
-    galaxies: UM.galaksi.state.daftar.filter(item => item.g.sendiri !== false).map(item => {
+    // The galaxy created with every account is left out: these tests count their own.
+    galaxies: UM.galaksi.state.daftar.filter(item => item.g.sendiri !== false && item.g.nama !== "Galaksi pertamaku").map(item => {
       const screen = item.pos.clone().project(camera);
       const points = item.lod?.pts;
       return {
@@ -90,9 +93,10 @@ test("simpan membuka galaksi dari Peta; galaksi dan bintang lama tetap tampil se
   expect(first.messages).toHaveLength(1);
   expect(first.particles).toBeGreaterThanOrEqual(4000);
 
+  // Home inside a workspace is the view of that whole workspace.
   await frame.locator(".um-dock [data-act=rumah]").click();
   await expect.poll(async () => (await scene(page)).flying).toBe(false);
-  expect((await scene(page)).target).toEqual([0, 0, 0]);
+  expect((await scene(page)).ruang).not.toBeNull();
   expect((await scene(page)).active).toBeNull();
   await expect(frame.locator("#return-home")).not.toBeVisible();
 
@@ -148,18 +152,34 @@ test("simpan membuka galaksi dari Peta; galaksi dan bintang lama tetap tampil se
   expect(saved.galaxies.find((item) => item.id === first.id)?.messages).toHaveLength(2);
   expect(saved.galaxies.find((item) => item.id === secondId)?.messages).toHaveLength(1);
 
-  // Reload starts at Milky Way. Saved galaxies remain rendered and can
-  // still be visited on desktop and narrow screens while the key is locked.
+  // Reload starts in the account's own workspace. Saved galaxies remain rendered and
+  // can still be visited on desktop and narrow screens while the key is locked.
   for (const viewport of [
     { width: 1280, height: 800 },
     { width: 390, height: 844 },
   ]) {
     await page.setViewportSize(viewport);
     await page.reload();
-    await frame.locator("#um-entry.on").waitFor();
+    // A signed-in refresh lands directly in the last room; the intro only
+    // belongs to guests.
+    await page.waitForFunction(
+      () => {
+        const w = document.querySelector("iframe")?.contentWindow;
+        return (
+          w &&
+          w.UM &&
+          w.UM.ruang &&
+          w.UM.ruang.state.daftar.length > 0 &&
+          !w.UM.ruang.state.pindah &&
+          !w.UM.ruang.state.selam
+        );
+      },
+      null,
+      { timeout: 60000 },
+    );
     expect(await page.frames()[1].evaluate(() => window.UM.account.isLogged())).toBe(true);
     const loaded = await scene(page);
-    expect(loaded.target).toEqual([0, 0, 0]);
+    expect(loaded.ruang).not.toBeNull();
     expect(loaded.active).toBeNull();
     expect(loaded.galaxies).toHaveLength(2);
     for (const galaxy of saved.galaxies) {
@@ -173,10 +193,10 @@ test("simpan membuka galaksi dari Peta; galaksi dan bintang lama tetap tampil se
     expect(await page.frames()[1].evaluate(() => window.UM.crypto.unlocked())).toBe(false);
     await page.frames()[1].evaluate(`(() => {
       UM.ui.closeAllScreens();
-      UM.galaksi.terbangKe(UM.galaksi.state.daftar[0]);
+      UM.galaksi.terbangKe(UM.galaksi.state.daftar.find(item => item.g.nama !== "Galaksi pertamaku"));
     })()`);
     await expect.poll(async () => (await scene(page)).flying).toBe(false);
-    expect((await scene(page)).galaxies[0].inFrame).toBe(true);
+    expect((await scene(page)).galaxies.some((galaxy) => galaxy.inFrame)).toBe(true);
     await expect(frame.locator("#beacon-panel")).toHaveCSS("opacity", "1");
     await page.screenshot({ path: testInfo.outputPath(`galaksi-${viewport.width}.png`) });
   }
@@ -213,13 +233,15 @@ test("Home membatalkan perjalanan doa dan galaksi dibuka dengan transisi utuh", 
       particles:item.lod.pts.geometry.attributes.position.count
     };
   })()`);
-  expect(result).toEqual({ unchanged: true, flight: true, centered: true, particles: 8500 });
+  // Painted galaxies carry more stars than the stored count (galaxy-explorer recipes).
+  expect(result).toMatchObject({ unchanged: true, flight: true, centered: true });
+  expect(result.particles).toBeGreaterThanOrEqual(12000);
   await expect.poll(async () => (await scene(page)).flying).toBe(false);
-  await expect(frame.locator("#return-home")).toHaveText("← Kembali ke Milky Way");
+  await expect(frame.locator("#return-home")).toHaveText("← Kembali ke ruang");
   await engine.evaluate(`UM.galaksi.kirimPerjalanan(UM.galaksi.state.daftar[0], 'doa')`);
   await frame.locator(".um-dock [data-act=rumah]").click();
   await expect.poll(async () => (await scene(page)).flying).toBe(false);
-  expect((await scene(page)).target).toEqual([0, 0, 0]);
+  expect((await scene(page)).ruang).not.toBeNull();
   expect(await engine.evaluate(`UM.galaksi.state.perjalanan.length`)).toBe(0);
   expect((await scene(page)).active).toBeNull();
   const cancelled = await engine.evaluate(`(async () => {

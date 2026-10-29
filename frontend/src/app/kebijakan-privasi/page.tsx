@@ -24,6 +24,15 @@ export default function Privacy() {
         ditarik kembali. Pesan tautan terbatas dari versi lama dipindahkan ke enkripsi perangkat
         saat pemilik masuk; tautan lama perlu dibuat ulang.
       </p>
+      <h2>Ruang di Bima Sakti</h2>
+      <p>
+        Setiap akun memiliki satu ruang yang tampil sebagai bintang di sekitar Bima Sakti. Ruang
+        privat terlihat sebagai bintang tanpa nama dan tidak dapat dimasuki orang lain. Bila kamu
+        membuka ruang untuk umum, pengunjung dapat melihat nama ruang, nama dan bentuk galaksimu,
+        serta pesan publik yang sudah disetujui. Pesan privat, tautan terbatas, foto, dan lampiran
+        tetap terenkripsi dan tidak pernah ditampilkan. Ruang dapat kembali dijadikan privat kapan
+        saja melalui Pengaturan atau bilah ruang.
+      </p>
       <h2>Penjadwalan dan kapsul waktu</h2>
       <p>
         Pesan publik terjadwal muncul setelah waktu pembukaan dan persetujuan moderator. Tautan

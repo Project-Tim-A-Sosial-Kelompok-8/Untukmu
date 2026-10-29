@@ -111,7 +111,7 @@ test("tombol kunci bisa dicoba lagi setelah salah kata sandi; galaksi tetap ada"
   await expect(frame.locator("#um-setup [data-act=lock]")).toBeVisible({ timeout: 60000 });
   await frame.locator("#um-setup [data-act=close]").click();
   await frame.locator(".um-dock [data-act=rumah]").click();
-  await expect(frame.locator(".um-glabel")).toContainText("Galaksi tetap");
+  await expect(frame.locator(".um-glabel", { hasText: "Galaksi tetap" })).toBeVisible();
   await frame.locator(".um-dock [data-act=dash]").click();
   await frame.locator("#um-dash [data-act=terbang]").first().click();
   await expect(frame.locator("#bp-name")).toHaveText("Galaksi tetap");

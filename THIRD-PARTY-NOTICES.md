@@ -1,5 +1,17 @@
 # Third-Party Notices
 
+## Painted galaxies (`frontend/src/visual/background.js`)
+
+The painted Milky Way, the painted-galaxy bake program (`EXT_PAINT_FRAG`, `paintGalaxy`), their presets, and the wormhole/streak transition (adapted as `mulaiSelam`/`buatStreak`) are adapted from [zjoooooo/galaxy-explorer](https://github.com/zjoooooo/galaxy-explorer), Copyright (c) 2026 Justin Zhang Jun, released under the MIT License:
+
+> Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions: The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software. THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+- `frontend/src/visual/images/lmc-plate.png` — Zdeněk Bardon/ESO (Large Magellanic Cloud) · CC BY 4.0 · cropped, pastel-graded, edge-feathered, downsampled to 256 px (as prepared by galaxy-explorer) · [source](https://commons.wikimedia.org/wiki/File:Large_Magellanic_Cloud_(magellan-ch17-bardon-cc).jpg)
+
+## Typefaces (`frontend/src/visual/fonts/`)
+
+Instrument Serif (Copyright 2022 The Instrument Serif Project Authors), IBM Plex Sans and IBM Plex Mono (Copyright © 2017 IBM Corp.) are redistributed as unmodified Latin-subset WOFF2 files under the [SIL Open Font License 1.1](https://openfontlicense.org/open-font-license-official-text/).
+
 File ini menyimpan atribusi dan pemberitahuan lisensi aset pihak ketiga.
 Atribusi visual yang dipakai saat ini berada di
 [pemberitahuan visual](frontend/src/visual/THIRD-PARTY-NOTICES.md), dengan berkas

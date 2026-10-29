@@ -106,12 +106,12 @@ test("pesan publik muncul pada filter Jelajah, empati, dan alur Doa dengan tujua
   expect(
     await page.frames()[1].evaluate('UM.galaksi.state.peta["publik-bersama"]'),
   ).toBeUndefined();
+  // The visitor stays in their own workspace: only the galaxy made with their account.
   expect(
     await visitor
       .frames()[1]
-      .evaluate("UM.galaksi.state.daftar.filter(item => item.g.sendiri !== false).length"),
-  ).toBe(0);
-  expect(await visitor.frames()[1].evaluate("UM.galaksi.state.daftar.length")).toBeGreaterThan(0);
+      .evaluate("UM.galaksi.state.daftar.map(item => item.g.sendiri !== false && item.g.nama)"),
+  ).toEqual(["Galaksi pertamaku"]);
   expect(await visitor.frames()[1].evaluate("UM.store.listDoa()")).toEqual([]);
   await guest.getByRole("button", { name: "Selesai", exact: true }).click();
   await visitor.frames()[1].evaluate("UM.ui.bukaDoa()");

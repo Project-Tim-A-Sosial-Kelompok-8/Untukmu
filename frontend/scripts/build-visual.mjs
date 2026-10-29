@@ -16,6 +16,8 @@ await rm(output, { recursive: true, force: true });
 await mkdir(output, { recursive: true });
 await cp(resolve(original, "vendor"), resolve(output, "vendor"), { recursive: true });
 await cp(resolve(original, "images"), resolve(output, "images"), { recursive: true });
+// Self-hosted typefaces (SIL OFL 1.1); the page CSP allows fonts from 'self' only.
+await cp(resolve(original, "fonts"), resolve(output, "fonts"), { recursive: true });
 for (const name of [
   "styles.css",
   "scene.js",
@@ -27,8 +29,8 @@ for (const name of [
 ])
   await cp(resolve(original, name), resolve(output, name));
 let index = await readFile(resolve(original, "index.html"), "utf8");
-const storageOrigin = new URL(process.env.S3_PUBLIC_ENDPOINT || "http://localhost:9000").origin;
-const csp = `default-src 'self'; script-src 'self' 'wasm-unsafe-eval' https://challenges.cloudflare.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self' ${storageOrigin} https://challenges.cloudflare.com; media-src 'self' blob: ${storageOrigin}; worker-src 'self'; frame-src https://challenges.cloudflare.com; object-src 'none'; base-uri 'self'; form-action 'self'`;
+// Encrypted uploads and curated audio are served by the same-origin API.
+const csp = `default-src 'self'; script-src 'self' 'wasm-unsafe-eval' https://challenges.cloudflare.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self' https://challenges.cloudflare.com; media-src 'self' blob:; worker-src 'self'; frame-src https://challenges.cloudflare.com; object-src 'none'; base-uri 'self'; form-action 'self'`;
 const charset = /<meta charset="utf-8"\s*\/?>/;
 if (!charset.test(index)) throw new Error("Visual document is missing its UTF-8 charset.");
 index = index.replace(
@@ -36,7 +38,8 @@ index = index.replace(
   '<meta charset="utf-8" /><meta http-equiv="Content-Security-Policy" content="' + csp + '" />',
 );
 await writeFile(resolve(output, "index.html"), index);
-for (const name of ["galaxy.js", "ui.js"]) await cp(resolve(original, name), resolve(output, name));
+for (const name of ["galaxy.js", "ruang.js", "ui.js"])
+  await cp(resolve(original, name), resolve(output, name));
 const catalog = await readFile(resolve(root, "../backend/data/prayers-v1.json"), "utf8");
 const registry = await readFile(resolve(original, "prayers.js"), "utf8");
 await writeFile(

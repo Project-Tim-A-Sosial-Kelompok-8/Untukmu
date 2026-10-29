@@ -243,37 +243,152 @@ async function listPesan(galaksiId?: string, fresh = false) {
   ).map(message);
 }
 
-// The composer/dashboard keep using the owner-only lists. The scene combines
-// those records with the anonymous public view, preferring complete owner data.
-function mergeOwned<T extends { id: string }>(publicRows: T[], ownedRows: T[]): T[] {
-  const rows = new Map(ownedRows.map((row) => [row.id, row]));
-  publicRows.forEach((row) => {
-    if (!rows.has(row.id)) rows.set(row.id, row);
+/* Workspaces. Every account owns one; in the scene each is a star around the
+   Milky Way. The galaxy field ("ladang") shows only the workspace that is
+   currently entered: your own (full data) or someone's public one (shapes,
+   names and approved public messages only). `null` is the Milky Way hub. */
+export interface Workspace {
+  id: string;
+  nama: string | null;
+  publik: boolean;
+  terkunci: boolean;
+  milikku: boolean;
+  jumlahGalaksi: number;
+  jumlahPublik: number;
+  dibuat: number;
+}
+interface WorkspaceRecord {
+  id: string;
+  name: string | null;
+  visibility: "private" | "public";
+  locked: boolean;
+  is_mine: boolean;
+  constellation_count: number | null;
+  public_message_count: number | null;
+  created_at: string;
+  constellations?: (GalaxyRecord & { public_message_count?: number })[];
+}
+function workspace(row: WorkspaceRecord): Workspace {
+  return {
+    id: row.id,
+    nama: row.name,
+    publik: row.visibility === "public",
+    terkunci: row.locked,
+    milikku: row.is_mine,
+    jumlahGalaksi: row.constellation_count || 0,
+    jumlahPublik: row.public_message_count || 0,
+    dibuat: Date.parse(row.created_at),
+  };
+}
+const ruang: { aktif: string | null; pemilik: string | null; dipilih: boolean } = {
+  aktif: null,
+  pemilik: null,
+  dipilih: false,
+};
+/* Tempat terakhir yang dibuka diingat per akun. Nilai `id: null` berarti
+   pengunjung sengaja kembali ke Bima Sakti, jadi refresh berikutnya juga
+   berhenti di sana — bukan dilempar lagi ke ruang pribadi. */
+const RUANG_TERAKHIR = "untukmu.ruang.v1";
+function bacaRuangTerakhir(owner: string): { ada: boolean; id: string | null } {
+  try {
+    if (typeof localStorage === "undefined") return { ada: false, id: null };
+    const raw = localStorage.getItem(RUANG_TERAKHIR);
+    if (!raw) return { ada: false, id: null };
+    const value = JSON.parse(raw) as { owner?: string; id?: string | null } | null;
+    if (!value || value.owner !== owner) return { ada: false, id: null };
+    return { ada: true, id: value.id || null };
+  } catch {
+    return { ada: false, id: null };
+  }
+}
+function simpanRuangTerakhir(owner: string | null, id: string | null) {
+  if (!owner) return;
+  try {
+    if (typeof localStorage === "undefined") return;
+    localStorage.setItem(RUANG_TERAKHIR, JSON.stringify({ owner, id: id || null }));
+  } catch {
+    /* penyimpanan penuh atau diblokir: sesi tetap jalan, hanya tidak diingat */
+  }
+}
+async function workspaceSaya() {
+  await ready();
+  if (!currentUser()) return null;
+  return workspace(await cached<WorkspaceRecord>("/workspaces/me"));
+}
+/* The entered workspace for the account that is signed in now. Until the
+   visitor chooses, members start in their own workspace and guests at the hub. */
+async function ruangAktif(): Promise<string | null> {
+  await ready();
+  const user = currentUser()?.id || null;
+  if (ruang.pemilik !== user) {
+    ruang.pemilik = user;
+    ruang.dipilih = false;
+    ruang.aktif = null;
+  }
+  if (!ruang.dipilih) {
+    if (user) {
+      const ingat = bacaRuangTerakhir(user);
+      if (ingat.ada) {
+        /* Kembali ke tempat terakhir: ruang yang sedang dibuka, atau Bima
+           Sakti bila terakhir kali pengunjung keluar ke sana. */
+        ruang.aktif = ingat.id;
+        ruang.dipilih = true;
+      } else {
+        try {
+          ruang.aktif = (await workspaceSaya())?.id || null;
+        } catch {
+          ruang.aktif = null;
+        }
+        ruang.dipilih = true;
+        simpanRuangTerakhir(user, ruang.aktif);
+      }
+    }
+  }
+  return ruang.aktif;
+}
+async function masukRuang(id: string | null) {
+  await ruangAktif();
+  ruang.aktif = id;
+  ruang.dipilih = true;
+  simpanRuangTerakhir(currentUser()?.id || null, id);
+}
+async function ruangSaya(id: string | null) {
+  return !!id && id === (await workspaceSaya())?.id;
+}
+async function detailRuang(id: string) {
+  return cached<WorkspaceRecord>(`/explore/workspaces/${id}`);
+}
+async function listRuang() {
+  await ready();
+  return (await api<WorkspaceRecord[]>("/explore/workspaces?limit=500")).map(workspace);
+}
+async function aturRuang(input: { nama?: string; publik?: boolean }) {
+  requireUser();
+  const row = await api<WorkspaceRecord>("/workspaces/me", {
+    method: "PATCH",
+    body: JSON.stringify({
+      name: input.nama,
+      visibility: input.publik === undefined ? undefined : input.publik ? "public" : "private",
+    }),
   });
-  return [...rows.values()];
+  await invalidate();
+  return workspace(row);
 }
 async function listGalaksiLadang() {
-  await ready();
-  const [owned, publicRows] = await Promise.all([
-    listGalaksi(),
-    allPages<GalaxyRecord>("/explore/constellations"),
-  ]);
-  return mergeOwned(await Promise.all(publicRows.map(galaxy)), owned);
+  const id = await ruangAktif();
+  if (!id) return [];
+  if (await ruangSaya(id)) return listGalaksi();
+  const detail = await detailRuang(id);
+  return Promise.all(
+    (detail.constellations || []).map((row) => galaxy({ ...row, is_mine: false })),
+  );
 }
 async function listPesanLadang(galaksiId?: string) {
-  await ready();
-  if (galaksiId) {
-    const owned = await listGalaksi();
-    if (owned.some((row) => row.id === galaksiId)) return listPesan(galaksiId);
-    return (await allPages<MessageRecord>(`/explore/constellations/${galaksiId}/messages`)).map(
-      message,
-    );
-  }
-  const [owned, publicRows] = await Promise.all([
-    listPesan(),
-    allPages<MessageRecord>("/explore/messages"),
-  ]);
-  return mergeOwned(publicRows.map(message), owned);
+  const id = await ruangAktif();
+  if (!id) return [];
+  if (await ruangSaya(id)) return listPesan(galaksiId);
+  const query = galaksiId ? `?constellation_id=${encodeURIComponent(galaksiId)}` : "";
+  return (await allPages<MessageRecord>(`/explore/workspaces/${id}/messages${query}`)).map(message);
 }
 
 export async function migrateUnlisted() {
@@ -451,6 +566,12 @@ export const store = {
   listGalaksi,
   listGalaksiLadang,
   listPesanLadang,
+  workspaceSaya,
+  ruangAktif,
+  masukRuang,
+  listRuang,
+  detailRuang: async (id: string) => workspace(await detailRuang(id)),
+  aturRuang,
   getGalaksi,
   saveGalaksi,
   saveGalaksiBaru: saveGalaksi,

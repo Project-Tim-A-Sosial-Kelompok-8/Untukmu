@@ -8,121 +8,104 @@ Panduan penggunaan, konfigurasi lokal, pengembangan, dan katalog disatukan di RE
 
 - [Teknologi](#teknologi)
 - [Menjalankan secara lokal](#menjalankan-secara-lokal)
+- [Bima Sakti dan ruang](#bima-sakti-dan-ruang)
 - [Fitur dan privasi pesan](#fitur-dan-privasi-pesan)
 - [Tombol Berikan empati](#tombol-berikan-empati)
 - [Doa dan kurasi audio](#doa-dan-kurasi-audio)
 - [Panel admin](#panel-admin)
 - [Struktur proyek](#struktur-proyek)
 - [Arsitektur dan keamanan data](#arsitektur-dan-keamanan-data)
-- [Pengembangan tanpa Docker untuk kode aplikasi](#pengembangan-tanpa-docker-untuk-kode-aplikasi)
 - [Format dan pengujian](#format-dan-pengujian)
 - [Persiapan deploy dan backup](#persiapan-deploy-dan-backup)
 
 ## Teknologi
 
-| Bagian               | Teknologi                                                                   |
-| -------------------- | --------------------------------------------------------------------------- |
-| Frontend             | Next.js 16 App Router, React 19, TypeScript, Tailwind CSS                   |
-| Visual kenangan      | Three.js, React Three Fiber; controller visual berada dalam sumber frontend |
-| State dan data       | Zustand, TanStack Query                                                     |
-| Backend              | Python 3.12, FastAPI, SQLAlchemy async, Alembic                             |
-| Database dan antrean | PostgreSQL 16, Redis                                                        |
-| Berkas               | S3/MinIO; lampiran pribadi dienkripsi di perangkat                          |
-| Infrastruktur        | Docker Compose, Caddy, Turnstile; Sentry dan Prometheus/Grafana opsional    |
-| Pemeriksaan          | ESLint, TypeScript, Prettier, Ruff, pytest, Vitest, Playwright              |
+| Bagian          | Teknologi                                                                          |
+| --------------- | ---------------------------------------------------------------------------------- |
+| Frontend        | Next.js 16 App Router, React 19, TypeScript, Tailwind CSS                          |
+| Visual kenangan | Three.js, React Three Fiber; controller visual berada dalam sumber frontend        |
+| State dan data  | Zustand, TanStack Query                                                            |
+| Backend         | Go 1.26, `net/http`, satu biner API dengan worker moderasi di dalamnya             |
+| Database        | PostgreSQL (Neon) lewat `DATABASE_URL`; SQLite lokal bila kosong; migrasi otomatis |
+| Berkas          | Folder lokal dengan URL bertanda tangan; lampiran pribadi dienkripsi di perangkat  |
+| Infrastruktur   | Tanpa Docker; Caddy dan Turnstile untuk produksi; Sentry/Prometheus opsional       |
+| Pemeriksaan     | ESLint, TypeScript, Prettier, gofmt, `go vet`, `go test`, Vitest, Playwright       |
 
 ## Menjalankan secara lokal
 
 ### 1. Siapkan perangkat dan proyek
 
-- Pasang **Docker Desktop** dan jalankan sampai engine siap. Pada Windows, gunakan WSL 2 dan mode **Linux containers**.
-- Pasang **Python 3.12** untuk membuat konfigurasi lokal. Pada Windows, aktifkan opsi penambahan Python ke `PATH` saat instalasi.
-- Unduh/clone repositori ini, lalu buka terminal pada folder yang berisi `docker-compose.yml`, `README.md`, dan `.env.example`.
-- Siapkan koneksi internet untuk mengunduh image dan dependensi saat build pertama. Pastikan port `3000`, `5432`, `6379`, `9000`, dan `9001` belum dipakai aplikasi lain.
+- Pasang **[Go 1.26+](https://go.dev/dl/)** dan **[Node.js 22+](https://nodejs.org/)** (beserta npm). Bila Go yang terpasang lebih lama, perintah `go` mengunduh toolchain yang sesuai secara otomatis.
+- Unduh/clone repositori ini, lalu buka terminal pada folder yang berisi `README.md` dan `.env.example`.
+- Pastikan port `3000` (frontend) dan `8000` (API) belum dipakai aplikasi lain.
 
-Untuk menjalankan seluruh aplikasi melalui Docker, **tidak perlu memasang PostgreSQL, Redis, MinIO, Node.js, atau dependensi backend secara terpisah**. Node.js hanya diperlukan jika ingin mengembangkan frontend di luar Docker.
+**Tidak perlu Docker, PostgreSQL, Redis, MinIO, atau Python.** Database SQLite dan folder unggahan dibuat otomatis di `backend/var/`.
 
 Periksa dari terminal yang sama:
 
 ```sh
-docker version
-docker compose version
-python --version
+go version
+node --version
 ```
 
-Gunakan Docker Compose **2.24.4 atau lebih baru**. `docker version` harus menampilkan bagian Client dan Server. Di PowerShell, contoh masuk ke folder proyek:
-
-```powershell
-Set-Location D:\Project\Untukmu-Git
-```
-
-Sesuaikan alamat folder tersebut dengan lokasi hasil unduhan Anda.
-
-### 2. Buat `.env` dan password PostgreSQL
+### 2. Buat `.env`
 
 Jalankan dari akar proyek:
 
 ```sh
-python scripts/init_env.py
+cd backend
+go run ./cmd/untukmu init-env
+cd ..
 ```
 
-Jika perintah `python` tidak tersedia di Windows tetapi Python Launcher sudah terpasang, gunakan `py -3.12 scripts/init_env.py`.
+Perintah membuat file **`.env` di akar proyek** dengan kunci acak. Setiap orang yang mencoba proyek membuat `.env` miliknya sendiri. `.env.example` hanya template. Jika muncul **`.env sudah ada; tidak diubah.`**, konfigurasi lama sengaja dipertahankan; `.env` lama dari versi Docker tetap bisa dipakai karena variabel yang tidak dikenal diabaikan.
 
-Script membuat file **`.env` di akar proyek**, menghasilkan password/kunci acak, dan menyamakan password PostgreSQL dengan `DATABASE_URL`. Anda **tidak memerlukan password PostgreSQL yang sudah ada di komputer**: container PostgreSQL baru akan memakai password buatan script tersebut. Setiap orang yang mencoba proyek membuat `.env` miliknya sendiri. `.env.example` hanya template; menyalinnya tanpa mengganti `CHANGE_ME` belum menghasilkan konfigurasi yang siap dipakai.
+Jangan unggah `.env` ke Git atau membagikannya dalam tangkapan layar. Peran setiap nilai:
 
-Buka `.env` menggunakan editor lokal jika perlu melihat kredensial. Jangan unggah file ini ke Git atau membagikannya dalam tangkapan layar. Peran setiap nilai utama:
+| Variabel                                        | Fungsi                                                                                                            |
+| ----------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- |
+| `ENVIRONMENT`                                   | `development` untuk lokal; `production` mengaktifkan pemeriksaan HTTPS/Turnstile yang lebih ketat.                |
+| `APP_ORIGIN`                                    | Alamat aplikasi di browser; lokal `http://localhost:3000`. Permintaan tulis dari origin lain ditolak.             |
+| `LISTEN_ADDR`, `API_INTERNAL_URL`               | Alamat API Go (`127.0.0.1:8000`) dan tujuan proxy `/api/v1` dari Next.js.                                         |
+| `DATABASE_URL`                                  | PostgreSQL, mis. Neon (`postgresql://…?sslmode=require`). Kosong = SQLite lokal di `DATABASE_PATH`.               |
+| `DATABASE_PATH`, `STORAGE_DIR`                  | Lokasi berkas SQLite dan unggahan terenkripsi, relatif terhadap folder `backend`. Backup keduanya bersama `.env`. |
+| `JWT_SECRET`, `PUBLIC_CONTENT_KEY`              | Kunci sesi dan penyimpanan pesan publik; dibuat otomatis. Jangan diganti pada instalasi yang sudah berisi data.   |
+| `TRUSTED_PROXIES`                               | Proxy yang boleh mengirim `X-Forwarded-For` (bawaan loopback: Next.js/Caddy di mesin yang sama).                  |
+| `TURNSTILE_*`, `NEXT_PUBLIC_TURNSTILE_SITE_KEY` | Boleh kosong untuk lokal dengan `ENVIRONMENT=development`; wajib pada produksi.                                   |
+| `SENTRY_DSN`, `METRICS_TOKEN`                   | Opsional: pelaporan kesalahan tanpa data pesan, dan token endpoint `/metrics` untuk Prometheus.                   |
+| `SITE_DOMAIN`                                   | Kosong untuk lokal; hostname tanpa skema untuk Caddy produksi.                                                    |
 
-| Variabel                                        | Fungsi dan cara mengisinya                                                                                                                                                   |
-| ----------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `POSTGRES_USER`                                 | User database; default `untukmu`. Bukan surel akun aplikasi.                                                                                                                 |
-| `POSTGRES_DB`                                   | Nama database; default `untukmu`.                                                                                                                                            |
-| `POSTGRES_PASSWORD`                             | Password user PostgreSQL di atas, dibuat acak oleh script. Pakai nilai ini ketika login dari pgAdmin.                                                                        |
-| `DATABASE_URL`                                  | Koneksi API yang dijalankan langsung di komputer: `postgresql+asyncpg://USER:PASSWORD@localhost:5432/DATABASE`. User, password, dan database harus sama dengan `POSTGRES_*`. |
-| `JWT_SECRET`, `PUBLIC_CONTENT_KEY`              | Kunci sesi dan penyimpanan pesan publik; dibuat otomatis. Simpan bersama backup `.env` untuk instalasi yang sama.                                                            |
-| `S3_ACCESS_KEY`, `S3_SECRET_KEY`                | Kredensial MinIO lokal; dibuat otomatis. Keduanya juga dipakai untuk konsol MinIO.                                                                                           |
-| `APP_ORIGIN`, `S3_PUBLIC_ENDPOINT`              | Alamat browser lokal; biarkan nilai `localhost` bawaan untuk panduan ini.                                                                                                    |
-| `TURNSTILE_*`, `NEXT_PUBLIC_TURNSTILE_SITE_KEY` | Boleh kosong untuk pengujian lokal dengan `ENVIRONMENT=development`; konfigurasi produksi dijelaskan di bawah.                                                               |
+### 3. Jalankan API dan frontend
 
-Konfigurasi lain pada template:
-
-| Variabel                                  | Nilai lokal / kegunaan                                                                                              |
-| ----------------------------------------- | ------------------------------------------------------------------------------------------------------------------- |
-| `ENVIRONMENT`                             | `development` untuk lokal; produksi menggunakan `production` dan pemeriksaan HTTPS/Turnstile yang lebih ketat.      |
-| `REDIS_URL`                               | `redis://localhost:6379/0` untuk API di host; Compose menggantinya dengan host internal `redis`.                    |
-| `S3_ENDPOINT`                             | `http://localhost:9000` untuk API di host; Compose menggantinya dengan `http://minio:9000`.                         |
-| `S3_PUBLIC_ENDPOINT`                      | Alamat storage yang dapat diakses browser, lokal `http://localhost:9000`; berbeda dari endpoint internal container. |
-| `S3_REGION`, `S3_BUCKET`                  | Lokal `us-east-1` dan `untukmu-private`; bucket disiapkan oleh layanan `init-storage`.                              |
-| `API_INTERNAL_URL`                        | Tujuan proxy API frontend; bawaan host `http://127.0.0.1:8000`, sedangkan image Docker memakai `http://api:8000`.   |
-| `SENTRY_DSN`                              | Kosong bila pelaporan kesalahan eksternal tidak digunakan.                                                          |
-| `METRICS_TOKEN`, `GRAFANA_ADMIN_PASSWORD` | Dibuat generator; dipakai saat profile monitoring diaktifkan. Tidak diperlukan untuk login akun aplikasi.           |
-| `SITE_DOMAIN`, `STORAGE_DOMAIN`           | Kosong untuk lokal; hostname tanpa skema untuk konfigurasi Caddy produksi.                                          |
-
-Dalam Docker Compose, `DATABASE_URL` diganti otomatis menjadi koneksi ke host internal `postgres`, memakai `POSTGRES_USER`, `POSTGRES_PASSWORD`, dan `POSTGRES_DB` dari `.env`. Sementara itu, nilai `DATABASE_URL` dalam file tetap memakai `localhost` agar cocok saat backend dijalankan langsung di komputer. Pertahankan password acak hasil script agar aman digunakan dalam kedua bentuk koneksi tersebut.
-
-Jika muncul **`.env sudah ada; tidak diubah.`**, script sengaja mempertahankan konfigurasi lama. Lanjutkan jika `.env` itu berasal dari generator dan masih sesuai dengan database. Jangan membuat ulang kunci atau mengganti password sembarangan pada instalasi yang sudah memiliki data; lihat pemecahan masalah di bawah.
-
-### 3. Bangun dan jalankan layanan
+Pasang dependensi frontend sekali:
 
 ```sh
-docker compose config --quiet
-docker compose up -d --build --wait
-docker compose ps -a
+npm ci
 ```
 
-Build pertama dapat memerlukan beberapa menit. Compose menyiapkan PostgreSQL, Redis, MinIO, migrasi database, API, worker, frontend, dan gateway. Layanan `migrate` dan `init-storage` memang berhenti dengan **Exited (0)** setelah berhasil; itu normal. Layanan yang berjalan harus berstatus Up, dan yang mempunyai healthcheck harus healthy.
+Terminal pertama — API Go (dari akar proyek):
 
-Buka http://localhost:3000/api/v1/health untuk memeriksa API. Hasil yang diharapkan memuat `"status":"ok"`. Kemudian buka aplikasi:
+```sh
+npm run api
+```
 
-| Halaman / layanan | Alamat                                        |
-| ----------------- | --------------------------------------------- |
-| Aplikasi          | http://localhost:3000                         |
-| Doa               | http://localhost:3000/doa                     |
-| Panel admin       | http://localhost:3000/admin                   |
-| Dokumentasi API   | http://localhost:3000/docs                    |
-| PostgreSQL        | `127.0.0.1:5432`; database/user dari `.env`   |
-| Konsol MinIO      | http://localhost:9001; kredensial dari `.env` |
+Terminal kedua — frontend:
 
-Tidak ada akun aplikasi bawaan. Buat akun melalui aplikasi seperti langkah berikut; password akun aplikasi berbeda dari `POSTGRES_PASSWORD`.
+```sh
+npm run dev
+```
+
+`npm run api` sama dengan `cd backend && go run ./cmd/untukmu`. API membuat skema database dan mengisi katalog doa saat pertama berjalan. Buka http://localhost:3000/api/v1/health; hasil yang diharapkan memuat `"status":"ok"`. Kemudian buka aplikasi:
+
+| Halaman     | Alamat                      |
+| ----------- | --------------------------- |
+| Aplikasi    | http://localhost:3000       |
+| Doa         | http://localhost:3000/doa   |
+| Panel admin | http://localhost:3000/admin |
+
+Untuk mode produksi lokal: `npm run build`, `npm run api:build`, lalu jalankan `backend/untukmu` (dari folder `backend`) dan `npm start`.
+
+Tidak ada akun aplikasi bawaan. Buat akun melalui aplikasi seperti langkah berikut.
 
 ### 4. Buat akun dan coba pesan publik dari akun lain
 
@@ -135,60 +118,40 @@ Tidak ada akun aplikasi bawaan. Buat akun melalui aplikasi seperti langkah berik
 
 Pesan publik harus lolos pemeriksaan awal dan sudah mencapai waktu pembukaan. Pesan yang ditandai untuk moderasi menunggu peninjauan admin. Nama pribadi tujuan, foto, lampiran, dan isi privat tidak ikut dibagikan lewat galaksi publik. **Ruang Pribadi** tetap berisi data milik akun yang sedang masuk.
 
-Semua akun harus mengakses server/instalasi yang sama agar berbagi pesan publik. Menjalankan salinan Docker terpisah di dua komputer menghasilkan database terpisah; `localhost` pada masing-masing komputer menunjuk komputer itu sendiri.
+Semua akun harus mengakses server/instalasi yang sama agar berbagi pesan publik. Menjalankan salinan terpisah di dua komputer menghasilkan database terpisah; `localhost` pada masing-masing komputer menunjuk komputer itu sendiri.
 
 **Refresh halaman tetap mempertahankan login** selama cookie dan sesi akun masih valid. Cookie sesi memiliki masa berlaku bawaan 30 hari dan diperpanjang saat token sesi diperbarui. Login ulang diperlukan setelah sesi berakhir/dicabut atau cookie dihapus. **Keluar/Ganti akun** mencabut sesi yang sedang digunakan.
 
 Sesudah refresh, akun tetap masuk, tetapi kunci enkripsi privat perlu dibuka kembali: pilih tombol **Kunci** (ikon kunci), masukkan kata sandi akun, lalu **Buka kunci**. Ini diperlukan untuk membaca/menulis pesan privat, membuka lampiran, atau mengekspor data; pesan publik dan galaksi tetap dapat dijelajahi. Kata sandi dan kunci enkripsi tidak disimpan di penyimpanan browser agar kunci tidak menetap setelah halaman ditutup.
 
-### 5. Mengakses PostgreSQL, menghentikan, dan menjalankan kembali
+### 5. Melihat database, menghentikan, dan menjalankan kembali
 
-Untuk pgAdmin yang berjalan di komputer Anda, daftarkan server menggunakan nilai berikut. Ganti nama variabel di tabel dengan **isi nilainya dari `.env`**, bukan teks nama variabelnya:
+Database berada di `backend/var/untukmu.db` (atau `DATABASE_PATH`). Buka dengan [DB Browser for SQLite](https://sqlitebrowser.org/) atau `sqlite3` secara **baca saja** saat API berjalan. Tabel utama: `users`, `messages`, `constellations`, `prayers`, dan `prayer_contents`. Berkas unggahan terenkripsi berada di `backend/var/storage`.
 
-| Isian pgAdmin        | Nilai                                     |
-| -------------------- | ----------------------------------------- |
-| Host name/address    | `127.0.0.1`                               |
-| Port                 | `5432`                                    |
-| Maintenance database | Nilai `POSTGRES_DB` (default `untukmu`)   |
-| Username             | Nilai `POSTGRES_USER` (default `untukmu`) |
-| Password             | Nilai `POSTGRES_PASSWORD` hasil generator |
-
-Tabel utama: `users`, `messages`, `constellations`, `prayers`, dan `prayer_contents`. Metadata audio berada di PostgreSQL; berkas unggahan berada di MinIO.
-
-```sh
-docker compose down
-docker compose up -d --wait
-```
-
-`down` menghentikan layanan dan mempertahankan volume database/storage; akun dan pesan tetap ada saat dijalankan kembali. Setelah memperbarui kode, gunakan kembali `docker compose up -d --build --wait` agar image dan migrasi terbaru diterapkan. **`docker compose down -v` menghapus volume beserta data lokal**, sehingga jangan gunakan untuk sekadar menghentikan atau memperbarui aplikasi.
+Hentikan API dan frontend dengan `Ctrl+C` di masing-masing terminal. Data tetap tersimpan; jalankan kembali perintah langkah 3. Menghapus folder `backend/var` menghapus seluruh akun, pesan, dan unggahan lokal.
 
 ### Jika belum berhasil
 
-Lihat layanan yang gagal dan lognya tanpa mencetak seluruh konfigurasi `.env`:
+| Kendala                                         | Yang perlu diperiksa                                                                                                                                                                              |
+| ----------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `go`/`node` tidak dikenali                      | Pastikan sudah terpasang dan buka ulang terminal.                                                                                                                                                 |
+| `JWT_SECRET wajib acak dan minimal 32 karakter` | `.env` belum dibuat atau masih berisi nilai template. Jalankan `go run ./cmd/untukmu init-env` dari folder `backend`.                                                                             |
+| Address already in use                          | Hentikan aplikasi lain yang memakai port `8000`/`3000`, atau ubah `LISTEN_ADDR` dan `API_INTERNAL_URL` bersamaan.                                                                                 |
+| Halaman memuat tetapi API gagal (502/500)       | Pastikan terminal API masih berjalan dan `API_INTERNAL_URL` menunjuk alamat yang sama dengan `LISTEN_ADDR`.                                                                                       |
+| Pesan A belum terlihat pada akun B              | Pastikan server sama, pilihan **Publik anonim**, jadwal sudah terbuka, moderasi sudah disetujui, filter Jelajah dikosongkan, dan tidak ada blokir antar akun. Muat ulang setelah menyimpan pesan. |
+| Tampilan masih seperti sebelum pembaruan        | Hentikan lalu jalankan ulang `npm run dev`, kemudian muat ulang paksa browser (`Ctrl+Shift+R`).                                                                                                   |
 
-```sh
-docker compose ps -a
-docker compose logs --tail 100 postgres migrate init-storage api web worker
-```
+## Bima Sakti dan ruang
 
-| Kendala                                                      | Yang perlu diperiksa                                                                                                                                                                              |
-| ------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `docker`/`python` tidak dikenali                             | Pastikan sudah terpasang dan buka ulang terminal. Untuk Python di Windows, coba `py -3.12`.                                                                                                       |
-| Cannot connect to Docker daemon / bagian Server tidak muncul | Jalankan Docker Desktop; tunggu engine siap dan pastikan mode Linux containers/WSL 2 aktif.                                                                                                       |
-| `CHANGE_ME`, variabel kosong, atau `.env` tidak ditemukan    | Jalankan generator dari akar proyek. Jika `.env` sudah ada, periksa file lokal; generator tidak menimpa file lama.                                                                                |
-| Port already allocated / address already in use              | Hentikan aplikasi/container lain yang memakai port tersebut, misalnya PostgreSQL lokal pada `5432`, lalu jalankan Compose kembali.                                                                |
-| `password authentication failed`                             | Cocokkan `POSTGRES_*`, `DATABASE_URL`, dan password pada database yang sudah ada. Mengubah `.env` **tidak mengubah password dalam volume PostgreSQL lama**; ikuti langkah di bawah.               |
-| Gateway 502 / API belum siap                                 | Periksa status/log `migrate`, `init-storage`, dan `api`. Tunggu proses selesai atau perbaiki penyebab yang tercatat, lalu ulangi perintah build/jalankan.                                         |
-| Pesan A belum terlihat pada akun B                           | Pastikan server sama, pilihan **Publik anonim**, jadwal sudah terbuka, moderasi sudah disetujui, filter Jelajah dikosongkan, dan tidak ada blokir antar akun. Muat ulang setelah menyimpan pesan. |
-| Tampilan masih seperti sebelum pembaruan                     | Rebuild dengan perintah di atas, kemudian muat ulang paksa browser (`Ctrl+Shift+R`).                                                                                                              |
+Ruang utama hanya berisi Bima Sakti — dilukis di GPU seperti [galaxy-explorer](https://github.com/zjoooooo/galaxy-explorer): sapuan kuas mengikuti aliran spiral, jalur debu gelap, inti krem keemasan, dan bintang partikel yang berkilau saat didekati. Setiap akun otomatis mendapat satu **ruang** beserta "Galaksi pertamaku" saat mendaftar. Ruang itu adalah satu butir cahaya di lengan Bima Sakti, bagian dari debu bintang yang ikut berputar mengorbit pusat galaksi.
 
-Jika volume PostgreSQL lama sudah ada, cara paling sederhana adalah mengembalikan `POSTGRES_PASSWORD` ke password instalasi sebelumnya dan menyamakan `DATABASE_URL`. Jika memang ingin mengganti password, simpan backup terlebih dahulu, masuk ke PostgreSQL pada container, lalu ubah melalui prompt interaktif berikut (contoh memakai user/database default):
+- Setelah masuk, kamu langsung berada di ruangmu sendiri. Pilih **Ke Bima Sakti** pada bilah ruang, atau gulir menjauh sampai batas zoom, untuk keluar: kamera muncul dari antara debu di dekat butir ruangmu lalu mundur sampai seluruh Bima Sakti terlihat.
+- Di ruang utama kamera hanya bisa diputar dan didekatkan; tidak bisa mundur atau digeser, jadi fokusnya selalu Bima Sakti.
+- Arahkan kursor ke butir di lengan galaksi untuk melihat ruangnya. Butir emas adalah ruangmu, butir biru-putih adalah ruang publik yang bisa dimasuki (klik untuk menyelam ke dalamnya), dan butir redup adalah ruang privat.
+- Ruang baru selalu **privat**. Pilih **Buka untuk umum** pada bilah ruang (atau Pengaturan → Ruangmu di Bima Sakti) agar orang lain bisa masuk. Pengunjung melihat nama ruang, nama dan bentuk galaksi, serta pesan publik yang sudah disetujui; pesan privat, tautan terbatas, foto, dan lampiran tetap terenkripsi.
+- Nama ruang dapat diganti lewat **Ganti nama** pada bilah ruang.
 
-```sh
-docker compose exec postgres psql -U untukmu -d untukmu
-```
-
-Di dalam `psql`, jalankan `\password untukmu`, masukkan password baru dua kali, lalu `\q`. Sesuaikan user/database bila nilai `.env` Anda berbeda. Isi password baru yang sama pada `POSTGRES_PASSWORD` dan `DATABASE_URL`, kemudian jalankan `docker compose up -d --force-recreate --wait`. Password acak huruf/angka menghindari karakter khusus yang perlu encoding dalam URL. Pertahankan `PUBLIC_CONTENT_KEY`, `JWT_SECRET`, dan kredensial storage milik instalasi tersebut; menghapus `.env` bukan langkah pemulihan password database.
+Galaksi di dalam ruang juga berupa lukisan GPU dengan resep galaxy-explorer: spiral ala Andromeda atau M33, eliptis ala M87, dan tak beraturan dari plate Awan Magellan Besar. Bagian luar paletnya diwarnai warna pilihan pemilik dan bentuknya stabil per galaksi. Lukisan di-bake bertahap per tile setelah ruang dibuka, lalu memudar masuk.
 
 ## Fitur dan privasi pesan
 
@@ -246,7 +209,7 @@ Tambahan draf Namo Tassa memakai [rekaman Pali asli Amaravati Publications](http
 
 Audio dipasang pada jenis doa yang sesuai dengan isinya: Al-Fatihah tidak dipakai untuk doa Rabbana/jenazah; rekaman Latin dan Inggris diberi label bahasanya. Jangan mengisi entri kosong dengan rekaman berbeda doa atau tradisi hanya agar statusnya terlihat lengkap. Paket referensi ini tidak menyatakan persetujuan institusi agama.
 
-Durasi sesi dibulatkan ke atas dari durasi berkas: Al-Fatihah 93, Pater Noster 29, Gayatri 21, Karaniya Metta 287, dan Namo Tassa 43 detik. Namo Tassa terbaca sekitar 42,08 detik pada pemutar browser. Durasi berkas Karaniya Metta lebih panjang dari angka pada halaman sumber, sehingga aplikasi memakai hasil pembacaan berkas. Sumber, ukuran, lisensi, atribusi, bahasa, dan SHA-256 tersedia di [manifest](backend/data/prayer-audio/manifest.json). Untuk mengunduh ulang dan memeriksa checksum dari sumber yang sama, jalankan `python scripts/fetch_prayer_recordings.py` dari akar proyek; diperlukan koneksi internet. Importer memeriksa checksum sebelum menyimpan berkas dan memperbarui manifest setelah seluruh sumber berhasil.
+Durasi sesi dibulatkan ke atas dari durasi berkas: Al-Fatihah 93, Pater Noster 29, Gayatri 21, Karaniya Metta 287, dan Namo Tassa 43 detik. Namo Tassa terbaca sekitar 42,08 detik pada pemutar browser. Durasi berkas Karaniya Metta lebih panjang dari angka pada halaman sumber, sehingga aplikasi memakai hasil pembacaan berkas. Sumber, ukuran, lisensi, atribusi, bahasa, dan SHA-256 tersedia di [manifest](backend/data/prayer-audio/manifest.json). Untuk mengunduh ulang dan memeriksa checksum dari sumber yang sama, jalankan `python scripts/fetch_prayer_recordings.py` dari akar proyek (opsional; memerlukan Python 3 dan koneksi internet). Rekaman ditanam ke biner API, jadi build ulang API setelah berkas berubah. Importer memeriksa checksum sebelum menyimpan berkas dan memperbarui manifest setelah seluruh sumber berhasil.
 
 ### Rekaman yang masih perlu dilengkapi
 
@@ -271,7 +234,8 @@ Rekaman bawaan diputar melalui API pada origin aplikasi. Rekaman unggahan diputa
 Daftarkan akun melalui aplikasi terlebih dahulu. Untuk memberikan peran admin kepada akun tersebut, jalankan perintah berikut dengan surel akun yang ingin dijadikan admin:
 
 ```sh
-docker compose exec api python -m scripts.make_admin emailakun@example.com
+cd backend
+go run ./cmd/untukmu make-admin emailakun@example.com
 ```
 
 Keluar lalu masuk kembali agar peran terbaru dimuat, kemudian buka http://localhost:3000/admin. Panel memiliki empat tab:
@@ -298,7 +262,7 @@ Panel menampilkan tahap pemeriksaan, unggahan, verifikasi server, dan penyimpana
 
 Penyiapan unggahan dan verifikasi memakai kuota terpisah, masing-masing sepuluh permintaan per admin per menit. Sepuluh unggahan dapat diselesaikan tanpa kedua tahap saling menghabiskan kuota; respons batas permintaan tetap memberi waktu untuk mencoba kembali.
 
-Unggahan memakai rekaman berkas yang dipilih admin; aplikasi tidak membuat teks/audio doa dengan AI. Perubahan lewat panel tersimpan di database dan storage tanpa perlu mengedit JSON, mengubah kode, atau melakukan rebuild. JSON menentukan pilihan katalog awal; penambahan jenis doa di luar pilihan tersebut merupakan perubahan katalog dan migrasi oleh pengembang.
+Unggahan memakai rekaman berkas yang dipilih admin; aplikasi tidak membuat teks/audio doa dengan AI. Perubahan lewat panel tersimpan di database dan storage tanpa perlu mengedit JSON, mengubah kode, atau melakukan rebuild. JSON menentukan pilihan katalog awal; penambahan jenis doa di luar pilihan tersebut merupakan perubahan katalog oleh pengembang.
 
 Audio Buddha memiliki lisensi nonkomersial; visual adaptasi juga memiliki batas nonkomersial. Untuk pemasangan komersial, gunakan rekaman dan visual dengan izin yang sesuai. Lihat [atribusi](THIRD-PARTY-NOTICES.md) sebelum menentukan penggunaan.
 
@@ -316,22 +280,17 @@ frontend/
   scripts/              # Build visual dan start standalone
   tests/                # Unit test dan browser test
 backend/
-  app/
-    routers/            # Endpoint FastAPI per fitur
-    main.py             # App, middleware, lifespan, pemasangan router
-    models.py           # Model SQLAlchemy
-    schemas.py          # Validasi input API
-    ...                 # Konfigurasi, keamanan, katalog, worker dan helper
-  alembic/              # Migrasi berurutan dan snapshot katalog historis
-  data/                 # Katalog aktif serta rekaman asli dan manifest
-  scripts/              # Inisialisasi storage dan pemberian peran admin
-  tests/                # Tes API, migrasi dan fixture browser
-infra/                  # Caddy, MinIO, Prometheus/Grafana
-scripts/                # Konfigurasi lokal, verifikasi audio dan browser terisolasi
+  cmd/untukmu/          # Biner: serve, make-admin, init-env
+  internal/app/         # Endpoint, validasi, keamanan, SQLite, storage, worker, tes
+    schema.sql          # Skema database (dibuat/dimigrasikan otomatis)
+  data/                 # Katalog aktif serta rekaman asli dan manifest (ditanam ke biner)
+  var/                  # Database dan unggahan lokal (dibuat otomatis, diabaikan Git)
+infra/                  # Caddy, Prometheus/Grafana
+scripts/                # Verifikasi audio, audit tombol dan browser terisolasi
 docs/                   # PRD.docx asli dan runbook PRODUKSI.md
 ```
 
-`frontend/public/visual` adalah hasil build otomatis, bukan sumber yang diedit. `node_modules`, `.next`, `.venv`, cache, laporan tes, `.env`, dan `.local-backups` diabaikan Git. Snapshot katalog dalam Alembic tetap diperlukan untuk instalasi dan upgrade database lama. Berkas `__init__.py` diperlukan sebagai penanda paket Python.
+`frontend/public/visual` adalah hasil build otomatis, bukan sumber yang diedit. `node_modules`, `.next`, `backend/var`, biner `backend/untukmu`, laporan tes, `.env`, dan `.local-backups` diabaikan Git.
 
 ## Arsitektur dan keamanan data
 
@@ -339,26 +298,25 @@ docs/                   # PRD.docx asli dan runbook PRODUKSI.md
 flowchart LR
   Browser[Next.js React dan Web Crypto] -->|HTTPS| Edge[Cloudflare dan Caddy]
   Edge --> Web[Next.js]
-  Edge --> API[FastAPI REST]
-  API --> DB[(PostgreSQL)]
-  API --> Cache[(Redis)]
-  Browser -->|Objek dan URL bertanda tangan| Storage[(MinIO atau R2)]
-  Worker[Worker moderasi publik] --> DB
-  Worker --> Cache
+  Web -->|/api/v1| API[API Go]
+  Edge --> API
+  API --> DB[(SQLite)]
+  API --> Files[(Folder unggahan terenkripsi)]
+  API --> Memory[Cache, rate limit, sesi doa di memori]
+  API --> Worker[Worker moderasi publik]
   Prometheus[Prometheus dengan token] --> API
-  Grafana[Grafana] --> Prometheus
   API -->|Jika diaktifkan operator| Sentry[Sentry]
 ```
 
-API berada di `/api/v1`, dokumentasi interaktif di `/docs`. Browser berbicara ke API pada origin aplikasi melalui gateway atau rewrite Next.js. Data akun dan daftar publik diperoleh dari API, tanpa data contoh atau katalog astronomi lokal. Cache feed/dashboard dan pembatasan laju memakai Redis. PWA hanya menyimpan aset statis serta halaman luring, tanpa menyimpan pesan atau respons akun.
+API berada di `/api/v1`. Browser berbicara ke API pada origin aplikasi melalui rewrite Next.js atau gateway Caddy. Data akun dan daftar publik diperoleh dari API, tanpa data contoh atau katalog astronomi lokal. Cache feed/dashboard, pembatasan laju, sesi doa, dan tantangan pemulihan disimpan di memori proses API, sehingga satu database dilayani satu proses API. Unggahan dikirim ke `/api/v1/storage/upload` dengan formulir bertanda tangan HMAC yang berumur lima menit, dan diunduh lewat URL bertanda tangan berumur pendek; isinya tetap ciphertext dari perangkat. PWA hanya menyimpan aset statis serta halaman luring, tanpa menyimpan pesan atau respons akun.
 
-Kata sandi diproses Argon2id di worker browser. Derivasi autentikasi dipisahkan dari kunci enkripsi; server meng-hash verifier autentikasi lagi dengan Argon2id. Kunci turunan membungkus kunci akun AES-256. Pesan privat/tautan terbatas, media, serta metadata berkas dienkripsi AES-256-GCM dengan IV acak dan AAD yang mengikat objek. Pesan publik dapat dibaca layanan dan disandikan saat tersimpan menggunakan `PUBLIC_CONTENT_KEY` instalasi.
+Kata sandi diproses Argon2id di worker browser. Derivasi autentikasi dipisahkan dari kunci enkripsi; server meng-hash verifier autentikasi lagi dengan Argon2id (format PHC, m=64 MiB, t=3, p=1). Kunci turunan membungkus kunci akun AES-256. Pesan privat/tautan terbatas, media, serta metadata berkas dienkripsi AES-256-GCM dengan IV acak dan AAD yang mengikat objek. Pesan publik dapat dibaca layanan dan disandikan saat tersimpan menggunakan `PUBLIC_CONTENT_KEY` instalasi.
 
 Tautan terbatas memakai ciphertext dan kunci berbagi terpisah dari kunci akun. Server menyimpan hash token; kunci setelah `#` tidak ikut dalam request HTTP. Rotasi, pencabutan, edit, atau perubahan privasi mencabut tautan lama. API menahan pesan publik/tautan terbatas sampai `release_at`. Kapsul privat adalah pengaturan tampilan untuk pemilik yang memiliki kunci; itu tidak mengunci pemilik secara kriptografis sampai tanggal pembukaan.
 
-Token akses dan `CryptoKey` akun hanya berada di memori halaman. Cookie refresh `um_refresh` bersifat HttpOnly dan SameSite Strict, serta Secure pada produksi. Token refresh diputar dan server menyimpan hash/statusnya. Pemulihan sesi setelah refresh tidak menyimpan password, token akses, atau kunci mentah di localStorage, sessionStorage, atau IndexedDB. Penanda ID akun per tab mencegah tab lama mengambil identitas akun lain saat cookie berubah. Gunakan profil browser atau jendela privat terpisah untuk mencoba dua akun bersamaan.
+Token akses dan `CryptoKey` akun hanya berada di memori halaman. Cookie refresh `um_refresh` bersifat HttpOnly dan SameSite Strict, serta Secure pada produksi. Token refresh diputar dan server menyimpan hash/statusnya; pemakaian ulang token lama mencabut sesi. Pemulihan sesi setelah refresh tidak menyimpan password, token akses, atau kunci mentah di localStorage, sessionStorage, atau IndexedDB. Penanda ID akun per tab mencegah tab lama mengambil identitas akun lain saat cookie berubah. Gunakan profil browser atau jendela privat terpisah untuk mencoba dua akun bersamaan.
 
-| Tabel / model                                            | Isi dan relasi utama                                                                                                   |
+| Tabel                                                    | Isi dan relasi utama                                                                                                   |
 | -------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
 | `users`, `sessions`                                      | Akun, peran, preferensi, kunci terbungkus, verifier pemulihan; hash token sesi, kedaluwarsa, pencabutan dan perangkat. |
 | `constellations`, `messages`, `message_constellations`   | Galaksi milik pengguna, isi/ciphertext pesan, privasi, jadwal, moderasi, relasi beberapa tujuan dan payload berbagi.   |
@@ -367,61 +325,15 @@ Token akses dan `CryptoKey` akun hanya berada di memori halaman. Cookie refresh 
 | `reports`, `moderation_decisions`, `blocks`, `empathies` | Laporan, keputusan bertoken revisi, blok publik dua arah, dan dukungan empati tanpa peringkat publik.                  |
 | `storage_deletions`                                      | Antrean penghapusan objek yang dapat dicoba ulang setelah akun dihapus.                                                |
 
-Penghapusan akun mengikuti pilihan pemilik. Pesan yang dipertahankan kehilangan relasi identitas dan tetap mengikuti privasi aslinya. Migrasi/worker tidak mengubah ciphertext privat menjadi pesan publik.
+Penghapusan akun mengikuti pilihan pemilik. Pesan yang dipertahankan kehilangan relasi identitas dan tetap mengikuti privasi aslinya. Worker tidak mengubah ciphertext privat menjadi pesan publik.
 
-### Migrasi dan katalog
+### Skema dan katalog
 
-Sumber aktif doa hanya [prayers-v1.json](backend/data/prayers-v1.json). Registry frontend di `frontend/src/visual/prayers.js` menerima data yang dibundel oleh build; API dan pengujian membaca katalog yang sama. Panel admin mengubah kurasi di database, bukan JSON. Entri di luar katalog aktif tidak dicantumkan pada antrean admin.
+Skema ada di [schema.sql](backend/internal/app/schema.sql) dan diterapkan otomatis saat API mulai; versinya dicatat di `PRAGMA user_version`, dan API menolak database dengan versi lebih baru dari kodenya. Perubahan skema berikutnya ditambahkan sebagai langkah migrasi bernomor di `backend/internal/app/db.go`.
 
-Snapshot pada `backend/alembic/catalog-*.json` merupakan data historis yang dibekukan agar upgrade database lama tetap dapat diulang. Migrasi `0007` mengubah klasifikasi doa tertulis lama menjadi pesan tanpa mengubah isi/lampiran. `0008` menambah jadwal dan envelope berbagi terenkripsi serta mencabut tautan lama; pemilik mengenkripsi ulang pesan tautan lama di perangkat saat masuk, dengan retry bila jaringan/rate limit menunda. `0009` melengkapi referensi, `0010` menambah paket rekaman asli, dan `0011` menyediakan draf doa umum. `0012` dan `0013` melengkapi referensi rekaman draf Gayatri dan Namo Tassa hanya jika entri lama masih merupakan draf bawaan yang belum disentuh. Unggahan, revisi teks, dan riwayat keputusan kurator dipertahankan; keduanya tetap belum disetujui. Pengisian referensi tersebut memerlukan migrasi online seperti yang dijalankan Compose; ekspor SQL offline melewatinya karena perlu memeriksa isi entri tersimpan. Selalu jalankan migrasi berurutan, jangan menghapus snapshot yang tampak mirip katalog aktif.
+Sumber aktif doa hanya [prayers-v1.json](backend/data/prayers-v1.json). Saat mulai, API menambahkan entri katalog yang belum ada tanpa menimpa kurasi yang sudah tersimpan. Registry frontend di `frontend/src/visual/prayers.js` menerima data yang dibundel oleh build; API dan pengujian membaca katalog yang sama. Panel admin mengubah kurasi di database, bukan JSON. Entri di luar katalog aktif tidak dicantumkan pada antrean admin.
 
-## Pengembangan tanpa Docker untuk kode aplikasi
-
-Bagian ini untuk mengubah kode. Untuk mencoba aplikasi saja, gunakan panduan Docker di atas. Siapkan **Node.js 22+**, npm, dan **Python 3.12**; `.env` tetap dibuat dari akar proyek. PostgreSQL, Redis, dan MinIO tetap dapat memakai Compose.
-
-Jika stack lengkap sedang berjalan, hentikan layanan yang memakai aplikasi/port frontend sebelum menjalankan kode dari host:
-
-```sh
-docker compose stop gateway web api worker
-docker compose up -d --build --wait postgres redis minio migrate init-storage
-npm ci
-```
-
-Buat virtual environment dari akar proyek. PowerShell:
-
-```powershell
-py -3.12 -m venv backend/.venv
-.\backend\.venv\Scripts\Activate.ps1
-python -m pip install -r backend/requirements-dev.lock
-```
-
-Pada Linux/macOS, gunakan `python3.12 -m venv backend/.venv` lalu `source backend/.venv/bin/activate`. Jika aktivasi PowerShell dibatasi kebijakan komputer, jalankan interpreter secara langsung: `.\backend\.venv\Scripts\python.exe -m pip install -r backend/requirements-dev.lock`; gunakan path interpreter tersebut untuk perintah Python berikutnya.
-
-Di terminal pertama, dari akar proyek, jalankan API:
-
-```sh
-python -m uvicorn app.main:app --app-dir backend --reload --env-file .env
-```
-
-Di terminal kedua, dari akar proyek, jalankan frontend:
-
-```sh
-npm run dev
-```
-
-Buka http://localhost:3000. Frontend development meneruskan `/api/v1` ke `http://127.0.0.1:8000` secara bawaan. `DATABASE_URL`, `REDIS_URL`, dan `S3_ENDPOINT` pada `.env` generator memakai alamat host yang sesuai. Untuk fitur worker, jalankan `docker compose up -d --build worker`; perubahan kode worker memerlukan rebuild container tersebut.
-
-Setelah mengubah model, buat migrasi Alembic dan tinjau hasilnya. Dari direktori `backend`, dengan virtual environment aktif, perintah berikut memuat `.env` akar proyek sebelum migrasi manual:
-
-```sh
-python -m dotenv -f ../.env run -- python -m alembic upgrade head
-```
-
-Jika frontend memakai storage/Turnstile yang berbeda dari bawaan lokal, set `S3_PUBLIC_ENDPOINT` dan `NEXT_PUBLIC_TURNSTILE_SITE_KEY` pada environment proses **sebelum** menjalankan dev/build. Root `.env` dipakai Compose/API; build visual membaca environment proses. Untuk kembali ke stack lengkap, hentikan proses dev lalu jalankan `docker compose up -d --build --wait`.
-
-### Sumber MinIO yang dikunci
-
-`infra/minio/Dockerfile` membangun sumber resmi tanpa perubahan pada rilis `RELEASE.2025-04-22T22-12-26Z`, commit [`0d7408fc9969caf07de6a8c3a84f9fbb10a6739e`](https://github.com/minio/minio/tree/0d7408fc9969caf07de6a8c3a84f9fbb10a6739e). [Arsip sumber](https://codeload.github.com/minio/minio/tar.gz/0d7408fc9969caf07de6a8c3a84f9fbb10a6739e) diperiksa dengan SHA-256 `7eb30a913fea30f18069abf194e1e78e4983b558cc526911ae1c11396a9859a5`, lalu modul Go diverifikasi. Binary, LICENSE, dan CREDITS dimasukkan ke image. Build dari sumber menghindari ketergantungan pada akses pull anonim image komunitas rilis tersebut. Jalankan `docker compose build minio` untuk membangunnya ulang; unduhan toolchain/modul diperlukan pada build pertama.
+> Versi sebelumnya memakai PostgreSQL, Redis, dan MinIO lewat Docker. Data lama tidak dipindahkan otomatis; instalasi baru dimulai dengan database SQLite kosong.
 
 ## Format dan pengujian
 
@@ -433,18 +345,18 @@ npm run format:check
 npm run lint
 npm test
 npm run build
+npm run api:test
 ```
 
-Prettier dikunci di lockfile dan mengikuti `.prettierrc.json`/`.prettierignore`. Perintah format mencakup frontend, script JavaScript, konfigurasi serta dokumentasi yang didukung. Vendor, data audio/katalog, snapshot migrasi, lockfile, notices, dependensi, dan hasil build dikecualikan. **Python dirapikan dengan Ruff**, bukan Prettier. Dari `backend`, dengan virtual environment aktif:
+Prettier dikunci di lockfile dan mengikuti `.prettierrc.json`/`.prettierignore`. Perintah format mencakup frontend, script JavaScript, konfigurasi serta dokumentasi yang didukung. Vendor, data audio/katalog, lockfile, notices, dependensi, dan hasil build dikecualikan. **Go dirapikan dengan `gofmt`**, bukan Prettier. Dari `backend`:
 
 ```sh
-python -m ruff format app tests scripts alembic ../scripts
-python -m ruff check app tests scripts alembic ../scripts
-python -m ruff format --check app tests scripts alembic ../scripts
-python -m pytest -q
+gofmt -l -w .
+go vet ./...
+go test ./...
 ```
 
-`npm test` menyiapkan aset visual dahulu lalu menjalankan Vitest. Pemeriksaan mencakup katalog aktif versus frontend/API, metadata pesan, batas dukungan, dan pemulihan sesi. Tes API memeriksa akses antar akun/pengunjung, ciphertext, jadwal, tautan, moderasi, metrik, pengguna admin, kurasi, unggahan, serta doa/empati idempoten. Fixture audio hanya memeriksa fungsi aplikasi dan tidak menyetujui materi produksi.
+`npm test` menyiapkan aset visual dahulu lalu menjalankan Vitest. Pemeriksaan mencakup katalog aktif versus frontend/API, metadata pesan, batas dukungan, dan pemulihan sesi. Tes API Go (`backend/internal/app/app_test.go`) memeriksa siklus sesi dan rotasi refresh token, batas privasi dan validasi, akses antar akun/pengunjung, moderasi, empati, laporan, blokir, metrik admin, doa idempoten, unggahan bertanda tangan, tautan terbatas, ekspor, penghapusan akun, pemulihan, dan pembatasan laju.
 
 ### Browser terisolasi
 
@@ -455,27 +367,16 @@ npx playwright install chromium
 node scripts/test-browser-local.mjs
 ```
 
-Runner menjalankan API nyata memakai SQLite/fakeredis, akun sementara, dan salinan build Next.js standalone di direktori sementara. Database/akun aplikasi Compose tidak dipakai. Runner menghentikan proses miliknya dan membersihkan direktori sementara setelah selesai, gagal, atau dibatalkan. `backend/.venv` dipakai bila tersedia; `UNTUKMU_TEST_PYTHON` dapat menunjuk interpreter lain. Pada Windows, Edge yang terpasang menjadi fallback jika Chromium bundel belum tersedia; `PLAYWRIGHT_CHROMIUM_EXECUTABLE` dapat menunjuk browser lain.
+Runner membangun biner API Go ke direktori sementara, menjalankannya dengan database SQLite dan folder storage sementara, akun sementara, dan salinan build Next.js standalone. Database lokal di `backend/var` tidak dipakai. Runner menghentikan proses miliknya dan membersihkan direktori sementara setelah selesai, gagal, atau dibatalkan. Pada Windows, Edge yang terpasang menjadi fallback jika Chromium bundel belum tersedia; `PLAYWRIGHT_CHROMIUM_EXECUTABLE` dapat menunjuk browser lain.
 
 Untuk menjalankan berkas tertentu: `node scripts/test-browser-local.mjs social.spec.ts prayer-admin.spec.ts`. Skenario browser mencakup login/refresh/ganti akun, galaksi publik lintas akun, tiga privasi, moderasi, doa dengan audio sampai selesai, pembatalan/pratinjau, kurasi admin, keyboard/reduced motion, responsif, serta batas cache PWA.
 
-### Integrasi Compose dan CI
+`npm run test:e2e` memakai layanan pada `http://localhost:3000` secara bawaan dan dapat membuat akun/data fixture. Jalankan pada instalasi pengujian tersendiri, bukan database produksi. `UNTUKMU_TEST_BASE_URL` dapat mengubah targetnya.
 
-`npm run test:e2e` memakai layanan pada `http://localhost:3000` secara bawaan dan dapat membuat akun/data fixture. Jalankan pada instalasi pengujian tersendiri, bukan database produksi. `UNTUKMU_TEST_BASE_URL` dapat mengubah targetnya. Pada Linux CI, pasang browser beserta dependensi OS menggunakan `npx playwright install --with-deps chromium`.
-
-Workflow [ci.yml](.github/workflows/ci.yml) menjalankan format/lint, unit/API, SQL migrasi, build, browser terisolasi, dan integrasi PostgreSQL/Redis/MinIO melalui Compose. Laporan/screenshot berada di `frontend/test-results`, HTML di `frontend/playwright-report`; CI mengunggah artifact `verification`. Hasil lokal bersifat keluaran pengujian yang diabaikan Git. Keberhasilan tes fungsi tidak menggantikan audit keamanan independen, uji beban produksi, atau pengukuran ponsel fisik.
+Workflow [ci.yml](.github/workflows/ci.yml) menjalankan format/lint, tes unit, `gofmt`/`go vet`/`go test`, build, dan browser terisolasi. Laporan/screenshot berada di `frontend/test-results`, HTML di `frontend/playwright-report`; CI mengunggah artifact `verification`. Keberhasilan tes fungsi tidak menggantikan audit keamanan independen, uji beban produksi, atau pengukuran ponsel fisik.
 
 ## Persiapan deploy dan backup
 
-Konfigurasi produksi disediakan dalam `docker-compose.production.yml`; gunakan Docker Compose **2.24.4+**. Siapkan domain aplikasi dan storage, DNS ke server, port 80/443, Turnstile, serta `.env` produksi. Set `ENVIRONMENT=production`, `SITE_DOMAIN`, `STORAGE_DOMAIN`, `APP_ORIGIN=https://...`, `S3_PUBLIC_ENDPOINT=https://...`, `TURNSTILE_SECRET`, `TURNSTILE_HOSTNAME`, dan `NEXT_PUBLIC_TURNSTILE_SITE_KEY`. Pertahankan rahasia serta kunci enkripsi saat upgrade instalasi yang sudah memiliki data.
+Produksi menjalankan biner API Go, frontend Next.js, dan Caddy sebagai layanan biasa di satu server, tanpa Docker. Siapkan domain, DNS ke server, port 80/443, Turnstile, serta `.env` produksi: `ENVIRONMENT=production`, `SITE_DOMAIN`, `APP_ORIGIN=https://...`, `TURNSTILE_SECRET`, `TURNSTILE_HOSTNAME`, dan `NEXT_PUBLIC_TURNSTILE_SITE_KEY`. Pertahankan rahasia serta kunci enkripsi saat upgrade instalasi yang sudah memiliki data. Paket rekaman asli tertanam di biner API; katalog frontend dibundel saat build. Untuk deploy sebagai satu project Vercel multi-service, lihat [Deploy Vercel](docs/VERCEL.md).
 
-Pada server tujuan, setelah konfigurasi dan backup siap:
-
-```sh
-docker compose -f docker-compose.yml -f docker-compose.production.yml config --quiet
-docker compose -f docker-compose.yml -f docker-compose.production.yml up -d --build --wait
-```
-
-Override produksi memasang Caddy untuk HTTPS aplikasi dan storage, menyimpan sertifikat pada volume, mengaktifkan restart layanan, dan menutup port host PostgreSQL/Redis/MinIO/Grafana. Paket rekaman asli ikut dalam image backend. Migrator berjalan sebelum API; katalog frontend dibundel saat build.
-
-Panduan lengkap untuk migrasi, backup/pemulihan, Cloudflare, monitoring, dan image GHCR: [Operasional produksi](docs/PRODUKSI.md). Domain, kredensial layanan produksi, rekaman dua pilihan yang masih kosong, dan peninjauan konten tetap perlu disiapkan sebelum peluncuran penuh. Repositori ini menyediakan konfigurasi deploy; belum terpasang pada server publik.
+Panduan lengkap untuk layanan sistem, backup/pemulihan SQLite dan storage, Cloudflare, dan monitoring: [Operasional produksi](docs/PRODUKSI.md). Domain, kredensial layanan produksi, rekaman dua pilihan yang masih kosong, dan peninjauan konten tetap perlu disiapkan sebelum peluncuran penuh. Repositori ini menyediakan konfigurasi deploy; belum terpasang pada server publik.

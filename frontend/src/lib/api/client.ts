@@ -229,7 +229,8 @@ export function cached<T>(path: string, fresh = false) {
 export async function allPages<T>(path: string, fresh = false): Promise<T[]> {
   const rows: T[] = [];
   for (let offset = 0; ; offset += 200) {
-    const page = await cached<T[]>(`${path}?offset=${offset}&limit=200`, fresh);
+    const join = path.includes("?") ? "&" : "?";
+    const page = await cached<T[]>(`${path}${join}offset=${offset}&limit=200`, fresh);
     rows.push(...page);
     if (page.length < 200) return rows;
   }

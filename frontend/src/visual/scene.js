@@ -14,12 +14,15 @@ var galaxyRoot = new THREE.Group();
 scene.add(galaxyRoot);
 var outputWidth = innerWidth,
   outputHeight = innerHeight;
-var camera = new THREE.PerspectiveCamera(55, innerWidth / innerHeight, 0.5, 5000);
-camera.position.set(0, 529, 715);
+var camera = new THREE.PerspectiveCamera(55, innerWidth / innerHeight, 0.5, 6000);
+// Pemandangan awal: Bima Sakti di tengah, bintang-bintang ruang mengelilinginya.
+var HUB_POS = new THREE.Vector3(0, 529, 715); // sudut pandang referensi galaxy-explorer
+camera.position.copy(HUB_POS);
 var controls = new THREE.OrbitControls(camera, renderer.domElement);
 controls.enableDamping = true;
 controls.dampingFactor = 0.08;
-controls.maxDistance = 1600;
+controls.maxDistance = HUB_POS.length(); // ruang utama: tanpa zoom-out
+controls.enablePan = false;
 controls.minDistance = 5;
 var SKY_R = 1000;
 var skyCamera = new THREE.PerspectiveCamera(60, innerWidth / innerHeight, 0.1, 3000);
@@ -178,13 +181,20 @@ function showReturnBtn(show) {
     returnBtn = document.createElement("button");
     returnBtn.type = "button";
     returnBtn.id = "return-home";
-    returnBtn.textContent = "← Kembali ke Milky Way";
     returnBtn.addEventListener("click", function () {
-      if (window.UM && UM.galaksi) UM.galaksi.kembaliKeRumah();
+      if (!window.UM || !UM.galaksi) return;
+      // Dari satu galaksi kembali ke ruangnya; dari ruang keluar ke Bima Sakti.
+      if (!UM.galaksi.state.aktif && UM.ruang && UM.ruang.state.aktif) UM.ruang.keHub();
+      else UM.galaksi.kembaliKeRumah();
     });
     document.body.appendChild(returnBtn);
   }
-  returnBtn.style.display = show && viewMode === "galaxy" ? "block" : "none";
+  var diRuang = window.UM && UM.ruang && UM.ruang.state.aktif;
+  returnBtn.textContent =
+    diRuang && UM.galaksi && UM.galaksi.state.aktif ? "← Kembali ke ruang" : "← Ke Bima Sakti";
+  // Di pemandangan ruang, bilah ruang sudah menyediakan jalan ke Bima Sakti.
+  var dobel = diRuang && !(UM.galaksi && UM.galaksi.state.aktif);
+  returnBtn.style.display = show && viewMode === "galaxy" && !dobel ? "block" : "none";
 }
 function flyTo(position, target, duration, done) {
   var startPosition = camera.position.clone(),
@@ -210,7 +220,7 @@ function flyTo(position, target, duration, done) {
   controls.enabled = false;
 }
 function flyHome() {
-  flyTo(new THREE.Vector3(0, 390, 520), new THREE.Vector3(), 2700, function () {
+  flyTo(HUB_POS.clone(), new THREE.Vector3(), 2700, function () {
     showReturnBtn(false);
   });
 }
@@ -287,6 +297,12 @@ function frame() {
     galaxyLODs.forEach(function (L) {
       var dst = camera.position.distanceTo(L.center);
       L.dst = dst;
+      if (L.paint)
+        L.paint.forEach(function (PJ) {
+          if (PJ.born === -1) PJ.born = t; // painting fades in when its bake lands
+          if (PJ.born !== null)
+            PJ.mat.uniforms.uFade.value = still ? 1 : Math.min(1, (t - PJ.born) / 0.6);
+        });
       L.pts.geometry.setDrawRange(
         0,
         Math.min(
@@ -300,7 +316,7 @@ function frame() {
         ),
       );
       L.mat.uniforms.uSize.value =
-        L.baseSize * Math.min(3.2, Math.max(0.8, dst / L.refDist)) * renderer.getPixelRatio();
+        L.baseSize * Math.min(5.2, Math.max(0.8, dst / L.refDist)) * renderer.getPixelRatio();
       if (L.mat.uniforms.uCap) L.mat.uniforms.uCap.value = 34 * renderer.getPixelRatio();
       if (!still)
         L.pts.quaternion.copy(L.q0).premultiply(galSpinTmp.setFromAxisAngle(L.axis, t * L.spin));
@@ -320,6 +336,7 @@ function frame() {
     });
     if (bgTwinkleMat && !still) bgTwinkleMat.uniforms.uTime.value = t;
     var breath = still ? 0 : Math.sin(t * 0.32);
+    if (paintedGalaxy) paintedGalaxy.updateView(camera);
     coreBreath.forEach(function (core) {
       var s = core.s * (1 + 0.07 * breath);
       core.sp.scale.set(s, s, 1);

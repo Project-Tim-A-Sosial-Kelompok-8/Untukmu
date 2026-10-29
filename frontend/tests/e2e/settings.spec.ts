@@ -18,9 +18,9 @@ test("pengaturan tersimpan; hapus dapat dibatalkan dan dicoba ulang; keluar menu
   });
   await frame.locator(".um-dock [data-act=set]").click();
   await page.reload();
-  await frame.locator("#um-entry.on").waitFor();
+  await expect(frame.locator("html")).toHaveAttribute("data-renderer", "react-three-fiber");
+  await page.frames()[1].evaluate(() => window.UM.store.ready());
   expect(await page.frames()[1].evaluate(() => window.UM.account.isLogged())).toBe(true);
-  await frame.locator("#um-entry [data-act=skip]").click();
   await frame.locator(".um-dock [data-act=set]").click();
   await expect(frame.locator("#um-set [data-act=gb]")).toHaveCount(0);
   await frame.locator("#um-set [data-act=account]").click();
@@ -61,11 +61,17 @@ test("pengaturan tersimpan; hapus dapat dibatalkan dan dicoba ulang; keluar menu
     await page.frames()[1].evaluate(async () => (await window.UM.store.listPesan()).length),
   ).toBe(1);
   confirmationPassword = password;
+  const reloaded = page.waitForEvent("framenavigated", {
+    predicate: (child) => child.parentFrame() !== null,
+    timeout: 60000,
+  });
   await frame.locator("#um-set [data-act=reset]").click();
   await expect(frame.locator("#um-set [data-act=reset]")).toBeDisabled();
   await expect(frame.locator("#um-set .um-close")).toBeDisabled();
   await expect(frame.locator("#um-set")).toHaveClass(/on/);
-  await frame.locator("#um-entry.on").waitFor({ timeout: 60000 });
+  await reloaded;
+  await expect(frame.locator("html")).toHaveAttribute("data-renderer", "react-three-fiber");
+  await page.frames()[1].evaluate(() => window.UM.store.ready());
   expect(await page.frames()[1].evaluate(() => window.UM.account.isLogged())).toBe(true);
   expect(
     await page.frames()[1].evaluate(async () => ({
@@ -73,7 +79,6 @@ test("pengaturan tersimpan; hapus dapat dibatalkan dan dicoba ulang; keluar menu
       galaxies: (await window.UM.store.listGalaksi()).length,
     })),
   ).toEqual({ messages: 0, galaxies: 0 });
-  await frame.locator("#um-entry [data-act=skip]").click();
   await frame.locator(".um-dock [data-act=set]").click();
   await frame.locator("#um-set [data-act=account]").click();
   await expect(frame.locator("#um-profile")).toHaveValue("public");

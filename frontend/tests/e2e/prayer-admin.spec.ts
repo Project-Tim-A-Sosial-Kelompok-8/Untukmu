@@ -8,11 +8,7 @@ test("kurator memakai unggahan tim dan persetujuan memerlukan rekaman", async ({
   test.skip(process.env.UNTUKMU_BROWSER_TEST !== "1", "Requires an isolated admin fixture.");
   const { frame, email, password } = await register(page, "prayer-curator");
   await frame.locator("#um-comp .um-close").click();
-  execFileSync(
-    process.env.UNTUKMU_TEST_PYTHON || "python",
-    [resolve("../backend/tests/promote_browser_admin.py"), email],
-    { env: process.env },
-  );
+  execFileSync(process.env.UNTUKMU_TEST_API_BIN!, ["make-admin", email], { env: process.env });
   await page.goto("/admin");
   await login(page, email, password);
   await frame.getByRole("tab", { name: "Doa & audio", exact: true }).click();
@@ -42,11 +38,7 @@ test("admin membaca durasi audio asli dan menolak berkas yang rusak", async ({ p
   test.skip(process.env.UNTUKMU_BROWSER_TEST !== "1", "Requires an isolated admin fixture.");
   const { frame, email, password } = await register(page, "audio-preview-admin");
   await frame.locator("#um-comp .um-close").click();
-  execFileSync(
-    process.env.UNTUKMU_TEST_PYTHON || "python",
-    [resolve("../backend/tests/promote_browser_admin.py"), email],
-    { env: process.env },
-  );
+  execFileSync(process.env.UNTUKMU_TEST_API_BIN!, ["make-admin", email], { env: process.env });
   await page.goto("/admin");
   await login(page, email, password);
   await frame.getByRole("tab", { name: "Doa & audio", exact: true }).click();
@@ -82,11 +74,7 @@ test("kurator menyaring antrean, mencoba ulang tanpa unggah ulang, lalu lanjut t
   test.skip(process.env.UNTUKMU_BROWSER_TEST !== "1", "Requires an isolated admin fixture.");
   const { frame, email, password } = await register(page, "audio-curation-retry");
   await frame.locator("#um-comp .um-close").click();
-  execFileSync(
-    process.env.UNTUKMU_TEST_PYTHON || "python",
-    [resolve("../backend/tests/promote_browser_admin.py"), email],
-    { env: process.env },
-  );
+  execFileSync(process.env.UNTUKMU_TEST_API_BIN!, ["make-admin", email], { env: process.env });
   const entries = [
     { id: "fixture/first", has_audio: false, reviewed: false, publicly_available: false },
     { id: "fixture/next", has_audio: true, reviewed: false, publicly_available: false },

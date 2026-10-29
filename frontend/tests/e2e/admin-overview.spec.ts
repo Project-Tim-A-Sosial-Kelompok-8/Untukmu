@@ -115,11 +115,9 @@ test("admin memisahkan metrik global dan akun, mencari pengguna, serta mengelola
       (id) => window.UM.store.report(id, "Periksa ucapan fixture untuk pengujian antarmuka admin."),
       reviewMessage,
     );
-  execFileSync(
-    process.env.UNTUKMU_TEST_PYTHON || "python",
-    [resolve("../backend/tests/promote_browser_admin.py"), admin.email],
-    { env: process.env },
-  );
+  execFileSync(process.env.UNTUKMU_TEST_API_BIN!, ["make-admin", admin.email], {
+    env: process.env,
+  });
   await page.goto("/admin");
   await login(page, admin.email, admin.password);
   const frame = page.frameLocator("iframe");

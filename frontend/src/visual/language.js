@@ -12,19 +12,20 @@ UM.i18n = (function () {
     id: {
       brand: "Untukmu",
       brandSub: "ruang untuk pesan yang tak tersampaikan",
-      brandHint: "drag memutar · scroll memperbesar · F sinema",
+      brandHint: "putar langitnya · dekatkan dengan gulir · F untuk mode sinema",
 
       /* pembuka */
+      entryKicker: "Surat yang tak sempat terkirim",
       entryH1: "Untukmu",
       entryLead:
-        "Tulis apa yang belum sempat kau ucapkan — kepada ibu, sahabat, seseorang yang telah pergi, atau kepada dirimu sendiri. Setiap orang punya satu galaksi, dan setiap pesan menjadi bintang di dalamnya.",
-      entryActsTulis: "Mulai Menulis",
+        "Ada yang tak sempat kau sampaikan. Tulis di sini; biarkan ia tinggal sebagai bintang di ruangmu, mengorbit pelan di Bima Sakti.",
+      entryActsTulis: "Mulai menulis",
       entryActsLangit: "Jelajahi Langit",
       entryFine:
         "Pesan privat dan tautan terbatas dienkripsi di perangkatmu. Pesan publik anonim ditinjau sebelum terbit. Baca kebijakan privasi.",
       entryFineWarn:
         "Enkripsi membutuhkan HTTPS atau localhost. Penulisan pesan terenkripsi belum tersedia pada koneksi ini.",
-      entrySkip: "Lihat galaksi saja →",
+      entrySkip: "Lihat langitnya dulu",
 
       /* dock */
       dockTulis: "Tulis",
@@ -37,12 +38,12 @@ UM.i18n = (function () {
       dockPeta: "Peta",
 
       /* ladang galaksi */
-      entryActsGalaksi: "Jelajahi Galaksi",
-      galaksiKosong: "Belum ada galaksi. Mulai menulis untuk menyalakan yang pertama.",
+      entryActsGalaksi: "Jelajahi Bima Sakti",
+      galaksiKosong: "Ruang ini belum punya galaksi.",
       genHilang: "Generator galaksi engine tidak tersedia — ladang galaksi tidak bisa dibangun.",
       kirimPesan: "Pesanmu sudah tiba.",
       kirimJalan: "Menempuh perjalanan…",
-      petaHint: "Klik penanda untuk terbang ke galaksi orang itu.",
+      petaHint: "Klik penanda untuk mengunjungi galaksi itu.",
 
       /* pemilih bentuk galaksi */
       bentukTitle: "Bentuk galaksi untuk orang ini",
@@ -66,18 +67,15 @@ UM.i18n = (function () {
       gkBintang: "Pesanmu",
       gkBatu: "Pesan orang lain",
       gkDoa: "Doa diterima",
-      gkHint:
-        "Scroll untuk mendekat, lalu klik satu bintang atau satu butir debu untuk membaca isinya.",
+      gkHint: "Dekatkan dengan gulir, lalu klik bintang atau butir debu untuk membaca isinya.",
       gkKirim: "Tulis pesan ke galaksi ini",
       gkDoakan: "Doakan orang ini",
       gkLihat: "Lihat",
       gkTerbang: "Terbang ke sini",
       bintangLabel: "Pesanmu",
       titikLabel: "Bintang di lengan galaksi",
-      titikSendiri:
-        "Ini salah satu pesan yang kamu tulis untuk orang ini. Kamera mengikutinya saat galaksi berputar.",
-      titikOrangLain:
-        "Dikirim oleh seseorang, tanpa nama. Kamera mengikutinya saat galaksi berputar.",
+      titikSendiri: "Pesan yang kau tulis untuk orang ini.",
+      titikOrangLain: "Pesan dari seseorang, tanpa nama.",
       batuLabel: "Pesan dari orang lain",
       batuTradisi: "Tradisi",
       batuDoa: "Doa",
@@ -90,7 +88,7 @@ UM.i18n = (function () {
       dashEmptyGalaksi: "Belum ada galaksi.",
       dashMasuk: "pesan dari orang lain di sabuk galaksimu",
       legenda:
-        "✦ tiap bintang di lengan galaksi bisa diklik · ✧ debu keemasan yang mengelilingi = doa dari orang lain",
+        "Klik bintang untuk membaca pesan. Debu keemasan di sekeliling galaksi adalah doa dari orang lain.",
 
       /* langit */
       skyKenangan: "Kenangan",
@@ -163,7 +161,7 @@ UM.i18n = (function () {
       pcDoakan: "Doakan",
       pcEmpati: "Berikan empati",
       pcEmpatiHint:
-        "Kirim dukungan anonim bahwa Anda memahami perasaan penulis. Penulis melihat jumlah dukungan di Ruang Pribadi. Untuk mendengarkan doa dan menambah pendoa, pilih Doakan ucapan ini.",
+        "Dukungan anonim. Penulis melihat jumlahnya di Ruang Pribadi; untuk ikut mendoakan, pilih Doakan.",
       pcEmpatiSent: "Empati terkirim",
       pcEmpatiReceived: "dukungan empati diterima",
       pcPendoa: "pendoa",
@@ -276,11 +274,11 @@ UM.i18n = (function () {
     en: {
       brand: "Untukmu",
       brandSub: "a place for what was never said",
-      brandHint: "drag to orbit · scroll to zoom · F cinema",
+      brandHint: "turn the sky · scroll to move closer · F for cinema",
 
       entryH1: "Untukmu",
       entryLead:
-        "Write what you never got to say — to a parent, a friend, someone gone, or to yourself. Each person has a galaxy, and every message becomes a star inside it.",
+        "Some things never got said. Leave them here; they will stay as a star in your space, circling the Milky Way.",
       entryActsTulis: "Start Writing",
       entryActsLangit: "Explore the Sky",
       entryFine:
@@ -304,7 +302,7 @@ UM.i18n = (function () {
       genHilang: "The engine’s galaxy generator is unavailable — the galaxy field cannot be built.",
       kirimPesan: "Your message has arrived.",
       kirimJalan: "Travelling…",
-      petaHint: "Click a marker to fly to that person’s galaxy.",
+      petaHint: "Click a marker to visit that galaxy.",
 
       /* galaxy shape chooser */
       bentukTitle: "The shape of this person’s galaxy",
@@ -328,7 +326,7 @@ UM.i18n = (function () {
       gkBintang: "Your messages",
       gkBatu: "Messages from others",
       gkDoa: "Prayers received",
-      gkHint: "Scroll closer, then click a star or a mote of dust to read it.",
+      gkHint: "Move closer with the scroll wheel, then click a star or a mote of dust to read it.",
       gkKirim: "Write a message to this galaxy",
       gkDoakan: "Pray for this person",
       gkLihat: "View",

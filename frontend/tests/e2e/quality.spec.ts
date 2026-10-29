@@ -67,7 +67,7 @@ test("PWA, keyboard, perpindahan kamera, dan cache privat", async ({ page, conte
     await navigator.serviceWorker.ready;
   });
   await page.reload();
-  await frame.locator("#um-entry.on").waitFor({ timeout: 20000 });
+  await expect(frame.locator("html")).toHaveAttribute("data-renderer", "react-three-fiber");
   const manifest = await (await page.request.get("/manifest.webmanifest")).json();
   expect(manifest.display).toBe("standalone");
   expect(manifest.icons).toHaveLength(3);

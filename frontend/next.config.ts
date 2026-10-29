@@ -4,6 +4,10 @@ const config: NextConfig = {
   output: "standalone",
   poweredByHeader: false,
   async rewrites() {
+    // On Vercel the top-level vercel.json route sends /api/* straight to the
+    // Go service. The dev proxy below is only for `npm run dev`, where Next is
+    // the only server running.
+    if (process.env.VERCEL) return [];
     return [
       {
         source: "/api/v1/:path*",

@@ -3,6 +3,11 @@
 Kontrol kamera dan sebagian kode tampilan diadaptasi dari Justin Zhang Jun,
 PolyForm Noncommercial 1.0.0. Pemberitahuan lisensi tetap dipertahankan pada kode.
 
+Animasi lorong cahaya saat masuk/keluar ruang (kurva kamera dan serat bintang)
+diadaptasi dari animasi `solarWarp` di
+[zjoooooo/galaxy-explorer](https://github.com/zjoooooo/galaxy-explorer),
+Copyright (c) 2026 Justin Zhang Jun, MIT License.
+
 ## three.js (r128) and example modules
 
 Bundled under `vendor/`.

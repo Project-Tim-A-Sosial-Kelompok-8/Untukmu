@@ -29,7 +29,7 @@ function galaxies(page: Page) {
   )()`);
 }
 
-test("akun lain dan tamu melihat galaksi serta bintang publik tanpa pesan atau galaksi privat", async ({
+test("ruang publik dapat dimasuki akun lain dan tamu tanpa membuka pesan privat", async ({
   page,
   browser,
 }, testInfo) => {
@@ -67,7 +67,9 @@ test("akun lain dan tamu melihat galaksi serta bintang publik tanpa pesan atau g
       privasi: "privat",
     });
     await Promise.all([window.UM.galaksi.refresh(), window.UM.sky.refresh()]);
+    const workspace = await window.UM.store.workspaceSaya();
     return {
+      workspace: workspace!.id,
       sharedGalaxy: sharedGalaxy.id,
       privateGalaxy: privateGalaxy.id,
       publicMessage: publicMessage.id,
@@ -76,10 +78,10 @@ test("akun lain dan tamu melihat galaksi serta bintang publik tanpa pesan atau g
     };
   }, texts);
 
-  // The owner's merged scene must keep their private stars and must not
-  // duplicate their public star when the public feed includes it as well.
+  // The owner's own workspace holds the galaxy created with the account plus
+  // the two above, with every private star still present.
   const ownerGalaxies = (await galaxies(page)).filter((galaxy) => galaxy.own);
-  expect(ownerGalaxies).toHaveLength(2);
+  expect(ownerGalaxies).toHaveLength(3);
   expect(ownerGalaxies.find((galaxy) => galaxy.id === saved.sharedGalaxy)).toMatchObject({
     messages: [saved.publicMessage, saved.privateMessage].sort(),
     attached: true,
@@ -88,6 +90,29 @@ test("akun lain dan tamu melihat galaksi serta bintang publik tanpa pesan atau g
   expect(ownerGalaxies.find((galaxy) => galaxy.id === saved.privateGalaxy)?.messages).toEqual([
     saved.privateOnlyMessage,
   ]);
+
+  // A private workspace is a locked star: nobody else can enter it.
+  const guestContext = await browser.newContext({ baseURL: page.url() });
+  try {
+    const guest = await guestContext.newPage();
+    await guest.goto("/");
+    await expect(guest.frameLocator("iframe").locator("html")).toHaveAttribute(
+      "data-renderer",
+      "react-three-fiber",
+    );
+    const locked = await guest.frames()[1].evaluate(async (id) => {
+      const star = (await window.UM.store.listRuang()).find((ruang) => ruang.id === id);
+      const entered = await window.UM.store.detailRuang(id).then(
+        () => true,
+        () => false,
+      );
+      return { terkunci: star?.terkunci, nama: star?.nama, entered };
+    }, saved.workspace);
+    expect(locked).toEqual({ terkunci: true, nama: null, entered: false });
+  } finally {
+    await guestContext.close();
+  }
+  await page.frames()[1].evaluate(() => window.UM.store.aturRuang({ publik: true }));
 
   // Separate contexts prevent the owner's cookies, encryption key, and cache
   // from supplying data that a different account or a guest cannot access.
@@ -105,6 +130,12 @@ test("akun lain dan tamu melihat galaksi serta bintang publik tanpa pesan atau g
       }
       await frame.locator("#um-entry.on").waitFor();
       await frame.locator("#um-entry [data-act=skip]").click();
+      await visitor
+        .frames()[1]
+        .evaluate(
+          (id) => (window.UM.ruang as { masuk: (id: string) => Promise<unknown> }).masuk(id),
+          saved.workspace,
+        );
 
       await expect
         .poll(async () =>
@@ -117,10 +148,17 @@ test("akun lain dan tamu melihat galaksi serta bintang publik tanpa pesan atau g
           starsDrawn: true,
         });
       const visible = await galaxies(visitor);
-      expect(visible.some((galaxy) => galaxy.id === saved.privateGalaxy)).toBe(false);
+      // In a public workspace every galaxy shape is shown, but a galaxy with
+      // only private messages shows no stars at all.
+      expect(visible.find((galaxy) => galaxy.id === saved.privateGalaxy)?.messages).toEqual([]);
       expect(visible.flatMap((galaxy) => galaxy.messages)).not.toContain(saved.privateMessage);
       expect(visible.flatMap((galaxy) => galaxy.messages)).not.toContain(saved.privateOnlyMessage);
-      expect(await visitor.frames()[1].evaluate(() => window.UM.store.listGalaksi())).toEqual([]);
+      const ownedByVisitor = await visitor
+        .frames()[1]
+        .evaluate(async () => (await window.UM.store.listGalaksi()).map((galaxy) => galaxy.id));
+      expect(ownedByVisitor).not.toContain(saved.sharedGalaxy);
+      expect(ownedByVisitor).not.toContain(saved.privateGalaxy);
+      expect(ownedByVisitor).toHaveLength(viewer === "account" ? 1 : 0);
       expect(await visitor.frames()[1].evaluate(() => window.UM.store.listPesan())).toEqual([]);
       expect(await visitor.frames()[1].evaluate(() => window.UM.account.isLogged())).toBe(
         viewer === "account",

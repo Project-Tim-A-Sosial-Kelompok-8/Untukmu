@@ -21,7 +21,8 @@ test("muat ulang mempertahankan akun dengan kunci terkunci; ganti akun menjaga d
     await window.UM.store.simpanPesan({ galaksiId: g.id, teks: "Doa privat akun pertama" });
   }, secret);
   await page.reload();
-  await expect(frame.locator("#um-entry")).toHaveClass(/on/);
+  await expect(frame.locator("html")).toHaveAttribute("data-renderer", "react-three-fiber");
+  await page.frames()[1].evaluate(() => window.UM.store.ready());
   await expect(frame.locator("#um-account-title")).toHaveCount(0);
   expect(await page.frames()[1].evaluate(() => window.UM.account.isLogged())).toBe(true);
   expect(await page.frames()[1].evaluate(() => window.UM.store.identitas())).toMatchObject({
@@ -34,7 +35,6 @@ test("muat ulang mempertahankan akun dengan kunci terkunci; ganti akun menjaga d
     return Promise.all(rows.map((row) => window.UM.store.bacaIsi(row)));
   });
   expect(locked).toEqual([null, null]);
-  await frame.locator("#um-entry [data-act=skip]").click();
   await frame.locator(".um-dock [data-act=set]").click();
   await Promise.all([
     page.waitForEvent("framenavigated", { predicate: (frame) => frame.parentFrame() !== null }),
@@ -174,8 +174,10 @@ test("pesan publik tanpa tujuan tetap dapat dibaca lintas akun melalui Jelajah",
       expect(data.shared).toMatchObject([
         { jenis: "pesan", publicBody: shared.public_body, authorDeleted: true, sendiri: false },
       ]);
-      expect(data.galaxies).toEqual([]);
-      expect(data.sceneMessages).toMatchObject([{ id: shared.id, galaksiIds: [], sendiri: false }]);
+      // The scene shows only the account's own workspace: its first galaxy, no
+      // foreign messages. Public messages of others are read through Jelajah.
+      expect(data.galaxies).toMatchObject([{ nama: "Galaksi pertamaku", sendiri: true }]);
+      expect(data.sceneMessages).toEqual([]);
       await frame.locator(".um-dock [data-act=jelajah]").click();
       await expect(frame.locator("#um-exp .txt")).toHaveText(shared.public_body);
     }

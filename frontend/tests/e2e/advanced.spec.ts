@@ -48,7 +48,7 @@ test("multi-tujuan → pemulihan penuh → ekspor terenkripsi", async ({ page })
   expect(filePath).toBeTruthy();
   await frame.locator("#export-verify").setInputFiles(filePath!);
   await expect(frame.locator("section [role=status]")).toContainText(
-    "Berkas berhasil diverifikasi: 1 pesan, 2 tujuan, 0 berkas.",
+    "Berkas berhasil diverifikasi: 1 pesan, 3 tujuan, 0 berkas.",
     { timeout: 60000 },
   );
   expect(errors).toEqual([]);

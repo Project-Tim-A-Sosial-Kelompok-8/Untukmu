@@ -47,9 +47,9 @@ test("pesan beberapa kenangan dihitung tanpa menganggap tag doa sebagai sesi doa
   await expect(frame.locator("[data-galaxy-count=doa-diterima] .v")).toHaveText("0");
   await expect(frame.locator("[data-galaxy-count=doa-tertulis]")).toHaveCount(0);
   await page.reload();
-  await frame.locator("#um-entry.on").waitFor();
+  await expect(frame.locator("html")).toHaveAttribute("data-renderer", "react-three-fiber");
+  await page.frames()[1].evaluate(() => window.UM.store.ready());
   expect(await page.frames()[1].evaluate(() => window.UM.account.isLogged())).toBe(true);
-  await frame.locator("#um-entry [data-act=skip]").click();
   await counts();
   expect(errors).toEqual([]);
 });

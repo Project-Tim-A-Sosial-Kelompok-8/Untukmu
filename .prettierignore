@@ -1,7 +1,6 @@
 node_modules/
 **/node_modules/
 **/.next/
-**/.venv/
 **/test-results/
 **/playwright-report/
 .local-backups/
@@ -9,7 +8,6 @@ frontend/public/visual/
 frontend/src/visual/vendor/
 frontend/next-env.d.ts
 package-lock.json
-backend/alembic/catalog-*.json
 backend/data/
 THIRD-PARTY-NOTICES.md
 frontend/src/visual/THIRD-PARTY-NOTICES.md

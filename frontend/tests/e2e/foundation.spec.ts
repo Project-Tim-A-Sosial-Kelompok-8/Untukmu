@@ -34,11 +34,11 @@ test("akun → kunci → pesan privat → muat ulang → buka lagi", async ({ pa
   expect(data.payload.alg).toBe("A256GCM");
   expect(data.payload.ct).toBeTruthy();
   await page.reload();
-  await frame.locator("#um-entry.on").waitFor();
+  await expect(frame.locator("html")).toHaveAttribute("data-renderer", "react-three-fiber");
+  await page.frames()[1].evaluate(() => window.UM.store.ready());
   expect(await page.frames()[1].evaluate(() => window.UM.account.isLogged())).toBe(true);
   expect(await page.frames()[1].evaluate(() => window.UM.crypto.unlocked())).toBe(false);
   await expect(frame.locator("#um-account-title")).toHaveCount(0);
-  await frame.locator("#um-entry [data-act=skip]").click();
   await frame.locator(".um-dock [data-act=setup]").click();
   await frame.locator("#um-pw").fill(password);
   await frame.locator("#um-setup [data-act=unlock]").click();
@@ -93,7 +93,8 @@ test("tamu tidak mendapat data contoh atau akses komposer tanpa akun", async ({ 
   const state = await page.frames()[1].evaluate(async () => ({
     galaxies: await window.UM.store.listGalaksi(),
     messages: await window.UM.store.listPesan(),
-    databases: await indexedDB.databases(),
+    // Next's dev server opens its own debug channel; it is not app data.
+    databases: (await indexedDB.databases()).filter((db) => db.name !== "__next_debug_channel"),
   }));
   expect(state.galaxies).toEqual([]);
   expect(state.messages).toEqual([]);

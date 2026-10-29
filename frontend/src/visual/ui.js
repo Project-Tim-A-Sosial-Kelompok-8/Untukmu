@@ -198,24 +198,27 @@ UM.ui = (function () {
     var aman = UM.crypto.available();
     UM.renderScreen(
       entryEl.querySelector(".um-enter"),
-      "<h1>" +
+      '<p class="um-kicker">' +
+        teks(T("entryKicker")) +
+        "</p>" +
+        "<h1>" +
         teks(T("entryH1")) +
         "</h1>" +
         '<p class="lead">' +
         teks(T("entryLead")) +
         "</p>" +
         '<div class="acts">' +
-        '<button class="um-btn primary" data-act="tulis">✎ ' +
+        '<button class="um-btn primary" data-act="tulis">' +
         teks(T("entryActsTulis")) +
         "</button>" +
-        '<button class="um-btn primary" data-act="doa">♡ Doa untuk seseorang</button>' +
-        '<button class="um-btn" data-act="jelajah">Jelajahi pesan publik</button>' +
-        '<button class="um-btn" data-act="galaksi">✦ ' +
+        '<button class="um-btn" data-act="doa">Kirim doa</button>' +
+        '<button class="um-btn" data-act="jelajah">Baca pesan publik</button>' +
+        '<button class="um-btn" data-act="galaksi">' +
         teks(T("entryActsGalaksi")) +
         "</button>" +
         "</div>" +
         '<p class="fine">' +
-        (aman ? "🔒 " : "⚠ — ") +
+        (aman ? "" : "Perhatian: ") +
         '<a href="/kebijakan-privasi" target="_top" style="color:inherit;text-decoration:none">' +
         teks(aman ? T("entryFine") : T("entryFineWarn")) +
         "</a>" +
@@ -258,28 +261,28 @@ UM.ui = (function () {
     var diPeta = typeof viewMode !== "undefined" && viewMode === "sky";
     UM.renderScreen(
       dockEl,
-      '<button data-act="tulis"><span class="i">✎</span>' +
+      '<button data-act="tulis">' +
         teks(T("dockTulis")) +
         "</button>" +
-        '<button data-act="doa"><span class="i">♡</span>Doa</button>' +
-        '<button data-act="rumah"><span class="i">⌂</span>' +
+        '<button data-act="doa">Doa</button>' +
+        '<button data-act="rumah">' +
         teks(T("dockRumah")) +
         "</button>" +
         '<button data-act="peta"' +
         (diPeta ? ' class="on"' : "") +
-        '><span class="i">✧</span>' +
+        ">" +
         teks(T("dockPeta")) +
         "</button>" +
-        '<button data-act="jelajah"><span class="i">☰</span>' +
+        '<button data-act="jelajah">' +
         teks(T("dockJelajah")) +
         "</button>" +
-        '<button data-act="dash"><span class="i">◈</span>' +
+        '<button data-act="dash">' +
         teks(T("dockDash")) +
         "</button>" +
-        '<button data-act="setup"><span class="i">🔑</span>' +
+        '<button data-act="setup">' +
         teks(T("dockSetup")) +
         "</button>" +
-        '<button data-act="set"><span class="i">⚙</span>' +
+        '<button data-act="set">' +
         teks(T("dockSet")) +
         "</button>",
     );
@@ -356,7 +359,7 @@ UM.ui = (function () {
       '<div class="um-chips"><button class="um-chip on" data-mode="kenangan">' +
         teks(T("skyKenangan")) +
         "</button></div>" +
-        '<div class="um-hint">Bintang berwarna menandai galaksi kenanganmu dan galaksi pesan publik. Klik bintangnya untuk mengunjungi galaksi. Geser untuk melihat langit.</div>',
+        '<div class="um-hint">Tiap bintang adalah satu kenangan. Klik untuk membukanya; geser untuk melihat langit.</div>',
     );
   }
 
@@ -2320,8 +2323,8 @@ UM.ui = (function () {
         isi +=
           '<p class="um-note" role="status">' +
           (current.added === false
-            ? "Kamu sudah pernah mendoakan ucapan ini. Terima kasih telah kembali meluangkan waktu."
-            : "Doamu sudah tercatat untuk ucapan ini. Bintang doa ditambahkan pada constellation terkait milik penulis pesan.") +
+            ? "Kau sudah pernah mendoakan ucapan ini."
+            : "Doamu sudah tercatat. Penulis pesan akan melihat satu pendoa lagi.") +
           "</p>" +
           (typeof current.prayerCount === "number"
             ? '<p class="um-hint">Jumlah pendoa: ' + current.prayerCount + "</p>"

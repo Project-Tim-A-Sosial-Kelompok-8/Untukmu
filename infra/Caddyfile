@@ -1,17 +1,20 @@
-:80 {
-	request_body {
-		max_size 200KB
+# Optional local gateway (caddy run --config infra/Caddyfile).
+# Next.js on :3000 already proxies /api/v1, so this file is only needed when
+# the API should be reached directly behind one origin.
+:8080 {
+	handle /api/v1/storage/upload {
+		request_body {
+			max_size 32MB
+		}
+		reverse_proxy 127.0.0.1:8000
 	}
 	handle /api/* {
-		reverse_proxy api:8000
-	}
-	handle /docs* {
-		reverse_proxy api:8000
-	}
-	handle /openapi.json {
-		reverse_proxy api:8000
+		request_body {
+			max_size 200KB
+		}
+		reverse_proxy 127.0.0.1:8000
 	}
 	handle {
-		reverse_proxy web:3000
+		reverse_proxy 127.0.0.1:3000
 	}
 }

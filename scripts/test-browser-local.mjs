@@ -1,4 +1,4 @@
-/** Run real web+API processes in one local test environment (SQLite/fakeredis only). */
+/** Run real web+API processes in one local test environment (isolated SQLite and storage). */
 import { spawn } from "node:child_process";
 import { existsSync } from "node:fs";
 import { cp, readFile, writeFile, mkdtemp, mkdir, rm } from "node:fs/promises";
@@ -172,19 +172,37 @@ try {
   interrupted.signal.throwIfAborted();
   const standaloneRoot = resolve(fixtureDirectory, "standalone");
   const standalone = resolve(standaloneRoot, "frontend");
-  const localPython = resolve(
-    root,
-    process.platform === "win32" ? "backend/.venv/Scripts/python.exe" : "backend/.venv/bin/python",
+  const apiBinary = resolve(
+    fixtureDirectory,
+    process.platform === "win32" ? "untukmu.exe" : "untukmu",
   );
-  const python =
-    process.env.UNTUKMU_TEST_PYTHON || (existsSync(localPython) ? localPython : "python");
   const environment = {
     ...process.env,
     UNTUKMU_BROWSER_TEST: "1",
     UNTUKMU_TEST_BASE_URL: baseURL,
-    UNTUKMU_TEST_PYTHON: python,
+    UNTUKMU_TEST_API_BIN: apiBinary,
     UNTUKMU_BROWSER_DATABASE: resolve(fixtureDirectory, "browser-test.db"),
+    // Test-only API configuration; never read from the developer's .env.
+    ENVIRONMENT: "test",
+    APP_ORIGIN: baseURL,
+    LISTEN_ADDR: `127.0.0.1:${apiPort}`,
+    // Never the developer's Neon database: an empty URL selects SQLite.
+    DATABASE_URL: "",
+    DATABASE_PATH: resolve(fixtureDirectory, "browser-test.db"),
+    STORAGE_DIR: resolve(fixtureDirectory, "storage"),
+    JWT_SECRET: "browser-test-secret-not-for-production-0123456789",
+    PUBLIC_CONTENT_KEY: "",
+    TURNSTILE_SECRET: "",
+    METRICS_TOKEN: "",
   };
+
+  const build = runChild("go", ["build", "-o", apiBinary, "./cmd/untukmu"], {
+    cwd: resolve(root, "backend"),
+    env: process.env,
+    stdio: ["ignore", "inherit", "inherit"],
+  });
+  const built = await waitForCommand(build);
+  if (built.error || built.code) throw built.error || new Error("go build gagal.");
 
   // Every run owns its build fixture and database. The project's standalone
   // manifest stays untouched even if setup fails or the runner is interrupted.
@@ -205,9 +223,9 @@ try {
   interrupted.signal.throwIfAborted();
 
   runChild(
-    python,
-    ["-m", "uvicorn", "tests.browser_server:app", "--host", "127.0.0.1", "--port", String(apiPort)],
-    { cwd: resolve(root, "backend"), env: environment, stdio: ["ignore", "pipe", "pipe"] },
+    apiBinary,
+    ["serve"],
+    { cwd: fixtureDirectory, env: environment, stdio: ["ignore", "pipe", "pipe"] },
     true,
   );
   runChild(

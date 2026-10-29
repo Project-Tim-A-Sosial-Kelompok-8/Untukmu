@@ -1,22 +1,21 @@
-# Production gateway loaded by docker-compose.production.yml.
-# Set SITE_DOMAIN, STORAGE_DOMAIN, APP_ORIGIN and configure Turnstile.
+# Production gateway: caddy run --config infra/Caddyfile.production
+# Runs on the same host as the Go API (127.0.0.1:8000) and Next.js (127.0.0.1:3000).
+# Set SITE_DOMAIN, APP_ORIGIN=https://SITE_DOMAIN and configure Turnstile.
 {$SITE_DOMAIN} {
 	header Strict-Transport-Security "max-age=31536000"
-	request_body {
-		max_size 200KB
+	handle /api/v1/storage/upload {
+		request_body {
+			max_size 32MB
+		}
+		reverse_proxy 127.0.0.1:8000
 	}
 	handle /api/* {
-		reverse_proxy api:8000
+		request_body {
+			max_size 200KB
+		}
+		reverse_proxy 127.0.0.1:8000
 	}
 	handle {
-		reverse_proxy web:3000
+		reverse_proxy 127.0.0.1:3000
 	}
-}
-
-{$STORAGE_DOMAIN} {
-	header Strict-Transport-Security "max-age=31536000"
-	request_body {
-		max_size 32MB
-	}
-	reverse_proxy minio:9000
 }

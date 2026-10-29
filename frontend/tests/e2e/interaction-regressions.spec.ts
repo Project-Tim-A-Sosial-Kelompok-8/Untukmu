@@ -123,7 +123,7 @@ test("komposer kedua dapat memilih nama, kenangan baru, kategori, dan silang", a
   await frame.locator("#um-nama").fill("Nama yang tidak boleh hilang");
   await frame.locator("#um-comp [data-act=cat]").first().click();
   await expect(frame.locator("#um-nama")).toHaveValue("Nama yang tidak boleh hilang");
-  await frame.locator("#um-comp [data-act=pick-galaksi]").click();
+  await frame.locator("#um-comp [data-act=pick-galaksi]", { hasText: "Kenangan pertama" }).click();
   await expect(frame.locator("#um-comp .um-note")).toContainText("Kenangan pertama");
   await frame.locator("#um-comp [data-act=baru]").click();
   await expect(frame.locator("#um-nama")).toHaveValue("Nama yang tidak boleh hilang");

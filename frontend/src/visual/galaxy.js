@@ -24,6 +24,8 @@ window.UM = window.UM || {};
 UM.galaksi = (function () {
   var RADIUS_MIN = 700,
     RADIUS_MAKS = 1300; // jarak galaksi orang dari pusat (titik awal)
+  var RUANG_MIN = 320,
+    RUANG_MAKS = 900; // sebaran galaksi di sekitar pusat ruang yang sedang dimasuki
   var MAKS_BATU = 900; // batas partikel doa yang digambar per galaksi
   var UKURAN_BINTANG = 2.6; // titik dasar partikel bintang pesan
   var UKURAN_DEBU = 2.4; // titik dasar partikel debu doa
@@ -33,7 +35,7 @@ UM.galaksi = (function () {
      ketika galaksi dibingkai dan puluhan piksel ketika kamera menempel
      padanya, jadi ambang dalam satuan dunia akan berarti berbeda di tiap
      tingkat zoom. */
-  var JARI_KURSOR_PX = 10; // sejauh apa kursor masih dianggap menunjuk sebuah titik
+  var JARI_KURSOR_PX = 12; // sejauh apa kursor masih dianggap menunjuk sebuah titik
   var TOLERANSI_LAYAR = 0.75; // beda jarak-layar yang dianggap "sama dekat"
   var PX_CINCIN = 46; // garis tengah cincin penanda terpilih
   var JARAK_TIBA_REL = 0.7; // jarak tiba ke sebuah titik = 0.7 × radius galaksinya
@@ -49,6 +51,8 @@ UM.galaksi = (function () {
     peta: {}, // id → item
     rumah: null, // posisi titik awal (pusat)
     aktif: null, // id galaksi tujuan; null berarti titik awal / seluruh ladang
+    ruang: null, // id ruang yang galaksinya sedang dibangun; null = Bima Sakti
+    jarakRuang: 0, // jarak kamera saat membingkai seluruh ruang
     perjalanan: [],
     kilatan: [],
     pembentukan: null,
@@ -101,17 +105,118 @@ UM.galaksi = (function () {
     };
   }
 
-  /* Posisi di ladang: stabil per id, jadi orang selalu muncul di tempat yang
-     sama. Disebar pada bola yang dipipihkan supaya ladangnya terbaca sebagai
-     pita, bukan bola penuh — dan supaya kamera awal tetap bisa membingkainya. */
+  /* Posisi cadangan di ladang: stabil per id, jadi orang selalu muncul di
+     tempat yang sama. Dipakai di ruang utama; di dalam sebuah ruang, susunan
+     yang dipakai adalah susunRuang() di bawah. */
   function posDariId(id) {
     var T = three();
     var r = rngDariSeed(seedFromId("pos:" + id));
     var u = r() * 2 - 1,
       phi = r() * Math.PI * 2,
       s = Math.sqrt(Math.max(0, 1 - u * u));
+    /* Di dalam sebuah ruang, galaksi pemiliknya berkumpul di sekitar pusat
+       ruang itu (jauh di luar Bima Sakti), bukan di sekitar pusat semesta. */
+    var pusat = UM.ruang && UM.ruang.pusat ? UM.ruang.pusat() : null;
+    if (pusat) {
+      var radRuang = RUANG_MIN + r() * (RUANG_MAKS - RUANG_MIN);
+      return new T.Vector3(
+        s * Math.cos(phi) * radRuang,
+        u * radRuang * 0.3,
+        s * Math.sin(phi) * radRuang,
+      ).add(pusat);
+    }
     var rad = RADIUS_MIN + r() * (RADIUS_MAKS - RADIUS_MIN);
     return new T.Vector3(s * Math.cos(phi) * rad, u * rad * 0.45, s * Math.sin(phi) * rad);
+  }
+
+  /* Tata letak galaksi di dalam sebuah ruang.
+
+     Sebelumnya tiap galaksi ditaruh acak pada bola pipih, jadi dua orang bisa
+     mendarat hampir di titik yang sama dan cakramnya saling menimpa. Di sini
+     mereka disusun dengan kisi emas (golden-angle) pada bidang yang menghadap
+     kamera ruang: sudut tiap galaksi selalu berbeda, jari-jarinya tumbuh
+     mengikuti akar jumlah galaksi supaya kerapatannya tetap, dan satu putaran
+     penolakan menjamin tepi dua cakram tidak bersentuhan.
+
+     Hasilnya deterministik: urutan id yang sama selalu menghasilkan susunan
+     yang sama, jadi galaksi tidak berpindah saat halaman dimuat ulang. */
+  function susunRuang(galaksi) {
+    var T = three();
+    var pusat = UM.ruang && UM.ruang.pusat ? UM.ruang.pusat() : null;
+    if (!T || !pusat || !galaksi || !galaksi.length) return null;
+
+    var urut = galaksi.slice().sort(function (a, b) {
+      var x = String(a.id),
+        y = String(b.id);
+      return x < y ? -1 : x > y ? 1 : 0;
+    });
+    var n = urut.length;
+
+    var maksR = 0;
+    urut.forEach(function (g) {
+      maksR = Math.max(maksR, galaksiRadius(g));
+    });
+    maksR = Math.max(maksR, 90);
+
+    /* Bidang susunan menghadap kamera ruang, jadi seluruh galaksi tersebar
+       pada layar — bukan berderet pada satu garis karena kebetulan sejajar
+       dengan bidang datar dunia. */
+    var arah = UM.ruang.arahPandang ? UM.ruang.arahPandang() : new T.Vector3(0, 0.6, 1);
+    arah = arah.clone();
+    if (!arah.lengthSq()) arah.set(0, 0.6, 1);
+    arah.normalize();
+    var kanan = new T.Vector3().crossVectors(new T.Vector3(0, 1, 0), arah);
+    if (kanan.lengthSq() < 1e-4) kanan.set(1, 0, 0);
+    kanan.normalize();
+    var atas = new T.Vector3().crossVectors(arah, kanan).normalize();
+
+    var jariMaks = Math.max(RUANG_MIN, maksR * 2.5 * Math.sqrt(n));
+    var EMAS = Math.PI * (3 - Math.sqrt(5)); // 137,5°
+
+    var daftar = urut.map(function (g, i) {
+      var r = jariMaks * Math.sqrt((i + 0.55) / n);
+      var sudut = i * EMAS;
+      /* Sedikit kedalaman membuat susunannya terasa tiga dimensi tanpa
+         mengubah ukuran tampak galaksi terlalu banyak. */
+      var dalam = (rngDariSeed(seedFromId("ruang-z:" + g.id))() - 0.5) * jariMaks * 0.3;
+      return {
+        g: g,
+        r: galaksiRadius(g),
+        pos: pusat
+          .clone()
+          .addScaledVector(kanan, Math.cos(sudut) * r)
+          .addScaledVector(atas, Math.sin(sudut) * r * 0.8)
+          .addScaledVector(arah, dalam),
+      };
+    });
+
+    /* Penolakan berpasangan: kalau ada dua galaksi yang radiusnya besar,
+       geser keduanya sampai tepinya berjarak aman. Iterasinya sedikit saja —
+       kisi emas sudah memberi jarak yang cukup untuk kasus biasa. */
+    for (var putaran = 0; putaran < 8; putaran++) {
+      var bergeser = false;
+      for (var i = 0; i < daftar.length; i++) {
+        for (var j = i + 1; j < daftar.length; j++) {
+          var a = daftar[i],
+            b = daftar[j];
+          var d = a.pos.distanceTo(b.pos);
+          var minimal = (a.r + b.r) * 1.35;
+          if (d >= minimal) continue;
+          var arahGeser = d < 1e-3 ? kanan.clone() : b.pos.clone().sub(a.pos).normalize();
+          var dorong = (minimal - Math.max(d, 0)) * 0.5;
+          a.pos.addScaledVector(arahGeser, -dorong);
+          b.pos.addScaledVector(arahGeser, dorong);
+          bergeser = true;
+        }
+      }
+      if (!bergeser) break;
+    }
+
+    var peta = {};
+    daftar.forEach(function (d) {
+      peta[d.g.id] = d.pos;
+    });
+    return peta;
   }
 
   /* ── pembangunan galaksi ─────────────────────────────────────────────────── */
@@ -134,36 +239,247 @@ UM.galaksi = (function () {
     });
   }
 
+  /* Tampilan galaksi mengikuti galaxy-explorer (zjoooooo): setiap galaksi
+     adalah lukisan minyak yang di-bake di GPU, dihiasi bintang partikel.
+     Ketiga bentuk memakai mesin cakram yang sama — yang membedakan adalah
+     karakter cahayanya: spiral seperti Andromeda, elips seperti galaksi
+     lentikular yang dilihat dari atas, dan tak beraturan seperti galaksi
+     kerdil yang sedang melahirkan bintang. Dengan begitu tidak ada bentuk
+     yang tampil sebagai gumpalan titik kosong. */
+  function palet(stops, warna, kuat) {
+    var T = three();
+    return stops.map(function (s) {
+      var c = new T.Color(s[1]);
+      if (s[0] >= 0.45) c.lerp(warna, kuat * Math.min(1, (s[0] - 0.35) / 0.65));
+      return [s[0], c.getHex()];
+    });
+  }
+
+  function resepGalaksi(g) {
+    var T = three();
+    var r = rngDariSeed(seedFromId("resep:" + g.id));
+    var warna = new T.Color(warnaAman(g.warna));
+    var R = galaksiRadius(g);
+    var benih = 1 + r() * 90;
+    var dasar = { radius: R, roll: r() * Math.PI, spin: 0.012 + r() * 0.01, pointSize: 1.9 };
+    if (g.kind === "ellipsoid")
+      return Object.assign(dasar, {
+        kind: "spiral",
+        count: 24000,
+        arms: 2,
+        inc: 0.06 + r() * 0.16, // hampir menghadap kamera: cakram lentikular
+        tight: 1.15 + r() * 0.2,
+        clumps: 240,
+        armJitter: 0.8,
+        smooth: true, // sedikit knot terang: permukaan halus seperti galaksi tua
+        bulge: 0.34,
+        bulgeR: 0.42,
+        haloSize: 0.85,
+        haloOpacity: 0.2,
+        coreSize: 0.24,
+        coreOpacity: 0.9,
+        core: 0xfff1d6,
+        nucleusSize: 0.06,
+        starGain: 0.66,
+        warm: 0.38,
+        warmK: 2.4,
+        paint: {
+          kind: 0,
+          seed: benih,
+          span: 2.5,
+          arm: [2, 1.35, 1.05, 0.1], // lengan nyaris hilang, tinggal piringan bercahaya
+          rim: [1.12, 0.48, 0.16],
+          body: [0.36, 1.0, 0.34, 0.28],
+          ring: [0.55, 0.35, 0.35],
+          lane: [0.7, 8, 0.1],
+          core: [0.2, 0.9, 0.1, 1.15],
+          tint: [0.15, 0, 0.05, 0.07],
+          pal: palet(
+            [
+              [0, 0xffe9c4],
+              [0.18, 0xffe2bd],
+              [0.42, 0xf2d8b8],
+              [0.62, 0xe7cdb4],
+              [0.85, 0xd9c2ae],
+              [1.0, 0xc7b3a4],
+            ],
+            warna,
+            0.42,
+          ),
+          young: 0xdfe6ff,
+          hiiCol: 0xe9a0a8,
+          hii: [0.12, 0, 1],
+          bright: 0.95,
+        },
+      });
+    if (g.kind === "irregular")
+      return Object.assign(dasar, {
+        kind: "spiral",
+        count: 22000,
+        arms: 2,
+        inc: 0.2 + r() * 0.34,
+        tight: 0.58 + r() * 0.2, // lengan longgar dan bergumpal
+        clumps: 300,
+        armJitter: 2.2,
+        bulge: 0.05,
+        haloSize: 0.6,
+        haloOpacity: 0.04,
+        coreSize: 0.1,
+        coreOpacity: 0.55,
+        starGain: 0.62,
+        warm: 0.05,
+        warmK: 3,
+        paint: {
+          kind: 0,
+          seed: benih,
+          span: 2.6,
+          arm: [2, 0.62, 1.5, 1.0],
+          rim: [1.1, 0.5, 0.35],
+          body: [0.22, 0.85, 0.9, 0.35],
+          ring: [0.3, 0.4, 0.2],
+          lane: [0.5, 4, 0.12],
+          core: [0.1, 0.9, 0, 1.1],
+          tint: [0.45, 0.12, 0.2, 0.1],
+          pal: palet(
+            [
+              [0, 0xfff6e6],
+              [0.16, 0xf3f0e6],
+              [0.38, 0xd9e2ff],
+              [0.6, 0xa9c4ff],
+              [0.82, 0x8aa6e8],
+              [1.0, 0x7787c4],
+            ],
+            warna,
+            0.5,
+          ),
+          young: 0x9db8ff,
+          hiiCol: 0xff6aa0,
+          hii: [0.45, 0, 1],
+          bright: 1.05,
+        },
+      });
+    // Spiral: dua lengan rapi ala Andromeda, atau bergumpal ala M33.
+    var gumpal = r() < 0.45;
+    var umum = {
+      kind: "spiral",
+      arms: 2,
+      inc: 0.35 + r() * 0.45,
+      haloOpacity: 0,
+      warm: gumpal ? 0.04 : 0.32,
+      warmK: gumpal ? 4 : 2.2,
+    };
+    if (gumpal)
+      return Object.assign(dasar, umum, {
+        count: 16000,
+        tight: 0.72,
+        hii: 0.015,
+        clumps: 300,
+        armJitter: 1.4,
+        coreSize: 0.06,
+        coreOpacity: 0.5,
+        starGain: 0.55,
+        paint: {
+          kind: 0,
+          seed: benih,
+          arm: [2, 0.72, 1.6, 0.8],
+          rim: [1.1, 0.55, 0.3],
+          body: [0.3, 0.9, 0.8, 0.25],
+          ring: [0.35, 0.45, 0.6],
+          lane: [0.45, 5, 0.1],
+          core: [0.04, 1.2, 0, 1.3],
+          tint: [0.4, 0, 0, 0.12],
+          pal: palet(
+            [
+              [0, 0xfff4e0],
+              [0.15, 0xf4e6cf],
+              [0.4, 0xe2dcec],
+              [0.65, 0xc4cdee],
+              [0.85, 0x9fb2e2],
+              [1.0, 0x7c92cc],
+            ],
+            warna,
+            0.5,
+          ),
+          young: 0xd6e4ff,
+          hiiCol: 0xf0609a,
+          hii: [0.85, 0, 1.2, 0.03],
+          bright: 1.1,
+        },
+      });
+    return Object.assign(dasar, umum, {
+      count: 22000,
+      tight: 1.5,
+      coreSize: 0.14,
+      coreOpacity: 0.6,
+      starGain: 0.58,
+      paint: {
+        kind: 0,
+        seed: benih,
+        arm: [2, 1.5, 1.6, 0.6],
+        rim: [1.2, 0.6, 0.2],
+        body: [0.38, 1.05, 0.7, 0.14],
+        ring: [0.66, 0.2, 0.75],
+        lane: [0.7, 8, 0.1],
+        core: [0.14, 0.9, 0.15, 1.2],
+        tint: [0.35, 0, 0, 0.12],
+        pal: palet(
+          [
+            [0, 0xfff1dc],
+            [0.2, 0xffe2c0],
+            [0.42, 0xf4c49a],
+            [0.55, 0xe9c4d2],
+            [0.8, 0xb8c2ff],
+            [1.0, 0xa6b2f4],
+          ],
+          warna,
+          0.5,
+        ),
+        young: 0xdbe4ff,
+        hiiCol: 0xe85a72,
+        hii: [0.45, 0, 1],
+        bright: 0.82,
+      },
+    });
+  }
+
+  /* Engine memiringkan piringan terhadap arah ke pusat semesta. Di dalam
+     ruang, kamera memandang dari arah lain, jadi piringan dihadapkan ulang ke
+     kamera ruang dengan kemiringan yang sama dari resepnya. */
+  function hadapkanKeRuang(lod, resep) {
+    var arah = UM.ruang && UM.ruang.arahPandang ? UM.ruang.arahPandang() : null;
+    if (!lod || !arah) return;
+    var T = three();
+    arah.normalize();
+    var tegak = new T.Vector3().crossVectors(arah, new T.Vector3(0, 1, 0));
+    if (tegak.lengthSq() < 1e-4) tegak.set(1, 0, 0);
+    tegak.normalize();
+    var normal = arah.clone().applyAxisAngle(tegak, resep.inc != null ? resep.inc : 0.5);
+    var q0 = new T.Quaternion().setFromUnitVectors(new T.Vector3(0, 1, 0), normal);
+    q0.premultiply(new T.Quaternion().setFromAxisAngle(normal, resep.roll || 0));
+    lod.q0.copy(q0);
+    lod.axis.copy(normal);
+    lod.pts.quaternion.copy(q0);
+  }
+
   function bangunGalaksi(item) {
     var g = item.g;
     var objekSebelum = scene.children.slice();
+    var veilSebelum = typeof galaxyVeils !== "undefined" ? galaxyVeils.length : 0;
+    var volSebelum = typeof galaxyVols !== "undefined" ? galaxyVols.length : 0;
     var asli = Math.random;
     Math.random = rngDariSeed(seedFromId("gal:" + g.id)); // galaksi orang harus sama tiap kali dibuka
+    var resep = resepGalaksi(g);
     try {
-      GX.buildGalaxyStars(item.pos, {
-        kind: g.kind || "spiral",
-        radius: galaksiRadius(g),
-        count: Math.max(4000, Math.min(10000, g.count || 8000)),
-        pointSize: 2.1,
-        spin: 0.02,
-        inc: 0.72,
-        roll: rngDariSeed(seedFromId("roll:" + g.id))() * Math.PI,
-        halo: warnaAman(g.warna),
-        haloOpacity: 0.17,
-        core: "#fff4e2",
-        coreOpacity: 0.92,
-        halo2: warnaAman(g.warna),
-        halo2Size: 1.05,
-        halo2Opacity: 0.05,
-        nucleusSize: 0.1,
-        hii: g.kind === "spiral" ? 0.02 : 0,
-      });
+      GX.buildGalaxyStars(item.pos, resep);
     } finally {
       Math.random = asli; // jangan sampai ada satu frame pun memakai RNG yang di-swap
     }
+    hadapkanKeRuang(GX.galaxyLODs[GX.galaxyLODs.length - 1], resep);
+    item.veil = typeof galaxyVeils !== "undefined" ? galaxyVeils.slice(veilSebelum) : [];
+    item.vol = typeof galaxyVols !== "undefined" ? galaxyVols.slice(volSebelum) : [];
     item.lod = GX.galaxyLODs[GX.galaxyLODs.length - 1];
     item.lod.userData = { umGalaksiId: g.id };
-    item.lod.minGalaxyDrawCount = 1800;
+    item.lod.minGalaxyDrawCount = 5200; // galaksi di ruang tetap berisi bintang saat dilihat dari jauh
     item.objek = scene.children.filter(function (objek) {
       return objekSebelum.indexOf(objek) < 0;
     });
@@ -497,6 +813,15 @@ UM.galaksi = (function () {
       item.terlihat = vis;
       if (vis) {
         var margin = item.el.offsetWidth / 2 + 12;
+        /* Label diletakkan DI BAWAH cakram, bukan menimpa bintang-bintangnya:
+           label adalah tombol, dan tombol di atas cakram akan menelan klik
+           yang seharusnya menuju bintang pesan atau butir doa di bawahnya. */
+        var R = galaksiRadius(item.g);
+        var setengahFov = (camera.fov * Math.PI) / 360;
+        var jarakKamera = camera.position.distanceTo(item.pos);
+        var radiusPx =
+          (R / Math.max(1, jarakKamera * Math.tan(setengahFov))) * (window.innerHeight / 2);
+        var turun = Math.min(150, Math.max(30, radiusPx * 0.8 + item.el.offsetHeight / 2 + 8));
         item.el.style.left =
           Math.max(
             margin,
@@ -507,7 +832,7 @@ UM.galaksi = (function () {
             item.el.offsetHeight / 2 + 12,
             Math.min(
               window.innerHeight - item.el.offsetHeight / 2 - 12,
-              (-tmpV.y * 0.5 + 0.5) * window.innerHeight + 38,
+              (-tmpV.y * 0.5 + 0.5) * window.innerHeight + turun,
             ),
           ) + "px";
         var dekat = camera.position.distanceTo(item.pos) < galaksiRadius(item.g) * 6;
@@ -527,11 +852,26 @@ UM.galaksi = (function () {
       (UM.store.listGalaksiLadang || UM.store.listGalaksi)(),
       (UM.store.listPesanLadang || UM.store.listPesan)(),
       UM.store.listDoa(),
+      UM.store.ruangAktif ? UM.store.ruangAktif() : null,
     ]).then(function (r) {
       if (versi !== refreshTerakhir) return false;
+      /* Pindah ruang: semua galaksi ruang lama dilepas dulu, lalu ruang yang
+         baru dibangun di sekitar pusatnya sendiri. */
+      var ruangBaru = r[3] || null;
+      if (state.ruang !== ruangBaru) {
+        state.daftar.slice().forEach(hapusItem);
+        state.daftar = [];
+        state.aktif = null;
+        state.ruang = ruangBaru;
+      }
+      if (UM.ruang && UM.ruang.sinkron) UM.ruang.sinkron(ruangBaru);
       var galaksi = r[0],
         pesan = r[1],
         doa = r[2];
+      /* Susunan ruang dihitung sekali untuk seluruh daftar, sebelum galaksi
+         baru dibangun — supaya yang baru langsung lahir di tempatnya dan yang
+         lama bisa ikut dirapikan. */
+      var tataRuang = ruangBaru ? susunRuang(galaksi) : null;
       pastikanHost();
 
       var pesanPer = {},
@@ -550,11 +890,20 @@ UM.galaksi = (function () {
       galaksi.forEach(function (g) {
         idBaru[g.id] = true;
         var item = state.peta[g.id];
+        var posRuang = tataRuang && tataRuang[g.id] ? tataRuang[g.id] : null;
         if (!item) {
-          item = state.peta[g.id] = { g: g, pos: posDariId(g.id), lod: null };
+          item = state.peta[g.id] = {
+            g: g,
+            pos: (posRuang || posDariId(g.id)).clone(),
+            lod: null,
+          };
           state.daftar.push(item);
           bangunGalaksi(item);
           bangunLabel(item);
+        } else if (posRuang) {
+          /* Jumlah galaksi berubah → susunannya berubah. Pindahkan yang sudah
+             berdiri tanpa membangun ulang partikelnya. */
+          pindahItem(item, posRuang);
         }
         item.g = g;
 
@@ -624,6 +973,20 @@ UM.galaksi = (function () {
     });
   }
 
+  /* Memindahkan galaksi yang sudah dibangun. Partikel, inti, veil, dan volume
+     sebuah galaksi ditambahkan langsung ke scene pada posisi dunianya, jadi
+     memindahkan satu galaksi berarti menggeser semua bagiannya dengan delta
+     yang sama — bentuk dan orientasi internalnya tidak tersentuh. */
+  function pindahItem(item, pos) {
+    if (!item || !item.pos || !item.objek || item.pos.distanceToSquared(pos) < 1e-6) return;
+    var delta = pos.clone().sub(item.pos);
+    item.objek.forEach(function (objek) {
+      objek.position.add(delta);
+    });
+    if (item.lod && item.lod.center) item.lod.center.copy(pos);
+    item.pos.copy(pos);
+  }
+
   function hapusItem(item) {
     if (item.el && item.el.parentNode) item.el.parentNode.removeChild(item.el);
     if (item.batu) {
@@ -646,6 +1009,20 @@ UM.galaksi = (function () {
         var idx = GX.galaxyLODs.indexOf(item.lod);
         if (idx >= 0) GX.galaxyLODs.splice(idx, 1);
       }
+      // tekstur lukisan hasil bake tidak ikut terbuang bersama materialnya
+      (item.lod.paint || []).forEach(function (lukisan) {
+        var peta = lukisan.mat.uniforms.uMap.value;
+        if (peta) peta.dispose();
+      });
+      // veil dan nebula volumetrik diperbarui tiap frame dari daftar global
+      (item.veil || []).forEach(function (v) {
+        var i = galaxyVeils.indexOf(v);
+        if (i >= 0) galaxyVeils.splice(i, 1);
+      });
+      (item.vol || []).forEach(function (v) {
+        var i = galaxyVols.indexOf(v);
+        if (i >= 0) galaxyVols.splice(i, 1);
+      });
     }
     delete state.peta[item.g.id];
   }
@@ -657,8 +1034,9 @@ UM.galaksi = (function () {
     if (viewMode === "sky" && typeof exitSky === "function") exitSky();
   }
 
-  /* Rumah membingkai seluruh kenangan yang dimuat. */
-  function bingkaiLadang() {
+  /* Rumah membingkai seluruh kenangan yang dimuat. arahPandang (opsional):
+     dari arah mana kamera memandang, dipakai saat tiba di sebuah ruang. */
+  function bingkaiLadang(arahPandang) {
     if (!state.daftar.length || typeof camera === "undefined" || typeof controls === "undefined") {
       kembaliKeRumah();
       return false;
@@ -680,8 +1058,11 @@ UM.galaksi = (function () {
     var setengahFov = (camera.fov * Math.PI) / 360;
     var sudut = Math.min(setengahFov, Math.atan(Math.tan(setengahFov) * camera.aspect));
     var jarak = (radius * 1.2) / Math.sin(sudut);
-    var arah = camera.position.clone().sub(controls.target).normalize();
+    var arah = arahPandang
+      ? arahPandang.clone().normalize()
+      : camera.position.clone().sub(controls.target).normalize();
     if (!arah.lengthSq()) arah.set(0, 0.6, 1).normalize();
+    state.jarakRuang = jarak;
     controls.maxDistance = Math.max(controls.maxDistance, jarak * 1.2);
     camera.far = Math.max(camera.far, jarak + radius * 2);
     camera.updateProjectionMatrix();
@@ -965,12 +1346,18 @@ UM.galaksi = (function () {
 
   /* ── galaksi latar bawaan engine ─────────────────────────────────────────── */
 
+  /* Di dalam ruang, "rumah" adalah pemandangan seluruh ruang itu. Di luar
+     ruang, rumah adalah Bima Sakti beserta bintang-bintang ruang. */
   function kembaliKeRumah() {
     masukLadang();
     batalkanPerjalanan();
     bersihkanPilihan();
     state.aktif = null;
     if (typeof clearSelection === "function") clearSelection();
+    if (state.ruang && state.daftar.length) {
+      bingkaiLadang(UM.ruang && UM.ruang.arahPandang ? UM.ruang.arahPandang() : null);
+      return;
+    }
     if (typeof flyHome === "function") flyHome();
     if (typeof showReturnBtn === "function") showReturnBtn(false);
   }
@@ -1560,19 +1947,6 @@ UM.galaksi = (function () {
     return a.jarak < b.jarak;
   }
 
-  function galaksiTerdekat() {
-    var terdekat = null,
-      jd = Infinity;
-    state.daftar.forEach(function (item) {
-      var d = camera.position.distanceTo(item.pos);
-      if (d < jd) {
-        jd = d;
-        terdekat = item;
-      }
-    });
-    return { item: terdekat, jarak: jd };
-  }
-
   /* Satu tempat untuk menentukan apa yang ada di bawah kursor: titik lengan
      (pesan) atau partikel doa. Dipakai bersama oleh klik dan sorotan hover,
      supaya keduanya tidak mungkin berbeda pendapat tentang apa yang sedang
@@ -1585,70 +1959,81 @@ UM.galaksi = (function () {
      di sepanjang berkas sinar bisa berada puluhan piksel dari tempat kursor
      berada. Dulu itulah sebabnya kamera terbang ke titik yang tidak ditunjuk
      pengguna, dan mengapa titik yang menyala saat hover bukan titik yang
-     terpilih. */
+     terpilih.
+
+     Semua galaksi di ruang ikut diperiksa, bukan hanya yang terdekat ke
+     kamera: di ruang yang berisi beberapa galaksi, titik terang di galaksi
+     paling jauh tetap harus bisa ditunjuk. */
   function pilihDi(ndcX, ndcY) {
     if (typeof camera === "undefined") return null;
+    /* Saat ruang sedang dimasuki/ditinggalkan, kamera bukan untuk dipilih:
+     * sorotan dan klik akan menunjuk tempat yang sudah tidak ada. */
+    if (window.UM && UM.ruang && UM.ruang.state && (UM.ruang.state.pindah || UM.ruang.state.selam))
+      return null;
     /* Matriks kamera disegarkan DULU: dalam mode mengikuti, tick() menggeser
        kamera setelah render terakhir, jadi tanpa ini berkas sinarnya memakai
        posisi kamera satu frame yang lalu. */
     if (camera.updateMatrixWorld) camera.updateMatrixWorld();
     raycaster.setFromCamera({ x: ndcX, y: ndcY }, camera);
 
-    var dekat = galaksiTerdekat();
-    var item = dekat.item;
-    if (!item) return null;
-    var R = galaksiRadius(item.g);
-    if (dekat.jarak > R * 9) return null; // terlalu jauh: klik tidak mungkin dimaksudkan untuk salah satunya
-
-    /* Ambang hanya MENYARING kandidat, dan sengaja longgar: titik mana pun yang
-       berada dalam JARI_KURSOR_PX piksel dari kursor harus ikut masuk, dari sisi
-       mana pun ia dilihat. Karena itu ambangnya dihitung pada jarak sisi TERJAUH
-       galaksi (pusat + 3 × radius, cukup untuk sabuk doa paling luar) — pada
-       titik yang lebih jauh, satu piksel layar berarti perpindahan dunia yang
-       lebih besar, jadi angka dari jarak terjauh selalu cukup. Yang menentukan
-       pilihan akhir adalah jarak di layar di bawah ini. */
-    raycaster.params.Points.threshold = Math.max(
-      0.2,
-      perPiksel(dekat.jarak + R * 3) * JARI_KURSOR_PX * 2,
-    );
-
     var terbaik = null;
-    var calon = { jenis: "", item: item, index: -1, points: null, dpx: 0, jarak: 0 };
 
-    function tawarkan(jenis, points, index) {
+    function tawarkan(jenis, item, points, index) {
       var dunia = posisiTitikDari(points, index, titikSementara());
       var dpx = pikselDariKursor(dunia, ndcX, ndcY);
       if (dpx == null || dpx > JARI_KURSOR_PX) return;
-      calon.jenis = jenis;
-      calon.points = points;
-      calon.index = index;
-      calon.dpx = dpx;
-      calon.jarak = camera.position.distanceTo(dunia);
-      if (!lebihBaik(calon, terbaik)) return;
-      terbaik = {
+      var calon = {
         jenis: jenis,
         item: item,
         index: index,
         points: points,
         dpx: dpx,
-        jarak: calon.jarak,
+        jarak: camera.position.distanceTo(dunia),
       };
+      if (!lebihBaik(calon, terbaik)) return;
+      terbaik = calon;
     }
 
-    if (item.batuPoints) {
-      var hb = raycaster.intersectObject(item.batuPoints, false);
-      for (var i = 0; i < hb.length; i++) {
-        if (hb[i].index < (item.batuList || []).length)
-          tawarkan("doa", item.batuPoints, hb[i].index);
+    var T = three();
+    var bola = new T.Sphere();
+    state.daftar.forEach(function (item) {
+      var R = galaksiRadius(item.g);
+      var jarak = camera.position.distanceTo(item.pos);
+
+      /* Saringan murah sebelum raycast: berkas kursor harus menyentuh bola
+         galaksi ini (radius cukup untuk sabuk doa paling luar). Tidak ada
+         batas jarak: di ruang yang lebar, galaksi paling jauh pun tetap harus
+         bisa ditunjuk selama titiknya ada di bawah kursor. */
+      bola.set(item.pos, R * 4.2);
+      if (!raycaster.ray.intersectsSphere(bola)) return;
+
+      /* Ambang hanya MENYARING kandidat, dan sengaja longgar: titik mana pun
+         yang berada dalam JARI_KURSOR_PX piksel dari kursor harus ikut masuk.
+         Ambangnya dihitung pada jarak sisi TERJAUH galaksi (pusat + 3 × radius)
+         supaya cukup untuk titik di sisi belakang. */
+      raycaster.params.Points.threshold = Math.max(
+        0.2,
+        perPiksel(jarak + R * 3) * JARI_KURSOR_PX * 2,
+      );
+
+      if (item.batuPoints) {
+        var hb = raycaster.intersectObject(item.batuPoints, false);
+        for (var i = 0; i < hb.length; i++) {
+          if (hb[i].index < (item.batuList || []).length)
+            tawarkan("doa", item, item.batuPoints, hb[i].index);
+        }
       }
-    }
-    /* Titik-titik lengan spiral galaksi. intersectObject dipanggil dengan
-       recursive=false, jadi partikel doa (anak dari pts) tidak ikut terhitung
-       dua kali. */
-    if (item.lod && item.lod.pts) {
-      var ht = raycaster.intersectObject(item.lod.pts, false);
-      for (var k = 0; k < ht.length; k++) tawarkan("titik", item.lod.pts, ht[k].index);
-    }
+      /* Titik-titik lengan spiral galaksi — HANYA yang membawa pesan. Titik
+         hiasan tidak boleh menyalakan kursor lalu tidak membuka apa-apa:
+         semua yang bisa disentuh di sini harus punya isi (pesan pemilik
+         galaksi atau doa dari orang lain di sabuk di atas). */
+      if (item.lod && item.lod.pts) {
+        var ht = raycaster.intersectObject(item.lod.pts, false);
+        for (var k = 0; k < ht.length; k++)
+          if (item.pesanDiTitik && item.pesanDiTitik[ht[k].index])
+            tawarkan("titik", item, item.lod.pts, ht[k].index);
+      }
+    });
     return terbaik;
   }
 
@@ -1679,20 +2064,15 @@ UM.galaksi = (function () {
               return;
             }
           } else {
-            /* Titik di lengan spiral. Pesannya sudah ada kalau titik ini memang
-             ditandai untuk pesanmu; kalau bukan, pesannya dibuat saat ini juga
-             sehingga tidak pernah ada titik yang diklik tanpa isi. */
+            /* Titik di lengan spiral yang ditandai membawa pesan pemilik
+               galaksi. Pesannya dibuat saat pesan ditulis — tidak ada lagi
+               titik yang diklik tanpa isi. */
             var item = hit.item,
               idx = hit.index;
             var sudahAda = item.pesanDiTitik ? item.pesanDiTitik[idx] : null;
+            if (!sudahAda) return;
             e.stopPropagation();
-            if (sudahAda) {
-              terbangKeTitik(item, idx, sudahAda);
-              return;
-            }
-            UM.store.pesanTitik(item.g.id, idx).then(function (pesan) {
-              if (pesan) UM.galaksi.terbangKeTitik(item, idx, pesan);
-            });
+            terbangKeTitik(item, idx, sudahAda);
             return;
           }
         }
@@ -1872,7 +2252,7 @@ UM.galaksi = (function () {
         hoverT = now;
         var ndc = ndcDari(e);
         var hit = pilihDi(ndc.x, ndc.y);
-        sorot(hit ? { points: hit.points, index: hit.index } : null);
+        sorot(hit ? { points: hit.points, index: hit.index, item: hit.item } : null);
       },
       false,
     );
