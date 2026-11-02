@@ -51,7 +51,7 @@ for (const viewport of [
     await frame.locator("#um-entry [data-act=skip]").click();
     await expectClearLayout(page);
 
-    await frame.locator(".um-dock [data-act=peta]").click();
+    await page.frames()[1].evaluate(() => window.UM.ui.kePeta());
     await expect.poll(() => engine.evaluate(() => window.UM_ENGINE!.metrics().mode)).toBe("sky");
     await expectClearLayout(page);
     await page.screenshot({ path: testInfo.outputPath("peta.png") });

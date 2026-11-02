@@ -323,7 +323,7 @@ export function PrayerAdmin() {
                       .filter((entry) => entry.tradition === id)
                       .map((entry) => (
                         <option key={entry.id} value={entry.id}>
-                          {entry.catalog_title} · {statusLabel(entry)}
+                          {entry.catalog_title}, {statusLabel(entry)}
                         </option>
                       ))}
                   </optgroup>
@@ -348,7 +348,7 @@ export function PrayerAdmin() {
               <span>
                 <strong>{entry.catalog_title}</strong>
                 <span className="um-admin-subtitle">
-                  {entry.tradition_label} · {entry.has_audio ? "Audio tersedia" : "Belum ada audio"}
+                  {entry.tradition_label}, {entry.has_audio ? "Audio tersedia" : "Belum ada audio"}
                 </span>
               </span>
               <span
@@ -377,7 +377,7 @@ export function PrayerAdmin() {
                   {selected.catalog_title}
                 </h3>
                 <p className="um-admin-subtitle">
-                  {selected.tradition_label} · {statusLabel(selected)}
+                  {selected.tradition_label}, {statusLabel(selected)}
                 </p>
               </div>
               <span className={`um-admin-status ${selected.has_audio ? "is-ready" : "is-draft"}`}>
@@ -415,7 +415,7 @@ export function PrayerAdmin() {
                   style={{ width: "100%" }}
                 />
                 <p className="um-hint">
-                  {selected.audio_meta.attribution} · {selected.audio_meta.license}
+                  {selected.audio_meta.attribution}, {selected.audio_meta.license}
                 </p>
               </div>
             )}
@@ -492,7 +492,7 @@ export function PrayerAdmin() {
                 onChange={(event) => void chooseAudio(event.currentTarget)}
               />
               <p className="um-hint">
-                MP3, OGG, WAV, atau M4A · maksimal 30 MiB · 5 detik–15 menit. Durasi dibaca dari
+                MP3, OGG, WAV, atau M4A, maksimal 30 MiB, 5 detik–15 menit. Durasi dibaca dari
                 rekaman. Unggahan hanya dipasang ke {selected.catalog_title} (
                 {selected.tradition_label}).
               </p>

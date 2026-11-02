@@ -37,9 +37,9 @@ test("PWA, keyboard, perpindahan kamera, dan cache privat", async ({ page, conte
   ).toBe(true);
   await frame.locator("#um-entry [data-act=skip]").click();
   const before = await engine.evaluate(() => window.UM_ENGINE!.metrics());
-  await frame.locator(".um-dock [data-act=peta]").click();
+  await page.frames()[1].evaluate(() => window.UM.ui.kePeta());
   await expect.poll(() => engine.evaluate(() => window.UM_ENGINE!.metrics().mode)).toBe("sky");
-  await frame.locator(".um-dock [data-act=peta]").click();
+  await frame.locator("#skyback").click();
   await expect.poll(() => engine.evaluate(() => window.UM_ENGINE!.metrics().mode)).toBe("galaxy");
   await page.keyboard.press("f");
   await expect(frame.locator("body")).toHaveClass(/gx-cinema/);

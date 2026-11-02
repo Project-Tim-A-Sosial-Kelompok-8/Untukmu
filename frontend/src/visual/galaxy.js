@@ -786,7 +786,7 @@ UM.galaksi = (function () {
       jumlah.pesan +
       " " +
       esc(UM.i18n.t("commonPesan")) +
-      '</span> · <span data-count="doa">' +
+      '</span>, <span data-count="doa">' +
       jumlah.doa +
       " " +
       esc(UM.i18n.t("commonDoa")) +

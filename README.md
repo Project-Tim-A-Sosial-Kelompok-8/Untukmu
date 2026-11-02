@@ -110,9 +110,9 @@ Tidak ada akun aplikasi bawaan. Buat akun melalui aplikasi seperti langkah berik
 ### 4. Buat akun dan coba pesan publik dari akun lain
 
 1. Buka http://localhost:3000, pilih **Mulai Menulis** atau **Tulis**, lalu **Daftar akun** saat formulir masuk muncul.
-2. Isi surel dan kata sandi minimal **12 karakter**, ulangi kata sandi, lalu pilih **Daftar**. Simpan kode pemulihan yang ditampilkan di tempat aman.
+2. Isi username (tanpa tanda @) dan kata sandi minimal **12 karakter**, ulangi kata sandi, lalu pilih **Daftar**. Simpan kode pemulihan yang ditampilkan di tempat aman.
 3. Sebagai **akun A**, pilih tujuan/nama kenangan, bentuk galaksi, lalu isi pesan sederhana, misalnya `Semoga hari ini membawa kabar baik`. Pada pilihan pembaca, pilih **Publik anonim**, kosongkan jadwal pembukaan untuk uji ini, lalu **Simpan sebagai bintang**.
-4. Buka browser lain atau jendela privat/incognito, akses **alamat aplikasi yang sama**, lalu daftar/masuk sebagai **akun B** dengan surel berbeda. Dua tab biasa dalam browser yang sama berbagi cookie dan bukan dua sesi akun yang terpisah.
+4. Buka browser lain atau jendela privat/incognito, akses **alamat aplikasi yang sama**, lalu daftar/masuk sebagai **akun B** dengan username berbeda. Dua tab biasa dalam browser yang sama berbagi cookie dan bukan dua sesi akun yang terpisah.
 5. Akun B harus dapat melihat galaksi yang memiliki pesan publik milik akun A di langit, serta membaca pesan itu melalui **Jelajah** dan memilihnya di **Doa**. Jika aplikasi sudah dibuka sebelum pesan dibuat, muat ulang halaman/daftar agar mengambil data terbaru. Ulangi tanpa login untuk memeriksa akses pengunjung.
 6. Buat pesan kedua sebagai akun A dengan pilihan **Privat**. Pesan privat tersebut hanya dapat dibuka oleh akun A; akun B tetap hanya menerima pesan yang dipublikasikan.
 
@@ -231,11 +231,11 @@ Rekaman bawaan diputar melalui API pada origin aplikasi. Rekaman unggahan diputa
 
 ## Panel admin
 
-Daftarkan akun melalui aplikasi terlebih dahulu. Untuk memberikan peran admin kepada akun tersebut, jalankan perintah berikut dengan surel akun yang ingin dijadikan admin:
+Daftarkan akun melalui aplikasi terlebih dahulu. Untuk memberikan peran admin kepada akun tersebut, jalankan perintah berikut dengan username akun yang ingin dijadikan admin:
 
 ```sh
 cd backend
-go run ./cmd/untukmu make-admin emailakun@example.com
+go run ./cmd/untukmu make-admin budi.santoso
 ```
 
 Keluar lalu masuk kembali agar peran terbaru dimuat, kemudian buka http://localhost:3000/admin. Panel memiliki empat tab:
@@ -243,7 +243,7 @@ Keluar lalu masuk kembali agar peran terbaru dimuat, kemudian buka http://localh
 | Tab                    | Kegunaan                                                                                                                                                                                      |
 | ---------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **Ringkasan**          | Melihat jumlah pengguna, **Pesan semua akun**, **Pesan akun saya**, dan pesan publik yang tersedia. Pilih periode metrik untuk membandingkan jumlah dalam rentang waktu yang sama.            |
-| **Pengguna terdaftar** | Melihat nama, surel, peran, tanggal pendaftaran, serta jumlah pesan tersimpan setiap akun. Pencarian tersedia berdasarkan nama atau surel. Jumlah pesan di daftar ini mencakup seluruh waktu. |
+| **Pengguna terdaftar** | Melihat nama, username, peran, tanggal pendaftaran, serta jumlah pesan tersimpan setiap akun. Pencarian tersedia berdasarkan nama atau username. Jumlah pesan di daftar ini mencakup seluruh waktu. |
 | **Peninjauan konten**  | Meninjau pesan publik yang ditandai atau dilaporkan, lalu menyetujui, menolak, atau menariknya dari publik.                                                                                   |
 | **Doa & audio**        | Memilih tradisi dan entri doa, meninjau teks/sumber, serta mengunggah dan mendengarkan rekaman.                                                                                               |
 

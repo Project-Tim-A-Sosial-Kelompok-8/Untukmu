@@ -67,7 +67,7 @@ test("doa tersedia untuk pengunjung dengan tujuh tradisi dan isi yang bisa dipil
     await engine.evaluate('typeof SKY_CONS + ":" + typeof BEACONS + ":" + typeof solarSystem'),
   ).toBe("undefined:undefined:undefined");
   await frame.locator("#um-doa [data-act=close]").click();
-  await frame.locator(".um-dock [data-act=peta]").click();
+  await page.frames()[1].evaluate(() => window.UM.ui.kePeta());
   await expect(frame.locator(".um-skyctl [data-mode=kenangan]")).toHaveClass(/on/);
   await expect(frame.locator(".um-skyctl")).toContainText(
     "Bintang berwarna menandai galaksi kenanganmu dan galaksi pesan publik.",

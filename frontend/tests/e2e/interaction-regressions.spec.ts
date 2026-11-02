@@ -154,7 +154,7 @@ test("tooltip Kenangan tersembunyi saat kamera digeser menjauh", async ({ page }
   await frame.locator("#um-comp [data-act=next]").click();
   await frame.locator("#um-comp [data-act=save]").click();
   await expect(frame.locator("#um-comp")).not.toHaveClass(/on/);
-  await frame.locator(".um-dock [data-act=peta]").click();
+  await page.frames()[1].evaluate(() => window.UM.ui.kePeta());
   await expect(frame.locator("#um-galaksilabels")).not.toBeVisible();
   const engine = page.frames()[1];
   await expect(frame.locator(".um-dock button").nth(0)).toHaveAttribute("data-act", "tulis");

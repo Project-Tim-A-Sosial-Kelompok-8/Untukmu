@@ -121,7 +121,7 @@ UM.sky = (function () {
       item.nPesan +
       " " +
       esc(UM.i18n.t("commonPesan")) +
-      " · " +
+      ", " +
       item.nBatu +
       " " +
       esc(UM.i18n.t("commonDoa")) +

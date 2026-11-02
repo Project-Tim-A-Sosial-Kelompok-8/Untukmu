@@ -28,7 +28,7 @@ function scene(page: Page) {
     ruang: UM.ruang.state.aktif,
     flying: !!flyState,
     // The galaxy created with every account is left out: these tests count their own.
-    galaxies: UM.galaksi.state.daftar.filter(item => item.g.sendiri !== false && item.g.nama !== "Galaksi pertamaku").map(item => {
+    galaxies: UM.galaksi.state.daftar.filter(item => item.g.sendiri !== false).map(item => {
       const screen = item.pos.clone().project(camera);
       const points = item.lod?.pts;
       return {
@@ -100,7 +100,7 @@ test("simpan membuka galaksi dari Peta; galaksi dan bintang lama tetap tampil se
   expect((await scene(page)).active).toBeNull();
   await expect(frame.locator("#return-home")).not.toBeVisible();
 
-  await frame.locator(".um-dock [data-act=peta]").click();
+  await page.frames()[1].evaluate(() => window.UM.ui.kePeta());
   await expect.poll(async () => (await scene(page)).mode).toBe("sky");
   await frame.locator(".um-dock [data-act=tulis]").click();
   await saveNewGalaxy(frame, "Kenangan kedua");
@@ -193,7 +193,7 @@ test("simpan membuka galaksi dari Peta; galaksi dan bintang lama tetap tampil se
     expect(await page.frames()[1].evaluate(() => window.UM.crypto.unlocked())).toBe(false);
     await page.frames()[1].evaluate(`(() => {
       UM.ui.closeAllScreens();
-      UM.galaksi.terbangKe(UM.galaksi.state.daftar.find(item => item.g.nama !== "Galaksi pertamaku"));
+      UM.galaksi.terbangKe(UM.galaksi.state.daftar.find(item => item.g.sendiri !== false));
     })()`);
     await expect.poll(async () => (await scene(page)).flying).toBe(false);
     expect((await scene(page)).galaxies.some((galaxy) => galaxy.inFrame)).toBe(true);

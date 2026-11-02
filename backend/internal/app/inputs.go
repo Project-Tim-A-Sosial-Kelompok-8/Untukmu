@@ -67,6 +67,7 @@ var (
 	reviewPattern    = regexp.MustCompile(`^[a-f0-9]{64}$`)
 	emailLocal       = regexp.MustCompile(`^[\p{L}\p{N}!#$%&'*+/=?^_` + "`" + `{|}~-]+(\.[\p{L}\p{N}!#$%&'*+/=?^_` + "`" + `{|}~-]+)*$`)
 	emailLabel       = regexp.MustCompile(`^[\p{L}\p{N}]([\p{L}\p{N}-]{0,61}[\p{L}\p{N}])?$`)
+	usernamePattern  = regexp.MustCompile(`^[a-z0-9]([a-z0-9._-]{1,30})[a-z0-9]$`)
 )
 
 var specialUseDomains = map[string]bool{
@@ -90,10 +91,27 @@ func validEmail(v *validation, value *string, loc ...any) string {
 		ok = !specialUseDomains[tld] && strings.Trim(tld, "0123456789") != ""
 	}
 	if !ok {
-		v.add("Alamat surel tidak valid.", loc...)
+		v.add("Format username atau email tidak valid.", loc...)
 		return ""
 	}
 	return strings.ToLower(address)
+}
+
+// validIdentifier accepts a username (the current scheme) or a legacy email
+// address, so accounts created before usernames existed can still sign in.
+func validIdentifier(v *validation, value *string, loc ...any) string {
+	if !required(v, value, loc...) {
+		return ""
+	}
+	if strings.Contains(*value, "@") {
+		return validEmail(v, value, loc...)
+	}
+	name := strings.ToLower(strings.TrimSpace(*value))
+	if !usernamePattern.MatchString(name) {
+		v.add("Username 3-32 karakter, hanya huruf kecil, angka, titik, garis bawah, atau strip.", loc...)
+		return ""
+	}
+	return name
 }
 
 // ---- Encryption records ----
@@ -212,12 +230,13 @@ func (p *cipherInput) dump() string {
 
 type registerInput struct {
 	RecoveryVerifier *string    `json:"recovery_verifier"`
+	Username         *string    `json:"username"`
 	Email            *string    `json:"email"`
 	Password         *string    `json:"password"`
 	DisplayName      *string    `json:"display_name"`
 	EncryptionRecord *keyRecord `json:"encryption_record"`
 	TurnstileToken   *string    `json:"turnstile_token"`
-	email            string
+	identifier       string
 }
 
 func (b *registerInput) validate() error {
@@ -225,7 +244,11 @@ func (b *registerInput) validate() error {
 	if b.RecoveryVerifier != nil && !verifierPattern.MatchString(*b.RecoveryVerifier) {
 		v.add("Format kode pemulihan tidak valid.", "recovery_verifier")
 	}
-	b.email = validEmail(&v, b.Email, "email")
+	account := b.Username
+	if account == nil {
+		account = b.Email
+	}
+	b.identifier = validIdentifier(&v, account, "username")
 	if required(&v, b.Password, "password") {
 		checkLength(&v, *b.Password, 12, 256, "password")
 	}
@@ -238,14 +261,19 @@ func (b *registerInput) validate() error {
 }
 
 type loginInput struct {
-	Email    *string `json:"email"`
-	Password *string `json:"password"`
-	email    string
+	Username   *string `json:"username"`
+	Email      *string `json:"email"`
+	Password   *string `json:"password"`
+	identifier string
 }
 
 func (b *loginInput) validate() error {
 	var v validation
-	b.email = validEmail(&v, b.Email, "email")
+	account := b.Username
+	if account == nil {
+		account = b.Email
+	}
+	b.identifier = validIdentifier(&v, account, "username")
 	if required(&v, b.Password, "password") {
 		checkLength(&v, *b.Password, 1, 256, "password")
 	}
@@ -297,13 +325,14 @@ func (b *settingsInput) validate() error {
 }
 
 type recoveryInput struct {
+	Username         *string    `json:"username"`
 	Email            *string    `json:"email"`
 	RecoveryVerifier *string    `json:"recovery_verifier"`
 	TurnstileToken   *string    `json:"turnstile_token"`
 	Challenge        *string    `json:"challenge"`
 	Password         *string    `json:"password"`
 	EncryptionRecord *keyRecord `json:"encryption_record"`
-	email            string
+	identifier       string
 }
 
 func (b *recoveryInput) validate(finish bool) error {
@@ -312,7 +341,11 @@ func (b *recoveryInput) validate(finish bool) error {
 		v.add("Format kode pemulihan tidak valid.", "recovery_verifier")
 	}
 	if !finish {
-		b.email = validEmail(&v, b.Email, "email")
+		account := b.Username
+		if account == nil {
+			account = b.Email
+		}
+		b.identifier = validIdentifier(&v, account, "username")
 		checkOptionalLength(&v, b.TurnstileToken, 2048, "turnstile_token")
 		for name, value := range map[string]bool{
 			"challenge": b.Challenge != nil, "password": b.Password != nil, "encryption_record": b.EncryptionRecord != nil,
@@ -328,7 +361,7 @@ func (b *recoveryInput) validate(finish bool) error {
 		checkLength(&v, *b.Password, 12, 256, "password")
 	}
 	b.EncryptionRecord.validate(&v, "encryption_record")
-	v.check(b.Email == nil, "Kolom tambahan tidak diizinkan.", "email")
+	v.check(b.Username == nil && b.Email == nil, "Kolom tambahan tidak diizinkan.", "username")
 	v.check(b.TurnstileToken == nil, "Kolom tambahan tidak diizinkan.", "turnstile_token")
 	return v.err()
 }

@@ -227,6 +227,31 @@ func TestSessionLifecycle(t *testing.T) {
 	expect(t, h.do("GET", "/api/v1/users/me", nil, auth), 401)
 }
 
+func TestUsernameAccounts(t *testing.T) {
+	h := newHarness(t)
+	register := h.do("POST", "/api/v1/auth/register", map[string]any{
+		"username": "Budi.Santoso", "password": "test-credential-derived-client-side", "encryption_record": testKeyRecord(),
+	}, nil)
+	expect(t, register, 201)
+	auth := map[string]string{"Authorization": "Bearer " + register.json(t)["access_token"].(string)}
+	me := h.do("GET", "/api/v1/users/me", nil, auth).json(t)
+	if me["username"] != "budi.santoso" || me["email"] != "budi.santoso" {
+		t.Fatalf("profil username: %v", me)
+	}
+	expect(t, h.do("POST", "/api/v1/auth/register", map[string]any{
+		"username": "budi.santoso", "password": "test-credential-derived-client-side", "encryption_record": testKeyRecord(),
+	}, nil), 409)
+	expect(t, h.do("POST", "/api/v1/auth/register", map[string]any{
+		"username": "ab", "password": "test-credential-derived-client-side", "encryption_record": testKeyRecord(),
+	}, nil), 422)
+	expect(t, h.do("POST", "/api/v1/auth/register", map[string]any{
+		"username": "budi santoso", "password": "test-credential-derived-client-side", "encryption_record": testKeyRecord(),
+	}, nil), 422)
+	expect(t, h.do("POST", "/api/v1/auth/login", map[string]any{
+		"username": "Budi.Santoso", "password": "test-credential-derived-client-side",
+	}, nil), 200)
+}
+
 func TestValidationAndPrivacyBoundary(t *testing.T) {
 	h := newHarness(t)
 	auth := h.account("first@example.com")
@@ -273,8 +298,8 @@ func TestValidationAndPrivacyBoundary(t *testing.T) {
 		t.Fatalf("pesan galaksi: %v", listed)
 	}
 	summary := h.do("GET", "/api/v1/dashboard/summary", nil, auth).json(t)
-	// One galaxy is created with the account, one was added above.
-	if summary["messages"].(float64) != 1 || summary["constellations"].(float64) != 2 {
+	// The account starts empty, so the only galaxy is the one added above.
+	if summary["messages"].(float64) != 1 || summary["constellations"].(float64) != 1 {
 		t.Fatalf("ringkasan: %v", summary)
 	}
 	expect(t, h.do("DELETE", "/api/v1/messages/"+message["id"].(string), nil, auth), 204)
@@ -576,14 +601,20 @@ func TestWorkspaces(t *testing.T) {
 	visitor := h.account("visitor@example.com")
 
 	mine := h.do("GET", "/api/v1/workspaces/me", nil, owner).json(t)
-	if mine["visibility"] != "private" || mine["constellation_count"].(float64) != 1 || mine["is_mine"] != true {
+	if mine["visibility"] != "private" || mine["constellation_count"].(float64) != 0 || mine["is_mine"] != true {
 		t.Fatalf("ruang baru: %v", mine)
 	}
-	galaxies := h.do("GET", "/api/v1/constellations", nil, owner).list(t)
-	if len(galaxies) != 1 || galaxies[0]["target_label"] != "Galaksi pertamaku" {
-		t.Fatalf("galaksi pertama: %v", galaxies)
+	// Accounts start empty: no galaxy is seeded automatically.
+	if galaxies := h.do("GET", "/api/v1/constellations", nil, owner).list(t); len(galaxies) != 0 {
+		t.Fatalf("akun baru seharusnya belum punya galaksi: %v", galaxies)
 	}
 	id := mine["id"].(string)
+
+	firstGalaxy := h.galaxy(owner)
+	galaxies := h.do("GET", "/api/v1/constellations", nil, owner).list(t)
+	if len(galaxies) != 1 || galaxies[0]["id"] != firstGalaxy {
+		t.Fatalf("galaksi buatan pengguna: %v", galaxies)
+	}
 
 	list := h.do("GET", "/api/v1/explore/workspaces", nil, visitor).list(t)
 	if len(list) != 2 {

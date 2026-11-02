@@ -153,11 +153,11 @@ export const unlock = (password: string, record?: KeyRecord) => open(password, f
 export const unlockWithRecovery = (code: string) => open(normalizeRecovery(code), true);
 
 /** Domain-separated login verifier; neither the raw password nor a vault key is sent to the API. */
-export async function authCredential(password: string, email: string) {
+export async function authCredential(password: string, account: string) {
   if (password.length > 256) throw new Error("Kata sandi terlalu panjang.");
   const digest = await crypto.subtle.digest(
     "SHA-256",
-    utf8.encode("untukmu:auth:v1:" + email.trim().toLowerCase()),
+    utf8.encode("untukmu:auth:v1:" + account.trim().toLowerCase()),
   );
   const bytes = await derive(password, new Uint8Array(digest).slice(0, 16));
   try {
@@ -277,14 +277,14 @@ export async function decryptFile(bytes: ArrayBuffer, meta: { iv: string; aad: s
 }
 
 /** Domain-separated verifier: the recovery secret never goes to the server. */
-export async function recoveryVerifier(code: string, email: string) {
+export async function recoveryVerifier(code: string, account: string) {
   const normalized = normalizeRecovery(code);
   if (!/^[A-Za-z0-9_-]{43}$/.test(normalized))
     throw new Error("Format kode pemulihan tidak valid.");
   return b64(
     await crypto.subtle.digest(
       "SHA-256",
-      utf8.encode(`untukmu:recovery-auth:v1:${email.trim().toLowerCase()}:${normalized}`),
+      utf8.encode(`untukmu:recovery-auth:v1:${account.trim().toLowerCase()}:${normalized}`),
     ),
   );
 }

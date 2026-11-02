@@ -52,15 +52,6 @@ func createWorkspace(ctx context.Context, q querier, ownerID, displayName string
 	return err
 }
 
-// createFirstGalaxy gives a new account a galaxy to write into right away.
-func createFirstGalaxy(ctx context.Context, q querier, ownerID string) error {
-	_, err := q.ExecContext(ctx, `INSERT INTO constellations (id, owner_id, target_kind, target_label, custom_category,
-		visual_type, visual_ref, kind, color, radius, particle_count, created_at)
-		VALUES (?, ?, 'diri_sendiri', 'Galaksi pertamaku', NULL, 'light_symbol', NULL, 'spiral', '#ffd9a0', 140, 8500, ?)`,
-		uid(), ownerID, now())
-	return err
-}
-
 func getWorkspace(ctx context.Context, q querier, where string, args ...any) (*Workspace, error) {
 	row, err := scanWorkspace(q.QueryRowContext(ctx, "SELECT "+workspaceColumns+" FROM workspaces WHERE "+where, args...))
 	if errors.Is(err, sql.ErrNoRows) {

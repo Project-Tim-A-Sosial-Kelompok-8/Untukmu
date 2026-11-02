@@ -4,6 +4,7 @@ import type { KeyRecord } from "../crypto/types";
 export interface User {
   recovery_ready: boolean;
   id: string;
+  username?: string;
   email: string;
   display_name: string;
   role: "user" | "admin";

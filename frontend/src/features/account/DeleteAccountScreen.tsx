@@ -15,7 +15,8 @@ export function DeleteAccountScreen({ onCancel }: { onCancel: () => void }) {
     setBusy(true);
     setError("");
     try {
-      const credential = await vault.authCredential(password, currentUser()!.email);
+      const account = currentUser()!.username || currentUser()!.email;
+      const credential = await vault.authCredential(password, account);
       await api("/users/me", {
         method: "DELETE",
         body: JSON.stringify({ password: credential, content_action: action }),
@@ -32,8 +33,8 @@ export function DeleteAccountScreen({ onCancel }: { onCancel: () => void }) {
   return (
     <form onSubmit={submit}>
       <p className="um-p">
-        Akun {currentUser()?.email} akan dihapus permanen dan semua sesi akan berakhir. Tentukan
-        nasib pesan dan doa yang telah ditulis.
+        Akun {currentUser()?.username || currentUser()?.email} akan dihapus permanen dan semua sesi
+        akan berakhir. Tentukan nasib pesan dan doa yang telah ditulis.
       </p>
       <fieldset disabled={busy} className="um-delete-options">
         <legend className="um-label">Pesan dan doa setelah akun dihapus</legend>

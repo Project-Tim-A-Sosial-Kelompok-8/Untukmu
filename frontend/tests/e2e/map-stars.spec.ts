@@ -25,7 +25,7 @@ test("bintang Kenangan menampilkan tooltip dan dapat diklik pada desktop dan pon
   });
   for (const width of [1366, 390]) {
     await page.setViewportSize({ width, height: 844 });
-    await frame.locator(".um-dock [data-act=peta]").click();
+    await page.frames()[1].evaluate(() => window.UM.ui.kePeta());
     const position = await engine.evaluate<ScreenPoint>(`(() => {
       const item = UM.sky.state.daftar[0];
       skyControls.autoRotate = false; skyControls.enableDamping = false;

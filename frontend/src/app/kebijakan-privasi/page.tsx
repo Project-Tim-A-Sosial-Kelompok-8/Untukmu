@@ -41,7 +41,7 @@ export default function Privacy() {
       </p>
       <h2>Metadata</h2>
       <p>
-        Surel, nama akun, nama tujuan, kategori, bentuk galaksi, tanggal, suasana hati, tag, ukuran
+        Username, nama akun, nama tujuan, kategori, bentuk galaksi, tanggal, suasana hati, tag, ukuran
         unggahan, dan waktu aktivitas terlihat oleh layanan. Jangan menuliskan isi rahasia pada
         metadata. Doa dan empati pengunjung tanpa akun menggunakan pengenal jaringan yang di-HMAC,
         tanpa menyimpan alamat IP mentah. Metrik operasional hanya memakai pola rute dan jumlah
@@ -52,7 +52,7 @@ export default function Privacy() {
       <h2>Akun dan pemulihan</h2>
       <p>
         Kata sandi asli diproses di perangkat. Server menyimpan hash kredensial autentikasi dan
-        verifier kode pemulihan. Kode ditampilkan sekali. Pemulihan dengan surel dan kode yang benar
+        verifier kode pemulihan. Kode ditampilkan sekali. Pemulihan dengan username dan kode yang benar
         mengganti kata sandi, mempertahankan kunci pesan lama, serta mencabut seluruh sesi dan kode
         pemulihan lama. Tanpa kata sandi maupun kode pemulihan, layanan tidak dapat membuka pesan
         privat.

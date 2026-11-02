@@ -38,7 +38,7 @@ export function AdminUsers() {
             Pengguna terdaftar
           </h2>
           <p className="um-admin-subtitle">
-            Lihat nama, surel, tanggal pendaftaran, dan jumlah pesan tersimpan setiap akun.
+            Lihat nama, username, tanggal pendaftaran, dan jumlah pesan tersimpan setiap akun.
           </p>
         </div>
         <span className="um-admin-status">
@@ -65,7 +65,7 @@ export function AdminUsers() {
             type="search"
             value={input}
             maxLength={254}
-            placeholder="Cari nama atau alamat surel"
+            placeholder="Cari nama atau username"
             onChange={(event) => setInput(event.target.value)}
           />
         </div>
@@ -110,7 +110,7 @@ export function AdminUsers() {
             <thead>
               <tr>
                 <th scope="col">Nama</th>
-                <th scope="col">Surel</th>
+                <th scope="col">Username</th>
                 <th scope="col">Peran</th>
                 <th scope="col">Terdaftar</th>
                 <th scope="col">Pesan tersimpan</th>
@@ -122,7 +122,7 @@ export function AdminUsers() {
                   <td data-label="Nama">
                     <strong>{user.display_name || "Tanpa nama"}</strong>
                   </td>
-                  <td data-label="Surel" className="um-admin-user-email">
+                  <td data-label="Username" className="um-admin-user-email">
                     {user.email}
                   </td>
                   <td data-label="Peran">
@@ -144,8 +144,8 @@ export function AdminUsers() {
                       {user.message_count.toLocaleString("id-ID")}
                     </strong>
                     <small className="um-admin-count-detail">
-                      {user.messages_by_visibility.public_anon} publik ·{" "}
-                      {user.messages_by_visibility.private} privat ·{" "}
+                      {user.messages_by_visibility.public_anon} publik,{" "}
+                      {user.messages_by_visibility.private} privat,{" "}
                       {user.messages_by_visibility.unlisted} tautan terbatas
                     </small>
                   </td>
@@ -160,7 +160,7 @@ export function AdminUsers() {
               </h3>
               <p className="um-muted">
                 {search
-                  ? "Coba nama atau alamat surel lain."
+                  ? "Coba nama atau username lain."
                   : "Akun baru akan muncul setelah pendaftaran berhasil."}
               </p>
             </div>

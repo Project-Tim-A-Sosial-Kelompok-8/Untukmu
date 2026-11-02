@@ -12,7 +12,7 @@ UM.i18n = (function () {
     id: {
       brand: "Untukmu",
       brandSub: "ruang untuk pesan yang tak tersampaikan",
-      brandHint: "putar langitnya · dekatkan dengan gulir · F untuk mode sinema",
+      brandHint: "putar langitnya, dekatkan dengan gulir, F untuk mode sinema",
 
       /* pembuka */
       entryKicker: "Surat yang tak sempat terkirim",
@@ -274,7 +274,7 @@ UM.i18n = (function () {
     en: {
       brand: "Untukmu",
       brandSub: "a place for what was never said",
-      brandHint: "turn the sky · scroll to move closer · F for cinema",
+      brandHint: "turn the sky, scroll to move closer, F for cinema",
 
       entryH1: "Untukmu",
       entryLead:
@@ -348,7 +348,7 @@ UM.i18n = (function () {
       dashEmptyGalaksi: "No galaxies yet.",
       dashMasuk: "messages from others in your galaxies’ belts",
       legenda:
-        "✦ every star in the galaxy’s arm is clickable · ✧ golden dust circling = prayers from others",
+        "✦ every star in the galaxy’s arm is clickable, ✧ golden dust circling = prayers from others",
 
       skyKenangan: "Memories",
       skyHint: "Pick a memory to open its messages.",

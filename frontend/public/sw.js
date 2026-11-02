@@ -1,5 +1,5 @@
 /* Only public static files are eligible. Auth, API, HTML sessions and uploads are never cached. */
-const CACHE = "untukmu-static-ac6965eeac9464f9";
+const CACHE = "untukmu-static-5ada748bf389750b";
 const OFFLINE = "/offline.html";
 self.addEventListener("install", (event) =>
   event.waitUntil(

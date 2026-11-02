@@ -258,7 +258,6 @@ UM.ui = (function () {
   /* ── dock ────────────────────────────────────────────────────────────────── */
 
   function renderDock() {
-    var diPeta = typeof viewMode !== "undefined" && viewMode === "sky";
     UM.renderScreen(
       dockEl,
       '<button data-act="tulis">' +
@@ -267,11 +266,6 @@ UM.ui = (function () {
         '<button data-act="doa">Doa</button>' +
         '<button data-act="rumah">' +
         teks(T("dockRumah")) +
-        "</button>" +
-        '<button data-act="peta"' +
-        (diPeta ? ' class="on"' : "") +
-        ">" +
-        teks(T("dockPeta")) +
         "</button>" +
         '<button data-act="jelajah">' +
         teks(T("dockJelajah")) +
@@ -298,10 +292,6 @@ UM.ui = (function () {
         UM.galaksi.kembaliKeRumah();
         renderDock();
         renderSkyCtl();
-      } else if (act === "peta") {
-        if (typeof viewMode !== "undefined" && viewMode === "sky") {
-          if (typeof exitSky === "function") exitSky();
-        } else kePeta();
       } else if (act === "jelajah") bukaJelajah();
       else if (act === "doa") bukaDoa();
       else if (act === "dash") bukaDash();
@@ -818,7 +808,7 @@ UM.ui = (function () {
       "</div></div>" +
       '<div class="um-field"><label class="um-label" for="um-files">Lampiran terenkripsi (opsional)</label><input id="um-files" class="um-input" type="file" multiple><div class="um-hint">' +
       (comp.files || []).length +
-      " berkas dipilih · maksimal 5</div></div>" +
+      " berkas dipilih, maksimal 5</div></div>" +
       '<div class="um-error">' +
       escAttr(comp.err) +
       "</div>" +
@@ -1187,7 +1177,7 @@ UM.ui = (function () {
             "</div>" +
             '<span id="bp-type">' +
             escAttr(UM.i18n.kategori(g.kategori)) +
-            " · " +
+            ", " +
             escAttr(
               T(
                 "jenis" +
@@ -1649,9 +1639,6 @@ UM.ui = (function () {
           '<button class="um-btn primary" data-act="tulis">✎ ' +
           teks(T("dockTulis")) +
           "</button>" +
-          '<button class="um-btn" data-act="peta">✧ ' +
-          teks(T("dockPeta")) +
-          "</button>" +
           "</div>",
       );
       renderDashPesan();
@@ -1777,10 +1764,7 @@ UM.ui = (function () {
         id = btn.getAttribute("data-id");
       if (act === "close") close(dashEl);
       else if (act === "tulis") bukaKomposer();
-      else if (act === "peta") {
-        close(dashEl);
-        kePeta();
-      } else if (act === "filter-own" || act === "reset-own") {
+      else if (act === "filter-own" || act === "reset-own") {
         dashMood = act === "filter-own" ? dashEl.querySelector("#um-own-mood").value : "";
         dashTag =
           act === "filter-own"
@@ -1821,7 +1805,7 @@ UM.ui = (function () {
     var busy = expBusy ? " disabled" : "";
     var filters =
       (expMood ? "Suasana: " + UM.i18n.mood(expMood) : "Semua suasana") +
-      (expTag ? " · Tag: #" + expTag : " · Semua tag");
+      (expTag ? ", Tag: #" + expTag : ", Semua tag");
     UM.renderScreen(
       expEl.querySelector(".um-wrap"),
       '<div class="um-head"><div><div class="um-h1">Jelajah ucapan</div><p class="um-muted">Ruang untuk membaca ucapan publik anonim dan saling mendukung. Pesan pribadi Anda ada di Ruang Pribadi.</p><p class="um-note" id="um-explore-empathy-hint">' +
@@ -2053,9 +2037,9 @@ UM.ui = (function () {
         entry.audio_preview_url || "",
       )
         ? '<div class="um-audio-reference"><p class="um-hint">' +
-          (entry.reviewed ? "Dengarkan rekaman · " : "Pratinjau rekaman · ") +
+          (entry.reviewed ? "Dengarkan rekaman, " : "Pratinjau rekaman, ") +
           teks(entry.audio_language || "") +
-          " · " +
+          ", " +
           (entry.detik || 30) +
           ' detik</p><audio data-prayer-preview controls preload="none" src="' +
           escAttr(entry.audio_preview_url) +
@@ -2064,7 +2048,7 @@ UM.ui = (function () {
           '</p><p class="um-hint">Lisensi: ' +
           teks(entry.audio_license || "") +
           (/^https:\/\//.test(entry.audio_license_url || "")
-            ? ' · <a href="' +
+            ? ', <a href="' +
               escAttr(entry.audio_license_url) +
               '" target="_blank" rel="noopener noreferrer">Ketentuan penggunaan</a>'
             : "") +
@@ -2300,7 +2284,7 @@ UM.ui = (function () {
           "</div>";
         isi += isiDoa(entry, L, !busy);
         isi +=
-          '<p class="um-hint">Dengarkan audio sampai selesai · ' +
+          '<p class="um-hint">Dengarkan audio sampai selesai, ' +
           (entry.detik || 30) +
           " detik</p>";
         isi += "</div>";

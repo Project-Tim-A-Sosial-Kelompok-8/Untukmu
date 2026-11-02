@@ -28,6 +28,7 @@ interface LegacyUM {
     closeAllScreens: () => void;
     bukaJelajah: () => void;
     bukaDoa: (galaxyId?: string, messageId?: string) => void;
+    kePeta: () => Promise<unknown>;
   };
   galaksi: {
     refresh: () => Promise<unknown>;

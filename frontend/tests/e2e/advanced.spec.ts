@@ -14,7 +14,7 @@ test("multi-tujuan → pemulihan penuh → ekspor terenkripsi", async ({ page })
   }, secret);
   await page.frames()[1].evaluate(() => window.UM.account.open());
   await frame.getByRole("button", { name: "Ganti kata sandi dengan kode pemulihan" }).click();
-  await frame.locator("#recovery-email").fill(email);
+  await frame.locator("#recovery-username").fill(email);
   await frame.locator("#recovery-code").fill(recovery);
   const password = "kata-sandi-baru-untuk-pemulihan";
   await frame.locator("#recovery-password").fill(password);

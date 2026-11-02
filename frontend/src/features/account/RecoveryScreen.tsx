@@ -14,7 +14,7 @@ export function RecoveryScreen({
     [error, setError] = useState("");
   async function submit(form: HTMLFormElement) {
     const data = new FormData(form),
-      email = String(data.get("email") || "")
+      username = String(data.get("username") || "")
         .trim()
         .toLowerCase(),
       code = String(data.get("code") || ""),
@@ -23,14 +23,17 @@ export function RecoveryScreen({
     setError("");
     try {
       if (password !== data.get("repeat")) throw new Error("Ulangan kata sandi belum cocok.");
-      if (currentUser()?.email === email && !currentUser()?.recovery_ready) {
+      if (
+        (currentUser()?.username || currentUser()?.email) === username &&
+        !currentUser()?.recovery_ready
+      ) {
         const previousPassword = String(data.get("previous") || "");
         await vault.unlockWithRecovery(code);
         await api("/auth/recovery/enable", {
           method: "POST",
           body: JSON.stringify({
-            password: await vault.authCredential(previousPassword, email),
-            recovery_verifier: await vault.recoveryVerifier(code, email),
+            password: await vault.authCredential(previousPassword, username),
+            recovery_verifier: await vault.recoveryVerifier(code, username),
           }),
         });
       }
@@ -39,8 +42,8 @@ export function RecoveryScreen({
         {
           method: "POST",
           body: JSON.stringify({
-            email,
-            recovery_verifier: await vault.recoveryVerifier(code, email),
+            username,
+            recovery_verifier: await vault.recoveryVerifier(code, username),
             turnstile_token: await requestChallenge("recovery"),
           }),
         },
@@ -48,9 +51,9 @@ export function RecoveryScreen({
       const next = await vault.rewrapWithRecovery(code, password, result.encryption_record);
       const user = await authenticate("recovery/finish", {
         challenge: result.challenge,
-        password: await vault.authCredential(password, email),
+        password: await vault.authCredential(password, username),
         encryption_record: next.record,
-        recovery_verifier: await vault.recoveryVerifier(next.recoveryCode, email),
+        recovery_verifier: await vault.recoveryVerifier(next.recoveryCode, username),
       });
       await vault.unlock(password, user.encryption_record);
       form.reset();
@@ -90,7 +93,7 @@ export function RecoveryScreen({
           </p>
           {(
             [
-              ["email", "Surel", "email"],
+              ["username", "Username", "text"],
               ["code", "Kode pemulihan", "password"],
               ["password", "Kata sandi baru", "password"],
               ["repeat", "Ulangi kata sandi baru", "password"],

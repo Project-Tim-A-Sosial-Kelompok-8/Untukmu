@@ -132,7 +132,7 @@ export function SocialScreens() {
             {blocks.data?.map((item, index) => (
               <div key={item.id} className="um-item">
                 <p className="um-p">
-                  Pengirim anonim {index + 1} ·{" "}
+                  Pengirim anonim {index + 1},{" "}
                   {new Date(item.created_at).toLocaleDateString("id-ID")}
                 </p>
                 <button

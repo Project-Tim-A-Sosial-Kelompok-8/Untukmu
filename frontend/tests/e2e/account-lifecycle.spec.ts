@@ -120,7 +120,7 @@ for (const action of ["keep", "delete"] as const) {
     await expect(frame.locator("#um-account-title")).toHaveText("Masuk ke Untukmu", {
       timeout: 60000,
     });
-    await frame.locator("#um-email").fill(email);
+    await frame.locator("#um-username").fill(email);
     await frame.locator("#um-account-password").fill(password);
     await frame.getByRole("button", { name: "Masuk", exact: true }).click();
     await expect(frame.getByRole("alert")).toContainText("tidak cocok", { timeout: 60000 });
@@ -174,9 +174,10 @@ test("pesan publik tanpa tujuan tetap dapat dibaca lintas akun melalui Jelajah",
       expect(data.shared).toMatchObject([
         { jenis: "pesan", publicBody: shared.public_body, authorDeleted: true, sendiri: false },
       ]);
-      // The scene shows only the account's own workspace: its first galaxy, no
-      // foreign messages. Public messages of others are read through Jelajah.
-      expect(data.galaxies).toMatchObject([{ nama: "Galaksi pertamaku", sendiri: true }]);
+      // The scene shows only the account's own workspace. A new account starts
+      // empty: galaxies are created from the composer. Public messages of others
+      // are read through Jelajah.
+      expect(data.galaxies).toEqual([]);
       expect(data.sceneMessages).toEqual([]);
       await frame.locator(".um-dock [data-act=jelajah]").click();
       await expect(frame.locator("#um-exp .txt")).toHaveText(shared.public_body);

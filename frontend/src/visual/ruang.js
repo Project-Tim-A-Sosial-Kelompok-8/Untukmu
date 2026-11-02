@@ -262,10 +262,10 @@ UM.ruang = (function () {
   }
 
   function keteranganRuang(w) {
-    if (w.terkunci) return "Ruang privat · terkunci";
+    if (w.terkunci) return "Ruang privat, terkunci";
     var bagian = [w.jumlahGalaksi + " galaksi"];
     if (w.jumlahPublik) bagian.push(w.jumlahPublik + " pesan publik");
-    return bagian.join(" · ");
+    return bagian.join(", ");
   }
 
   function renderTip() {
@@ -305,7 +305,7 @@ UM.ruang = (function () {
         (state.pengguna ? '<button type="button" data-act="ruangku">Masuk ruangku</button>' : "");
     } else if (w && w.milikku) {
       html =
-        '<div class="um-rb-title"><span class="um-rb-kicker">Ruangmu · ' +
+        '<div class="um-rb-title"><span class="um-rb-kicker">Ruangmu, ' +
         (w.publik ? "publik" : "privat") +
         "</span><strong>" +
         esc(w.nama) +

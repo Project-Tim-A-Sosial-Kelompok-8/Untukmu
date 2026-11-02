@@ -141,7 +141,7 @@ document.addEventListener(
         return;
       const password = prompt("Masukkan kata sandi akun untuk mengonfirmasi:");
       if (!password) return;
-      const email = currentUser()!.email;
+      const account = currentUser()!.username || currentUser()!.email;
       const controls = Array.from(
         target.closest(".um-screen")?.querySelectorAll<HTMLButtonElement>("button") || [],
       ).map((button) => ({ button, disabled: button.disabled }));
@@ -152,7 +152,7 @@ document.addEventListener(
       });
       target.textContent = "Menghapus pesan dan tujuan…";
       void vault
-        .authCredential(password, email)
+        .authCredential(password, account)
         .then((credential) =>
           api("/users/me/clear", {
             method: "POST",

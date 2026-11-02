@@ -18,9 +18,10 @@ export async function register(
   });
   await expect(frame.locator("html")).toHaveAttribute("data-renderer", "react-three-fiber");
   await frame.getByRole("button", { name: "Daftar akun", exact: true }).click();
-  const email = `${prefix}-${Date.now()}@example.com`,
+  // Usernames are 3-32 lowercase characters; the timestamp keeps them unique.
+  const email = `${prefix.slice(0, 16)}-${Date.now().toString(36)}`,
     password = "kata-sandi-pengujian-yang-panjang";
-  await frame.locator("#um-email").fill(email);
+  await frame.locator("#um-username").fill(email);
   await frame.locator("#um-account-password").fill(password);
   await frame.locator("#um-repeat").fill(password);
   const registered = page.waitForResponse(
@@ -75,7 +76,7 @@ export async function login(page: Page, email: string, password: string) {
   await expect(frame.locator("#um-account-title")).toHaveText("Masuk ke Untukmu", {
     timeout: 20000,
   });
-  await frame.locator("#um-email").fill(email);
+  await frame.locator("#um-username").fill(email);
   await frame.locator("#um-account-password").fill(password);
   await frame.getByRole("button", { name: "Masuk", exact: true }).click();
   await expect(frame.locator("#um-account-title")).not.toBeVisible({ timeout: 60000 });

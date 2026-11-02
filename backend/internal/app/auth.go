@@ -10,6 +10,7 @@ import (
 func userView(user *User) map[string]any {
 	return map[string]any{
 		"id":                         user.ID,
+		"username":                   user.Email,
 		"email":                      user.Email,
 		"display_name":               user.DisplayName,
 		"role":                       user.Role,
@@ -67,7 +68,7 @@ func (a *App) register(c *Ctx) (any, error) {
 	instant := now()
 	user := &User{
 		ID:               uid(),
-		Email:            body.email,
+		Email:            body.identifier,
 		PasswordHash:     hashPassword(*body.Password),
 		DisplayName:      "Anonim",
 		Role:             "user",
@@ -87,16 +88,14 @@ func (a *App) register(c *Ctx) (any, error) {
 			user.ID, user.Email, user.PasswordHash, user.RecoveryAuthHash, user.DisplayName, user.EncryptionRecord,
 			instant, instant)
 		if isUniqueViolation(err) {
-			return fail(http.StatusConflict, "Alamat surel sudah terdaftar.")
+			return fail(http.StatusConflict, "Username sudah dipakai.")
 		}
 		if err != nil {
 			return err
 		}
-		// Every new account starts with its own workspace and a first galaxy.
+		// Every new account starts with its own workspace. Galaxies are created
+		// on demand from the composer, so the account begins empty.
 		if err := createWorkspace(c.ctx(), tx, user.ID, user.DisplayName, false); err != nil {
-			return err
-		}
-		if err := createFirstGalaxy(c.ctx(), tx, user.ID); err != nil {
 			return err
 		}
 		tokens, err = c.newSession(c.ctx(), tx, user)
@@ -116,20 +115,20 @@ func (a *App) login(c *Ctx) (any, error) {
 	if err := c.throttle("login-ip", 15, ""); err != nil {
 		return nil, err
 	}
-	if err := c.throttle("login-account", 8, body.email); err != nil {
+	if err := c.throttle("login-account", 8, body.identifier); err != nil {
 		return nil, err
 	}
-	user, err := getUser(c.ctx(), a.DB, "email = ?", body.email)
+	user, err := getUser(c.ctx(), a.DB, "email = ?", body.identifier)
 	if err != nil {
 		return nil, err
 	}
 	// Run Argon2 for unknown users too, reducing timing-based account enumeration.
 	if user == nil {
 		hashPassword(*body.Password)
-		return nil, fail(http.StatusUnauthorized, "Surel atau kata sandi tidak cocok.")
+		return nil, fail(http.StatusUnauthorized, "Username atau kata sandi tidak cocok.")
 	}
 	if !checkPassword(user.PasswordHash, *body.Password) {
-		return nil, fail(http.StatusUnauthorized, "Surel atau kata sandi tidak cocok.")
+		return nil, fail(http.StatusUnauthorized, "Username atau kata sandi tidak cocok.")
 	}
 	var tokens map[string]any
 	err = a.tx(c.ctx(), func(tx *Tx) error {

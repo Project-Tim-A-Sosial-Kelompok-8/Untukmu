@@ -27,22 +27,22 @@ func (a *App) recoveryBegin(c *Ctx) (any, error) {
 	if err := c.throttle("recovery-ip", 5, ""); err != nil {
 		return nil, err
 	}
-	if err := c.throttle("recovery-email", 5, body.email); err != nil {
+	if err := c.throttle("recovery-account", 5, body.identifier); err != nil {
 		return nil, err
 	}
 	if err := c.verifyTurnstile(body.TurnstileToken, "recovery"); err != nil {
 		return nil, err
 	}
-	user, err := getUser(c.ctx(), a.DB, "email = ?", body.email)
+	user, err := getUser(c.ctx(), a.DB, "email = ?", body.identifier)
 	if err != nil {
 		return nil, err
 	}
 	if user == nil || !user.RecoveryAuthHash.Valid || user.RecoveryAuthHash.String == "" {
 		hashPassword(*body.RecoveryVerifier)
-		return nil, fail(http.StatusUnauthorized, "Surel atau kode pemulihan tidak cocok.")
+		return nil, fail(http.StatusUnauthorized, "Username atau kode pemulihan tidak cocok.")
 	}
 	if !checkPassword(user.RecoveryAuthHash.String, *body.RecoveryVerifier) {
-		return nil, fail(http.StatusUnauthorized, "Surel atau kode pemulihan tidak cocok.")
+		return nil, fail(http.StatusUnauthorized, "Username atau kode pemulihan tidak cocok.")
 	}
 	token := randomToken()
 	state, _ := json.Marshal(recoveryState{UserID: user.ID, Version: sha256Hex(user.RecoveryAuthHash.String)})

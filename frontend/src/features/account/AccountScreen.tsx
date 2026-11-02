@@ -71,7 +71,7 @@ function AccountLayer({
 export function AccountScreen() {
   const { open, mode, show, required } = useAccount();
   const [recovering, setRecovering] = useState(false);
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [repeat, setRepeat] = useState("");
   const [error, setError] = useState("");
@@ -142,15 +142,18 @@ export function AccountScreen() {
     try {
       if (mode === "register" && password !== repeat)
         throw new Error("Ulangan kata sandi belum cocok.");
-      const credential = await vault.authCredential(password, email);
+      const account = username.trim().toLowerCase();
+      if (mode === "register" && account.includes("@"))
+        throw new Error("Username tidak boleh memakai tanda @.");
+      const credential = await vault.authCredential(password, username);
       if (mode === "register") {
         const out = await vault.setup(password);
         try {
           await authenticate("register", {
-            email: email.trim().toLowerCase(),
+            username: account,
             password: credential,
             encryption_record: out.record,
-            recovery_verifier: await vault.recoveryVerifier(out.recoveryCode, email),
+            recovery_verifier: await vault.recoveryVerifier(out.recoveryCode, username),
             turnstile_token: turnstile || null,
           });
         } catch (failure) {
@@ -161,7 +164,7 @@ export function AccountScreen() {
         setSaved(false);
       } else {
         const user = await authenticate("login", {
-          email: email.trim().toLowerCase(),
+          username: account,
           password: credential,
         });
         try {
@@ -282,7 +285,7 @@ export function AccountScreen() {
                 <DeleteAccountScreen onCancel={() => show("settings")} />
               ) : mode === "settings" ? (
                 <>
-                  <p className="um-p">{currentUser()?.email}</p>
+                  <p className="um-p">{currentUser()?.username || currentUser()?.email}</p>
                   <div className="um-field">
                     <label className="um-label" htmlFor="um-profile">
                       Ruangmu di Bima Sakti
@@ -448,19 +451,28 @@ export function AccountScreen() {
                       : "Buat akun untuk menyimpan pesan dan doa serta menjelajahi pesan publik bersama."}
                   </p>
                   <div className="um-field">
-                    <label className="um-label" htmlFor="um-email">
-                      Surel
+                    <label className="um-label" htmlFor="um-username">
+                      Username
                     </label>
                     <input
-                      id="um-email"
+                      id="um-username"
                       className="um-input"
-                      type="email"
+                      type="text"
                       required
                       maxLength={254}
-                      autoComplete="email"
-                      value={email}
-                      onChange={(event) => setEmail(event.target.value)}
+                      autoComplete="username"
+                      autoCapitalize="none"
+                      spellCheck={false}
+                      placeholder="mis. budi.santoso"
+                      value={username}
+                      onChange={(event) => setUsername(event.target.value)}
                     />
+                    {mode === "register" && (
+                      <p className="um-hint">
+                        3-32 karakter: huruf kecil, angka, titik, garis bawah, atau strip. Tanpa
+                        tanda @.
+                      </p>
+                    )}
                   </div>
                   <div className="um-field">
                     <label className="um-label" htmlFor="um-account-password">

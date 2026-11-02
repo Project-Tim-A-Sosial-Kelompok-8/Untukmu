@@ -199,7 +199,7 @@ function ContentReview() {
       )}
       <div className="um-admin-pagination">
         <span className="um-muted">
-          Halaman {Math.floor(offset / 50) + 1} · {queue.data?.length || 0} pesan pada halaman ini
+          Halaman {Math.floor(offset / 50) + 1}, {queue.data?.length || 0} pesan pada halaman ini
         </span>
         <div className="um-btn-row">
           <button
@@ -242,7 +242,9 @@ export function AdminPanel({ onClose }: { onClose: () => void }) {
             </p>
           </div>
           <div className="um-admin-header-actions">
-            <span className="um-admin-account">{currentUser()?.email}</span>
+            <span className="um-admin-account">
+              {currentUser()?.username || currentUser()?.email}
+            </span>
             <button className="um-btn" onClick={onClose}>
               Kembali ke galaksi
             </button>
